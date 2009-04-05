@@ -45,7 +45,8 @@ DWORD WINAPI writeFunction(LPVOID param)
 	{
 		char * original = readLine();
 		int cantidadDeItems = 0;
-		int resultadoValidacion = validar(original,&cantidadDeItems);
+		char* contenido = NULL; // contenido posterior al comando
+		int resultadoValidacion = validar(original,&cantidadDeItems, &contenido);
 		char* c1 = copiaChar(original);
 		char* primeraPalabra = NULL;
 		primeraPalabra=	strtok(c1," ");
