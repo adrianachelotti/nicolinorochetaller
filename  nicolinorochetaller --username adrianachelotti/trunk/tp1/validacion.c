@@ -190,7 +190,7 @@ char* copiaChar(char* c)
 }
 
 
-int validar(char* c,int* cont)
+int validar(char* c,int* cont, char** elems)
 {
 	char* comando = NULL;
 	
@@ -207,18 +207,22 @@ int validar(char* c,int* cont)
 		if (strcmp(comando,"QUIT") == 0) 
 		{
 			resul = validarQuit(c2,cont);
+			*elems = NULL;
 		}
 		if (strcmp(comando,"STRING") == 0) 
 		{ 
 			resul = validarString(c2,cont);
+			*elems = c + sizeof(char)*7;
 		}
 		if (strcmp(comando,"INT") == 0)
 		{
 			resul = validarInt(c2,cont);
+			*elems = c + sizeof(char)*4;
 		}
 		if (strcmp(comando,"DOUBLE") == 0)
 		{
 			resul = validarDouble(c2,cont);
+			*elems = c + sizeof(char)*7;
 		}
 	}
 	free(c1);

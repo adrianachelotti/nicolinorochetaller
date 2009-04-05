@@ -4,7 +4,7 @@
 #define VALIDACION_OK 0
 #define VALIDACION_NOT_OK 1
 
-int validar(char* o,int* cant);
+int validar(char* o,int* cant, char** elems);
 
 char *readLine();
 
