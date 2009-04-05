@@ -84,7 +84,8 @@ int validarInt(char cadenaNum[MAX],int* cont)
 			numero = strtol(b, &noente, 10 );
 			if ((*noente != '\0') || (numero == MAX_INT) || (numero == MIN_INT))
 			{
-				r = 1;
+				*cont = 0;
+				return 1;
 			}
 			else {
 				r = validarLimitesInt(numero);
