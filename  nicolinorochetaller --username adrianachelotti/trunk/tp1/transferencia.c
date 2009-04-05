@@ -103,20 +103,41 @@ int trEnviar(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, const vo
 int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void *datos)
 {
 	
-	char buffer[1024];
 
-	strcpy(buffer,"");
+	int result = 0;
+	printf("INT: %i\n",sizeof(int));
+	printf("PUNTERO: %i\n",sizeof(char*));
 
-	pConexion->len=recv(pConexion->socketAccept,buffer,1024,0); //recibimos los datos que envie
-
-	if(pConexion->len == 0 || strcmp(buffer,"") == 0)
+	if(tipo == td_command)
 	{
-		return RES_NOT_OK;
+		char* comando = NULL;
+		char* cantidad = NULL;
+		char bufferComando[1024];
+
+		pConexion->len=recv(pConexion->socketAccept,bufferComando,1024,0); //recibimos los datos que envie
+		comando = strtok(bufferComando," ");
+		cantidad = strtok(NULL," ");
+		cantItems = atoi(cantidad);
+		tipo = td_int;
+		result = trRecibir(pConexion,tipo,cantItems,datos);
 	}
 	else
 	{
-		buffer[pConexion->len] = 0; //le ponemos el final de cadena
-		printf(">%s",buffer); //imprimimos la cadena recibida
+		char buffer[1024];
+		
+		strcpy(buffer,"");
+
+		pConexion->len=recv(pConexion->socketAccept,buffer,1024,0); //recibimos los datos que envie
+
+		if(pConexion->len == 0 || strcmp(buffer,"") == 0)
+		{
+			return RES_NOT_OK;
+		}
+		else
+		{
+			buffer[pConexion->len] = 0; //le ponemos el final de cadena
+			printf(">%s",buffer); //imprimimos la cadena recibida
+		}
 	}
 	return RES_OK;
 

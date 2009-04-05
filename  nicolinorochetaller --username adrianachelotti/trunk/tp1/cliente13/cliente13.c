@@ -18,14 +18,16 @@ CONEXION *pConexion;
 /*****************************************************************/ 
 DWORD WINAPI readFunction(LPVOID param) 
 {
-	int cantItems;
-	enum tr_tipo_dato tipo;
+	int cantItems = 1;
+	enum tr_tipo_dato tipo = td_command;
 	
 	while(pConexion->len > 0)
 	{
 				
 		if(trRecibir(pConexion,tipo,cantItems,NULL) != RES_OK)
 			pConexion->len = 0;
+
+		trRecibir(pConexion,tipo,cantItems,NULL);
 
 	}
 	return 0;
@@ -62,19 +64,19 @@ DWORD WINAPI writeFunction(LPVOID param)
 			}
 			else if (strcmp(primeraPalabra,"STRING") == 0) 
 			{ 
-				err = trEnviar(pConexion,td_command,1,"STRING");
-				if (err==RES_OK) err = trEnviar(pConexion,td_char,strlen(original),original);
+				err = trEnviar(pConexion,td_command,1,"STRING 3\0");
+				if (err==RES_OK) err = trEnviar(pConexion,td_char,cantidadDeItems,contenido);
 			}
 			else if (strcmp(primeraPalabra,"INT") == 0) 
 			{
-				err = trEnviar(pConexion,td_command,1,"INT");
-				if (err==RES_OK) err = trEnviar(pConexion,td_int,cantidadDeItems,original);
+				err = trEnviar(pConexion,td_command,1,"INT 4\0");
+				if (err==RES_OK) err = trEnviar(pConexion,td_int,cantidadDeItems,contenido);
 			}
 			
 			else if (strcmp(primeraPalabra,"DOUBLE") == 0)
 			{
-				err = trEnviar(pConexion,td_command,1,"DOUBLE");
-				if (err==RES_OK) err = trEnviar(pConexion,td_double,cantidadDeItems,original);
+				err = trEnviar(pConexion,td_command,1,"DOUBLE 5\0");
+				if (err==RES_OK) err = trEnviar(pConexion,td_double,cantidadDeItems,contenido);
 			}
 			if (err != RES_OK)
 				printf("Error al enviar el mensaje");
