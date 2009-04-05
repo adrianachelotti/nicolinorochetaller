@@ -18,16 +18,14 @@ CONEXION *pConexion;
 /*****************************************************************/ 
 DWORD WINAPI readFunction(LPVOID param) 
 {
-	int cantItems = 1;
-	enum tr_tipo_dato tipo = td_command;
-	
+		
 	while(pConexion->len > 0)
 	{
-				
+		int cantItems = 1;
+		enum tr_tipo_dato tipo = td_command;		
+
 		if(trRecibir(pConexion,tipo,cantItems,NULL) != RES_OK)
 			pConexion->len = 0;
-
-		trRecibir(pConexion,tipo,cantItems,NULL);
 
 	}
 	return 0;
@@ -51,8 +49,20 @@ DWORD WINAPI writeFunction(LPVOID param)
 		int resultadoValidacion = validar(original,&cantidadDeItems, &contenido);
 		char* c1 = copiaChar(original);
 		char* primeraPalabra = NULL;
+		
+		char buffer[33];
+		const char* contenidoBis = contenido;
+		
+		if (contenidoBis != NULL)
+		{
+			int tamanio = strlen(contenidoBis);
+			char* cadenaTamanio = itoa(tamanio,buffer,10);
+			char * cadenaFinal = strcat(cadenaTamanio," INT\0");
+		}
+
 		primeraPalabra=	strtok(c1," ");
-		 
+		
+	
         if ( resultadoValidacion == VALIDACION_OK )
 		{
 			if (strcmp(primeraPalabra,"QUIT") == 0)
@@ -64,18 +74,18 @@ DWORD WINAPI writeFunction(LPVOID param)
 			}
 			else if (strcmp(primeraPalabra,"STRING") == 0) 
 			{ 
-				err = trEnviar(pConexion,td_command,1,"STRING 3\0");
+				err = trEnviar(pConexion,td_command,1,"STRING 4096\0");
 				if (err==RES_OK) err = trEnviar(pConexion,td_char,cantidadDeItems,contenido);
 			}
 			else if (strcmp(primeraPalabra,"INT") == 0) 
 			{
-				err = trEnviar(pConexion,td_command,1,"INT 4\0");
+				err = trEnviar(pConexion,td_command,1,"INT 4096\0");
 				if (err==RES_OK) err = trEnviar(pConexion,td_int,cantidadDeItems,contenido);
 			}
 			
 			else if (strcmp(primeraPalabra,"DOUBLE") == 0)
 			{
-				err = trEnviar(pConexion,td_command,1,"DOUBLE 5\0");
+				err = trEnviar(pConexion,td_command,1,"DOUBLE 4096\0");
 				if (err==RES_OK) err = trEnviar(pConexion,td_double,cantidadDeItems,contenido);
 			}
 			if (err != RES_OK)
