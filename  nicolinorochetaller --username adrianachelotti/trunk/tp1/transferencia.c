@@ -8,7 +8,6 @@
 
 #pragma comment(lib,"ws2_32.lib")
 
-#define BUFFER_SIZE 1024
 
 int trEscuchar(int Puerto, CONEXION *pConexion)
 {
@@ -93,28 +92,22 @@ int trConectar(const char *pDireccion, int Puerto, CONEXION *pConexion )
 
 int trEnviar(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, const void *datos)
 {
-	char buffer[BUFFER_SIZE];
-	int k;
-
-	for (k = 0; k < cantItems; k++ )
-	{
-		sprintf(buffer,"%s ",(char*)datos);
-	}
-
-	pConexion->len = send(pConexion->socketAccept,buffer,strlen(buffer),0);	
+			
+	pConexion->len = send(pConexion->socketAccept,(char*)datos,strlen((char*)datos),0);	
 	
 	return RES_OK;
 }
 
 
 
-int trRecibir(CONEXION *pConexion,enum tr_tipo_dato *tipo, int *cantItems, void *datos)
+int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void *datos)
 {
-	char buffer[BUFFER_SIZE];
+	
+	char buffer[1024];
 
 	strcpy(buffer,"");
 
-	pConexion->len=recv(pConexion->socketAccept,buffer,BUFFER_SIZE,0);
+	pConexion->len=recv(pConexion->socketAccept,buffer,1024,0); //recibimos los datos que envie
 
 	if(pConexion->len == 0 || strcmp(buffer,"") == 0)
 	{
@@ -125,8 +118,8 @@ int trRecibir(CONEXION *pConexion,enum tr_tipo_dato *tipo, int *cantItems, void 
 		buffer[pConexion->len] = 0; //le ponemos el final de cadena
 		printf(">%s",buffer); //imprimimos la cadena recibida
 	}
-
 	return RES_OK;
+
 }
 
 
@@ -135,19 +128,6 @@ int trCerrarConexion(CONEXION *pConexion)
 	closesocket(pConexion->socketListen);
 	printf("Conexion finalizada\n");
 	return RES_OK;
-}
-
-
-int trConexionActiva(CONEXION *pConexion)
-{
-	if(pConexion->len > 0)
-	{
-		return RES_OK;
-	}
-	else
-	{
-		return RES_NOT_OK;
-	}
 }
 
 

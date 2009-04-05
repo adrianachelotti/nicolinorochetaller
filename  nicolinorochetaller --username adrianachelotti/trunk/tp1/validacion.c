@@ -1,350 +1,226 @@
-#include <transferencia.h>
+// validadorEntrada.cpp : Defines the entry point for the console application.
+//
 #include <stdio.h>
-#include <string.h> 
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <conio.h>
+#include <math.h>
+#include "validacion.h"
+#include <malloc.h>
 
-/* DEFINICION DE VALORES QUE DEVUELVEN LAS VALIDACIONES */
-#define RES_OK 0
-#define RES_COMANDO_NO_VALIDO 10
-#define RES_COMANDO_REQUERIDO 11
-#define RES_DATO_NO_VALIDO 12
-#define RES_DATO_FUERA_RANGO 13
+#define LONGITUD_INICIAL   1024
+#define INCREMENTO          512
 
-
-/* DEFINICION DE CONSTANTES */
-#define PARTICION_STRING 1024
-#define MIN_INT -32768
-#define MAX_INT 32767
-
-#define FLT_MIN -3.40282347E+38F
-#define FLT_MAX 3.40282347E+38F
-
-#define DBL_MINIMO -1.7976931348623157E+308
-#define DBL_MAXIMO 1.7976931348623157E+308
-
-#define TAMBUFFER 1024
-
-char seps[] = " \n";
-
-int esEntero(char* cadena){
-	int esNumero =1;
-    int tam= strlen(cadena)-1;
-	int i =1;
-	while ((i<tam)&&(esNumero!=0)){
-        esNumero=isdigit(cadena[i])	;
-		i++;
-	};
-	return esNumero;
-
-};
-
-int tieneFormatoDecimal(char* aux){
-    
-   int tam=strlen(aux)-1;
-   int i=0;
-   int cantidadDePuntos=0;
-   int lugarPuntos=1;
-   int posicionExponente=tam;
-   int contadorExp=0;
-    //busca los puntos 
-    while ((i<tam)&&(cantidadDePuntos<2)){
-	  if (aux[i]=='.') {
-		  cantidadDePuntos++;
-		  //me guardo la posicion del primer punto
-		  if (cantidadDePuntos==1) lugarPuntos =i;
-	  };
-	  if (aux[i]=='E'){
-		  posicionExponente=i;
-		  contadorExp++;
-	  }
-      
-	  i++;
-	  
-	};// fin while
-	
-	//verifico que no exista mas de un punto
-	if (cantidadDePuntos >1) return 0;
-    
-	//verifico que no exista mas de un exponente
-    if (contadorExp >1) return 0;
+#define MAX 1024
+#define MAX_INT 2147483647
+#define MIN_INT -2147483648
 
 
-	//verifico que de existir un exponente el siguiente
-	//caracter sea + o -
-
-	if (contadorExp==1){
-		if ((aux[posicionExponente+1]!='+') && (aux[posicionExponente+1]!='-'))
-			return 0;
-	    
-	    for(i=posicionExponente+2;i<tam;i++){
-		if(isdigit(aux[i])==0) 	return 0;
-		}; 
-	
-	
-	} 
-    
-    //verifico que la parte entera sean digitos
-    
-	if ((aux[0]=='-') || (aux[0]=='+')) i=1; 
-	else i=0;
-	for(i;i<lugarPuntos;i++){
-		if(isdigit(aux[i])==0) 	return 0;
-	};
-	
-	// verifico que la parte decimal sean digitos
-	for(i=lugarPuntos+1;i<posicionExponente;i++){
-		if(isdigit(aux[i])==0) 	return 0;
-	};
-	
-	
-	
-	return 1;
-
-};
-
-
-int parse_to_string(CONEXION *pConexion, char* buffer){
-	int err;
-	char *msg;
-
-	msg = malloc(TAMBUFFER);
-
-	strncpy(msg, buffer, TAMBUFFER);
-	err = trEnviar(pConexion,td_char,1,msg);
-	if ( err != RES_OK ){
-		return err;
+int validarQuit(char cadenaPalabras[MAX],int* cont)
+{
+	char *b = NULL;
+	int contador = 0;
+	b= strtok(cadenaPalabras, " ");
+	while (b!= NULL) {
+		b= strtok(NULL, " ");
+		if (b!= NULL) {
+			contador = contador + 1;
+		}
 	}
-
-	free(msg);
-
-	return RES_OK;
-};
-
-
-int parse_to_int(CONEXION *pConexion, char* buffer){
-	int err, i=0;
-	int numero;
-	char*  aux;
-
-	aux = strtok (buffer," ");
-
-	//Valido de a uno los numeros ingresados y los envío
-	while (aux != NULL){
-		numero = atoi(aux);
-        if (esEntero(aux)==0) return RES_DATO_NO_VALIDO;
-		if ((numero==0) && (aux != "0"))
-			return RES_DATO_NO_VALIDO; //dato no valido como numero int
-
-		// Evaluo si el valor esta dentro de los limites que permite el tipo de dato
-       if ((numero < MIN_INT) || (numero > MAX_INT ))
-	        return RES_DATO_FUERA_RANGO; //dato fuera del rango de los int
-
-		err = trEnviar(pConexion,td_int,1,aux);
-		if ( err != RES_OK ){
-			return err;	//error al enviar los datos
-		};
-
-		aux = strtok (NULL, " ");
-		i++;
+	if (contador != 0) {
+			return 1;
 	}
-	return RES_OK;
-};
+	*cont = 0;
+	return 0;
+}
 
-
-int parse_to_float(CONEXION *pConexion, char* buffer){
-	int err, i=0;
-	double numero;
-	char*  aux;
-
-	aux = strtok (buffer," ");
-
-	//Valido de a uno los numeros ingresados y los envío
-	while (aux != NULL){
-		
-        if (!(tieneFormatoDecimal(aux)))
-			return RES_DATO_NO_VALIDO;
-        
-		numero = atof(aux); 
-		if ((numero==0) && (aux != "0"))
-			return RES_DATO_NO_VALIDO; //dato no valido como numero float
-
-		// Evaluo si el valor esta dentro de los limites que permite el tipo de dato
-        if ((numero < FLT_MIN) || (numero > FLT_MAX ))
-			return RES_DATO_FUERA_RANGO; //dato fuera del rango de los float
-
-		err = trEnviar(pConexion,td_float,1,aux);
-		if ( err != RES_OK ){
-			return err;	//error al enviar los datos
-		};
-
-		aux = strtok (NULL, " ");
-		i++;
+int validarString(char cadenaPalabras[MAX],int* cont){
+	char *b = NULL;
+	int contador = 0;
+	int a = 0;
+	b= strtok(cadenaPalabras, " ");
+	while (b!= NULL) {
+		b= strtok(NULL, " ");
+		if (b!= NULL) {
+			contador = contador + 1;
+			if (contador == 1) {
+				//tomo el tamanio de toda la cadena despues del STRING
+				a = strlen(b);
+			}
+		}
 	}
-	return RES_OK;
-};
-
-
-int parse_to_double(CONEXION *pConexion, char* buffer){
-	int err, i=0;
-	double numero;
-	char*  aux;
-
-	aux = strtok (buffer," ");
-
-	//Valido de a uno los numeros ingresados y los envío
-	while (aux != NULL){
-		
-		if (!(tieneFormatoDecimal(aux)))
-			return RES_DATO_NO_VALIDO;
-		
-		numero = atof(aux);
-
-		if ((numero==0) && (aux != "0"))
-			return RES_DATO_NO_VALIDO; //dato no valido como numero double
-
-		// Evaluo si el valor esta dentro de los limites que permite el tipo de dato
-        if (!((numero > DBL_MINIMO) && (numero < DBL_MAXIMO )))
-			return RES_DATO_FUERA_RANGO; //dato fuera del rango de los double
-
-		err = trEnviar(pConexion,td_float,1,aux);
-		if ( err != RES_OK ){
-			return err;	//error al enviar los datos
-		};
-
-		aux = strtok (NULL, " ");
-		i++;
+	if (contador == 0) {
+			return 1;
 	}
-	return RES_OK;
-};
+	*cont = a;
+	return 0;
+}
 
+int validarLimitesInt(int num) {
+	if ((num<-32768) || (num>32767)) {
+		return 1;
+	}
+	return 0;
+}
 
-int quit(){
-
-	return RES_OK;
-};
-
-
-int parser(CONEXION *pConexion, char* buffer, char *tipo){
-	int err;
-	int bEntre;
-	char *fin;
-    char s1[7];
-	bEntre = 0;
+int validarInt(char cadenaNum[MAX],int* cont) 
+{
+	char *b = NULL;
+	int r=0;
+	int contador = 0;
+	char *noente = NULL;
+	int numero = 0;
 	
-	if (strncmp(buffer,"STRING ",7) == 0){
-		// Envio del comando
-	    
-		strncpy( s1, buffer, 6 );
-        s1[6]='\0';
-      	err=trEnviar(pConexion,td_char,1,s1);
-		if ( err != RES_OK ){
-			return err;
-		};
+	
+	b= strtok(cadenaNum, " ");
 		
-		// Parseo string
-
-		err = parse_to_string(pConexion,strchr(buffer,' '));
-		if ( err != RES_OK ){
-			return err;
-		};	
-		
-		bEntre = 1;
-		fin = strchr(buffer,'\n');
-		if(fin == NULL)
-			*tipo = 'C';
-		else
-			*tipo = '0';
-	}
-	else if ( *tipo == 'C'){
-		// Parseo string
-		err = parse_to_string(pConexion,buffer);
-		if ( err != RES_OK ){
-			return err;
-		};	
-		
-		bEntre = 1;
-		fin = strchr(buffer,'\n');
-		if(fin == NULL)
-			*tipo = 'C';
-		else
-			*tipo = '0';
-	}
-	else if ( strncmp(buffer,"DOUBLE ",7) == 0 )  
+	while (b!= NULL)
 	{
-		
-		// Envio del comando
-	    
-		strncpy( s1, buffer, 6 );
-        s1[6]='\0';
-      	err=trEnviar(pConexion,td_char,1,s1);
-		if ( err != RES_OK ){
-			return err;
-		};
-		
-		err = parse_to_double(pConexion, strchr(buffer,' '));
-		if ( err != RES_OK )
+		b= strtok(NULL, " ");
+		if (b!= NULL)
 		{
-			return err;
-		};	
-		
-		bEntre = 1;
-
-	}
-	else if ( strncmp(buffer,"FLOAT ",6) == 0 ) 
-	{	
-
-		// Envio del comando
-	    
-		strncpy( s1, buffer, 5 );
-        s1[5]='\0';
-      	err=trEnviar(pConexion,td_char,1,s1);
-		if ( err != RES_OK ){
-			return err;
-		};
-		
-		err = parse_to_float(pConexion,strchr(buffer,' '));
-		if ( err != RES_OK )
+			contador = contador + 1;
+			numero = strtol(b, &noente, 10 );
+			if ((*noente != '\0') || (numero == MAX_INT) || (numero == MIN_INT))
+			{
+				r = 1;
+			}
+			else {
+				r = validarLimitesInt(numero);
+			}
+		}
+		if (contador == 0)
 		{
-			return err;
-		};	
-		
-		bEntre = 1;
+			r = 1;
+		}
+	}
+	//cargo la cnatidad de numeros
+	*cont = contador;
+	return r;	
+}
 
-	} 
-	else if ( strncmp(buffer,"INT ",4) == 0 ) 
-	{	
-        // Envio del comando
-	    
-		strncpy( s1, buffer, 3 );
-        s1[3]='\0';
-      	err=trEnviar(pConexion,td_char,1,s1);
-		if ( err != RES_OK ){
-			return err;
-		};
+int validarDouble(char cadenaNum[MAX],int* cont) {
+	char *b = NULL;
+	int contador = 0;
+	char *nodouble = NULL;
+	double numero = 0;
+	double maxDouble = strtod("1.7e309",&nodouble);
+	double minDouble = strtod("1.7e-309",&nodouble);
 
-		err = parse_to_int(pConexion,strchr(buffer,' '));
-		if ( err != RES_OK )
+    b= strtok(cadenaNum, " ");
+
+	while (b!= NULL)
+	{
+		b= strtok(NULL, " ");
+		if (b!= NULL)
 		{
-			return err;
-		};	
-		
-		bEntre = 1;
-
-	} 
-	else if (strncmp(buffer,"QUIT",4) == 0 ){			
-		*tipo = 'Q';
-		bEntre = 1;
-		trEnviar(pConexion,td_char,1,"El otro lado finalizo su conexion\n");
-		trEnviar(pConexion,td_char,1,"");
-		pConexion->Puerto = 0;
+			contador = contador + 1;
+			numero = strtod (b, &nodouble);
+			if ((*nodouble != '\0') || (numero == maxDouble) || (numero == minDouble))
+			{
+				return 1;
+			}
+		}
+		if (contador == 0)
+		{
+			return 1;
+		}
 	}
-	else{	
-		return RES_COMANDO_NO_VALIDO;
+	//cargo la cnatidad de numeros
+	*cont = contador;
+	return 0;	
+}
+
+void minAmayu( char* s ){
+   while( *s ){
+      *s = toupper((int)*s);
+      s++;
+   }
+}
+
+char *readLine()
+{
+    char c;
+    char *szCadena;
+    char *szAuxiliar;
+    int iAllocSize=LONGITUD_INICIAL;
+    int iAllocUsed=0;
+    szCadena = (char*) malloc (LONGITUD_INICIAL * sizeof(char));
+	if (szCadena==NULL)
+	{
+        fprintf(stderr,"%s\n","ERROR");
+        return NULL;
+    }
+    while ((c=getchar())!='\n') {
+        if (iAllocUsed < iAllocSize-1) {
+            szAuxiliar = (char*) realloc(szCadena,(iAllocSize+INCREMENTO)*sizeof(char));
+            if (szAuxiliar==NULL) {
+                fprintf(stderr,"%s\n","ERROR");
+                free(szCadena);
+                return NULL;
+            }
+            iAllocSize+=INCREMENTO;
+            szCadena = szAuxiliar;
+        }
+        szCadena[iAllocUsed++]=c;
+    }
+    szCadena[iAllocUsed]='\0';
+    szCadena[iAllocUsed+1]='\0';
+	return szCadena;
+}
+
+char* copiaChar(char* c) 
+{
+	int tamanio = strlen(c);
+	char* copiaArg = (char*) calloc (tamanio,sizeof(char*));
+	int contador = 0;	
+	
+	while (*c != 0) 
+	{
+		*copiaArg = *c;
+		c++;
+		copiaArg++;
+		contador++;
 	}
+	c = c - contador;
+	copiaArg = copiaArg - contador;
+	return(copiaArg);
+}
 
-	if (bEntre = 0)
-		return RES_COMANDO_NO_VALIDO;
 
-	return RES_OK;
+int validar(char* c,int* cont)
+{
+	char* comando = NULL;
+	
+	char* c1 = copiaChar(c);
+	char* c2 = copiaChar(c);
+	int resul = 1;
 
-};
+	comando = strtok(c1," ");
+	minAmayu(comando);
+	//pasa de minuscula a mayuscula
 
+	if (comando)  //si no es null
+	{
+		if (strcmp(comando,"QUIT") == 0) 
+		{
+			resul = validarQuit(c2,cont);
+		}
+		if (strcmp(comando,"STRING") == 0) 
+		{ 
+			resul = validarString(c2,cont);
+		}
+		if (strcmp(comando,"INT") == 0)
+		{
+			resul = validarInt(c2,cont);
+		}
+		if (strcmp(comando,"DOUBLE") == 0)
+		{
+			resul = validarDouble(c2,cont);
+		}
+	}
+	free(c1);
+	free(c2);
+	return resul;
+}
