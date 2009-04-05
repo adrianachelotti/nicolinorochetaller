@@ -12,7 +12,6 @@ CONEXION *pConexion;
 
 
 
-
 /*****************************************************************/
 /* readFunction: Función encargada de recibir lo que envia el    */
 /* servidor mientras la conexión se encuentre establecida        */
@@ -21,10 +20,11 @@ DWORD WINAPI readFunction(LPVOID param)
 {
 	int cantItems;
 	enum tr_tipo_dato tipo;
-
-	while(trConexionActiva(pConexion) == RES_OK)
+	
+	while(pConexion->len > 0)
 	{
-		if(trRecibir(pConexion,&tipo,&cantItems,NULL) != RES_OK)
+				
+		if(trRecibir(pConexion,tipo,cantItems,NULL) != RES_OK)
 			pConexion->len = 0;
 
 	}
@@ -39,28 +39,56 @@ DWORD WINAPI readFunction(LPVOID param)
  
 DWORD WINAPI writeFunction(LPVOID param) 
 {
-	char buffer[TAMBUFFER], *msg;
-	int err;
-	char tipo = '0';
-
-	while(trConexionActiva(pConexion) == RES_OK)
+	int err = 0;
+	
+	while(pConexion->len > 0) 
 	{
-		fgets(buffer,TAMBUFFER-1,stdin); 
-
-		msg = malloc(strlen(buffer));
-		strcpy(msg,buffer);
-
-		err = parser(pConexion,msg,&tipo);
-
-		if ( err != RES_OK )
+		char * original = readLine();
+		int cantidadDeItems = 0;
+		int resultadoValidacion = validar(original,&cantidadDeItems);
+		char* c1 = copiaChar(original);
+		char* primeraPalabra = NULL;
+		primeraPalabra=	strtok(c1," ");
+		 
+        if ( resultadoValidacion == VALIDACION_OK )
 		{
-			err = trEnviar(pConexion,td_char,1,"HUBO ERROR EN EL PARSEO\n");
+			if (strcmp(primeraPalabra,"QUIT") == 0)
+			{
+				//err = trEnviar(pConexion,td_char,1,"QUIT"); ???
+				printf("Validacion QUIT");
+				pConexion->Puerto = 0;
+				pConexion->len = 0;
+			}
+			else if (strcmp(primeraPalabra,"STRING") == 0) 
+			{ 
+				err = trEnviar(pConexion,td_command,1,"STRING");
+				if (err==RES_OK) err = trEnviar(pConexion,td_char,strlen(original),original);
+			}
+			else if (strcmp(primeraPalabra,"INT") == 0) 
+			{
+				err = trEnviar(pConexion,td_command,1,"INT");
+				if (err==RES_OK) err = trEnviar(pConexion,td_int,cantidadDeItems,original);
+			}
 			
+			else if (strcmp(primeraPalabra,"DOUBLE") == 0)
+			{
+				err = trEnviar(pConexion,td_command,1,"DOUBLE");
+				if (err==RES_OK) err = trEnviar(pConexion,td_double,cantidadDeItems,original);
+			}
 			if (err != RES_OK)
 				printf("Error al enviar el mensaje");
+
 		}
-		if(tipo == 'Q')
-			pConexion->len = 0;
+		else 
+		{
+			err = trEnviar(pConexion,td_char,1,"El mensaje que se desea enviar no posee el formato establecido.\n");
+			
+			if (err != RES_OK) 	printf("Error al enviar el mensaje de error.");
+			
+			printf("Error al enviar el mensaje, no posee el formato establecido.");
+
+		}		
+			
 	}
 	return 0;
 }
@@ -90,14 +118,14 @@ int main(int argc, char* argv[])
 
 	if(trConectar(argv[1],puerto,pConexion) != RES_OK)
 	{
-		printf("No se ha podido establecer la conexion con el servidor. Verifique si el IP y Puerto ingresado son validos.\n");
+		printf("No se ha podido establecer la conexion con el servidor.\n Verifique si el IP y Puerto ingresado son validos.\n");
 		return RES_NOT_OK;
 	}
 
 	printf("Conexion establecida....\n ");
 
-	threadWriter = CreateThread(NULL,0,writeFunction,pConexion,0,NULL);	
-	threadReader = CreateThread(NULL,0,readFunction,pConexion,0,NULL);
+	threadWriter = CreateThread(NULL,0,writeFunction,NULL,0,NULL);	
+	threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);
 	
 	WaitForSingleObject(threadWriter,INFINITE);		
 
