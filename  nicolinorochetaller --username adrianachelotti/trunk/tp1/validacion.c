@@ -12,12 +12,13 @@
 #define LONGITUD_INICIAL   1024
 #define INCREMENTO          512
 
-#define MAX 1024
-#define MAX_INT 2147483647
-#define MIN_INT -2147483648
+#define MAX_INT 32767
+#define MIN_INT -32768
+#define MAX_INT_LONG 2147483647
+#define MIN_INT_LONG -2147483648
 
 
-int validarQuit(char cadenaPalabras[MAX],int* cont)
+int validarQuit(char* cadenaPalabras,int* cont)
 {
 	char *b = NULL;
 	int contador = 0;
@@ -35,7 +36,7 @@ int validarQuit(char cadenaPalabras[MAX],int* cont)
 	return 0;
 }
 
-int validarString(char cadenaPalabras[MAX],int* cont){
+int validarString(char* cadenaPalabras,int* cont){
 	char *b = NULL;
 	int contador = 0;
 	int a = 0;
@@ -44,27 +45,24 @@ int validarString(char cadenaPalabras[MAX],int* cont){
 		b= strtok(NULL, " ");
 		if (b!= NULL) {
 			contador = contador + 1;
-			if (contador == 1) {
-				//tomo el tamanio de toda la cadena despues del STRING
-				a = strlen(b);
-			}
+			a = a + strlen(b) + 1;
 		}
 	}
 	if (contador == 0) {
 			return 1;
 	}
-	*cont = a;
+	*cont = a - 1;
 	return 0;
 }
 
 int validarLimitesInt(int num) {
-	if ((num<-32768) || (num>32767)) {
+	if ((num<-MIN_INT) || (num>MAX_INT)) {
 		return 1;
 	}
 	return 0;
 }
 
-int validarInt(char cadenaNum[MAX],int* cont) 
+int validarInt(char* cadenaNum,int* cont) 
 {
 	char *b = NULL;
 	int r=0;
@@ -82,7 +80,7 @@ int validarInt(char cadenaNum[MAX],int* cont)
 		{
 			contador = contador + 1;
 			numero = strtol(b, &noente, 10 );
-			if ((*noente != '\0') || (numero == MAX_INT) || (numero == MIN_INT))
+			if ((*noente != '\0') || (numero == MAX_INT_LONG) || (numero == MIN_INT_LONG))
 			{
 				*cont = 0;
 				return 1;
@@ -101,7 +99,7 @@ int validarInt(char cadenaNum[MAX],int* cont)
 	return r;	
 }
 
-int validarDouble(char cadenaNum[MAX],int* cont) {
+int validarDouble(char* cadenaNum,int* cont) {
 	char *b = NULL;
 	int contador = 0;
 	char *nodouble = NULL;
