@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <float.h>
+#include <utilidades.h>
 
 #pragma comment(lib,"ws2_32.lib")
 
@@ -92,10 +93,50 @@ int trConectar(const char *pDireccion, int Puerto, CONEXION *pConexion )
 
 int trEnviar(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, const void *datos)
 {
-			
-	pConexion->len = send(pConexion->socketAccept,(char*)datos,strlen((char*)datos),0);	
 	
-	return RES_OK;
+	void *datosAEnviar;
+	int bytesTotalesAEnviar;
+	int bytesEnviados;
+	int resultado = RES_OK;
+
+	if(tipo == td_command)
+	{
+		bytesTotalesAEnviar = strlen((char*)datos) ;
+		pConexion->len = send(pConexion->socketAccept,(char*)datos,bytesTotalesAEnviar,0);
+		bytesEnviados = pConexion->len;
+	}
+	else
+	{
+	
+		bytesTotalesAEnviar = (cantItems * getTamanioTipoDato(tipo));
+	
+		datosAEnviar = malloc (bytesTotalesAEnviar);
+
+		/*************************************************************************************************/
+		
+		//	VER QUE PASA CON EL MEMCPY!!!!!!!!!!!!!!
+
+		/*************************************************************************************************/
+
+		//Copio a un bloque de memoria los datos a enviar
+		memcpy(datosAEnviar,datos,bytesTotalesAEnviar);
+		
+	
+
+		pConexion->len = send( pConexion->socketAccept,datosAEnviar,bytesTotalesAEnviar,0);
+		bytesEnviados = pConexion->len;
+
+	}
+	
+	
+
+	if ( bytesEnviados != bytesTotalesAEnviar ) 
+	{  
+		resultado = RES_NOT_OK;
+	}
+
+	return resultado;
+
 }
 
 
@@ -105,20 +146,32 @@ int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void *d
 	
 	if(tipo == td_command)
 	{
-		char* comando = NULL;
-		const char* cantidad;
-		char bufferComando[1024];
+		char buffer[1024];
+		int err;
 
-		pConexion->len=recv(pConexion->socketAccept,bufferComando,1024,0); //recibimos los datos que envie
-		comando = strtok(bufferComando," ");
-		cantidad = strtok(NULL," ");
-		cantItems = atoi(cantidad);
-		tipo = td_int;
-		trRecibir(pConexion,tipo,cantItems,datos);
+		strcpy(buffer,"");
+		
+		pConexion->len=recv(pConexion->socketAccept,buffer,1024,0); //recibimos los datos que envie
+        
+
+		if(pConexion->len == 0 || strcmp(buffer,"") == 0)
+		{
+			return RES_NOT_OK;
+		}
+		else
+		{
+			
+			obtenerComandoYCantidadDeItems(buffer,&tipo,&cantItems);
+
+			err=trRecibir(pConexion,tipo,cantItems,datos);
+		
+			return err;
+		}
+
 	}
 	else
 	{		
-		int tamanioBuffer = cantItems;
+		int tamanioBuffer = cantItems*getTamanioTipoDato(tipo);
 		char* buffer = malloc (tamanioBuffer); 
 		
 		strcpy(buffer,"");
@@ -131,8 +184,11 @@ int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void *d
 		}
 		else
 		{
-			buffer[pConexion->len] = 0; //le ponemos el final de cadena
-			printf(">%s",buffer); //imprimimos la cadena recibida
+
+		//	buffer[pConexion->len] = 0; //le ponemos el final de cadena
+           datos= desSerializarDatos(tipo,cantItems,buffer);
+			printf("%s" , (char*)datos);
+			return RES_OK;			
 		}
 		free(buffer);
 	}
