@@ -58,8 +58,7 @@ DWORD WINAPI writeFunction(LPVOID param)
 			enum tr_tipo_dato tipo;
 			
 			minAmayu(comando);	
-			tipo = getTipo(comando);
-			comandoYCantidad = obtenerCadenaComandoYCantidad(comando,cantidadDeItems);
+			
 			
 			if (strcmp(comando,"QUIT") == 0)
 			{
@@ -72,7 +71,8 @@ DWORD WINAPI writeFunction(LPVOID param)
 			}
 			else
 			{ 
-				
+				tipo = getTipo(comando);
+				comandoYCantidad = obtenerCadenaComandoYCantidad(comando,cantidadDeItems);	
 				datosSerializados = serializarDatos(tipo,cantidadDeItems,datos);
 				
 				err = trEnviar(pConexion,td_command,1,comandoYCantidad);
