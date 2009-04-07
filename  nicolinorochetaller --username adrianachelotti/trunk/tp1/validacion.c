@@ -56,7 +56,7 @@ int validarString(char* cadenaPalabras,int* cont){
 }
 
 int validarLimitesInt(int num) {
-	if ((num<-MIN_INT) || (num>MAX_INT)) {
+	if ((num<MIN_INT) || (num>MAX_INT)) {
 		return 1;
 	}
 	return 0;
