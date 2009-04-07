@@ -211,23 +211,46 @@ void* desSerializarDatos( enum tr_tipo_dato tipo , int cantidad ,void * datos )
 	int espacios;
 	int tamanioAcumulado;
 	const char* cadenaTipo;
-	
+	int enviarComando=0;
 	if( tipo == td_char )
 	{
-		return datos;
+		if(enviarComando==0){
+			const char* comandoChar = "STRING ";
+			const char* comandoFinDeLinea = "\0";
+			datosDesSerializados = malloc(7+cantidad+1); 
+			memcpy( datosDesSerializados , comandoChar , 7 );
+			memcpy( (void*)((int)datosDesSerializados+7) , datos , cantidad);
+			memcpy( (void*)((int)datosDesSerializados+cantidad+7) , comandoFinDeLinea , 1);
+			return datosDesSerializados;
+		}else{
+			
+			const char* comandoFinDeLinea = "\0";
+			datosDesSerializados = malloc(cantidad+1); 
+			memcpy( (void*)((int)datosDesSerializados) , datos , cantidad);
+			memcpy( (void*)((int)datosDesSerializados+cantidad) , comandoFinDeLinea , 1);
+			return datosDesSerializados;
+		}
 	}
+	if(enviarComando==0){
+		tamanioTipoDato = getTamanioTipoDato( tipo );
+		espacios = cantidad+1;
+		tamanioAcumulado =getTamanioCadenaTipo(tipo)+1;
+		cadenaTipo= getCadenaTipo(tipo);
+		datosDesSerializados = malloc(getTamanioCadenaTipo(tipo)+ tamanioTipoDato * cantidad + espacios + 4);
+		memcpy( datosDesSerializados , cadenaTipo , getTamanioCadenaTipo(tipo)+1 );
+	}
+	else
+	{
+		tamanioTipoDato = getTamanioTipoDato( tipo );
+		espacios = cantidad;
+		tamanioAcumulado =0;
+		
+		datosDesSerializados = malloc( tamanioTipoDato * cantidad + espacios + 4);
 
-	tamanioTipoDato = getTamanioTipoDato( tipo );
-	espacios = cantidad+1;
-	tamanioAcumulado =getTamanioCadenaTipo(tipo)+1;
-	cadenaTipo= getCadenaTipo(tipo);
-	
-	datosDesSerializados = malloc(getTamanioCadenaTipo(tipo)+ tamanioTipoDato * cantidad + espacios + 4);
-	
+	}
 	datoAux = malloc( tamanioTipoDato);
 
 
-	memcpy( datosDesSerializados , cadenaTipo , getTamanioCadenaTipo(tipo)+1 );
 
 	for( index = 0 ; index < cantidad ; index ++)
 	{
