@@ -2,6 +2,7 @@
 #include <transferencia.h>
 #include <windows.h>
 #include <validacion.h>
+#include <utilidades.h>
 
 #define TAMBUFFER 1024
 #define PORT_MAX 65535
@@ -43,58 +44,49 @@ DWORD WINAPI writeFunction(LPVOID param)
 	
 	while(pConexion->len > 0) 
 	{
-		char * original = readLine();
+		char * datosEntrada = readLine();
 		int cantidadDeItems = 0;
-		char* contenido = NULL; // contenido posterior al comando
-		int resultadoValidacion = validar(original,&cantidadDeItems, &contenido);
-		char* c1 = copiaChar(original);
-		char* primeraPalabra = NULL;
+		char* datos = NULL; // contenido posterior al comando
+		int resultadoValidacion = validar(datosEntrada,&cantidadDeItems, &datos);
 		
-		char buffer[33];
-		const char* contenidoBis = contenido;
-		
-		if (contenidoBis != NULL)
-		{
-			int tamanio = strlen(contenidoBis);
-			char* cadenaTamanio = itoa(tamanio,buffer,10);
-			char * cadenaFinal = strcat(cadenaTamanio," INT\0");
-		}
-
-		primeraPalabra=	strtok(c1," ");
-		
-	
+					
         if ( resultadoValidacion == VALIDACION_OK )
 		{
-			if (strcmp(primeraPalabra,"QUIT") == 0)
+			void* datosSerializados;
+			char* comando = strtok(datosEntrada," ");
+			char* comandoYCantidad ;
+			enum tr_tipo_dato tipo;
+			
+			minAmayu(comando);	
+			tipo = getTipo(comando);
+			comandoYCantidad = obtenerCadenaComandoYCantidad(comando,cantidadDeItems);
+			
+			if (strcmp(comando,"QUIT") == 0)
 			{
 				//err = trEnviar(pConexion,td_char,1,"QUIT"); ???
-				printf("Validacion QUIT");
+					
 				pConexion->Puerto = 0;
 				pConexion->len = 0;
+				exit(0);
+				
 			}
-			else if (strcmp(primeraPalabra,"STRING") == 0) 
+			else
 			{ 
-				err = trEnviar(pConexion,td_command,1,"STRING 4096\0");
-				if (err==RES_OK) err = trEnviar(pConexion,td_char,cantidadDeItems,contenido);
-			}
-			else if (strcmp(primeraPalabra,"INT") == 0) 
-			{
-				err = trEnviar(pConexion,td_command,1,"INT 4096\0");
-				if (err==RES_OK) err = trEnviar(pConexion,td_int,cantidadDeItems,contenido);
+				
+				datosSerializados = serializarDatos(tipo,cantidadDeItems,datos);
+				
+				err = trEnviar(pConexion,td_command,1,comandoYCantidad);
+				
+				if (err==RES_OK) err = trEnviar(pConexion,tipo,cantidadDeItems,datosSerializados);
 			}
 			
-			else if (strcmp(primeraPalabra,"DOUBLE") == 0)
-			{
-				err = trEnviar(pConexion,td_command,1,"DOUBLE 4096\0");
-				if (err==RES_OK) err = trEnviar(pConexion,td_double,cantidadDeItems,contenido);
-			}
 			if (err != RES_OK)
-				printf("Error al enviar el mensaje");
+				printf("Error al enviar el mensaje.\n");
 
 		}
 		else 
 		{
-			err = trEnviar(pConexion,td_char,1,"El mensaje que se desea enviar no posee el formato establecido.\n");
+		//	err = trEnviar(pConexion,td_char,1,"El mensaje que se desea enviar no posee el formato establecido.\n");
 			
 			if (err != RES_OK) 	printf("Error al enviar el mensaje de error.");
 			

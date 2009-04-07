@@ -94,6 +94,14 @@ SOURCE=..\transferencia.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\utilidades.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\utilidades.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\validacion.c
 # End Source File
 # Begin Source File

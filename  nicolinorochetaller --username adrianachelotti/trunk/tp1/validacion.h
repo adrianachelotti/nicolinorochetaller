@@ -10,4 +10,6 @@ char *readLine();
 
 char* copiaChar(char* c);
 
+void minAmayu( char* s );
+
 #endif /* VALIDACION_H_ */

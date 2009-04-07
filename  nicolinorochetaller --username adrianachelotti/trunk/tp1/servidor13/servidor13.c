@@ -22,9 +22,9 @@ DWORD WINAPI readFunction(LPVOID param)
 	{
 		int cantItems = 1;
 		enum tr_tipo_dato tipo = td_command;
-
 		if(trRecibir(pConexion,tipo,cantItems,NULL) != RES_OK)
 			pConexion->len = 0;
+		
 
 	}
 	return 0;
@@ -83,7 +83,7 @@ DWORD WINAPI writeFunction(LPVOID parametro)
 		}
 		else 
 		{
-			err = trEnviar(pConexion,td_char,1,"El mensaje que se desea enviar no posee el formato establecido.\n");
+			//err = trEnviar(pConexion,td_char,1,"El mensaje que se desea enviar no posee el formato establecido.\n");
 			
 			if (err != RES_OK) 	printf("Error al enviar el mensaje de error.\n");
 			
