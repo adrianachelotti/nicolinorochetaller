@@ -41,9 +41,10 @@ DWORD WINAPI readFunction(LPVOID param)
 DWORD WINAPI writeFunction(LPVOID param) 
 {
 	int err = 0;
-	
+	printf("Enviar: ");
 	while(pConexion->len > 0) 
 	{
+		
 		char * datosEntrada = readLine();
 		int cantidadDeItems = 0;
 		char* datos = NULL; // contenido posterior al comando
@@ -62,12 +63,10 @@ DWORD WINAPI writeFunction(LPVOID param)
 			
 			if (strcmp(comando,"QUIT") == 0)
 			{
-				//err = trEnviar(pConexion,td_char,1,"QUIT"); ???
-					
+						
 				pConexion->Puerto = 0;
 				pConexion->len = 0;
-				exit(0);
-				
+				printf("Cliente desconectandose... \n");
 			}
 			else
 			{ 
@@ -80,21 +79,25 @@ DWORD WINAPI writeFunction(LPVOID param)
 				if (err==RES_OK) err = trEnviar(pConexion,tipo,cantidadDeItems,datosSerializados);
 			}
 			
-			if (err != RES_OK)
-				printf("Error al enviar el mensaje.\n");
+			if (err == RES_NOT_OK) 	printf("No se ha podido enviar el mensaje. Reintente nuevamente\n");
+			if (err == RES_NOT_TOTAL_DATA) 	printf("No se ha podido enviar el mensaje completo. Reintente nuevamente\n");
+		
 
 		}
 		else 
 		{
-		//	err = trEnviar(pConexion,td_char,1,"El mensaje que se desea enviar no posee el formato establecido.\n");
+		
 			
-			if (err != RES_OK) 	printf("Error al enviar el mensaje de error.\n");
+			if (err == RES_NOT_OK) 	printf("No se ha podido enviar el mensaje. Reintente nuevamente\n");
+			if (err == RES_NOT_TOTAL_DATA) 	printf("No se ha podido enviar el mensaje completo. Reintente nuevamente\n");
 			
-			printf("Error al enviar el mensaje, no posee el formato establecido.\n");
+			
+			printf("El mensaje que ha querido enviar posee un formato invalido. Reintente nuevamente. \n");
 
 		}		
-			
+		printf("Enviar: ");
 	}
+
 	return 0;
 }
 
@@ -137,8 +140,11 @@ int main(int argc, char* argv[])
 	CloseHandle(threadWriter);
 	CloseHandle(threadReader);
 
+   
 	trCerrarConexion(pConexion);
-	
+
+	printf("Presione una tecla para finalizar.");
+	getchar();
 	return 0;
 }
 

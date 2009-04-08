@@ -211,7 +211,7 @@ void* desSerializarDatos( enum tr_tipo_dato tipo , int cantidad ,void * datos )
 	int espacios;
 	int tamanioAcumulado;
 	const char* cadenaTipo;
-	int enviarComando=0;
+	int enviarComando=1;
 
 	if( tipo == td_char )
 	{
