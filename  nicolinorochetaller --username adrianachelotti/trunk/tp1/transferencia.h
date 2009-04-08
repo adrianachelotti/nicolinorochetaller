@@ -16,6 +16,7 @@ enum tr_tipo_dato { td_int, td_char, td_double , td_command };
 /* Resulados de las funciones.*/
 #define RES_OK 0
 #define RES_NOT_OK -1
+#define RES_NOT_TOTAL_DATA -2
 
 /* Los errores que siguen deben empezar con RES_ seguido de un nombre, por ejemplo
 RES_TIMEOUT */

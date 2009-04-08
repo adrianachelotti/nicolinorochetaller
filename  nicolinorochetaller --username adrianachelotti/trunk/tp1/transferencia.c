@@ -31,7 +31,7 @@ int trEscuchar(int Puerto, CONEXION *pConexion)
 	{
 		return RES_NOT_OK;
 	}
-	
+
 	//ponemos el socket a la escucha
 	if (listen(pConexion->socketListen,1)==RES_NOT_OK)
 	{
@@ -62,7 +62,7 @@ int trConectar(const char *pDireccion, int Puerto, CONEXION *pConexion )
 
 	//resolvemos el nombre de dominio
 	host=gethostbyname(pDireccion);
-
+	
 	//creamos el socket
 	pConexion->socketListen = socket(AF_INET,SOCK_STREAM,IPPROTO_TCP);
 
@@ -125,7 +125,7 @@ int trEnviar(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, const vo
 	
 	if ( bytesEnviados != bytesTotalesAEnviar ) 
 	{  
-		resultado = RES_NOT_OK;
+		resultado = RES_NOT_TOTAL_DATA;
 	}
 
 	return resultado;
@@ -144,7 +144,10 @@ int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void *d
 
 		strcpy(buffer,"");
 		
+		
 		pConexion->len=recv(pConexion->socketAccept,buffer,1024,0); //recibimos los datos que envie
+
+
         
 		if(pConexion->len == 0 || strcmp(buffer,"") == 0)
 		{
@@ -164,6 +167,7 @@ int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void *d
 	else
 	{		
 		int tamanioBuffer = cantItems*getTamanioTipoDato(tipo);
+		
 		void* buffer = malloc (tamanioBuffer); 
 		
 		pConexion->len=recv(pConexion->socketAccept,buffer,tamanioBuffer,0); //recibimos los datos que envie
@@ -175,9 +179,10 @@ int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void *d
 		else
 		{
 
-		//	buffer[pConexion->len] = 0; //le ponemos el final de cadena
+		
             datos= desSerializarDatos(tipo,cantItems,buffer);
-			printf("%s\n" , (char*)datos);
+			printf("\n Recibiendo:  %s\n" , (char*)datos);
+			printf("Enviar: ");
 			return RES_OK;			
 		}
 		free(buffer);
