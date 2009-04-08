@@ -116,9 +116,11 @@ int validarDouble(char* cadenaNum,int* cont) {
 		{
 			contador = contador + 1;
 			numero = strtod (b, &nodouble);
-			if ((*nodouble != '\0') || (numero == maxDouble) || (numero == minDouble))
-			{
-				return 1;
+			if ( (strcmp(b,"0") != 0) && (strcmp(b,"0.0") != 0) && (strcmp(b,"0.00") != 0) ) {
+				if ((*nodouble != '\0') || (numero == maxDouble) || (numero == minDouble))
+				{
+					return 1;
+				}
 			}
 		}
 		if (contador == 0)
