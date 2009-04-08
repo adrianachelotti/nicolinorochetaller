@@ -124,7 +124,7 @@ void* getDatoSerializado( char * aux , enum tr_tipo_dato tipo )
 {
 	void* resultado;
 	int intAuxiliar;
-	double doubleAuxiliar;
+	double doubleAuxiliar=0;
 	
 	if( tipo == td_int )
 	{
@@ -138,7 +138,7 @@ void* getDatoSerializado( char * aux , enum tr_tipo_dato tipo )
 	}
 	if( tipo == td_double )
 	{
-		resultado = malloc( sizeof(double));
+		resultado = malloc(sizeof(double));
 		doubleAuxiliar = atof(aux);
 		memcpy( resultado, &doubleAuxiliar, sizeof(double));
 	}
@@ -212,9 +212,11 @@ void* desSerializarDatos( enum tr_tipo_dato tipo , int cantidad ,void * datos )
 	int tamanioAcumulado;
 	const char* cadenaTipo;
 	int enviarComando=0;
+
 	if( tipo == td_char )
 	{
-		if(enviarComando==0){
+		if(enviarComando==0)
+		{
 			const char* comandoChar = "STRING ";
 			const char* comandoFinDeLinea = "\0";
 			datosDesSerializados = malloc(7+cantidad+1); 
@@ -222,8 +224,9 @@ void* desSerializarDatos( enum tr_tipo_dato tipo , int cantidad ,void * datos )
 			memcpy( (void*)((int)datosDesSerializados+7) , datos , cantidad);
 			memcpy( (void*)((int)datosDesSerializados+cantidad+7) , comandoFinDeLinea , 1);
 			return datosDesSerializados;
-		}else{
-			
+		}
+		else
+		{
 			const char* comandoFinDeLinea = "\0";
 			datosDesSerializados = malloc(cantidad+1); 
 			memcpy( (void*)((int)datosDesSerializados) , datos , cantidad);
@@ -231,11 +234,13 @@ void* desSerializarDatos( enum tr_tipo_dato tipo , int cantidad ,void * datos )
 			return datosDesSerializados;
 		}
 	}
-	if(enviarComando==0){
+	if(enviarComando==0)
+	{
 		tamanioTipoDato = getTamanioTipoDato( tipo );
 		espacios = cantidad+1;
 		tamanioAcumulado =getTamanioCadenaTipo(tipo)+1;
 		cadenaTipo= getCadenaTipo(tipo);
+		
 		datosDesSerializados = malloc(getTamanioCadenaTipo(tipo)+ tamanioTipoDato * cantidad + espacios + 4);
 		memcpy( datosDesSerializados , cadenaTipo , getTamanioCadenaTipo(tipo)+1 );
 	}
@@ -248,8 +253,8 @@ void* desSerializarDatos( enum tr_tipo_dato tipo , int cantidad ,void * datos )
 		datosDesSerializados = malloc( tamanioTipoDato * cantidad + espacios + 4);
 
 	}
+	
 	datoAux = malloc( tamanioTipoDato);
-
 
 
 	for( index = 0 ; index < cantidad ; index ++)

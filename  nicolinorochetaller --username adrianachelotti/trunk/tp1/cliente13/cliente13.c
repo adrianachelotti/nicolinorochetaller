@@ -88,9 +88,9 @@ DWORD WINAPI writeFunction(LPVOID param)
 		{
 		//	err = trEnviar(pConexion,td_char,1,"El mensaje que se desea enviar no posee el formato establecido.\n");
 			
-			if (err != RES_OK) 	printf("Error al enviar el mensaje de error.");
+			if (err != RES_OK) 	printf("Error al enviar el mensaje de error.\n");
 			
-			printf("Error al enviar el mensaje, no posee el formato establecido.");
+			printf("Error al enviar el mensaje, no posee el formato establecido.\n");
 
 		}		
 			

@@ -112,16 +112,9 @@ int trEnviar(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, const vo
 	
 		datosAEnviar = malloc (bytesTotalesAEnviar);
 
-		/*************************************************************************************************/
-		
-		//	VER QUE PASA CON EL MEMCPY!!!!!!!!!!!!!!
-
-		/*************************************************************************************************/
-
 		//Copio a un bloque de memoria los datos a enviar
 		memcpy(datosAEnviar,datos,bytesTotalesAEnviar);
-		
-	
+			
 
 		pConexion->len = send( pConexion->socketAccept,datosAEnviar,bytesTotalesAEnviar,0);
 		bytesEnviados = pConexion->len;
@@ -129,7 +122,7 @@ int trEnviar(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, const vo
 	}
 	
 	
-
+	
 	if ( bytesEnviados != bytesTotalesAEnviar ) 
 	{  
 		resultado = RES_NOT_OK;
@@ -153,7 +146,6 @@ int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void *d
 		
 		pConexion->len=recv(pConexion->socketAccept,buffer,1024,0); //recibimos los datos que envie
         
-
 		if(pConexion->len == 0 || strcmp(buffer,"") == 0)
 		{
 			return RES_NOT_OK;
@@ -172,13 +164,11 @@ int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void *d
 	else
 	{		
 		int tamanioBuffer = cantItems*getTamanioTipoDato(tipo);
-		char* buffer = malloc (tamanioBuffer); 
+		void* buffer = malloc (tamanioBuffer); 
 		
-		strcpy(buffer,"");
-
 		pConexion->len=recv(pConexion->socketAccept,buffer,tamanioBuffer,0); //recibimos los datos que envie
 
-		if(pConexion->len == 0 || strcmp(buffer,"") == 0)
+		if(pConexion->len == 0)
 		{
 			return RES_NOT_OK;
 		}
@@ -186,8 +176,8 @@ int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void *d
 		{
 
 		//	buffer[pConexion->len] = 0; //le ponemos el final de cadena
-           datos= desSerializarDatos(tipo,cantItems,buffer);
-			printf("%s" , (char*)datos);
+            datos= desSerializarDatos(tipo,cantItems,buffer);
+			printf("%s\n" , (char*)datos);
 			return RES_OK;			
 		}
 		free(buffer);
