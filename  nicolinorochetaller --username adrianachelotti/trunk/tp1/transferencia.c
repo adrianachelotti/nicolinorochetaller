@@ -181,7 +181,7 @@ int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void *d
 
 		
             datos= desSerializarDatos(tipo,cantItems,buffer);
-			printf("\n Recibiendo:  %s\n" , (char*)datos);
+			printf("\nRecibido:  %s\n" , (char*)datos);
 			printf("Enviar: ");
 			return RES_OK;			
 		}
