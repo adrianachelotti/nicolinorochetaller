@@ -128,7 +128,7 @@ int main(int argc, char* argv[])
 
 	while(pConexion->Puerto != 0)
 	{
-		printf("Escuchando ...\n");
+		printf("Servidor escuchando ...\n");
 		trEscuchar(puerto,pConexion);	
 		printf("Cliente conectado......\n");
 		
