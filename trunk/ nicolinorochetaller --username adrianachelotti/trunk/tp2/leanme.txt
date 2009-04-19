@@ -1,0 +1,11 @@
+Necesitan bajar la libreria  SDL la cual lo pueden bajar de 
+http://www.libsdl.org/download-1.2.php  el que dice "SDL-devel-1.2.13-VC6.zip (Visual C++ 6.0)"
+
+Para linkearla al visual, son 4 pasos:
+1- En Tools->options, en la solapa que dice directories, seleccionan en show directories for "Include files"
+ y ponen el path de la carpeta "...SDL-1.213\include".
+2- En Tools->options, en la solapa que dice directories, seleccionan en show directories for "Library files"
+ y ponen el path de la carpeta "...SDL-1.213\lib".
+3- En Project->settings , en la solapa que dice C/C++ hay una parte que dice Category selecionen Code Generation 
+en donde dice Use Run-Time Library seleccionar Multithreaded DLL.
+4- Copiar el SDL.dll en la carpeta de Debug donde esta el exe del proyecto.
