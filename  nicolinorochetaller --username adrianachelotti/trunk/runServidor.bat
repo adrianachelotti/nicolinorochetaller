@@ -1,4 +1,4 @@
 SET Y=".\tp1"
 
-cd %y%\servidor13\Debug\
-call .\servidor13.exe 5000
+cd %y%\servidor04\Debug\
+call .\servidor04.exe 5000
