@@ -87,7 +87,7 @@ typedef struct recta
 		  SDL_UnlockSurface(screen); 
 	  } 
 	  
-	  SDL_UpdateRect(screen, x, y, 1, 1); 
+	 // SDL_UpdateRect(screen, x, y, 1, 1); 
 	}
 
 
@@ -118,7 +118,7 @@ void rellenarRectangulo( SDL_Surface *screen,int x,int y,int w, int h,Uint32 col
    }
    //SDL_FillRect(screen,&targetarea,color);
    if (SDL_MUSTLOCK (screen) )      SDL_UnlockSurface (screen);
-   SDL_UpdateRect(screen, 0,0,0,0);
+  // SDL_UpdateRect(screen, 0,0,0,0);
    
 }
 
@@ -265,7 +265,7 @@ int BresenHam( SDL_Surface* screen,Punto A, Punto B,Uint32 color){
     if (SDL_MUSTLOCK (screen) )
         SDL_UnlockSurface (screen);
         
-    SDL_UpdateRect(screen, 0,0,0,0);
+    //SDL_UpdateRect(screen, 0,0,0,0);
   
     return 1;
 }
@@ -326,6 +326,16 @@ double getRectaY(int x , double pendiente, double abscisa )
 {
 	return (pendiente*x)+ abscisa;
 }
+/****************************************************************************
+ *Calcula el punto x producto de la interseccion de una recta cualquiera
+ y la recta Y=k
+ ****************************************************************************/
+double getPuntoX(int y , Recta recta )
+{
+	if(recta.pendiente==0)return -1;
+	return (y-recta.abscisa)/recta.pendiente;
+}
+
 
 /****************************************************************************
  *Retorna :                                                                 *
@@ -417,42 +427,48 @@ void rellenarTriangulo(SDL_Surface *screen,Punto a ,Punto b , Punto c, Uint32 co
 {
 	
 	
-/*	Punto * p1= (Punto*)malloc(sizeof(Punto));
+	Punto * p1= (Punto*)malloc(sizeof(Punto));
 	Punto * p2= (Punto*)malloc(sizeof(Punto));
 	Punto * p3= (Punto*)malloc(sizeof(Punto));
+	Punto puntoInit, puntoEnd;
 	int max, init;
-	/*
-	Recta recta1, recta2, recta3;
+
+	Recta recta31,recta32,recta12;
 	int index=0;
-	recta1.pendiente = calcularPendiente(a,b);
-	recta1.abscisa = calcularAbcisa(a,b);
-	
-	recta2.pendiente = calcularPendiente(b,c);
-	recta2.abscisa = calcularAbcisa(b,c);
-	
-	recta3.pendiente = calcularPendiente(c,a);
-	recta3.abscisa = calcularAbcisa(c,a);*/
-/*
-    
-	printf("punto 1 : %d , %d \n" ,a.x,a.y);
-	printf("punto 2 : %d , %d \n" ,b.x,b.y);
-	printf("punto 3 : %d , %d \n" ,c.x,c.y);
+
 	ordenarPuntosPorY(&a,&b,&c,p1,p2,p3);
-	printf("punto 1 : %d , %d \n" ,p1->x,p1->y);
-	printf("punto 2 : %d , %d \n" ,p2->x,p2->y);
-	printf("punto 3 : %d , %d \n" ,p3->x,p3->y);
-    init = p3->y;
-	max = p1->y;
-	for(int i= init;i<=max;i++)
+	recta31.pendiente=calcularPendiente(*p1,*p3);
+	recta32.pendiente=calcularPendiente(*p2,*p3);
+	recta12.pendiente=calcularPendiente(*p1,*p2);
+	recta31.abscisa= calcularAbcisa(*p1,*p3);
+	recta32.abscisa= calcularAbcisa(*p2,*p3);
+	recta12.abscisa= calcularAbcisa(*p1,*p2);
+	printf("inicio %d  final %d " , p3->y, p2->y );
+	for(index=p3->y;index<p2->y;index++)
 	{
-		dibujarSegmento(screen,*p1,*p2,color);
-		p1->y--;
-		p1->x--;
-		p2->y--;
-		p2->x--;
+		double x1= getPuntoX(index,recta32);
+		double x2= getPuntoX(index, recta31);
+		printf("extremos %d  %d",x1,x2);
+		puntoInit.x=(int) x1;
+
+		puntoEnd.x =(int) x2;
+		puntoInit.y= index;
+		puntoEnd.y= index;
+		dibujarSegmento(screen,puntoInit,puntoEnd,color);
+
 	}
-		
-	*/
+	for(index=p2->y;index<p1->y;index++)
+	{
+		double x1= getPuntoX(index,recta12);
+		double x2= getPuntoX(index, recta31);
+		printf("extremos %d  %d",x1,x2);
+		puntoInit.x=(int) x1;
+		puntoEnd.x =(int) x2;
+		puntoInit.y= index;
+		puntoEnd.y= index;
+		dibujarSegmento(screen,puntoInit,puntoEnd,color);
+
+	}
 
 	
 
@@ -722,7 +738,7 @@ int main(int argc, char *argv[]) {
 	/*
 		Dibuja  Triangulo
 	*/
-	dibujarTriangulo(screen,a1,b1,c1,color);
+	//dibujarTriangulo(screen,a1,b1,c1,color);
 
 	/*
 		Rellenar Triangulo
@@ -731,8 +747,9 @@ int main(int argc, char *argv[]) {
 	 
 	rellenarCirculoTextura(screen, 150,330,25);
 
+
 //	agrandarTextura( screen, 4, 4, 30,30);
-	//comprimirTextura( screen, 1, 3, 30,30);
+//	comprimirTextura( screen, 1, 3, 30,30);
 	//dibujarRectangulo(screen,43+30,65,20,20,0x00FF0000);
 	
      // update the screen (aka double buffering) 
