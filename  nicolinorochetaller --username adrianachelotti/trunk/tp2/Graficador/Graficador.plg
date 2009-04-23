@@ -6,37 +6,54 @@
 --------------------Configuration: Graficador - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\Users\adriana\AppData\Local\Temp\RSP9867.tmp" with contents
+Creating temporary file "C:\Users\Dario\AppData\Local\Temp\RSPDA33.tmp" with contents
 [
-/nologo /MD /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/Graficador.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ  /c 
-"C:\Users\adriana\Desktop\Taller_tp\trunk\tp2\Graficador\main.cpp"
+/nologo /MD /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR"Debug/" /Fp"Debug/Graficador.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"C:\Users\Dario\Documents\UBA\Taller I\tp2\Graficador\main.cpp"
+"C:\Users\Dario\Documents\UBA\Taller I\tp2\Graficador\Escenario.cpp"
+"C:\Users\Dario\Documents\UBA\Taller I\tp2\Graficador\Figura.cpp"
+"C:\Users\Dario\Documents\UBA\Taller I\tp2\Graficador\Textura.cpp"
+"C:\Users\Dario\Documents\UBA\Taller I\tp2\Graficador\Rectangulo.cpp"
 ]
-Creating command line "cl.exe @C:\Users\adriana\AppData\Local\Temp\RSP9867.tmp" 
-Creating temporary file "C:\Users\adriana\AppData\Local\Temp\RSP9868.tmp" with contents
+Creating command line "cl.exe @C:\Users\Dario\AppData\Local\Temp\RSPDA33.tmp" 
+Creating temporary file "C:\Users\Dario\AppData\Local\Temp\RSPDA44.tmp" with contents
 [
-kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/Graficador.pdb" /debug /machine:I386 /out:"Debug/Graficador.exe" /pdbtype:sept 
-.\Debug\main.obj
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/Graficador.pdb" /debug /machine:I386 /out:"Debug/Graficador.exe" /pdbtype:sept 
+".\Debug\main.obj"
+".\Debug\Escenario.obj"
+".\Debug\Figura.obj"
+".\Debug\Textura.obj"
+".\Debug\Rectangulo.obj"
 ]
-Creating command line "link.exe @C:\Users\adriana\AppData\Local\Temp\RSP9868.tmp"
+Creating command line "link.exe @C:\Users\Dario\AppData\Local\Temp\RSPDA44.tmp"
 <h3>Output Window</h3>
 Compiling...
 main.cpp
-c:\users\adriana\desktop\taller_tp\trunk\tp2\graficador\main.cpp(55) : warning C4244: '=' : conversion from 'unsigned __int32' to 'unsigned __int8', possible loss of data
-c:\users\adriana\desktop\taller_tp\trunk\tp2\graficador\main.cpp(63) : warning C4244: '=' : conversion from 'unsigned __int32' to 'unsigned __int16', possible loss of data
-c:\users\adriana\desktop\taller_tp\trunk\tp2\graficador\main.cpp(71) : warning C4244: '=' : conversion from 'unsigned __int32' to 'unsigned __int8', possible loss of data
-c:\users\adriana\desktop\taller_tp\trunk\tp2\graficador\main.cpp(72) : warning C4244: '=' : conversion from 'unsigned __int32' to 'unsigned __int8', possible loss of data
-c:\users\adriana\desktop\taller_tp\trunk\tp2\graficador\main.cpp(73) : warning C4244: '=' : conversion from 'unsigned __int32' to 'unsigned __int8', possible loss of data
-c:\users\adriana\desktop\taller_tp\trunk\tp2\graficador\main.cpp(473) : warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
-c:\users\adriana\desktop\taller_tp\trunk\tp2\graficador\main.cpp(489) : warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
-c:\users\adriana\desktop\taller_tp\trunk\tp2\graficador\main.cpp(490) : warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
-c:\users\adriana\desktop\taller_tp\trunk\tp2\graficador\main.cpp(497) : warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
-c:\users\adriana\desktop\taller_tp\trunk\tp2\graficador\main.cpp(498) : warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+c:\users\dario\documents\uba\taller i\tp2\graficador\main.cpp(55) : warning C4244: '=' : conversion from 'unsigned __int32' to 'unsigned __int8', possible loss of data
+c:\users\dario\documents\uba\taller i\tp2\graficador\main.cpp(63) : warning C4244: '=' : conversion from 'unsigned __int32' to 'unsigned __int16', possible loss of data
+c:\users\dario\documents\uba\taller i\tp2\graficador\main.cpp(71) : warning C4244: '=' : conversion from 'unsigned __int32' to 'unsigned __int8', possible loss of data
+c:\users\dario\documents\uba\taller i\tp2\graficador\main.cpp(72) : warning C4244: '=' : conversion from 'unsigned __int32' to 'unsigned __int8', possible loss of data
+c:\users\dario\documents\uba\taller i\tp2\graficador\main.cpp(73) : warning C4244: '=' : conversion from 'unsigned __int32' to 'unsigned __int8', possible loss of data
+c:\users\dario\documents\uba\taller i\tp2\graficador\main.cpp(434) : warning C4101: 'max' : unreferenced local variable
+c:\users\dario\documents\uba\taller i\tp2\graficador\main.cpp(434) : warning C4101: 'init' : unreferenced local variable
+c:\users\dario\documents\uba\taller i\tp2\graficador\main.cpp(489) : warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+c:\users\dario\documents\uba\taller i\tp2\graficador\main.cpp(505) : warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+c:\users\dario\documents\uba\taller i\tp2\graficador\main.cpp(506) : warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+c:\users\dario\documents\uba\taller i\tp2\graficador\main.cpp(513) : warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+c:\users\dario\documents\uba\taller i\tp2\graficador\main.cpp(514) : warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+Escenario.cpp
+Figura.cpp
+Textura.cpp
+Rectangulo.cpp
 Linking...
+Creating command line "bscmake.exe /nologo /o"Debug/Graficador.bsc"  ".\Debug\main.sbr" ".\Debug\Escenario.sbr" ".\Debug\Figura.sbr" ".\Debug\Textura.sbr" ".\Debug\Rectangulo.sbr""
+Creating browse info file...
+<h3>Output Window</h3>
 
 
 
 <h3>Results</h3>
-Graficador.exe - 0 error(s), 10 warning(s)
+Graficador.exe - 0 error(s), 12 warning(s)
 </pre>
 </body>
 </html>
