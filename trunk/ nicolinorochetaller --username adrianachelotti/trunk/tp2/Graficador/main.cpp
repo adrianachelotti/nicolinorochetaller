@@ -11,15 +11,15 @@ IMPRIME RECTANGULO
 #include "SDL.h"
 #include "stdio.h"
 #include <math.h>
+#include "Figura.h"
+#include "Escenario.h"
+
+#include "Rectangulo.h"
 
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
 #define SCREEN_DEPTH 8
 
-typedef struct punto 
-{   int x;
-	int y;
-}Punto;
 
 typedef struct recta
 {
@@ -705,7 +705,21 @@ int main(int argc, char *argv[]) {
 	d1.x= 390;
 	d1.y= 100;
 
-     
+
+	Escenario::setColorFondoFigura(2);
+	Rectangulo* rect = new Rectangulo("20",3,4,a1);
+
+	rect->setColorFondo(0);
+//	rect->setColorLinea(0xFF000000);
+	//rect->setIdTextura("0");
+
+	rect->dibujar();
+
+	
+	int lalala = (int) Escenario::getColorFondoFigura();
+
+	std::cout<<lalala<<std::endl;
+
     // Initialize the SDL library 
 	if( SDL_Init(SDL_INIT_VIDEO) < 0 ) 
 	{
@@ -731,7 +745,7 @@ int main(int argc, char *argv[]) {
 	/*
 	Circulo relleno
 	*/
-	rellenarCirculo(screen, 50,150,30, color );
+	rellenarCirculo(screen, 50,150,30, 0xFF000000 );
 	
 	 /*
 	 Circulo vacio
