@@ -421,59 +421,95 @@ void ordenarPuntosPorY(Punto* a, Punto* b , Punto* c, Punto* punto1, Punto* punt
 }
 
 /****************************************************************************
+ * Intercambia las coordenadas de los puntos                                *				
+ ****************************************************************************/
+void intercambiarPuntos(Punto* punto1 ,Punto* punto2)
+{ 
+	Punto puntoAuxiliar;
+	puntoAuxiliar.x=punto1->x;
+	puntoAuxiliar.y=punto1->y;
+	punto1->x = punto2->x;
+	punto1->y = punto2->y;
+	punto2->x = puntoAuxiliar.x;
+	punto2->y = puntoAuxiliar.y;
+ 
+}
+/****************************************************************************
  * Rellena un triangulo comprendido entre los puntos a , b y c		        *				
  ****************************************************************************/
-void rellenarTriangulo(SDL_Surface *screen,Punto a ,Punto b , Punto c, Uint32 color)
+void rellenarTriangulo(SDL_Surface* screen , Punto* a, Punto*  b, Punto* c, Uint32 color)
 {
+	int dxab,dxbc,dxac;
+	Punto A,B,C;
+
+    /* Ordeno los valores de los puntos a , b y c segun los valores de y de menor a mayor 
+	respectivamente */
+	if (a->y > b->y) { intercambiarPuntos(a, b); }
+	if (a->y > c->y) { intercambiarPuntos(a, c); }
+	if (b->y > c->y) { intercambiarPuntos(b, c); }
 	
 	
-	Punto * p1= (Punto*)malloc(sizeof(Punto));
-	Punto * p2= (Punto*)malloc(sizeof(Punto));
-	Punto * p3= (Punto*)malloc(sizeof(Punto));
-	Punto puntoInit, puntoEnd;
-	int max, init;
+	A.x = int(a->x)<<16;
+	A.y = int(a->y);
+	
+	B.x = int(b->x)<<16;
+	B.y = int(b->y);
+	
+	C.x = int(c->x)<<16;
+	C.y = int(c->y);
 
-	Recta recta31,recta32,recta12;
-	int index=0;
+	
+	if (A.y < B.y)	{ dxab = int((B.x -A.x) /float(B.y -A.y)); }else{ dxab = (B.x -A.x); }
+	if (A.y < C.y)	{ dxac = int((C.x -A.x) /float(C.y -A.y)); }else{ dxac = 0; }
+	if (B.y < C.y)	{ dxbc = int((C.x -B.x) /float(C.y -B.y)); }else{ dxbc = 0; }
 
-	ordenarPuntosPorY(&a,&b,&c,p1,p2,p3);
-	recta31.pendiente=calcularPendiente(*p1,*p3);
-	recta32.pendiente=calcularPendiente(*p2,*p3);
-	recta12.pendiente=calcularPendiente(*p1,*p2);
-	recta31.abscisa= calcularAbcisa(*p1,*p3);
-	recta32.abscisa= calcularAbcisa(*p2,*p3);
-	recta12.abscisa= calcularAbcisa(*p1,*p2);
-	printf("inicio %d  final %d " , p3->y, p2->y );
-	for(index=p3->y;index<p2->y;index++)
+	int x1	= A.x;
+	int x2	= x1;
+	int y	= A.y;
+	if (dxab > dxac)
 	{
-		double x1= getPuntoX(index,recta32);
-		double x2= getPuntoX(index, recta31);
-		printf("extremos %d  %d",x1,x2);
-		puntoInit.x=(int) x1;
-
-		puntoEnd.x =(int) x2;
-		puntoInit.y= index;
-		puntoEnd.y= index;
-		dibujarSegmento(screen,puntoInit,puntoEnd,color);
-
+		if (A.y == B.y) 
+		{
+			x1 += dxac;
+			x2 += dxab;
+		}
+		for (; y < B.y; ++y, x1+=dxac, x2+=dxab){
+			for (int x = (x1>>16); x < (x2>>16); ++x)
+			{
+				dibujarpixel(screen , x,y,color);
+			}
+		}
+		for (; y < C.y; ++y, x1+=dxac, x2+=dxbc)
+		{
+			for (int x = (x1>>16); x < (x2>>16); ++x)
+			{
+				dibujarpixel(screen , x,y,color);
+			}
+		}
 	}
-	for(index=p2->y;index<p1->y;index++)
+	else 
 	{
-		double x1= getPuntoX(index,recta12);
-		double x2= getPuntoX(index, recta31);
-		printf("extremos %d  %d",x1,x2);
-		puntoInit.x=(int) x1;
-		puntoEnd.x =(int) x2;
-		puntoInit.y= index;
-		puntoEnd.y= index;
-		dibujarSegmento(screen,puntoInit,puntoEnd,color);
-
+		if (A.y == B.y) 
+		{
+			x1 += dxab;
+			x2 += dxac;
+		}
+		for (; y < B.y; ++y, x1+=dxab, x2+=dxac)
+		{
+			for (int x = (x1>>16); x < (x2>>16); ++x)
+			{
+				dibujarpixel(screen , x,y,color);
+			}
+		}
+		for (; y < C.y; ++y, x1+=dxbc, x2+=dxac)
+		{
+			for (int x = (x1>>16); x < (x2>>16); ++x)
+			{
+				dibujarpixel(screen , x,y,color);
+			}
+		}
 	}
-
-	
-
 }
-
 
 /**************************************************************************************
 * Dibuja un circulo relleno en la posicion (x,y) de radio y color pasado como parametro
@@ -743,8 +779,10 @@ int main(int argc, char *argv[]) {
 	/*
 		Rellenar Triangulo
 	*/
-	rellenarTriangulo(screen,a1,b1,c1,color);
-	 
+
+	rellenarTriangulo(screen ,&a1,&c1,&b1,color );
+
+	
 	rellenarCirculoTextura(screen, 150,330,25);
 
 
