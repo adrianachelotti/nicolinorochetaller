@@ -9,18 +9,20 @@
 
 using namespace std;
 
-class Rectangulo:Figura  
+class Rectangulo:public Figura  
 {
 private:
 	int base;
 	int altura;
+	Punto posicionVerticeInferiorIzquierdo;
+
 public:
 	
     /*Constructor sin parametros. */
 	Rectangulo();
 
 	/*Constructor con parametros. */
-	Rectangulo(string identificador,int base, int altura);
+	Rectangulo(string identificador,int base,int altura,Punto posicionVertice);
 	
 	/*Destructor. */
 	virtual ~Rectangulo();
@@ -36,8 +38,18 @@ public:
 
 	/*Retorna la altura del rectangulo. */
 	int getAltura();
-	
+
+	/*Setea la posicion del vertice inferior izquierdo del rectangulo */
+	void setPosicionVerticeInferiorIzquierdo(Punto vertice);
+
+	/*Retorna la posicion del vertice inferior izquierdo del rectangulo */
+	Punto getPosicionVerticeInferiorIzquierdo();
+
+	/*Metodo encargado de dibujar el rectangulo */
+	virtual void dibujar();
+		
 };
 
 #endif 
+
 

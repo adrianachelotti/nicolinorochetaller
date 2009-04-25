@@ -4,10 +4,6 @@
 
 #include "Textura.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-
 Textura::Textura()
 {
 
@@ -16,4 +12,32 @@ Textura::Textura()
 Textura::~Textura()
 {
 
+}
+
+
+Textura::Textura(string id,string path)
+{
+	this->id = id;
+	this->path = path;
+	
+}
+
+void Textura::setId(string id)
+{
+	this->id = id;
+}
+
+string Textura::getId()
+{
+	return this->id;
+}
+
+void Textura::setPath(string path)
+{
+	this->path = path;
+}
+
+string Textura::getPath()
+{
+	return this->path;
 }

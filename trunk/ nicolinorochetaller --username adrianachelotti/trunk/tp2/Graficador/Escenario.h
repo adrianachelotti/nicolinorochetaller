@@ -5,7 +5,6 @@
 #define ESCENARIO_H
 
 #include <iostream>
-#include <SDL.h>
 #include <list>
 #include "Figura.h"
 #include "Textura.h"
@@ -21,8 +20,8 @@ private:
 	Uint32 colorFondoFigura;
 	Uint32 colorLinea;
 	Uint32 colorFondoEscenario;
-	list<Figura> listadoDeFiguras;
-	list<Textura> listadoDeTexturas;
+	list<Figura*> listadoDeFiguras;
+	list<Textura*> listadoDeTexturas;
 
 public:
 	
@@ -69,16 +68,16 @@ public:
 	Uint32 getColorFondoEscenario();
 
 	/*Setea las figuras del escenario */
-	void setListadoDeFiguras(list<Figura> listadoDeFiguras);
+	void setListadoDeFiguras(list<Figura*> listadoDeFiguras);
 
 	/*Retorna las figuras del escenario */
-	list<Figura> getListadoDeFiguras();
+	list<Figura*> getListadoDeFiguras();
 
 	/*Setea las texturas del escenario */
-	void setListadoDeTexturas(list<Textura> listadoDeTexturas);
+	void setListadoDeTexturas(list<Textura*> listadoDeTexturas);
 
 	/*Retorna las texturas del escenario */
-	list<Textura> getListadoDeTexturas();
+	list<Textura*> getListadoDeTexturas();
 
 	
 };

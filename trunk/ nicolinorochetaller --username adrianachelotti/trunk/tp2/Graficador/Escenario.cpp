@@ -85,25 +85,25 @@ Uint32 Escenario::getColorFondoEscenario()
 }
 
 	
-void Escenario::setListadoDeFiguras(list<Figura> listadoDeFiguras)
+void Escenario::setListadoDeFiguras(list<Figura*> listadoDeFiguras)
 {
 	this->listadoDeFiguras = listadoDeFiguras;
 }
 
 	
-list<Figura> Escenario::getListadoDeFiguras()
+list<Figura*> Escenario::getListadoDeFiguras()
 {
 	return this->listadoDeFiguras;
 }
 
 
-void Escenario::setListadoDeTexturas(list<Textura> listadoDeTexturas)
+void Escenario::setListadoDeTexturas(list<Textura*> listadoDeTexturas)
 {
 	this->listadoDeTexturas = listadoDeTexturas;
 }
 
 
-list<Textura> Escenario::getListadoDeTexturas()
+list<Textura*> Escenario::getListadoDeTexturas()
 {
 	return this->listadoDeTexturas;
 }

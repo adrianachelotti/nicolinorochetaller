@@ -1,0 +1,49 @@
+// Segmento.cpp: implementation of the Segmento class.
+//
+//////////////////////////////////////////////////////////////////////
+
+#include "Segmento.h"
+
+
+Segmento::Segmento()
+{
+
+}
+
+Segmento::~Segmento()
+{
+
+}
+
+
+Segmento::Segmento(string id,Punto puntoInicio,Punto puntoFinal):Figura(id)
+{
+	this->puntoInicio = puntoInicio;
+	this->puntoFinal = puntoFinal;
+}
+	
+
+void Segmento::setPuntoInicio(Punto puntoInicio)
+{
+	this->puntoInicio = puntoInicio;
+}
+	
+Punto Segmento::getPuntoInicio()
+{
+	return this->puntoInicio;
+}
+	
+void Segmento::setPuntoFinal(Punto puntoFinal)
+{
+	this->puntoFinal = puntoFinal;
+}
+	
+Punto Segmento::getPuntoFinal()
+{
+	return this->puntoFinal;
+}
+	
+void Segmento::dibujar()
+{
+	std::cout<<"Dibujo un segmento"<<std::endl;
+}
