@@ -61,7 +61,18 @@ Punto Rectangulo::getPosicionVerticeInferiorIzquierdo()
 	
 void Rectangulo::dibujar()
 {
-	std::cout<<"Dibujo un Rectangulo"<<std::endl;
+	if(this->getColorFondo()==COLOR_VACIO)
+	{
+		std::cout<<"No Dibujo fondo"<<std::endl;
+	}
+	if(this->getColorLinea()==COLOR_VACIO)
+	{
+		std::cout<<"No Dibujo linea"<<std::endl;
+	}
+	if((this->getIdTextura()).empty())
+	{
+		std::cout<<"No Dibujo textura"<<std::endl;
+	}
 }
 
 

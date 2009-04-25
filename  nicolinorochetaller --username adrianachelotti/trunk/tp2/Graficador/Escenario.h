@@ -11,20 +11,21 @@
 
 using namespace std;
 
+
 class Escenario  
 {
 private:
 	string resolucion;
-    string texturaFigura;
-	string texturaEscenario;
-	Uint32 colorFondoFigura;
-	Uint32 colorLinea;
+    string texturaEscenario;	
 	Uint32 colorFondoEscenario;
 	list<Figura*> listadoDeFiguras;
 	list<Textura*> listadoDeTexturas;
-
 public:
 	
+	static Uint32 colorFondoFigura;
+	static Uint32 colorLinea;
+	static string texturaFigura;
+
 	/*Constructor	 */
 	Escenario();
 	
@@ -38,29 +39,29 @@ public:
 	string getResolucion();
 	
 	/*Setea la textura por defecto de las figuras */
-	void setTexturaFigura(string texturaFigura);
+	static void setTexturaFigura(string textura);
 	
 	/*Retorna la textura por defecto de las figuras */
-	string getTexturaFigura();
+	static string getTexturaFigura();
 
-	/*Setea la textura del escenario */
+	/*Setea el color de fondo por defecto de las figuras */
+	static void setColorFondoFigura(Uint32 color);
+
+	/*Retorna el color de fondo por defecto de las figuras */
+	static Uint32 getColorFondoFigura();
+
+	/*Setea el color por defecto de las lineas */
+	static void setColorLinea(Uint32 color);
+
+	/*Retorna el color por defecto de las lineas */
+	static Uint32 getColorLinea();
+
+    /*Setea la textura del escenario */
 	void setTexturaEscenario(string texturaEscenario);
 	
 	/*Retorna la textura del escenario */
 	string getTexturaEscenario();
 	
-	/*Setea el color de fondo por defecto de las figuras */
-	void setColorFondoFigura(Uint32 colorFondoFigura);
-
-	/*Retorna el color de fondo por defecto de las figuras */
-	Uint32 getColorFondoFigura();
-
-	/*Setea el color por defecto de las lineas */
-	void setColorLinea(Uint32 colorLinea);
-
-	/*Retorna el color por defecto de las lineas */
-	Uint32 getColorLinea();
-
 	/*Setea el color de fondo del escenario */
 	void setColorFondoEscenario(Uint32 colorFondoEscenario);
 
@@ -78,7 +79,6 @@ public:
 
 	/*Retorna las texturas del escenario */
 	list<Textura*> getListadoDeTexturas();
-
 	
 };
 

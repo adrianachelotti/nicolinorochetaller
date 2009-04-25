@@ -4,6 +4,7 @@
 
 #if !defined FIGURA_H
 #define FIGURA_H
+#define COLOR_VACIO 0xFF000000
 
 #include <iostream>
 #include <SDL.h>

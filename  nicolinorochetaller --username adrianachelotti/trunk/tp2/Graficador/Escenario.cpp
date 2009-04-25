@@ -5,6 +5,11 @@
 #include "Escenario.h"
 
 
+Uint32 Escenario::colorFondoFigura = COLOR_VACIO;
+Uint32 Escenario::colorLinea = COLOR_VACIO;
+string Escenario::texturaFigura = NULL;
+
+
 Escenario::Escenario()
 {
 
@@ -26,20 +31,23 @@ string Escenario::getResolucion()
 }
 	
 
-void Escenario::setTexturaFigura(string texturaFigura)
+void Escenario::setTexturaFigura(string textura)
 {
-	this->texturaFigura = texturaFigura;
+	Escenario::texturaFigura = textura;
 }
 	
 
 string Escenario::getTexturaFigura()
 {
-	return this->texturaFigura;
+	return Escenario::texturaFigura;
 }
+
+
 
 void Escenario::setTexturaEscenario(string texturaEscenario)
 {
 	this->texturaEscenario = texturaEscenario;
+	
 }
 	
 
@@ -49,27 +57,27 @@ string Escenario::getTexturaEscenario()
 }
 	
 
-void Escenario::setColorFondoFigura(Uint32 colorFondoFigura)
+void Escenario::setColorFondoFigura(Uint32 color)
 {
-	this->colorFondoFigura = colorFondoFigura;
+	Escenario::colorFondoFigura = color;
 }
 
 
 Uint32 Escenario::getColorFondoFigura()
 {
-	return this->colorFondoFigura;
+	return Escenario::colorFondoFigura;
 }
 
 
-void Escenario::setColorLinea(Uint32 colorLinea)
+void Escenario::setColorLinea(Uint32 color)
 {
-	this->colorLinea = colorLinea;
+	Escenario::colorLinea = color;
 }
 
 
 Uint32 Escenario::getColorLinea()
 {
-	return this->colorLinea;
+	return Escenario::colorLinea;
 }
 
 
