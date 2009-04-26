@@ -3,6 +3,8 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Segmento.h"
+#include "Escenario.h"
+#include "Graficador.h"
 
 
 Segmento::Segmento()
@@ -45,5 +47,9 @@ Punto Segmento::getPuntoFinal()
 	
 void Segmento::dibujar()
 {
-	std::cout<<"Dibujo un segmento"<<std::endl;
+	Graficador* graficador = Graficador::obtenerInstancia(); 
+	if(this->getColorLinea()!=COLOR_VACIO)
+	{
+		graficador->dibujarSegmento(Escenario::screen,this->puntoInicio,this->puntoFinal,this->getColorLinea());
+	}
 }

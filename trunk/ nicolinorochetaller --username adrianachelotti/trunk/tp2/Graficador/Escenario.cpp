@@ -7,7 +7,8 @@
 
 Uint32 Escenario::colorFondoFigura = COLOR_VACIO;
 Uint32 Escenario::colorLinea = COLOR_VACIO;
-string Escenario::texturaFigura = NULL;
+string Escenario::texturaFigura = "";
+SDL_Surface* Escenario::screen=NULL;
 
 
 Escenario::Escenario()

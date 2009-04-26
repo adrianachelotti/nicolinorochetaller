@@ -25,6 +25,7 @@ public:
 	static Uint32 colorFondoFigura;
 	static Uint32 colorLinea;
 	static string texturaFigura;
+	static SDL_Surface* screen;
 
 	/*Constructor	 */
 	Escenario();

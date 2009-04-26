@@ -3,6 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Figura.h"
+#include "Escenario.h"
 
 
 Figura::Figura()
@@ -25,9 +26,9 @@ Figura::Figura(string identificador, string idTextura,Uint32 colorLinea,Uint32 c
 
 Figura::Figura(string identificador)
 {
-	this->id = identificador;
-	this->colorFondo = COLOR_VACIO;
-	this->colorLinea = COLOR_VACIO;
+	this->id =identificador;
+	this->colorFondo = Escenario::getColorFondoFigura();
+	this->colorLinea = Escenario::getColorLinea();
 }
 
 void Figura::setId(string id)

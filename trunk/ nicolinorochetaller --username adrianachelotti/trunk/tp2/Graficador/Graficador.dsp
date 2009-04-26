@@ -101,6 +101,10 @@ SOURCE=.\Figura.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Graficador.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\main.cpp
 # End Source File
 # Begin Source File
@@ -142,6 +146,10 @@ SOURCE=.\Escenario.h
 # Begin Source File
 
 SOURCE=.\Figura.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Graficador.h
 # End Source File
 # Begin Source File
 
