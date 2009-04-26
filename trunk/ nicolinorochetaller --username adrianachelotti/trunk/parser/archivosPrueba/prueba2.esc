@@ -1,0 +1,8 @@
+<escenario>
+	<General resolucion="800" colorFondoFig="123200100" texturaFig="Madera" colorLinea="123200100" colorFondoEsc="237928930" 
+	texturaEsc="Corcho">	
+	</General>
+		<ListadoDeTexturas>
+		<textura id="idTextura" path="C:\casa">
+		</textura>
+	</ListadoDeTexturas>
