@@ -3,6 +3,8 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Rectangulo.h"
+#include "Graficador.h"
+#include "Escenario.h"
 
 
 
@@ -61,18 +63,49 @@ Punto Rectangulo::getPosicionVerticeInferiorIzquierdo()
 	
 void Rectangulo::dibujar()
 {
-	if(this->getColorFondo()==COLOR_VACIO)
+	Graficador* graficador = Graficador::obtenerInstancia(); 
+
+	if(this->getIdTextura().empty())
 	{
-		std::cout<<"No Dibujo fondo"<<std::endl;
-	}
-	if(this->getColorLinea()==COLOR_VACIO)
+
+		if((this->getColorFondo()!=COLOR_VACIO))
+		{
+			
+			graficador->rellenarRectangulo(Escenario::screen,this->getPosicionVerticeInferiorIzquierdo(),this->base,this->altura,this->getColorFondo());
+			
+			if(this->getColorLinea()!=COLOR_VACIO)
+			{
+				graficador->dibujarRectangulo(Escenario::screen,this->getPosicionVerticeInferiorIzquierdo(),this->base,this->altura,this->getColorLinea());
+			}
+		}
+		else
+		{
+			//TODO: cuando no le paso nada
+
+			graficador->dibujarRectangulo(Escenario::screen,this->getPosicionVerticeInferiorIzquierdo(),this->base,this->altura,this->getColorLinea());
+		
+
+		}
+	
+		
+	}else
 	{
-		std::cout<<"No Dibujo linea"<<std::endl;
+			//dibujar Textura
+		//TODO: el escenario deberia tener un getTextura segun ID
+		Textura* text = new Textura("3", "Dibujo.bmp");
+	
+		SDL_Surface* imagen  = graficador->resizeTextura(text,this->base, this->altura);
+		graficador->rellenarRectanguloConTextura(Escenario::screen,imagen ,this->getPosicionVerticeInferiorIzquierdo());
+
+		if(this->getColorLinea()!=COLOR_VACIO)
+		{
+			graficador->dibujarRectangulo(Escenario::screen,this->getPosicionVerticeInferiorIzquierdo(),this->base,this->altura,this->getColorLinea());
+		}
 	}
-	if((this->getIdTextura()).empty())
-	{
-		std::cout<<"No Dibujo textura"<<std::endl;
-	}
+
+	
 }
+
+
 
 

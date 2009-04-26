@@ -3,6 +3,8 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Triangulo.h"
+#include "Escenario.h"
+#include "Graficador.h"
 
 
 Triangulo::Triangulo()
@@ -38,7 +40,41 @@ Punto* Triangulo::getVertices()
 
 void Triangulo::dibujar()
 {
-	std::cout<<"Dibujo un triangulo"<<std::endl;
+	
+	Graficador* graficador = Graficador::obtenerInstancia(); 
+
+	if(this->getIdTextura().empty())
+	{
+
+		if((this->getColorFondo()!=COLOR_VACIO))
+		{
+			
+			graficador->rellenarTriangulo(Escenario::screen,&(this->vertices[0]),&(this->vertices[1]),&(this->vertices[2]),this->getColorFondo());
+			
+			if(this->getColorLinea()!=COLOR_VACIO)
+			{
+			graficador->dibujarTriangulo(Escenario::screen,this->vertices[0],this->vertices[1],this->vertices[2],this->getColorLinea());
+			}
+		}
+		else
+		{
+			//TODO
+			graficador->dibujarTriangulo(Escenario::screen,this->vertices[0],this->vertices[1],this->vertices[2],this->getColorLinea());
+		
+
+		}
+	
+		
+	}else
+	{
+			//dibujar Textura
+		std::cout<<"se dibuja Textura"<<std::endl;
+
+		if(this->getColorLinea()!=COLOR_VACIO)
+		{
+			graficador->dibujarTriangulo(Escenario::screen,this->vertices[0],this->vertices[1],this->vertices[2],this->getColorLinea());
+		}
+	}
 }
 
 

@@ -29,6 +29,9 @@ public:
 	/*Retorna la longitud del radio del circulo */
 	int getRadio();
 
+	/*Retorna la longitud del diametro del circulo */
+	int getDiametro();
+
 	/*Setea la posicion del centro del circulo */
 	void setCentro(Punto centro);
 
