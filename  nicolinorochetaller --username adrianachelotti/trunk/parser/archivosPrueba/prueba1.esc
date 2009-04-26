@@ -1,0 +1,9 @@
+<escenario>
+	<ListadoDeTexturas>
+		<textura id="idTextura" path="C:\casa">
+		</textura>
+		<textura id="idTextura2" path="C:\casasegunda">
+		</textura>
+	</ListadoDeTexturas>
+	
+</escenario>
