@@ -113,6 +113,7 @@ int main(int argc, char *argv[]) {
 
 	triangulo->setColorLinea(0x0098fb98);;
 	triangulo->setColorFondo(0x00ffffff);
+	triangulo->setIdTextura("sd");
 	triangulo->dibujar();;
 	SDL_Flip(screen);
 	  

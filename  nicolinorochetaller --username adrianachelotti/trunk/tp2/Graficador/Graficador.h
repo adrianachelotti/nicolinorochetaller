@@ -44,7 +44,7 @@ public:
 
 	void rellenarRectanguloConTextura(SDL_Surface* screen, SDL_Surface* imagen ,Punto punto);
 
-	void Graficador::rellenarTrianguloConTextura(SDL_Surface* screen, SDL_Surface* imagen ,Punto punto[]);
+	void rellenarTrianguloConTextura(SDL_Surface* screen ,SDL_Surface* imagen ,Punto* a, Punto*  b, Punto* c);
 
 	void expandirTextura(SDL_Surface* screen, SDL_Surface* screenCopy, int escalaX, int escalaY);
 
