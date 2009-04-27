@@ -46,13 +46,14 @@ public:
 
 	void rellenarTrianguloConTextura(SDL_Surface* screen ,SDL_Surface* imagen ,Punto* a, Punto*  b, Punto* c);
 
-	void expandirTextura(SDL_Surface* screen, SDL_Surface* screenCopy, int escalaX, int escalaY);
+	void expandirTextura(SDL_Surface* screen, SDL_Surface* screenCopy, double escalaX, double escalaY);
 
-	void contraerTextura(SDL_Surface* screen, SDL_Surface* screenCopy, int escalaX, int escalaY);
+	void contraerTextura(SDL_Surface* screen, SDL_Surface* screenCopy, double escalaX, double escalaY);
 	
 	static Graficador* obtenerInstancia();
 
 	SDL_Surface* resizeTextura(Textura* textura , int width , int height);
+
 
 private:
 	
@@ -65,6 +66,8 @@ private:
 	void dibujarLadoVertical( SDL_Surface *screen,int x, int y,int height, Uint32 color);
 	
 	Uint32 getColor(SDL_Surface *screen,int r, int g, int  b);
+
+	void putPixel(SDL_Surface *screen, int offset, Uint32 color);
 
 
 };
