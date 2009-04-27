@@ -495,8 +495,8 @@ Uint32 getPixel(SDL_Surface *surface, int x, int y)
  ******************************************************************************/
 void Graficador::rellenarCirculoConTextura(SDL_Surface* screen, SDL_Surface* imagen1, Punto punto, int radio)
 {
-	int centroX = imagen1->w;
-	int centroY = imagen1->h;
+	int centroX = imagen1->w/2;
+	int centroY = imagen1->h/2;
 	int radio_2 = radio*radio;
 	for(int i=-radio;i<=radio;i++)
 	{
@@ -504,7 +504,7 @@ void Graficador::rellenarCirculoConTextura(SDL_Surface* screen, SDL_Surface* ima
 		{
 			int resul= j*j+i*i;
 			if(resul<=radio_2)
-			dibujarPixel(screen,punto.x + j,punto.y + i,getPixel(imagen1,j+radio,i+radio));
+			dibujarPixel(screen,punto.x + j,punto.y + i,getPixel(imagen1,j+centroX,i+centroY));
 			
 		}
 	}		
@@ -534,12 +534,88 @@ void Graficador::rellenarRectanguloConTextura(SDL_Surface* screen, SDL_Surface* 
 /******************************************************************************
  * dibuja un triangulo con una imagen 
  ******************************************************************************/
-void Graficador::rellenarTrianguloConTextura(SDL_Surface* screen, SDL_Surface* imagen ,Punto punto[])
+void Graficador::rellenarTrianguloConTextura(SDL_Surface* screen ,SDL_Surface* imagen ,Punto* a, Punto*  b, Punto* c)
 {
+	int dxab,dxbc,dxac;
+	int minimoX, minimoY;
+	Punto A,B,C;
+
+    /* Ordeno los valores de los puntos a , b y c segun los valores de y de menor a mayor 
+	respectivamente */
+	if (a->y > b->y) { intercambiarPuntos(a, b); }
+	if (a->y > c->y) { intercambiarPuntos(a, c); }
+	if (b->y > c->y) { intercambiarPuntos(b, c); }
 	
+	minimoY = a->y;
 
+	if ((a->x <= b->x) &&(a->x <= c->x)){ minimoX = a->x; }
+	if ((b->x <= a->x) &&(b->x <= c->x)){ minimoX = b->x; }
+	if ((c->x <= b->x) &&(c->x <= a->x)){ minimoX = c->x; }
+	
+	
+	A.x = int(a->x)<<16;
+	A.y = int(a->y);
+	
+	B.x = int(b->x)<<16;
+	B.y = int(b->y);
+	
+	C.x = int(c->x)<<16;
+	C.y = int(c->y);
 
+	
+	if (A.y < B.y)	{ dxab = int((B.x -A.x) /float(B.y -A.y)); }else{ dxab = (B.x -A.x); }
+	if (A.y < C.y)	{ dxac = int((C.x -A.x) /float(C.y -A.y)); }else{ dxac = 0; }
+	if (B.y < C.y)	{ dxbc = int((C.x -B.x) /float(C.y -B.y)); }else{ dxbc = 0; }
+
+	int x1	= A.x;
+	int x2	= x1;
+	int y	= A.y;
+
+	if (dxab > dxac)
+	{
+		if (A.y == B.y) 
+		{
+			x1 += dxac;
+			x2 += dxab;
+		}
+		for (; y < B.y; ++y, x1+=dxac, x2+=dxab){
+			for (int x = (x1>>16); x < (x2>>16); ++x)
+			{
+				dibujarPixel(screen , x,y,getPixel(imagen,x-minimoX,y-minimoY));
+			}
+		}
+		for (; y < C.y; ++y, x1+=dxac, x2+=dxbc)
+		{
+			for (int x = (x1>>16); x < (x2>>16); ++x)
+			{
+				dibujarPixel(screen , x,y,getPixel(imagen,x-minimoX,y-minimoY));
+			}
+		}
+	}
+	else 
+	{
+		if (A.y == B.y) 
+		{
+			x1 += dxab;
+			x2 += dxac;
+		}
+		for (; y < B.y; ++y, x1+=dxab, x2+=dxac)
+		{
+			for (int x = (x1>>16); x < (x2>>16); ++x)
+			{
+				dibujarPixel(screen , x,y,getPixel(imagen,x-minimoX,y-minimoY));
+			}
+		}
+		for (; y < C.y; ++y, x1+=dxbc, x2+=dxac)
+		{
+			for (int x = (x1>>16); x < (x2>>16); ++x)
+			{
+				dibujarPixel(screen , x,y,getPixel(imagen,x-minimoX,y-minimoY));
+			}
+		}
+	}
 }
+
 
 
 /******************************************************************************
@@ -624,8 +700,10 @@ SDL_Surface* Graficador::resizeTextura(Textura* textura , int width , int height
 	escalaY=(double)height/alturaTextura;
 	if((width==0)||(height==0)) return NULL;
 
-	if((escalaX>=1)&&(escalaY>=1))
+	
+	if((escalaX>1)&&(escalaY>1))
 	{
+
 		expandirTextura(imagen,surface,escalaX,escalaY);
 	
 	}
