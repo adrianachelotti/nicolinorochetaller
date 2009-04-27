@@ -496,8 +496,8 @@ Uint32 getPixel(SDL_Surface *surface, int x, int y)
  ******************************************************************************/
 void Graficador::rellenarCirculoConTextura(SDL_Surface* screen, SDL_Surface* imagen1, Punto punto, int radio)
 {
-	int centroX = imagen1->w/2;
-	int centroY = imagen1->h/2;
+	int centroX = imagen1->w/2-1;
+	int centroY = imagen1->h/2-1;
 	int radio_2 = radio*radio;
 	for(int i=-radio;i<=radio;i++)
 	{
@@ -619,56 +619,10 @@ void Graficador::rellenarTrianguloConTextura(SDL_Surface* screen ,SDL_Surface* i
 
 
 
-/******************************************************************************
- * agrandar una imagen en un factor de escalaX y escalaY
- ******************************************************************************/
-void Graficador::expandirTextura(SDL_Surface* texturaOriginal,SDL_Surface* texturaResize, double escalaX, double escalaY)
+SDL_Surface* Graficador::getImageResized(Textura* textura, int Width, int Height)
 {
 
-	for(int i=0;i<texturaOriginal->h;i++)
-	{
-		for(int j=0; j<texturaOriginal->w;j++)
-		{
-			for(int z=1; z<=escalaY;z++)
-			{
-				for(int h=1; h<=escalaX;h++)
-				{
-					dibujarPixel(texturaResize,j*escalaX+h,i*escalaY +z ,getPixel(texturaOriginal,j,i));
-				
-				}
-			}
-			
-		}
-	}
-	
 
-}
-
-/******************************************************************************
- * comprime la textura en una escalaX y escalaY
- ******************************************************************************/
-void Graficador::contraerTextura(SDL_Surface* texturaOriginal,SDL_Surface* texturaResize, double escalaX, double escalaY)
-{
-	
-	if ((escalaX==0)||(escalaY==0)) return ;
-
-	for(int i=0;i<texturaOriginal->h;i=i+escalaY)
-	{
-		for(int j=0; j<texturaOriginal->w;j=j+escalaX)
-		{
-		
-			dibujarPixel(texturaResize,j/escalaX,i/escalaY,getPixel(texturaOriginal,j,i));
-				
-		}
-	}
-	
-
-}
-
-
-SDL_Surface* Graficador::resizeTextura(Textura* textura , int width , int height)
-{
-	
 	int baseTextura=0;
 	int alturaTextura=0;
 	double escalaX=0;
@@ -680,60 +634,28 @@ SDL_Surface* Graficador::resizeTextura(Textura* textura , int width , int height
 	amask = 0x00000000;
 	
 
-	if((width==0)||(height==0)) return NULL;
-	SDL_Surface* surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32,
-                                   rmask, gmask, bmask, amask);
+	if((Width==0)||(Height==0)) return NULL;
+	SDL_Surface* Surface = SDL_LoadBMP( textura->getPath().c_str());
+    SDL_Surface *_ret = SDL_CreateRGBSurface(Surface->flags, Width, Height, 32,
+    rmask, gmask, bmask, amask);
 
-
-	SDL_Surface* imagen = SDL_LoadBMP( textura->getPath().c_str());
-    if((surface == NULL) ||(imagen==NULL)) 
+    if((Surface == NULL) ||(_ret==NULL)) 
 	{
 
         fprintf(stderr, "resizeTextura failed: %s\n", SDL_GetError());
         exit(1);
     } 
-	
-	
-	baseTextura = imagen->w;
-	alturaTextura = imagen->h;
-	
-	escalaX=(double)width/baseTextura;
-	escalaY=(double)height/alturaTextura;
-	if((width==0)||(height==0)) return NULL;
+    
+   
+  double  _stretch_factor_x = (static_cast<double>(Width)  / static_cast<double>(Surface->w)),
+        _stretch_factor_y = (static_cast<double>(Height) / static_cast<double>(Surface->h));
 
-	
-	if((escalaX>1)&&(escalaY>1))
-	{
+    for(Sint32 y = 0; y < Surface->h; y++)
+        for(Sint32 x = 0; x < Surface->w; x++)
+            for(Sint32 o_y = 0; o_y < _stretch_factor_y; ++o_y)
+                for(Sint32 o_x = 0; o_x < _stretch_factor_x; ++o_x)
+                    dibujarPixel(_ret, static_cast<Sint32>(_stretch_factor_x * x) + o_x,
+                        static_cast<Sint32>(_stretch_factor_y * y) + o_y, getPixel(Surface, x, y));
 
-		expandirTextura(imagen,surface,escalaX,escalaY);
-	
-	}
-	else
-	if((escalaX>=1)&&(escalaY<=1))
-	{
-		int inversaEscalaY = alturaTextura/height;
-
-		contraerTextura(imagen,surface,1,inversaEscalaY);
-
-		expandirTextura(imagen,surface,escalaX,1);
-	
-	}
-	else
-	if((escalaX<=1)&&(escalaY<=1))
-	{
-		int inversaEscalaY = alturaTextura/height;
-		int inversaEscalaX = baseTextura/width;
-		contraerTextura(imagen,surface,inversaEscalaX,inversaEscalaY);
-	
-	}else
-	
-	if((escalaX<=1)&&(escalaY>=1))
-	{
-		int inversaEscalaX = baseTextura/width;
-		contraerTextura(imagen,surface,inversaEscalaX,1);
-		expandirTextura(imagen,surface,1,escalaY);
-	
-	}
-	return surface;
-
+    return _ret;
 }

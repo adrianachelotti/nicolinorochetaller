@@ -46,13 +46,11 @@ public:
 
 	void rellenarTrianguloConTextura(SDL_Surface* screen ,SDL_Surface* imagen ,Punto* a, Punto*  b, Punto* c);
 
-	void expandirTextura(SDL_Surface* screen, SDL_Surface* screenCopy, double escalaX, double escalaY);
-
-	void contraerTextura(SDL_Surface* screen, SDL_Surface* screenCopy, double escalaX, double escalaY);
-	
 	static Graficador* obtenerInstancia();
 
-	SDL_Surface* resizeTextura(Textura* textura , int width , int height);
+
+	
+	SDL_Surface* getImageResized(Textura* textura, int Width, int Height);
 
 
 private:
