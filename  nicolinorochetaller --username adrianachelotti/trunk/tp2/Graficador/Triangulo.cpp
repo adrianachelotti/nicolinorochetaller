@@ -120,7 +120,7 @@ void Triangulo::dibujar()
 
 		Textura* text = new Textura("3", "Dibujo.bmp");
 	
-		SDL_Surface* imagen  = graficador->resizeTextura(text,this->getAncho(), this->getAlto());
+		SDL_Surface* imagen  = graficador->getImageResized(text,this->getAncho(), this->getAlto());
 		SDL_SaveBMP(imagen, "bh.bmp");
 
 		graficador->rellenarTrianguloConTextura(Escenario::screen,imagen ,&this->vertices[0],&this->vertices[1],&this->vertices[2]);

@@ -125,7 +125,7 @@ void Circulo::dibujar()
 			anchoX = diametro;
 			
 		}
-		SDL_Surface* imagenResized  = graficador->resizeTextura(text, anchoX,altoY);
+		SDL_Surface* imagenResized  = graficador->getImageResized(text, anchoX,altoY);
 		SDL_SaveBMP(imagenResized, "aaa.bmp");
 		graficador->rellenarCirculoConTextura(Escenario::screen,imagenResized ,this->getCentro(), this->getRadio());
 

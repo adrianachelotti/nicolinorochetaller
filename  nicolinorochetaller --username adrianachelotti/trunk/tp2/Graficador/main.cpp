@@ -76,10 +76,10 @@ int main(int argc, char *argv[]) {
 	//Escenario::setColorFondoFigura(0x0000ff00);
 
 	
-	Rectangulo* rect = new Rectangulo("20",120,99,a1);
+	Rectangulo* rect = new Rectangulo("20",120,12,a1);
 	Cuadrado* cuadrado = new Cuadrado("22",99,b1);
-	Circulo* circulo = new Circulo("23",130,c1);
-	Segmento* segmento =  new Segmento("24",b1,c1);
+	Circulo* circulo = new Circulo("23",24,c1);
+	Segmento* segmento = new Segmento("24",b1,c1);
 	Triangulo* triangulo = new Triangulo("25",vertices);
 	Graficador* graficador = Graficador::obtenerInstancia();
 

@@ -94,7 +94,7 @@ void Rectangulo::dibujar()
 		//TODO: el escenario deberia tener un getTextura segun ID
 		Textura* text = new Textura("3", "Dibujo.bmp");
 	
-		SDL_Surface* imagen  = graficador->resizeTextura(text,this->base, this->altura);
+		SDL_Surface* imagen  = graficador->getImageResized(text,this->base, this->altura);
 		graficador->rellenarRectanguloConTextura(Escenario::screen,imagen ,this->getPosicionVerticeInferiorIzquierdo());
 
 		if(this->getColorLinea()!=COLOR_VACIO)

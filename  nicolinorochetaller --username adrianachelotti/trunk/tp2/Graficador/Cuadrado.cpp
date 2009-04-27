@@ -82,7 +82,7 @@ void Cuadrado::dibujar()
 		
 		Textura* text = new Textura("3", "Dibujo.bmp");
 	
-		SDL_Surface* imagen  = graficador->resizeTextura(text,this->lado, this->lado);
+		SDL_Surface* imagen  = graficador->getImageResized(text,this->lado, this->lado);
 		graficador->rellenarRectanguloConTextura(Escenario::screen,imagen ,this->getPosicionVerticeInferiorIzquierdo());
 
 		if(this->getColorLinea()!=COLOR_VACIO)
