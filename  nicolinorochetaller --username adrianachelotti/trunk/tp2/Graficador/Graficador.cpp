@@ -94,6 +94,8 @@ Graficador* Graficador::obtenerInstancia()
 
 }
 
+
+ 
 /**************************************************************************
 * Dibujar un rectangulo en el punto (x,y) con ancho(w) , alto(h) y 
 * del color pasado como parametro                
@@ -489,7 +491,6 @@ Uint32 getPixel(SDL_Surface *surface, int x, int y)
     }
 }
 
-
 /******************************************************************************
  * rellenar un circulo con una imagen 
  ******************************************************************************/
@@ -621,7 +622,7 @@ void Graficador::rellenarTrianguloConTextura(SDL_Surface* screen ,SDL_Surface* i
 /******************************************************************************
  * agrandar una imagen en un factor de escalaX y escalaY
  ******************************************************************************/
-void Graficador::expandirTextura(SDL_Surface* texturaOriginal,SDL_Surface* texturaResize, int escalaX, int escalaY)
+void Graficador::expandirTextura(SDL_Surface* texturaOriginal,SDL_Surface* texturaResize, double escalaX, double escalaY)
 {
 
 	for(int i=0;i<texturaOriginal->h;i++)
@@ -646,7 +647,7 @@ void Graficador::expandirTextura(SDL_Surface* texturaOriginal,SDL_Surface* textu
 /******************************************************************************
  * comprime la textura en una escalaX y escalaY
  ******************************************************************************/
-void Graficador::contraerTextura(SDL_Surface* texturaOriginal,SDL_Surface* texturaResize, int escalaX, int escalaY)
+void Graficador::contraerTextura(SDL_Surface* texturaOriginal,SDL_Surface* texturaResize, double escalaX, double escalaY)
 {
 	
 	if ((escalaX==0)||(escalaY==0)) return ;
