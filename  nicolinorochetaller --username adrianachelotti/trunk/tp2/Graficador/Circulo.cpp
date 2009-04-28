@@ -52,11 +52,28 @@ Punto Circulo::getCentro()
 }
 
 
-void Circulo::dibujar()
+int Circulo::dibujar()
 {
 	Graficador* graficador = Graficador::obtenerInstancia(); 
+	SDL_Surface* imagen = NULL;
+	Textura* text = NULL;
 
-	if(this->getIdTextura().empty())
+	//bool contieneTextura = !(this->getIdTextura().empty());
+
+	bool contieneTextura = false;
+
+	Escenario* escenario = Escenario::obtenerInstancia();
+
+	text = escenario->getTextura(this->getIdTextura());
+
+	if (text!=NULL) contieneTextura = true;
+
+	if(contieneTextura)
+	{
+		imagen = SDL_LoadBMP(text->getPath().c_str());
+	}
+
+	if(imagen==NULL)
 	{
 
 		if((this->getColorFondo()!=COLOR_VACIO))
@@ -71,32 +88,22 @@ void Circulo::dibujar()
 		}
 		else
 		{
-			//TODO
+			//TODO ver si cuando no me pasan ningun dato solo dibujo la linea
 			graficador->dibujarCirculo(Escenario::screen,this->getCentro(),this->radio,this->getColorLinea());
 		
-
 		}
-	
-		
-	}else
+
+		if(contieneTextura) return RES_ERROR_CARGANDO_TEXTURA;
+		return RES_OK;
+			
+	}
+	else
 	{
-			//dibujar Textura
-
-		std::cout<<"se dibuja Textura"<<std::endl;
+				
 		int anchoX, altoY;
-		
-		Textura* text = new Textura("3", "Dibujo.bmp");
-		SDL_Surface* imagen = SDL_LoadBMP( text->getPath().c_str());
+				
 		int diametro = this->getDiametro();
-		
-		
-		if(imagen==NULL) 
-		{
-
-			fprintf(stderr, "resizeTextura failed: %s\n", SDL_GetError());
-			exit(1);
-		} 
-	
+			
 		if(imagen->w>=imagen->h)
 		{
 			if(imagen->w<diametro)
@@ -108,7 +115,6 @@ void Circulo::dibujar()
 				anchoX = imagen->w;
 			}
 			altoY  = diametro;
-			
 		}
 		else
 		{
@@ -121,18 +127,19 @@ void Circulo::dibujar()
 				altoY = imagen->h;
 			}
 
-
 			anchoX = diametro;
-			
 		}
+
 		SDL_Surface* imagenResized  = graficador->getImageResized(text, anchoX,altoY);
-		SDL_SaveBMP(imagenResized, "aaa.bmp");
+		//SDL_SaveBMP(imagenResized, "aaa.bmp");
 		graficador->rellenarCirculoConTextura(Escenario::screen,imagenResized ,this->getCentro(), this->getRadio());
 
 		if(this->getColorLinea()!=COLOR_VACIO)
 		{
 			graficador->dibujarCirculo(Escenario::screen,this->getCentro(),this->radio,this->getColorLinea());
 		}
+	
 	}
 
+	return RES_OK;
 }

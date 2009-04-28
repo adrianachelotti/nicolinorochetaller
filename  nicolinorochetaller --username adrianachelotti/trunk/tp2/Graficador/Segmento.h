@@ -37,7 +37,7 @@ public:
 	Punto getPuntoFinal();
 	
 	/*Metodo encargado de dibujar el segmento */
-	virtual void dibujar();
+	virtual int dibujar();
 
 };
 

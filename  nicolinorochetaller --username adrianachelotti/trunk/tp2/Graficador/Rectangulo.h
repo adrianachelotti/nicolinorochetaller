@@ -46,7 +46,7 @@ public:
 	Punto getPosicionVerticeInferiorIzquierdo();
 
 	/*Metodo encargado de dibujar el rectangulo */
-	virtual void dibujar();
+	virtual int dibujar();
 		
 };
 

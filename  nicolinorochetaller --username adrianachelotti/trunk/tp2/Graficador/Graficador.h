@@ -49,9 +49,7 @@ public:
 	static Graficador* obtenerInstancia();
 
 
-	
 	SDL_Surface* getImageResized(Textura* textura, int Width, int Height);
-
 
 private:
 	

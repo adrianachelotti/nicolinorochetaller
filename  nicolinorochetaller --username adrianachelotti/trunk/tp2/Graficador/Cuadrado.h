@@ -36,7 +36,7 @@ public:
 	Punto getPosicionVerticeInferiorIzquierdo();
 	
 	/*Metodo encargado de dibujar el cuadrado*/
-	virtual void dibujar();
+	virtual int dibujar();
 
 };
 
