@@ -78,9 +78,7 @@ int Cuadrado::dibujar()
 		
 	}else
 	{
-			//dibujar Textura
-		std::cout<<"se dibuja Textura"<<std::endl;
-		
+			
 		Textura* text = new Textura("3", "Dibujo.bmp");
 	
 		SDL_Surface* imagen  = graficador->getImageResized(text,this->lado, this->lado);

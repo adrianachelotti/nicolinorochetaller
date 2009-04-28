@@ -153,3 +153,21 @@ Textura* Escenario::getTextura(string idTextura)
 
 	return texturaActual;
 }
+
+int Escenario::dibujar()
+{
+	Figura* figuraActual = NULL;
+
+	list<Figura*>::iterator it;
+ 
+    it = this->listadoDeFiguras.begin();
+    
+	while( it != this->listadoDeFiguras.end())
+	{
+      figuraActual = *it;
+	  figuraActual->dibujar();	
+      it++;
+    }
+
+	return RES_OK;
+}

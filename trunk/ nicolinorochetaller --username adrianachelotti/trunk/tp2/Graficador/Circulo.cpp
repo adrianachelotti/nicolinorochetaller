@@ -58,8 +58,6 @@ int Circulo::dibujar()
 	SDL_Surface* imagen = NULL;
 	Textura* text = NULL;
 
-	//bool contieneTextura = !(this->getIdTextura().empty());
-
 	bool contieneTextura = false;
 
 	Escenario* escenario = Escenario::obtenerInstancia();

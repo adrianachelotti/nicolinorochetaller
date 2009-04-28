@@ -70,8 +70,9 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 
-	// se toma un color
+	//seteo la pantalla del escenario
 	Escenario::screen=screen;
+
 	//Escenario::setColorFondoFigura(0x0000ff00);
 
 	
@@ -82,13 +83,8 @@ int main(int argc, char *argv[]) {
 	Triangulo* triangulo = new Triangulo("25",vertices);
 	Graficador* graficador = Graficador::obtenerInstancia();
 
-	/*std::cout<<"se dibuja Textura"<<std::endl;
-	Textura* text = new Textura("3", "Dibujo.bmp");
 	
-	SDL_Surface* imagen  = graficador->resizeTextura(text,100, 150);
-	int result = SDL_SaveBMP(imagen,"DibujoREsize.bmp");*/
-
-	Textura* text1 = new Textura("id1","Dibujo.bmp");
+	Textura* text1 = new Textura("id1","textura2.bmp");
 	Textura* text2 = new Textura("id2","path2");
 	Textura* text3 = new Textura("id3","path3");
 	
@@ -102,7 +98,7 @@ int main(int argc, char *argv[]) {
 
 	escenario2->setListadoDeTexturas(texturas);
 
-
+	
 	rect->setIdTextura("ad");
 	rect->setColorLinea(0x00ff0000);
 	rect->setColorFondo(0x0000ff00);

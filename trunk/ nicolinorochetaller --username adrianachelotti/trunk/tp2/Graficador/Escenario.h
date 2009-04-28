@@ -92,6 +92,9 @@ public:
 
 	/*Retorna la textura que poseea el id pasado como parametro */
     Textura* getTextura(string idTextura);
+
+	/*Metodo encargado de dibujar el escenario */
+	int dibujar();
 	
 };
 
