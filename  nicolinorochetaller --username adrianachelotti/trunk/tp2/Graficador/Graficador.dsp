@@ -109,6 +109,10 @@ SOURCE=.\main.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Parser.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Rectangulo.cpp
 # End Source File
 # Begin Source File
@@ -150,6 +154,10 @@ SOURCE=.\Figura.h
 # Begin Source File
 
 SOURCE=.\Graficador.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Parser.h
 # End Source File
 # Begin Source File
 
