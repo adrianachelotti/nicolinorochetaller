@@ -34,7 +34,7 @@ class Parser
 public:
 	Parser();
 	virtual ~Parser();
-	int validar(string linea, FILE* archivo, FILE* archivoErrores);
+	int validar(FILE* archivo, FILE* archivoErrores);
 	int validaTagPadre(string linea, FILE* archivo, FILE* archivoErrores);
 	int validaTextura(string linea,FILE* archivo, FILE* archivoErrores);
 	int validaElementos(string linea,FILE* archivo,FILE* archivoErrores);

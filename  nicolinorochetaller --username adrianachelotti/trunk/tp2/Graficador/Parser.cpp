@@ -1044,12 +1044,18 @@ int Parser::validaTagPadre(string linea, FILE* archivo, FILE* archivoErrores) {
 	return INVALID_FORMAT;
 }
 
-int Parser::validar(string linea, FILE* archivo, FILE* archivoErrores) {
+int Parser::validar(FILE* archivo, FILE* archivoErrores) {
 	size_t found;
 	char* tag;
-	string fin;
+	string fin, primera;
 
-	found = linea.find("<escenario>");
+	tag = readTag(archivo);
+	while ((tag != NULL) && (tag == "ENTER")) {
+		tag = readTag(archivo);
+	}
+	if (tag!=NULL) primera = (string) tag;
+
+	found = primera.find("<escenario>");
 	if (found == 0) {
 		cout<<"ESCENARIO ENCONTRADO"<<endl;
 	} else {
@@ -1082,5 +1088,7 @@ int Parser::validar(string linea, FILE* archivo, FILE* archivoErrores) {
 		}
 		
 	}
+	cout<<"No se encontro el cierre del escenario"<<endl;
+	fprintf(archivoErrores,"No se encontro el cierre del escenario.\n");
 	return INVALID_FORMAT;
 }
