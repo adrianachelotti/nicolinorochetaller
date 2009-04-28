@@ -84,7 +84,7 @@ int validaVertices(FILE* archivo,FILE* archivoErrores) {
 	found = ver1.find("<ver1 ");
 	if(found == string::npos){
 		fprintf(archivoErrores,"No se encontro Vertice 1 de Triangulo. No se Dibujara\n");
-        cout<<"ERROR EN LA INICIO"<<endl;
+        cout<<"ERROR EN LA VERTICE 1"<<endl;
 		return INVALID_FORMAT;
 	} else {
 		cout<<"VERTICE 1"<<endl;
@@ -122,7 +122,7 @@ int validaVertices(FILE* archivo,FILE* archivoErrores) {
 	found = ver2.find("<ver2 ");
 	if(found == string::npos){
 		fprintf(archivoErrores,"No se encontro el vertice 2 de Triangulo. No se Dibujara\n");
-        cout<<"ERROR EN LA FIN"<<endl;
+        cout<<"ERROR EN EL VERTICE 2"<<endl;
 		return INVALID_FORMAT;
 	} else {
 		cout<<"VERTICE 2"<<endl;
@@ -277,6 +277,7 @@ int validaInicioFin(FILE* archivo,FILE* archivoErrores) {
 	return VALID_FORMAT;
 }
 
+
 int validaPos(FILE* archivo,FILE* archivoErrores) {
 	size_t found; 
 	string pos;
@@ -284,7 +285,9 @@ int validaPos(FILE* archivo,FILE* archivoErrores) {
 	int res1 = 0;
 	int x,y;
 	int begin, end;
-
+	fpos_t position;
+	
+	fgetpos (archivo, &position);
 	tag = readTag(archivo);
 	while ((tag!=NULL) && (tag=="ENTER")) {
 		tag = readTag(archivo);
@@ -293,6 +296,7 @@ int validaPos(FILE* archivo,FILE* archivoErrores) {
 	
 	found = pos.find("<posicion ");
 	if(found == string::npos){
+		fsetpos (archivo, &position);
 		fprintf(archivoErrores,"No se encontro Posicion de Elemento. No se Dibujara\n");
         cout<<"ERROR EN LA POSICION"<<endl;
 		return INVALID_FORMAT;
@@ -437,7 +441,7 @@ int validaRectangulo(string s,FILE* archivoErrores) {
     //primero se fija si la sintaxis esta bien hecha, es decir, si empieza con "<cuadrado"
     size_t found; 
 	int begin, end, res;
- 
+	
     found = s.find("<rectangulo id=\"");   
 	if(found != 0){
         cout<<"Error en el id del Rectangulo"<<endl;
@@ -911,7 +915,7 @@ int validaTextura(string linea,FILE* archivo, FILE* archivoErrores){
 
 	char* tag;
 	fpos_t position;
-	
+
 	//controlo que esta la id de la textura bien formado
 	found = linea.find("<textura id=\"");
 	if(found == string::npos){
@@ -969,6 +973,7 @@ int validaTagPadre(string linea, FILE* archivo, FILE* archivoErrores) {
 	string fin;
 	int res = 0;
 	int res1 = 0;
+	fpos_t position;
 
 	//Si encutnra el general entra y valida hasta su cierre....
 	found = linea.find("<General ");
@@ -984,12 +989,16 @@ int validaTagPadre(string linea, FILE* archivo, FILE* archivoErrores) {
 	found = linea.find("<ListadoDeElementos>");
 	if (found == 0) {
 		cout<<"LISTA DE ELEMENTOS"<<endl;					
-		while ((tag != NULL) && (fin.find("</ListadoDeElementos>")) ) {
+		while ( (tag != NULL) && ( (fin.find("</ListadoDeElementos>")!=0)&&(fin.find("<ListadoDeTexturas>")!= 0)&&(fin.find("<General>")!= 0)&&(fin.find("</escenario>")!= 0) ) ) {
+			
+			fgetpos (archivo, &position);
 			tag = readTag(archivo);
-
+			while ((tag != NULL) && (tag == "ENTER")) {
+				tag = readTag(archivo);
+			}
 			if (tag != NULL) fin = (string)tag;
 
-			if ((tag != NULL) && (tag != "ENTER") && (fin.find("</ListadoDeElementos>"))) {
+			if ((tag != NULL) && ( (fin.find("</ListadoDeElementos>")!=0)&&(fin.find("<ListadoDeTexturas>")!= 0)&&(fin.find("<General>")!= 0)&&(fin.find("</escenario>")!= 0) ) ) {
 				
 				cout<<"LINEA A VALIDAR: "<<tag<<endl;
 				
@@ -1004,17 +1013,25 @@ int validaTagPadre(string linea, FILE* archivo, FILE* archivoErrores) {
 		if (fin.find("</ListadoDeElementos>") == 0) {
 			return VALID_FORMAT;
 		}
+		if ( (fin.find("<ListadoDeTexturas>")) || (fin.find("<General>")) ){
+			cout<<"No se cerro el ListadoDeElementos"<<endl;
+			fprintf(archivoErrores,"No se cerro el ListadoDeElementos\n");
+			fsetpos (archivo, &position);
+		}
 	}
 	
 	//valida las texturas y se fija si cierra....
 	found = linea.find("<ListadoDeTexturas>");
 	if (found == 0) {
-		while ((tag != NULL) && (fin.find("</ListadoDeTexturas>"))) { 
-		
+		while ((tag != NULL) && ( (fin.find("</ListadoDeTexturas>")!=0)&&(fin.find("<ListadoDeElementos>")!= 0)&&(fin.find("<General>")!= 0)&&(fin.find("</escenario>")!= 0)  ) ) {
+			fgetpos (archivo, &position);
 			tag = readTag(archivo);
+			while ((tag != NULL) && (tag == "ENTER")) {
+				tag = readTag(archivo);
+			}
 			if (tag != NULL) fin = (string)tag;
 
-			if ((tag != NULL) && (tag != "ENTER") && (fin.find("</ListadoDeTexturas>"))) {
+			if ((tag != NULL) && ( (fin.find("</ListadoDeTexturas>")!=0)&&(fin.find("<ListadoDeElementos>")!= 0)&&(fin.find("<General>")!= 0)&&(fin.find("</escenario>")!= 0) ) ) {
 				cout<<"LINEA A VALIDAR: "<<tag<<endl;
 				res1 = validaTextura(tag,archivo,archivoErrores);
 			}
@@ -1022,6 +1039,12 @@ int validaTagPadre(string linea, FILE* archivo, FILE* archivoErrores) {
 		//nos dice si cerro el listado de texturas, sino sigue validando texturas...
 		if (fin.find("</ListadoDeTexturas>") == 0) {
 			return VALID_FORMAT;
+		}
+
+		if ( (fin.find("<ListadoDeElementos>")) || (fin.find("<General>")) ){
+			cout<<"No se cerro el ListadoDeTexturas"<<endl;
+			fprintf(archivoErrores,"No se cerro el ListadoDeTexturas\n");
+			fsetpos (archivo, &position);
 		}
 	}
 
@@ -1043,14 +1066,18 @@ int validar(string linea, FILE* archivo, FILE* archivoErrores) {
 	}
 	
 	while (tag != NULL) {
+		
 		tag = readTag(archivo);
+		while ((tag != NULL) && (tag == "ENTER")) {
+				tag = readTag(archivo);
+		}
 		if (tag!= NULL) fin=(string)tag;
 
 		if (fin.find("</escenario>") == 0) {
 			return VALID_FORMAT;		
 		}
 		
-		if ((tag != NULL) && (tag != "ENTER")) {
+		if (tag != NULL) {
 			cout<<"LINEA A VALIDAR: "<<tag<<endl;
 			
 			int resultado = validaTagPadre(tag,archivo,archivoErrores);
