@@ -39,7 +39,7 @@ public:
 	int getAlto();
 	
 	/*Metodo encargado de dibujar el triangulo */
-	virtual void dibujar();
+	virtual int dibujar();
 	
 };
 

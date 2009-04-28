@@ -64,7 +64,7 @@ public:
 
 
 	/*Metodo encargado de dibujar la figura */
-	virtual void dibujar()=0;
+	virtual int dibujar()=0;
 
 };
 

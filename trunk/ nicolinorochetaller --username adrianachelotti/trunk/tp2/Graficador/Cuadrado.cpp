@@ -49,7 +49,8 @@ Punto Cuadrado::getPosicionVerticeInferiorIzquierdo()
 	return this->posicionVerticeInferiorIzquierdo;
 }
 	
-void Cuadrado::dibujar()
+
+int Cuadrado::dibujar()
 {
 	Graficador* graficador = Graficador::obtenerInstancia(); 
 
@@ -91,4 +92,5 @@ void Cuadrado::dibujar()
 		}
 	}
 
+	return 0;
 }

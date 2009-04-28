@@ -86,7 +86,7 @@ int Triangulo::getAncho()
 
 
 }
-void Triangulo::dibujar()
+int Triangulo::dibujar()
 {
 	
 	Graficador* graficador = Graficador::obtenerInstancia(); 
@@ -130,6 +130,8 @@ void Triangulo::dibujar()
 			graficador->dibujarTriangulo(Escenario::screen,this->vertices[0],this->vertices[1],this->vertices[2],this->getColorLinea());
 		}
 	}
+
+	return 0;
 }
 
 

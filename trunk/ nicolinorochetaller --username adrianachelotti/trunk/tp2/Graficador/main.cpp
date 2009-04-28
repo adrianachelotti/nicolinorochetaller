@@ -66,8 +66,7 @@ int main(int argc, char *argv[]) {
     screen = SDL_SetVideoMode(640, 480, 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
 	if ( screen == NULL )
 	{
-		fprintf(stderr, "Couldn't set 640x480x8 video mode: %s\n",
-			SDL_GetError());
+		fprintf(stderr, "Couldn't set 640x480x8 video mode: %s\n",SDL_GetError());
 		exit(1);
 	}
 
@@ -89,6 +88,20 @@ int main(int argc, char *argv[]) {
 	SDL_Surface* imagen  = graficador->resizeTextura(text,100, 150);
 	int result = SDL_SaveBMP(imagen,"DibujoREsize.bmp");*/
 
+	Textura* text1 = new Textura("id1","Dibujo.bmp");
+	Textura* text2 = new Textura("id2","path2");
+	Textura* text3 = new Textura("id3","path3");
+	
+	list<Textura*> texturas;
+
+	texturas.push_front(text1);
+	texturas.push_front(text3);
+	texturas.push_front(text2);
+
+	Escenario* escenario2 = Escenario::obtenerInstancia();
+
+	escenario2->setListadoDeTexturas(texturas);
+
 
 	rect->setIdTextura("ad");
 	rect->setColorLinea(0x00ff0000);
@@ -101,7 +114,7 @@ int main(int argc, char *argv[]) {
 	cuadrado->dibujar();
 
 
-	circulo->setIdTextura("asdsa");
+	circulo->setIdTextura("id1");
 	circulo->setColorFondo(0x000000FF);
 	circulo->setColorLinea(0x0000FF00);
 	circulo->dibujar();
@@ -115,9 +128,12 @@ int main(int argc, char *argv[]) {
 	triangulo->setColorFondo(0x00ffffff);
 	triangulo->setIdTextura("sd");
 	triangulo->dibujar();;
+
 	SDL_Flip(screen);
-	  
-	 getchar();
+
+
+	
+	getchar();
 		SDL_Quit( );
 		return 0;
 }

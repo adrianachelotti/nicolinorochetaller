@@ -61,7 +61,7 @@ Punto Rectangulo::getPosicionVerticeInferiorIzquierdo()
 	return this->posicionVerticeInferiorIzquierdo;
 }
 	
-void Rectangulo::dibujar()
+int Rectangulo::dibujar()
 {
 	Graficador* graficador = Graficador::obtenerInstancia(); 
 
@@ -103,6 +103,7 @@ void Rectangulo::dibujar()
 		}
 	}
 
+	return 0;
 	
 }
 

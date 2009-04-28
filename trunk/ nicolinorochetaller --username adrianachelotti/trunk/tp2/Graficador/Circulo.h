@@ -39,7 +39,7 @@ public:
 	Punto getCentro();
 	
 	/*Metodo encargado de dibujar el circulo */
-	virtual void dibujar();
+	virtual int dibujar();
 
 };
 

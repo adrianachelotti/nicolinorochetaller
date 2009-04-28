@@ -4,6 +4,9 @@
 #if !defined ESCENARIO_H
 #define ESCENARIO_H
 
+#define RES_ERROR_CARGANDO_TEXTURA 1
+#define RES_OK 0
+
 #include <iostream>
 #include <list>
 #include "Figura.h"
@@ -20,18 +23,24 @@ private:
 	Uint32 colorFondoEscenario;
 	list<Figura*> listadoDeFiguras;
 	list<Textura*> listadoDeTexturas;
+
+	/*Constructor	 */
+	Escenario();
+	static Escenario* instancia;
+
 public:
 	
 	static Uint32 colorFondoFigura;
 	static Uint32 colorLinea;
 	static string texturaFigura;
 	static SDL_Surface* screen;
-
-	/*Constructor	 */
-	Escenario();
+		
 	
 	/*Destructor	 */
 	virtual ~Escenario();
+	
+	/*Obtiene la instancia del escenario*/
+	static Escenario* obtenerInstancia();
 	
 	/*Setea la resolucion del escenario pasada como parametro */
 	void setResolucion(string resolucion);
@@ -80,6 +89,9 @@ public:
 
 	/*Retorna las texturas del escenario */
 	list<Textura*> getListadoDeTexturas();
+
+	/*Retorna la textura que poseea el id pasado como parametro */
+    Textura* getTextura(string idTextura);
 	
 };
 

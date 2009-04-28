@@ -9,7 +9,9 @@ Uint32 Escenario::colorFondoFigura = COLOR_VACIO;
 Uint32 Escenario::colorLinea = COLOR_VACIO;
 string Escenario::texturaFigura = "";
 SDL_Surface* Escenario::screen=NULL;
+Escenario* Escenario::instancia = NULL;
 
+using namespace std;
 
 Escenario::Escenario()
 {
@@ -18,6 +20,14 @@ Escenario::Escenario()
 
 Escenario::~Escenario()
 {
+
+}
+
+Escenario* Escenario::obtenerInstancia()
+{
+	if(instancia==NULL) instancia = new Escenario();
+	
+	return instancia;
 
 }
 
@@ -115,4 +125,31 @@ void Escenario::setListadoDeTexturas(list<Textura*> listadoDeTexturas)
 list<Textura*> Escenario::getListadoDeTexturas()
 {
 	return this->listadoDeTexturas;
+}
+
+Textura* Escenario::getTextura(string idTextura)
+{
+	bool encontrado = false;
+
+	Textura* texturaActual = NULL;
+
+	list<Textura*>::iterator it;
+ 
+    it = this->listadoDeTexturas.begin();
+    
+	while( (it != this->listadoDeTexturas.end())&&(!encontrado))
+	{
+      texturaActual = *it;
+
+      if(idTextura.compare(texturaActual->getId()) == 0)
+	  {
+		encontrado= true;
+	  }
+	  else
+	  {
+	  	  it++;
+	  }
+    }
+
+	return texturaActual;
 }
