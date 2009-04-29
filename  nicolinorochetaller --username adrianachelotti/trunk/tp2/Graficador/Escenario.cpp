@@ -150,8 +150,8 @@ Textura* Escenario::getTextura(string idTextura)
 	  	  it++;
 	  }
     }
-
-	return texturaActual;
+	if(encontrado) return texturaActual;
+	return NULL;
 }
 
 int Escenario::dibujar()
