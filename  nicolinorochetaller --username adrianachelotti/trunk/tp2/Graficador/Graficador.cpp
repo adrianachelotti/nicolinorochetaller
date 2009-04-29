@@ -454,9 +454,9 @@ Uint32 getColor(SDL_Surface *screen,int r, int g, int  b)
 	if((0>r)||(r>255)) return -1;
 	if((0>g)||(g>255)) return -1;
 	if((0>b)||(b>255)) return -1;
+	
 	Uint32 color = SDL_MapRGB(screen->format,r,g,b);
 	
-
 	return color;
 }
 

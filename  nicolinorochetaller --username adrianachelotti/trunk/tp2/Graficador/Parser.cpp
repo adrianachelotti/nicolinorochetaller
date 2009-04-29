@@ -586,58 +586,72 @@ int Parser::colorValido(int c) {
 
 void Parser::validaColor(string aux,color&c) {
 	int g,r,v;
-	if (aux.length() != 9) {
+	
+	if (aux.length() != 9)
+	{
 		c.G = 111;
 		c.R = 111;
 		c.V = 111;
-	} else {
+	}
+	else 
+	{
 		r = atoi(aux.substr(0, 3).c_str());
 		c.R = colorValido(r);
 		g = atoi(aux.substr(3, 3).c_str());
 		c.G = colorValido(g);
 		v = atoi(aux.substr(6, 3).c_str());
 		c.V = colorValido(v);
-	}	
+	}
 }
+
 
 void Parser::imprimeColor(color c) {
 	cout<<"R: "<<c.R<<" "<<"G: "<<c.G<<" "<<"V: "<<c.V<<endl;
 }
 
-int Parser::validaGeneral(string linea,FILE* archivoErrores) {
+int Parser::validaGeneral(string linea,FILE* archivoErrores) 
+{
 	size_t found; 
 	int begin, end, reso;
 	string aux;
 	color cFF,cL,cFE;
+	Escenario* escenario = Escenario::obtenerInstancia();
 
 	//controlo la resolucion
 	found = linea.find("resolucion=\"");
-	if(found == string::npos){
+	if(found == string::npos)
+	{
 		fprintf(archivoErrores,"No se encontro Resolucion. Se colocara por defecto\n");
         reso = RESO_DEF;
     }
-	else {
+	else 
+	{
 		// obtengo la resolucion
 		begin = linea.find("resolucion=\"") + 12;
 		end = linea.find("\"", begin + 1);
 		reso = atoi(linea.substr(begin, end - begin).c_str());
 		reso = validaReso(reso);	
 	}
+	escenario->setResolucion(reso);
 	cout<<"RESOLUCION: "<<reso<<endl;
 
 	//controlo la colorFondofig
 	found = linea.find("colorFondoFig=\"");
-	if(found == string::npos){
+	if(found == string::npos)
+	{
 		fprintf(archivoErrores,"No se encontro Color para fondo de Figura. Se colocara por defecto\n");
         colorXdef(cFF);
 	}
-	else {
+	else 
+	{
 		// obtengo el color de Fondo Figura
 		begin = linea.find("colorFondoFig=\"") + 15;
 		end = linea.find("\"", begin + 1);
 		aux = linea.substr(begin, end - begin).c_str();
 		validaColor(aux,cFF);
 	}
+
+	escenario->setColorFondoFigura();
 	cout<<"COLOR FONDO FIGURA ";imprimeColor(cFF);
 
 	//controlo la colorLinea
@@ -903,8 +917,9 @@ int Parser::validaElementos(string linea,FILE* archivo,FILE* archivoErrores) {
 int Parser::validaTextura(string linea,FILE* archivo, FILE* archivoErrores){
 	size_t found; 
 	int begin, end, res;
-	string tex;
+	string tex,path;
 	string fin;
+	Escenario* escenario = Escenario::obtenerInstancia();
 
 	char* tag;
 	fpos_t position;
@@ -935,21 +950,33 @@ int Parser::validaTextura(string linea,FILE* archivo, FILE* archivoErrores){
 		// obtengo la id de ta textura
 		begin = linea.find("path=\"") + 6;
 		end = linea.find("\"", begin + 1);
-		tex =linea.substr(begin, end - begin).c_str();
-		cout<<"Path: "<<tex<<endl;
+		path =linea.substr(begin, end - begin).c_str();
+		cout<<"Path: "<<path<<endl;
+	}
+
+	if (res!=INVALID_FORMAT)
+	{
+	    Textura* nuevaTextura = new Textura(tex,path);
+		escenario->addTextura(nuevaTextura);
+				
 	}
 
 	//guardo la posicion por si no se cierra la textura. Para poder volver en el archivo...
 	fgetpos (archivo, &position);
 	tag = readTag(archivo);
-	while ((tag != NULL) && (tag == "ENTER")) {
+	while ((tag != NULL) && (tag == "ENTER")) 
+	{
 		tag = readTag(archivo);
 	}
-	if (tag != NULL) {
+	if (tag != NULL) 
+	{
 		fin = (string) tag;
-		if (fin.find("</textura>") == 0) {
+		if (fin.find("</textura>") == 0)
+		{
 			return VALID_FORMAT;
-		} else {
+		} 
+		else 
+		{
 			fsetpos(archivo, &position);
 			fprintf(archivoErrores,"Textura no cerrada\n");
 			cout<<"TEXTURA NO CERRADA"<<endl;

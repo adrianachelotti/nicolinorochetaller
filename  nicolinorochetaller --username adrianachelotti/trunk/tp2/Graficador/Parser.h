@@ -8,6 +8,14 @@
 #include <string>
 #include <iostream>
 
+#include "Escenario.h"
+#include "Cuadrado.h"
+#include "Rectangulo.h"
+#include "Circulo.h"
+#include "Segmento.h"
+#include "Triangulo.h"
+#include "Textura.h"
+
 
 using namespace std;
 
