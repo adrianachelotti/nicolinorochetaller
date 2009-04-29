@@ -16,7 +16,7 @@
 		<segmento id="idSegmento">
 			<inicio x="3" y="32"/>
 			<fin x="3" y="32"/>
-		</segmeno>
+		</segmento>
 		<triangulo id="idTriangulo">
 			<ver1 x="3" y="32"/>
 			<ver2 x="3" y="32"/>
