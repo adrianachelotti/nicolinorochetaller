@@ -90,10 +90,24 @@ int Triangulo::dibujar()
 {
 	
 	Graficador* graficador = Graficador::obtenerInstancia(); 
+		SDL_Surface* imagen = NULL;
+	Textura* text = NULL;
 
-	if(this->getIdTextura().empty())
+	bool contieneTextura = false;
+
+	Escenario* escenario = Escenario::obtenerInstancia();
+
+	text = escenario->getTextura(this->getIdTextura());
+
+	if (text!=NULL) contieneTextura = true;
+
+	if(contieneTextura)
 	{
+		imagen = SDL_LoadBMP(text->getPath().c_str());
+	}
 
+	if(imagen==NULL)
+	{
 		if((this->getColorFondo()!=COLOR_VACIO))
 		{
 			
@@ -112,18 +126,17 @@ int Triangulo::dibujar()
 
 		}
 	
+		if(contieneTextura) return RES_ERROR_CARGANDO_TEXTURA;
+		return RES_OK;
 		
 	}else
 	{
 			//dibujar Textura
 	
+		SDL_Surface* imagenResized  = graficador->getImageResized(text,this->getAncho(), this->getAlto());
+		//SDL_SaveBMP(imagen, "bh.bmp");
 
-		Textura* text = new Textura("3", "Dibujo.bmp");
-	
-		SDL_Surface* imagen  = graficador->getImageResized(text,this->getAncho(), this->getAlto());
-		SDL_SaveBMP(imagen, "bh.bmp");
-
-		graficador->rellenarTrianguloConTextura(Escenario::screen,imagen ,&this->vertices[0],&this->vertices[1],&this->vertices[2]);
+		graficador->rellenarTrianguloConTextura(Escenario::screen,imagenResized ,&this->vertices[0],&this->vertices[1],&this->vertices[2]);
 
 		if(this->getColorLinea()!=COLOR_VACIO)
 		{
@@ -131,7 +144,7 @@ int Triangulo::dibujar()
 		}
 	}
 
-	return 0;
+	return RES_OK;
 }
 
 
