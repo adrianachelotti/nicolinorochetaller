@@ -1096,7 +1096,6 @@ int validar(string linea, FILE* archivo, FILE* archivoErrores) {
 int main(int argc, char** argv) {
 	FILE *archivo;
 	FILE *archivoErrores;
-	char* tag;
 	int resultado;
 
 	char nombre[100] = "C:/Documents and Settings/Martin/Mis documentos/Facultad/taller/parser/archivosPrueba/prueba.esc";
@@ -1115,15 +1114,32 @@ int main(int argc, char** argv) {
 		exit(1);
 	}
 	
-
-	tag = readTag(archivo);
-	resultado = validar(tag,archivo,archivoErrores);	
+	resultado = validar(archivo,archivoErrores);	
 	
-	if (resultado!=VALID_FORMAT) {
-		cout<<"No se encontro el cierre del escenario"<<endl;
-		fprintf(archivoErrores,"No se encontro el cierre del escenario.\n");
+	fclose(archivo);
+	fclose(archivoErrores);
+    return (EXIT_SUCCESS);FILE *archivo;
+	FILE *archivoErrores;
+	int resultado;
+
+	char nombre[100] = "C:/Documents and Settings/Martin/Mis documentos/Facultad/taller/parser/archivosPrueba/prueba.esc";
+	char nombreEr[100] = "C:/Documents and Settings/Martin/Mis documentos/Facultad/taller/parser/archivosPrueba/errores.err";
+
+	archivoErrores = fopen(nombreEr,"w");
+	if (archivoErrores == NULL) {
+		cout<<"No se pudo abrir el archivo de errores"<<endl;
+		exit(1);
 	}
 
+	archivo = fopen(nombre,"r");
+	if (archivo == NULL) {
+		cout<<"No se pudo abrir el archivo"<<endl;
+		fprintf(archivoErrores,"No se pudo encontrar el archivo de datos\n");
+		exit(1);
+	}
+	
+	resultado = validar(archivo,archivoErrores);	
+	
 	fclose(archivo);
 	fclose(archivoErrores);
     return (EXIT_SUCCESS);
