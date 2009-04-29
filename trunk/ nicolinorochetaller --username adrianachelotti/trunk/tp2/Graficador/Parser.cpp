@@ -17,7 +17,8 @@ Parser::~Parser()
 {
 
 }
-Uint32 getColor(int r, int g, int b)
+
+Uint32 Parser::getColor(int r, int g, int b)
 {
 	Uint32 color = 0;
 	color = r<<16;
@@ -68,7 +69,7 @@ char* Parser::readTag(FILE* arch)
 	}
 }
 
-int Parser::validaVertices(FILE* archivo,FILE* archivoErrores) {
+int Parser::validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,punto&v3) {
 	size_t found; 
 	string ver1,ver2,ver3;
 	char* tag;
@@ -189,16 +190,22 @@ int Parser::validaVertices(FILE* archivo,FILE* archivoErrores) {
 			cout<<"Y= "<<y3<<endl;	
 		}
 	}
+	v1.x = x1;
+	v1.y = y1;
+	v2.x = x2;
+	v2.y = y2;
+	v3.x = x3;
+	v3.y = y3;
 	return VALID_FORMAT;
 
 }
 
-int Parser::validaInicioFin(FILE* archivo,FILE* archivoErrores) {
+int Parser::validaInicioFin(FILE* archivo,FILE* archivoErrores,punto&i, punto&f) {
 	size_t found; 
 	string inicio,fin;
 	char* tag;
 	int res1 = 0;
-	int x,y;
+	int ix,iy,fx,fy;
 	int begin, end;
 
 	tag = readTag(archivo);
@@ -222,8 +229,8 @@ int Parser::validaInicioFin(FILE* archivo,FILE* archivoErrores) {
 		} else {
 			begin = inicio.find("x=\"") + 3;
 			end = inicio.find("\"", begin + 1);
-			x = atoi(inicio.substr(begin, end - begin).c_str());
-			cout<<"X= "<<x<<endl;	
+			ix = atoi(inicio.substr(begin, end - begin).c_str());
+			cout<<"X= "<<ix<<endl;	
 		}
 		found = inicio.find("y=\"");
 		if (found == string::npos){
@@ -233,8 +240,8 @@ int Parser::validaInicioFin(FILE* archivo,FILE* archivoErrores) {
 		} else {
 			begin = inicio.find("y=\"") + 3;
 			end = inicio.find("\"", begin + 1);
-			y = atoi(inicio.substr(begin, end - begin).c_str());
-			cout<<"Y= "<<y<<endl;	
+			iy = atoi(inicio.substr(begin, end - begin).c_str());
+			cout<<"Y= "<<iy<<endl;	
 		}
 	}
 
@@ -260,8 +267,8 @@ int Parser::validaInicioFin(FILE* archivo,FILE* archivoErrores) {
 		} else {
 			begin = fin.find("x=\"") + 3;
 			end = fin.find("\"", begin + 1);
-			x = atoi(fin.substr(begin, end - begin).c_str());
-			cout<<"X= "<<x<<endl;	
+			fx = atoi(fin.substr(begin, end - begin).c_str());
+			cout<<"X= "<<fx<<endl;	
 		}
 		found = fin.find("y=\"");
 		if (found == string::npos){
@@ -271,15 +278,20 @@ int Parser::validaInicioFin(FILE* archivo,FILE* archivoErrores) {
 		} else {
 			begin = fin.find("y=\"") + 3;
 			end = fin.find("\"", begin + 1);
-			y = atoi(fin.substr(begin, end - begin).c_str());
-			cout<<"Y= "<<y<<endl;	
+			fy = atoi(fin.substr(begin, end - begin).c_str());
+			cout<<"Y= "<<fy<<endl;	
 		}
 	}
+
+	i.x = ix;
+	i.y = iy;
+	f.x = fx;
+	f.y = fy;
 	return VALID_FORMAT;
 }
 
 
-int Parser::validaPos(FILE* archivo,FILE* archivoErrores) {
+int Parser::validaPos(FILE* archivo,FILE* archivoErrores,punto&p) {
 	size_t found; 
 	string pos;
 	char* tag;
@@ -325,16 +337,17 @@ int Parser::validaPos(FILE* archivo,FILE* archivoErrores) {
 			cout<<"Y= "<<y<<endl;	
 		}
 	}
+	p.x = x;
+	p.y = y;
 	return VALID_FORMAT;
 }
 
-int Parser::validaCuadrado(string s,FILE* archivoErrores) {
+int Parser::validaCuadrado(string s,FILE* archivoErrores,Cuadrado* nCuadrado) {
     //primero se fija si la sintaxis esta bien hecha, es decir, si empieza con "<cuadrado"
     size_t found; 
 	int begin, end;
-	color cF,cL;
+	Uint32 cF,cL;
 	string textura,id,colorFondo,colorLinea;
-
 	int res = VALID_FORMAT;
   
     found = s.find("<cuadrado id=\"");
@@ -350,6 +363,7 @@ int Parser::validaCuadrado(string s,FILE* archivoErrores) {
 		id = s.substr(begin, end - begin);
 		// ID obtenido
 		cout<<"ID: "<<id<<endl;
+		nCuadrado->setId(id);
 	}
 
     // controla la existencia del dato "lado"
@@ -365,6 +379,7 @@ int Parser::validaCuadrado(string s,FILE* archivoErrores) {
 		end = s.find("\"", begin + 1);
 		lado = atoi(s.substr(begin, end - begin).c_str());
 		cout<<"LADO: "<<lado<<endl;
+		nCuadrado->setLado(lado);
 	}
 	
 	// controla la existencia de una textura...
@@ -379,19 +394,22 @@ int Parser::validaCuadrado(string s,FILE* archivoErrores) {
 		textura = s.substr(begin, end - begin);
 		// textura obetenida
 		cout<<"Textura: "<<textura<<endl;
+		nCuadrado->setIdTextura(textura);
 	}
 
 	// controla la existencia de un color de fondo
-	found = s.find("colorFondo=\"");
+	found = s.find("colorFigura=\"");
 	if(found == string::npos){
 		cout<<"El cuadrado no tiene un color de Fondo asignado"<<endl;
     } else {
 		// obtengo el el colorFondo
-		begin = s.find("colorFondo=\"") + 12;
+		begin = s.find("colorFigura=\"") + 13;
 		end = s.find("\"", begin + 1);
 		colorFondo = s.substr(begin, end - begin);
-		validaColor(colorFondo,cF);
-		imprimeColor(cF);
+		cF = validaColor(colorFondo);
+		//cout<<cF<<endl;
+		nCuadrado->setColorFondo(cF);
+
 	}
 
 	// controla la existencia de un color de Linea
@@ -403,18 +421,19 @@ int Parser::validaCuadrado(string s,FILE* archivoErrores) {
 		begin = s.find("colorLinea=\"") + 12;
 		end = s.find("\"", begin + 1);
 		colorLinea = s.substr(begin, end - begin);
-		validaColor(colorLinea,cL);
-		imprimeColor(cL);
+		cL = validaColor(colorLinea);
+		//cout<<cL<<endl;
+		nCuadrado->setColorLinea(cL);
 	}
 	return res;
 }
 
 
-int Parser::validaCirculo(string s,FILE* archivoErrores) {
+int Parser::validaCirculo(string s,FILE* archivoErrores,Circulo* nCirculo) {
     //primero se fija si la sintaxis esta bien hecha, es decir, si empieza con "<circulo"
     size_t found; 
 	int begin, end, radio;
-	color cF,cL;
+	Uint32 cF,cL;
 	string id,textura,colorFondo,colorLinea;
   
 	int res = VALID_FORMAT;
@@ -433,6 +452,7 @@ int Parser::validaCirculo(string s,FILE* archivoErrores) {
 		id = s.substr(begin, end - begin);
 		// ID obtenido
 		cout<<"ID: "<<id<<endl;
+		nCirculo->setId(id);
 	}
 
     // controla la existencia del dato "radio"
@@ -448,6 +468,7 @@ int Parser::validaCirculo(string s,FILE* archivoErrores) {
 		end = s.find("\"", begin + 1);
 		radio = atoi(s.substr(begin, end - begin).c_str());
 		cout<<"RADIO: "<<radio<<endl;
+		nCirculo->setRadio(radio);
 	}
 
 	// controla la existencia de una textura...
@@ -461,19 +482,20 @@ int Parser::validaCirculo(string s,FILE* archivoErrores) {
 		textura = s.substr(begin, end - begin);
 		// textura obetenida
 		cout<<"Textura: "<<textura<<endl;
+		nCirculo->setIdTextura(textura);
 	}
 
 	// controla la existencia de un color de fondo
-	found = s.find("colorFondo=\"");
+	found = s.find("colorFigura=\"");
 	if(found == string::npos){
 		cout<<"El circulo no tiene un color de Fondo asignado"<<endl;
     } else {
 		// obtengo el el colorFondo
-		begin = s.find("colorFondo=\"") + 12;
+		begin = s.find("colorFigura=\"") + 13;
 		end = s.find("\"", begin + 1);
 		colorFondo = s.substr(begin, end - begin);
-		validaColor(colorFondo,cF);
-		imprimeColor(cF);
+		cF = validaColor(colorFondo);
+		nCirculo->setColorFondo(cF);
 	}
 
 	// controla la existencia de un color de Linea
@@ -485,19 +507,19 @@ int Parser::validaCirculo(string s,FILE* archivoErrores) {
 		begin = s.find("colorLinea=\"") + 12;
 		end = s.find("\"", begin + 1);
 		colorLinea = s.substr(begin, end - begin);
-		validaColor(colorLinea,cL);
-		imprimeColor(cL);
+		cL = validaColor(colorLinea);
+		nCirculo->setColorLinea(cL);
 	}
 
 	return res;
 }
 
-int Parser::validaRectangulo(string s,FILE* archivoErrores) {
+int Parser::validaRectangulo(string s,FILE* archivoErrores,Rectangulo* nRectangulo) {
     //primero se fija si la sintaxis esta bien hecha, es decir, si empieza con "<cuadrado"
     size_t found; 
 	int begin, end, base, altura;
 	string textura,id,colorFondo,colorLinea;
-	color cF,cL;
+	Uint32 cF,cL;
 
 	int res = VALID_FORMAT;
 	
@@ -512,7 +534,7 @@ int Parser::validaRectangulo(string s,FILE* archivoErrores) {
 		end = s.find("\"", begin + 1);
 		id = s.substr(begin, end - begin);
 		cout<<"ID: "<<id<<endl;
-		// ID obtenido
+		nRectangulo->setId(id);
 	}
     // controla la existencia del dato "base"
     found = s.find("base=\"");
@@ -527,6 +549,7 @@ int Parser::validaRectangulo(string s,FILE* archivoErrores) {
 		end = s.find("\"", begin + 1);
 		base = atoi(s.substr(begin, end - begin).c_str());
 		cout<<"BASE: "<<base<<endl;
+		nRectangulo->setBase(base);
 	}
 
 	// controla la existencia del dato "altura"
@@ -541,6 +564,7 @@ int Parser::validaRectangulo(string s,FILE* archivoErrores) {
 		end = s.find("\"", begin + 1);
 		altura = atoi(s.substr(begin, end - begin).c_str());
 		cout<<"ALTURA: "<<altura<<endl;
+		nRectangulo->setAltura(altura);
 	}
 
 	// controla la existencia de una textura...
@@ -554,19 +578,20 @@ int Parser::validaRectangulo(string s,FILE* archivoErrores) {
 		textura = s.substr(begin, end - begin);
 		// textura obetenida
 		cout<<"Textura: "<<textura<<endl;
+		nRectangulo->setIdTextura(textura);
 	}
 
 	// controla la existencia de un color de fondo
-	found = s.find("colorFondo=\"");
+	found = s.find("colorFigura=\"");
 	if(found == string::npos){
 		cout<<"El rectangulo no tiene un color de Fondo asignado"<<endl;
     } else {
 		// obtengo el el colorFondo
-		begin = s.find("colorFondo=\"") + 12;
+		begin = s.find("colorFigura=\"") + 13;
 		end = s.find("\"", begin + 1);
 		colorFondo = s.substr(begin, end - begin);
-		validaColor(colorFondo,cF);
-		imprimeColor(cF);
+		cF = validaColor(colorFondo);
+		nRectangulo->setColorFondo(cF);
 	}
 
 	// controla la existencia de un color de Linea
@@ -578,20 +603,18 @@ int Parser::validaRectangulo(string s,FILE* archivoErrores) {
 		begin = s.find("colorLinea=\"") + 12;
 		end = s.find("\"", begin + 1);
 		colorLinea = s.substr(begin, end - begin);
-		validaColor(colorLinea,cL);
-		imprimeColor(cL);
+		cL = validaColor(colorLinea);
+		nRectangulo->setColorLinea(cL);
 	}
-
-
 	return res;
 }
 
-int Parser::validaTriangulo(string s, FILE* archivoErrores) {
+int Parser::validaTriangulo(string s, FILE* archivoErrores,Triangulo* nTriangulo) {
     //primero se fija si la sintaxis esta bien hecha, es decir, si empieza con "<circulo"
     size_t found; 
 	int begin, end; 
 	string id,textura,colorFondo,colorLinea;
-	color cF,cL;
+	Uint32 cF,cL;
 
     int res = VALID_FORMAT;
     
@@ -609,6 +632,7 @@ int Parser::validaTriangulo(string s, FILE* archivoErrores) {
 		id = s.substr(begin, end - begin);
 		// ID obtenido
 		cout<<"ID: "<<id<<endl;
+		nTriangulo->setId(id);
 	}
 	
 	// controla la existencia de una textura...
@@ -622,19 +646,20 @@ int Parser::validaTriangulo(string s, FILE* archivoErrores) {
 		textura = s.substr(begin, end - begin);
 		// textura obetenida
 		cout<<"Textura: "<<textura<<endl;
+		nTriangulo->setIdTextura(textura);
 	}
 
 	// controla la existencia de un color de fondo
-	found = s.find("colorFondo=\"");
+	found = s.find("colorFigura=\"");
 	if(found == string::npos){
 		cout<<"El triangulo no tiene un color de Fondo asignado"<<endl;
     } else {
 		// obtengo el el colorFondo
-		begin = s.find("colorFondo=\"") + 12;
+		begin = s.find("colorFigura=\"") + 13;
 		end = s.find("\"", begin + 1);
 		colorFondo = s.substr(begin, end - begin);
-		validaColor(colorFondo,cF);
-		imprimeColor(cF);
+		cF = validaColor(colorFondo);
+		nTriangulo->setColorFondo(cF);
 	}
 
 	// controla la existencia de un color de Linea
@@ -646,20 +671,20 @@ int Parser::validaTriangulo(string s, FILE* archivoErrores) {
 		begin = s.find("colorLinea=\"") + 12;
 		end = s.find("\"", begin + 1);
 		colorLinea = s.substr(begin, end - begin);
-		validaColor(colorLinea,cL);
-		imprimeColor(cL);
+		cL = validaColor(colorLinea);
+		nTriangulo->setColorLinea(cL);
 	}
 
 	
 	return res;
 }
 
-int Parser::validaSegmento(string s, FILE* archivoErrores) {
+int Parser::validaSegmento(string s, FILE* archivoErrores,Segmento* nSegmento) {
     //primero se fija si la sintaxis esta bien hecha, es decir, si empieza con "<circulo"
     size_t found; 
 	int begin, end;
 	string id,colorLinea;
-	color cL;
+	Uint32 cL;
 
 	int res = VALID_FORMAT;
 
@@ -677,6 +702,7 @@ int Parser::validaSegmento(string s, FILE* archivoErrores) {
 		id = s.substr(begin, end - begin);
 		// ID obtenido
 		cout<<"ID: "<<id<<endl;
+		nSegmento->setId(id);
 	}
 
 	// controla la existencia de un color de Linea
@@ -688,8 +714,8 @@ int Parser::validaSegmento(string s, FILE* archivoErrores) {
 		begin = s.find("colorLinea=\"") + 12;
 		end = s.find("\"", begin + 1);
 		colorLinea = s.substr(begin, end - begin);
-		validaColor(colorLinea,cL);
-		imprimeColor(cL);
+		cL = validaColor(colorLinea);
+		nSegmento->setColorLinea(cL);
 	}
 
 	return res;
@@ -705,10 +731,12 @@ int Parser::validaReso(int r){
 	}
 }
 
-void Parser::colorXdef(color&c) {
-	c.R = 111;
-	c.G = 111;
-	c.B = 111;
+Uint32 Parser::colorXdef() {
+	int r,g,b;
+	r = 111;
+	g = 111;
+	b = 111;
+	return(getColor(r,g,b));
 }
 
 int Parser::colorValido(int c) {
@@ -719,24 +747,26 @@ int Parser::colorValido(int c) {
 	}
 }
 
-void Parser::validaColor(string aux,color&c) {
+Uint32 Parser::validaColor(string aux) {
 	int g,r,b;
 	
 	if (aux.length() != 9)
 	{
-		c.G = 111;
-		c.R = 111;
-		c.B = 111;
+		g = 111;
+		r = 111;
+		b = 111;
 	}
 	else 
 	{
 		r = atoi(aux.substr(0, 3).c_str());
-		c.R = colorValido(r);
+		r = colorValido(r);
 		g = atoi(aux.substr(3, 3).c_str());
-		c.G = colorValido(g);
+		g = colorValido(g);
 		b = atoi(aux.substr(6, 3).c_str());
-		c.B = colorValido(b);
+		b = colorValido(b);
 	}
+	return(getColor(r,g,b));
+
 }
 
 
@@ -749,7 +779,7 @@ int Parser::validaGeneral(string linea,FILE* archivoErrores)
 	size_t found; 
 	int begin, end, reso;
 	string aux;
-	color cFF,cL,cFE;
+	Uint32 cFF,cL,cFE;
 	Escenario* escenario = Escenario::obtenerInstancia();
 
 	//controlo la resolucion
@@ -775,7 +805,7 @@ int Parser::validaGeneral(string linea,FILE* archivoErrores)
 	if(found == string::npos)
 	{
 		fprintf(archivoErrores,"No se encontro Color para fondo de Figura. Se colocara por defecto\n");
-        colorXdef(cFF);
+        cFF = colorXdef();
 	}
 	else 
 	{
@@ -783,44 +813,43 @@ int Parser::validaGeneral(string linea,FILE* archivoErrores)
 		begin = linea.find("colorFondoFig=\"") + 15;
 		end = linea.find("\"", begin + 1);
 		aux = linea.substr(begin, end - begin).c_str();
-		validaColor(aux,cFF);
+		cFF = validaColor(aux);
 	}
+	
+	escenario->setColorFondoFigura(cFF);
 
-//<<<<<<< .mine
-//=======
-//	escenario->setColorFondoFigura();
-//>>>>>>> .r74
-	cout<<"COLOR FONDO FIGURA ";imprimeColor(cFF);
 
 	//controlo la colorLinea
 	found = linea.find("colorLinea=\"");
 	if(found == string::npos){
 		fprintf(archivoErrores,"No se encontro Color de Linea. Se colocara por defecto\n");
-        colorXdef(cL);
+        cL = colorXdef();
 	}
 	else {
 		// obtengo el color de Linea
 		begin = linea.find("colorLinea=\"") + 12;
 		end = linea.find("\"", begin + 1);
 		aux = linea.substr(begin, end - begin).c_str();
-		validaColor(aux,cL);	
+		cL = validaColor(aux);	
 	}
-	cout<<"COLOR LINEA ";imprimeColor(cL);
+	
+	escenario->setColorLinea(cL);
 
 	//controlo la colorFondoEsc
 	found = linea.find("colorFondoEsc=\"");
 	if(found == string::npos){
 		fprintf(archivoErrores,"No se encontro Color de fondo de Escenario. Se colocara por defecto\n");
-        colorXdef(cFE);
+        cFE = colorXdef();
 	}
 	else {
 		// obtengo el color de fondo escenario
 		begin = linea.find("colorFondoEsc=\"") + 15;
 		end = linea.find("\"", begin + 1);
 		aux = linea.substr(begin, end - begin).c_str();
-		validaColor(aux,cFE);
+		cFE = validaColor(aux);
 	}
-	cout<<"COLOR FONDO ESCENARIO ";imprimeColor(cFE);
+
+	escenario->setColorFondoEscenario(cFE);
 
 	//controlo la texturaFig
 	found = linea.find("texturaFig=\"");
@@ -834,8 +863,11 @@ int Parser::validaGeneral(string linea,FILE* archivoErrores)
 		end = linea.find("\"", begin + 1);
 		aux = linea.substr(begin, end - begin).c_str();
 		cout<<"TEXTURA FIGURA: "<<aux<<endl;
+		escenario->setTexturaFigura(aux);
 	}
 	
+	
+
 	//controlo la texturaEsc
 	found = linea.find("texturaEsc=\"");
 	if(found == string::npos){
@@ -848,6 +880,7 @@ int Parser::validaGeneral(string linea,FILE* archivoErrores)
 		end = linea.find("\"", begin + 1);
 		aux = linea.substr(begin, end - begin).c_str();
 		cout<<"TEXTURA ESCENARIO: "<<aux<<endl;
+		escenario->setTexturaEscenario(aux);
 	}
 	return VALID_FORMAT;
 }
@@ -1005,64 +1038,152 @@ int Parser::validaTrianguloCierre(FILE* archivo,FILE* archivoErrores) {
 int Parser::validaElementos(string linea,FILE* archivo,FILE* archivoErrores) {
 	size_t found; 
 	int res = 0;
-			found = linea.find("<cuadrado ");
-			if (found == 0) {
-				cout<<"CUADRADO"<<endl;
-				//creo el cuadradop
-				res = validaCuadrado(linea,archivoErrores);
-				if (res==VALID_FORMAT) 
-				{
-					res = validaPos(archivo,archivoErrores); // agregar el punto con &
-					if (res==VALID_FORMAT) 
-					{
-						//agrego la poscion al cuadado...
-						//agrego el cudrado a la lista del escenerio..
-					}
-					res = validaCuadradoCierre(archivo,archivoErrores);
-				}
-				else 
-				{
-					//elimino cuadrado
-				}
-				return(res);
+	punto p,v1,v2,v3,i,f;
+	Escenario* escenario = Escenario::obtenerInstancia();
+			
+	found = linea.find("<cuadrado ");
+	if (found == 0) 
+	{
+		cout<<"CUADRADO"<<endl;
+		Cuadrado* nuevoCuadrado = new Cuadrado();
+		res = validaCuadrado(linea,archivoErrores,nuevoCuadrado);
+		if (res==VALID_FORMAT) 
+		{
+			res = validaPos(archivo,archivoErrores,p); // agregar el punto con &
+			if (res==VALID_FORMAT) 
+			{
+				nuevoCuadrado->setPosicionVerticeInferiorIzquierdo(p);
+				escenario->addFigura(nuevoCuadrado);
+			} 
+			else 
+			{
+				delete(nuevoCuadrado);
 			}
+			res = validaCuadradoCierre(archivo,archivoErrores);
+		}
+		else 
+		{
+			delete(nuevoCuadrado);
+		}
+		return(res);
+	}
 	
-			found = linea.find("<circulo ");
-			if (found == 0) {
-				cout<<"CIRCULO"<<endl;
-				res = validaCirculo(linea,archivoErrores);
-				res = validaPos(archivo,archivoErrores);
-				res = validaCirculoCierre(archivo,archivoErrores);
-				return(res);
+	found = linea.find("<circulo ");
+	if (found == 0) 
+	{
+		cout<<"CIRCULO"<<endl;
+		Circulo* nuevoCirculo = new Circulo();
+		res = validaCirculo(linea,archivoErrores,nuevoCirculo);
+		if (res==VALID_FORMAT) 
+		{
+			res = validaPos(archivo,archivoErrores,p);
+			if (res == VALID_FORMAT) 
+			{	
+				nuevoCirculo->setCentro(p);
+				escenario->addFigura(nuevoCirculo);
 			}
+			else 
+			{
+				delete(nuevoCirculo);
+			}
+			res = validaCirculoCierre(archivo,archivoErrores);
+		} 
+		else 
+		{
+			delete(nuevoCirculo);
+		}
+		return(res);
+	}
 	
-			found = linea.find("<rectangulo id=\"");
-			if (found == 0) {
-				cout<<"RECTANGULO"<<endl;
-				res = validaRectangulo(linea,archivoErrores);
-				res = validaPos(archivo,archivoErrores);
-				res = validaRectanguloCierre(archivo,archivoErrores);
-				return(res);
+	found = linea.find("<rectangulo id=\"");
+	if (found == 0) 
+	{
+		cout<<"RECTANGULO"<<endl;
+		Rectangulo* nuevoRectangulo = new Rectangulo();
+		res = validaRectangulo(linea,archivoErrores,nuevoRectangulo);
+		if (res==VALID_FORMAT) 
+		{
+			res = validaPos(archivo,archivoErrores,p);
+			if (res==VALID_FORMAT) 
+			{
+				nuevoRectangulo->setPosicionVerticeInferiorIzquierdo(p);
+				escenario->addFigura(nuevoRectangulo);
 			}
+			else 
+			{
+				delete(nuevoRectangulo);
+			}
+			res = validaRectanguloCierre(archivo,archivoErrores);
+		} 
+		else 
+		{
+			delete(nuevoRectangulo);
+		}
+		return(res);
+	}
 	
-			found = linea.find("<triangulo id=\"");
-			if (found == 0) {
-				cout<<"TRIANGULO"<<endl;
-				res = validaTriangulo(linea,archivoErrores);
-				res = validaVertices(archivo,archivoErrores);
-				res = validaTrianguloCierre(archivo,archivoErrores);
-				return(res);
+	found = linea.find("<triangulo id=\"");
+	if (found == 0) 
+	{
+
+		cout<<"TRIANGULO"<<endl;
+		Triangulo* nuevoTriangulo = new Triangulo();
+		res = validaTriangulo(linea,archivoErrores,nuevoTriangulo);
+		if (res==VALID_FORMAT) 
+		{
+			res = validaVertices(archivo,archivoErrores,v1,v2,v3);
+			if (res==VALID_FORMAT) 
+			{
+				punto vertices[3];
+				vertices[0] = v1;
+				vertices[1] = v2;
+				vertices[2] = v3;
+				nuevoTriangulo->setVertices(vertices);
+				escenario->addFigura(nuevoTriangulo);
+			} 
+			else 
+			{
+				delete(nuevoTriangulo);
 			}
+		res = validaTrianguloCierre(archivo,archivoErrores);
+		}
+		else 
+		{
+			delete(nuevoTriangulo);
+		}
+		
+		return(res);
+	}
 	
-			found = linea.find("<segmento id=\"");
-			if (found == 0) {
-				cout<<"SEGMENTO"<<endl;
-				res = validaSegmento(linea,archivoErrores);
-				res = validaInicioFin(archivo,archivoErrores);
-				res = validaSegmentoCierre(archivo,archivoErrores);
-				return(res);
+	found = linea.find("<segmento id=\"");
+	if (found == 0) 
+	{
+		cout<<"SEGMENTO"<<endl;
+		Segmento* nuevoSegmento = new Segmento();
+		res = validaSegmento(linea,archivoErrores,nuevoSegmento);
+		if (res==VALID_FORMAT) 
+		{
+			res = validaInicioFin(archivo,archivoErrores,i,f);
+			if (res==VALID_FORMAT) 
+			{
+				nuevoSegmento->setPuntoInicio(i);
+				nuevoSegmento->setPuntoFinal(f);
+				escenario->addFigura(nuevoSegmento);
+			} 
+			else 
+			{
+				delete(nuevoSegmento);
 			}
-			return INVALID_FORMAT;
+		res = validaSegmentoCierre(archivo,archivoErrores);
+		}
+		else 
+		{
+			delete(nuevoSegmento);
+		}
+		return(res);
+	}
+
+	return INVALID_FORMAT;
 }
 
 int Parser::validaTextura(string linea,FILE* archivo, FILE* archivoErrores){

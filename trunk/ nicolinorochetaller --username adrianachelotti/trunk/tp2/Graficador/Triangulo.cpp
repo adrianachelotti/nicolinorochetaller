@@ -9,7 +9,7 @@
 
 Triangulo::Triangulo()
 {
-
+	this->vertices = new Punto[3];
 }
 
 Triangulo::Triangulo(string identificador,Punto vertices[]):Figura(identificador)

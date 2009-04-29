@@ -93,6 +93,9 @@ public:
 	/*Se agrega una textura */
 	void addTextura(Textura* textura);
 
+	/*Se agrega una Figura */
+	void addFigura(Figura* figura);
+
 	/*Retorna la textura que poseea el id pasado como parametro */
     Textura* getTextura(string idTextura);
 
