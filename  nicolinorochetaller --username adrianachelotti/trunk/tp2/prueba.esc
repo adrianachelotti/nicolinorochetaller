@@ -1,0 +1,33 @@
+<escenario>
+	<General resolucion="800" colorFondoFig="1200100" texturaFig="Madera" colorLinea="123200100" colorFondoEsc="237928930" 
+	texturaEsc="Corcho">
+	</General>
+
+	<ListadoDeElementos>
+		<cuadrado id="idCuadrado" lado="34" idTextura="texturaCuadrado">
+			<posicion x="33" y="43"/>
+		</cuadrado>
+		<rectangulo id="idrec" base="34" altura="43" idTextura="texturaRectangulo">
+			<posicion x="33" y="43"/>
+		</rectangulo>
+		<circulo id="idCirculo" radio="34" idTextura="texturaCirculo">
+			<posicion x="33" y="43"/>
+		</circulo>
+		<segmento id="idSegmento">
+			<inicio x="3" y="32"/>
+			<fin x="3" y="32"/>
+		</segmeno>
+		<triangulo id="idTriangulo">
+			<ver1 x="3" y="32"/>
+			<ver2 x="3" y="32"/>
+			<ver3 x="32" y="32"/>
+		</triangulo>
+	</ListadoDeElementos>
+	<ListadoDeTexturas>
+		<textura id="idTextura" path="C:\casa">
+		</textura>
+		<textura id="idTextura2" path="C:\casasegunda">
+		</textura>
+	</ListadoDeTexturas>
+
+</escenario>
