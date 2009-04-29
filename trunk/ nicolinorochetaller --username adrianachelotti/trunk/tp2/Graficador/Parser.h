@@ -34,7 +34,7 @@ using namespace std;
 struct color {
 	int R;
 	int G;
-	int V;
+	int B;
 };
 
 class Parser  
