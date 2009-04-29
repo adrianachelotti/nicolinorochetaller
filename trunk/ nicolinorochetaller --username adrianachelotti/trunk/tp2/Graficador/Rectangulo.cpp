@@ -64,8 +64,23 @@ Punto Rectangulo::getPosicionVerticeInferiorIzquierdo()
 int Rectangulo::dibujar()
 {
 	Graficador* graficador = Graficador::obtenerInstancia(); 
+	SDL_Surface* imagen = NULL;
+	Textura* text = NULL;
 
-	if(this->getIdTextura().empty())
+	bool contieneTextura = false;
+
+	Escenario* escenario = Escenario::obtenerInstancia();
+
+	text = escenario->getTextura(this->getIdTextura());
+
+	if (text!=NULL) contieneTextura = true;
+
+	if(contieneTextura)
+	{
+		imagen = SDL_LoadBMP(text->getPath().c_str());
+	}
+
+	if(imagen==NULL)
 	{
 
 		if((this->getColorFondo()!=COLOR_VACIO))
@@ -86,16 +101,18 @@ int Rectangulo::dibujar()
 		
 
 		}
+		
+		if(contieneTextura) return RES_ERROR_CARGANDO_TEXTURA;
+		return RES_OK;
 	
 		
 	}else
 	{
 			//dibujar Textura
-		//TODO: el escenario deberia tener un getTextura segun ID
-		Textura* text = new Textura("3", "Dibujo.bmp");
-	
-		SDL_Surface* imagen  = graficador->getImageResized(text,this->base, this->altura);
-		graficador->rellenarRectanguloConTextura(Escenario::screen,imagen ,this->getPosicionVerticeInferiorIzquierdo());
+		
+			
+		SDL_Surface* imagenResized  = graficador->getImageResized(text,this->base, this->altura);
+		graficador->rellenarRectanguloConTextura(Escenario::screen,imagenResized ,this->getPosicionVerticeInferiorIzquierdo());
 
 		if(this->getColorLinea()!=COLOR_VACIO)
 		{
@@ -103,7 +120,7 @@ int Rectangulo::dibujar()
 		}
 	}
 
-	return 0;
+	return RES_OK;
 	
 }
 
