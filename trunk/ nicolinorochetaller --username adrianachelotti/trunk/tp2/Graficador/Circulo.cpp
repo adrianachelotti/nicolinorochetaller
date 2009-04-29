@@ -129,7 +129,7 @@ int Circulo::dibujar()
 		}
 
 		SDL_Surface* imagenResized  = graficador->getImageResized(text, anchoX,altoY);
-		//SDL_SaveBMP(imagenResized, "aaa.bmp");
+	
 		graficador->rellenarCirculoConTextura(Escenario::screen,imagenResized ,this->getCentro(), this->getRadio());
 
 		if(this->getColorLinea()!=COLOR_VACIO)
