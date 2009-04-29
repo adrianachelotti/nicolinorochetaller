@@ -17,6 +17,14 @@ Parser::~Parser()
 {
 
 }
+Uint32 getColor(int r, int g, int b)
+{
+	Uint32 color = 0;
+	color = r<<16;
+	color|= g<<8;
+	color|= b;
+	return color;
+}
 
 
 char* Parser::readTag(FILE* arch)
