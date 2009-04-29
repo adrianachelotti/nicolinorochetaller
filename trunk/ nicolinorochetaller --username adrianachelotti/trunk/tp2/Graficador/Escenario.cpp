@@ -31,12 +31,12 @@ Escenario* Escenario::obtenerInstancia()
 
 }
 
-void Escenario::setResolucion(string resolucion)
+void Escenario::setResolucion(int resolucion)
 {
 	this->resolucion = resolucion;
 }
 	
-string Escenario::getResolucion()
+int Escenario::getResolucion()
 {
 	return this->resolucion;
 }
@@ -126,6 +126,12 @@ list<Textura*> Escenario::getListadoDeTexturas()
 {
 	return this->listadoDeTexturas;
 }
+
+void Escenario::addTextura(Textura* textura)
+{
+	 this->getListadoDeTexturas().push_front(textura);
+}
+
 
 Textura* Escenario::getTextura(string idTextura)
 {

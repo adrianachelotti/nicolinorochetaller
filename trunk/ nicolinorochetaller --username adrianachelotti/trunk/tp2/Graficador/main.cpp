@@ -20,6 +20,7 @@ IMPRIME RECTANGULO
 #include "Triangulo.h"
 #include "Graficador.h"
 #include "Textura.h"
+#include "Parser.h" 
 
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
@@ -34,6 +35,7 @@ IMPRIME RECTANGULO
 
 int main(int argc, char *argv[]) {
     SDL_Surface *screen;
+	Parser* parser = new Parser();
  	Punto a1, b1,c1,d1,e1 ,f1;
 	Punto vertices[3] ; 
 	a1.x=1;
@@ -58,8 +60,8 @@ int main(int argc, char *argv[]) {
 	FILE *archivoErrores;
 	int resultado;
 
-	char nombre[100] = "C:/Documents and Settings/Martin/Mis documentos/Facultad/taller/parser/archivosPrueba/prueba.esc";
-	char nombreEr[100] = "C:/Documents and Settings/Martin/Mis documentos/Facultad/taller/parser/archivosPrueba/errores.err";
+	char nombre[100] = "Debug/prueba.esc";
+	char nombreEr[100] = "Debug/errores.err";
 
 	archivoErrores = fopen(nombreEr,"w");
 	if (archivoErrores == NULL) {
@@ -74,12 +76,12 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 	
-	resultado = validar(archivo,archivoErrores);	
+	resultado = parser->validar(archivo,archivoErrores);	
 	
 	fclose(archivo);
 	fclose(archivoErrores);
     
-	//return (EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 
 	//Dibujo del escenario.
     
@@ -87,9 +89,9 @@ int main(int argc, char *argv[]) {
 	{
 		fprintf(stderr,"Couldn't initialize SDL: %s\n", SDL_GetError());
 		exit(1);
-	}
-;
-     
+	};
+
+	     
     screen = SDL_SetVideoMode(640, 480, 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
 	if ( screen == NULL )
 	{
@@ -97,6 +99,7 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 
+	
 	//seteo la pantalla del escenario
 	Escenario::screen=screen;
 

@@ -18,7 +18,7 @@ using namespace std;
 class Escenario  
 {
 private:
-	string resolucion;
+	int resolucion;
     string texturaEscenario;	
 	Uint32 colorFondoEscenario;
 	list<Figura*> listadoDeFiguras;
@@ -43,10 +43,10 @@ public:
 	static Escenario* obtenerInstancia();
 	
 	/*Setea la resolucion del escenario pasada como parametro */
-	void setResolucion(string resolucion);
+	void setResolucion(int resolucion);
 	
 	/*Retorna la resolucion del escenario */
-	string getResolucion();
+	int getResolucion();
 	
 	/*Setea la textura por defecto de las figuras */
 	static void setTexturaFigura(string textura);
@@ -89,6 +89,9 @@ public:
 
 	/*Retorna las texturas del escenario */
 	list<Textura*> getListadoDeTexturas();
+
+	/*Se agrega una textura */
+	void addTextura(Textura* textura);
 
 	/*Retorna la textura que poseea el id pasado como parametro */
     Textura* getTextura(string idTextura);
