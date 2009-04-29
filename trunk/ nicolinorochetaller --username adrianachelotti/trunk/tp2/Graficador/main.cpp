@@ -53,9 +53,36 @@ int main(int argc, char *argv[]) {
 	vertices[1] = e1;
 	vertices[2] = f1;
 
+	//Lectura de archivo y parser.
+	FILE *archivo;
+	FILE *archivoErrores;
+	int resultado;
 
+	char nombre[100] = "C:/Documents and Settings/Martin/Mis documentos/Facultad/taller/parser/archivosPrueba/prueba.esc";
+	char nombreEr[100] = "C:/Documents and Settings/Martin/Mis documentos/Facultad/taller/parser/archivosPrueba/errores.err";
 
-    // Initialize the SDL library 
+	archivoErrores = fopen(nombreEr,"w");
+	if (archivoErrores == NULL) {
+		cout<<"No se pudo abrir el archivo de errores"<<endl;
+		exit(1);
+	}
+
+	archivo = fopen(nombre,"r");
+	if (archivo == NULL) {
+		cout<<"No se pudo abrir el archivo"<<endl;
+		fprintf(archivoErrores,"No se pudo encontrar el archivo de datos\n");
+		exit(1);
+	}
+	
+	resultado = validar(archivo,archivoErrores);	
+	
+	fclose(archivo);
+	fclose(archivoErrores);
+    
+	//return (EXIT_SUCCESS);
+
+	//Dibujo del escenario.
+    
 	if( SDL_Init(SDL_INIT_VIDEO) < 0 ) 
 	{
 		fprintf(stderr,"Couldn't initialize SDL: %s\n", SDL_GetError());
@@ -126,8 +153,6 @@ int main(int argc, char *argv[]) {
 	triangulo->dibujar();;
 
 	SDL_Flip(screen);
-
-
 	
 	getchar();
 		SDL_Quit( );
