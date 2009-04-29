@@ -651,7 +651,7 @@ int Parser::validaGeneral(string linea,FILE* archivoErrores)
 		validaColor(aux,cFF);
 	}
 
-	escenario->setColorFondoFigura();
+//	escenario->setColorFondoFigura();
 	cout<<"COLOR FONDO FIGURA ";imprimeColor(cFF);
 
 	//controlo la colorLinea
