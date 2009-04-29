@@ -1,35 +1,21 @@
 <escenario>
-	<General resolucion="800" colorFondoFig="1200100" texturaFig="Madera" colorLinea="123200100" colorFondoEsc="237928930" 
-	texturaEsc="Corcho">
+	<General resolucion="800" colorFondoFig="1200100" colorLinea="123200100" colorFondoEsc="237928930">
 	</General>
-
 	<ListadoDeElementos>
-		<cuadrado id="idCuadrado" lado="34" idTextura="texturaCuadrado" colorFondo="123123123" colorLinea="111898129">
-			<posicion x="33" y="43"/>
-		</cuadrado>
-		<circulo id="Cirulito" radio="34" colorFondo="123431232" colorLinea="43232323">
-			<posicion x="33" y="43"/>
-		</circulo>
-		<rectangulo id="martincito" base="43" idTextura="textRec" altura="43" colorFondo="123431232" colorLinea="43232323">
-				<posicion x="33" y="43"/>
+		<rectangulo id="martincito" base="100" idTextura="id1" altura="43" colorFigura="000255000" colorLinea="43232323">
+				<posicion x="200" y="200"/>
 		</rectangulo>
-
-		<segmento id="idCuadrado" colorLinea="111898129">
-				<inicio x="33" y="43"/>
-				<fin x="33" y="43"/>
-		</segmento>
-
-		<triangulo id="martincito" idTextura="textRec" colorFondo="123431232" colorLinea="43232323">
-				<ver1 x="33" y="43"/>
-				<ver2 x="33" y="43"/>
-				<ver3 x="33" y="43"/>
+		<cuadrado id="dario" lado="100" colorFigura="000100000" colorLinea="000000123">
+				<posicion x="100" y="100"/>
+		</cuadrado>
+		<triangulo id="adri" colorFigura="150255000" colorLinea="100000100">
+				<ver1 x="100" y="100"/>
+				<ver2 x="200" y="200"/>
+				<ver3 x="100" y="350"/>
 		</triangulo>
-	
 	</ListadoDeElementos>
 	<ListadoDeTexturas>
-		<textura id="idTextura" path="C:\casa">
-		</textura>
-		<textura id="idTextura2" path="C:\casasegunda">
+		<textura id="id1" path="../Debug/textura.bmp">
 		</textura>
 	</ListadoDeTexturas>
 

@@ -129,8 +129,20 @@ list<Textura*> Escenario::getListadoDeTexturas()
 
 void Escenario::addTextura(Textura* textura)
 {
-	 this->getListadoDeTexturas().push_front(textura);
+	list<Textura*> lista;
+	lista = this->getListadoDeTexturas();
+	lista.push_front(textura);
+	this->setListadoDeTexturas(lista);
 }
+
+void Escenario::addFigura(Figura* figura)
+{
+	list<Figura*> lista;
+	lista = this->getListadoDeFiguras();
+	lista.push_front(figura);
+	this->setListadoDeFiguras(lista);
+}
+
 
 
 Textura* Escenario::getTextura(string idTextura)

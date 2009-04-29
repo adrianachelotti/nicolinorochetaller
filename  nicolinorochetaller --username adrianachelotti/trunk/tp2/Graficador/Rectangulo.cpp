@@ -82,7 +82,6 @@ int Rectangulo::dibujar()
 
 	if(imagen==NULL)
 	{
-
 		if((this->getColorFondo()!=COLOR_VACIO))
 		{
 			

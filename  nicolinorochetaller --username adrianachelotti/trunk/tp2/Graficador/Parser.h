@@ -42,6 +42,7 @@ class Parser
 public:
 	Parser();
 	virtual ~Parser();
+	Uint32 getColor(int r, int g, int b);
 	int validar(FILE* archivo, FILE* archivoErrores);
 	int validaTagPadre(string linea, FILE* archivo, FILE* archivoErrores);
 	int validaTextura(string linea,FILE* archivo, FILE* archivoErrores);
@@ -54,21 +55,19 @@ public:
 	int validarGeneralCierre(FILE* archivo,FILE* archivoErrores);
 	int validaGeneral(string linea,FILE* archivoErrores);
 	void imprimeColor(color c);
-	void validaColor(string aux,color&c);
+	Uint32 validaColor(string aux);
 	int colorValido(int c);
-	void colorXdef(color&c);
+	Uint32 colorXdef();
 	int validaReso(int r);
-	int validaSegmento(string s, FILE* archivoErrores);
-	int validaTriangulo(string s, FILE* archivoErrores);
-	int validaRectangulo(string s,FILE* archivoErrores);
-	int validaCirculo(string s,FILE* archivoErrores);
-	int validaCuadrado(string s,FILE* archivoErrores);
-	int validaPos(FILE* archivo,FILE* archivoErrores);
-	int validaInicioFin(FILE* archivo,FILE* archivoErrores);
-	int validaVertices(FILE* archivo,FILE* archivoErrores);
+	int validaSegmento(string s, FILE* archivoErrores,Segmento* nSegmento);
+	int validaTriangulo(string s, FILE* archivoErrores,Triangulo* nTriangulo);
+	int validaRectangulo(string s,FILE* archivoErrores,Rectangulo* nRectangulo);
+	int validaCirculo(string s,FILE* archivoErrores,Circulo* nCirculo);
+	int validaCuadrado(string s,FILE* archivoErrores,Cuadrado* nCuadrado);
+	int validaPos(FILE* archivo,FILE* archivoErrores,punto&p);
+	int validaInicioFin(FILE* archivo,FILE* archivoErrores,punto&i,punto&f);
+	int validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,punto&v3);
 	char* readTag(FILE* arch);
-
-	
 };
 
 #endif 
