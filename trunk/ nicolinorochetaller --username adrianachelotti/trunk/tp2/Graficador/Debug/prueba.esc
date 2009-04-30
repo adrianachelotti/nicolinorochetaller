@@ -10,8 +10,8 @@
 		</cuadrado>
 		<triangulo id="adri" colorFigura="150255000" colorLinea="100000100">
 				<ver1 x="100" y="100"/>
-				<ver2 x="200" y="200"/>
-				<ver3 x="100" y="350"/>
+				<ver2 x="100" y="200"/>
+				<ver3 x="200" y="300"/>
 		</triangulo>
 	</ListadoDeElementos>
 	<ListadoDeTexturas>
