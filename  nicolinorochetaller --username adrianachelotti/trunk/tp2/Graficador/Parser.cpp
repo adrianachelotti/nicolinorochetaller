@@ -69,6 +69,51 @@ char* Parser::readTag(FILE* arch)
 	}
 }
 
+
+bool equals(punto p1, punto p2){
+    if(p1.x == p2.x && p1.y == p2.y){
+        return true;
+    }
+	return false;
+}
+
+
+
+int validaPuntosTriangulo(punto vertices[3] ){
+    // primero compruebo que los puntos no sean iguales aunque sea 2 de ellos
+    if( equals(vertices[1], vertices[0]) || equals(vertices[2], vertices[0]) || equals(vertices[1], vertices[2]) ){
+        cout << "Puntos del triangulo en la misma recta" << endl;
+        return INVALID_FORMAT;
+    }
+    // ahora debo comprobar si algun par no forma una recta con pendiente inf
+    float m;
+    if(vertices[1].x - vertices[0].x == 0){
+        if(vertices[2].x == vertices[1].x){
+            cout << "puntos en la misma recta X" << endl;
+            return INVALID_FORMAT;  // el tercer punto tiene coordenada x igual a los otros puntos            
+        }else{
+            cout << "triangulo valido" << endl;
+            return VALID_FORMAT;
+        }
+    }else{
+        // pendiente de la recta
+        m = (vertices[1].y - vertices[0].y) / (vertices[1].x - vertices[0].x);
+    }
+    // ordenada al origen
+    float b = (- m)*vertices[1].y + vertices[1].x;
+    
+    if(vertices[2].y == m * vertices[2].x + b){
+        cout << "Puntos del triangulo en la misma recta" << endl;
+		return INVALID_FORMAT;
+    }else{
+        cout << "triangulo valido" << endl;
+		return VALID_FORMAT;
+    }
+    
+}
+
+
+
 int Parser::validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,punto&v3) {
 	size_t found; 
 	string ver1,ver2,ver3;
@@ -196,9 +241,18 @@ int Parser::validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,
 	v2.y = y2;
 	v3.x = x3;
 	v3.y = y3;
-	return VALID_FORMAT;
+	
+	punto vertices[3];
+	vertices[0] = v1;
+	vertices[1] = v2;
+	vertices[2] = v3;
+	return validaPuntosTriangulo(vertices);		
 
 }
+
+
+
+
 
 int Parser::validaInicioFin(FILE* archivo,FILE* archivoErrores,punto&i, punto&f) {
 	size_t found; 
