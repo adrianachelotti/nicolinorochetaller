@@ -81,8 +81,6 @@ int main(int argc, char *argv[]) {
 	fclose(archivo);
 	fclose(archivoErrores);
 
-	//return (EXIT_SUCCESS);
-
 	//Dibujo del escenario.
 	Escenario* escenario2 = Escenario::obtenerInstancia();
     
@@ -90,7 +88,7 @@ int main(int argc, char *argv[]) {
 	{
 		fprintf(stderr,"Couldn't initialize SDL: %s\n", SDL_GetError());
 		exit(1);
-	};
+	}
 
 	//TODO que la reso el segundo int se coloque segun el primero....   
     screen = SDL_SetVideoMode(escenario2->getResolucion(), 600, 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
@@ -100,64 +98,15 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 
-	
 	//seteo la pantalla del escenario
 	Escenario::screen=screen;
 
-//	Escenario::setColorFondoFigura(0x0000ff00);
-
-	
-/*	Rectangulo* rect = new Rectangulo("20",120,12,a1);
-	Cuadrado* cuadrado = new Cuadrado("22",99,b1);
-	Circulo* circulo = new Circulo("23",24,c1);
-	Segmento* segmento = new Segmento("24",b1,c1);
-	Triangulo* triangulo = new Triangulo("25",vertices);*/
-
 	Graficador* graficador = Graficador::obtenerInstancia();
 
-	
-//	Textura* text1 = new Textura("id1","Debug/textura.bmp");
-//	Textura* text2 = new Textura("id2","path2");
-//	Textura* text3 = new Textura("id3","path3");
-	
-//	list<Textura*> texturas;
-
-//	texturas.push_front(text1);
-//	texturas.push_front(text3);
-//	texturas.push_front(text2);
-
-	
-
-//	escenario2->setListadoDeTexturas(texturas);
-
-	
-	//rect->setIdTextura("id1");
-	//rect->setColorLinea(0x00ff0000);
-	//rect->setColorFondo(0x0000ff00);
-	//rect->dibujar();
-
-/*	cuadrado->setColorLinea(0x00ffff00);
-	cuadrado->setColorFondo(0x00800080);
-	cuadrado->setIdTextura("asda");
-	cuadrado->dibujar();
-
-	circulo->setIdTextura("id1");
-	circulo->setColorFondo(0x000000FF);
-	circulo->setColorLinea(0x0000FF00);
-	circulo->dibujar();
-
-	segmento->setColorLinea(0x00FFa500);
-	segmento->dibujar();
-
-	triangulo->setColorLinea(0x0098fb98);;
-	triangulo->setColorFondo(0x00ffffff);
-	triangulo->setIdTextura("sd");
-	triangulo->dibujar();*/
 
 	escenario2->dibujar();
 
 	SDL_Flip(screen);
-	
 	getchar();
 	SDL_Quit( );
 	return 0;
