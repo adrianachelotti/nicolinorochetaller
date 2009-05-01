@@ -2,21 +2,24 @@
 	<General resolucion="800" colorFondoFig="1200100" colorLinea="123200100" colorFondoEsc="237928930">
 	</General>
 	<ListadoDeElementos>
-		<rectangulo id="martincito" base="100" idTextura="id1" altura="43" colorFigura="000255000" colorLinea="43232323">
-				<posicion x="200" y="200"/>
-		</rectangulo>
-		<cuadrado id="dario" lado="100" colorFigura="000100000" colorLinea="000000123">
-				<posicion x="100" y="100"/>
+		<cuadrado id="dario" lado="50" idTextura="id1" colorFigura="111111000" colorLinea="000000123">
+				<posicion x="400" y="400"/>
 		</cuadrado>
-		<triangulo id="adri" colorFigura="150255000" colorLinea="100000100">
+		<circulo id="dario" radio="100"  idTextura="id2"  colorFigura="100100100" colorLnea="000000123">
+				<posicion x="400" y="400"/>
+		</circulo>
+		<triangulo id="adri" colorFigura="150255000" colorLinea="100000100" idTextura="id2" >
 				<ver1 x="100" y="100"/>
 				<ver2 x="100" y="200"/>
-				<ver3 x="200" y="300"/>
+				<ver3 x="600" y="300"/>
 		</triangulo>
 	</ListadoDeElementos>
 	<ListadoDeTexturas>
-		<textura id="id1" path="../Debug/textura.bmp">
+		<textura id="id1" path="tex.bmp">
 		</textura>
+		<textura id="id2" path="Dibujo.bmp">
+		</textura>
+
 	</ListadoDeTexturas>
 
 </escenario>

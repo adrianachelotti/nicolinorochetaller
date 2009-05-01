@@ -4,6 +4,61 @@
 
 #include "Parser.h"
 
+
+#define ERR1 "ERROR: - Error grave en un Tag principal -"
+#define ERR2 "ERROR: - No se encontro el inicio del escenario -"
+#define ERR3 "ERROR: - No se encontro el id de la textura -"
+#define ERR4 "ERROR: - Mo se encontro el path de la textura -"
+#define ERR5 "ERROR: - Error grave al iniciar un Elemento -"
+#define ERR6 "ERROR: - No se encontro el id del Cuadrado -"
+#define ERR7 "ERROR: - No se encontro el lado del Cuadrado -"
+#define ERR8 "ERROR: - No se encontro Posicion de Elemento -"
+#define ERR9 "ERROR: - No se encontro la coordenada X -"
+#define ERR10 "ERROR: - No se encontro la coordenada Y -"
+#define ERR11 "ERROR: - No se encontro el id del Circulo -"
+#define ERR12 "ERROR: - No se encontro el radio del Circulo -"
+#define ERR13 "ERROR: - No se encontro el id del Rectangulo -"
+#define ERR14 "ERROR: - No se encontro la base del Rectangulo -"
+#define ERR15 "ERROR: - No se encontro la altura del Rectangulo -"
+#define ERR16 "ERROR: - No se encontro la id del Triangulo -"
+#define ERR17 "ERROR: - No se encontro Vertice 1 de Triangulo -"
+#define ERR18 "ERROR: - No se encontro Vertice 2 de Triangulo -"
+#define ERR19 "ERROR: - No se encontro Vertice 3 de Triangulo -"
+#define ERR20 "ERROR: - No se encontro la coordenada X del Vertice 1 del Triangulo -"
+#define ERR21 "ERROR: - No se encontro la coordenada Y del Vertice 1 del Triangulo -"
+#define ERR22 "ERROR: - No se encontro la coordenada X del Vertice 2 del Triangulo -"
+#define ERR23 "ERROR: - No se encontro la coordenada Y del Vertice 2 del Triangulo -" 
+#define ERR24 "ERROR: - No se encontro la coordenada X del Vertice 3 del Triangulo -"
+#define ERR25 "ERROR: - No se encontro la coordenada Y del Vertice 3 del Triangulo -"
+#define ERR26 "ERROR: - No se encontro el id del Segmento -"
+#define ERR27 "ERROR: - No se encontro el Inicio de Segmento -"
+#define ERR28 "ERROR: - No se encontro la coordenada X del Inicio del Segmento -"
+#define ERR29 "ERROR: - No se encontro la coordenada Y del Inicio del Segmento -"
+#define ERR30 "ERROR: - No se encontro el Fin de Segmento -"
+#define ERR31 "ERROR: - No se encontro la coordenada X del Fin del Segmento -"
+#define ERR32 "ERROR: - No se encontro la coordenada y del Fin del Segmento -"
+#define ERR33 "ERROR: - Los vertices del triangulo se encuentran sobre una misma recta -"
+
+#define WAR1 "ADVERTENCIA: - No se encontro el cierre del escenario -"
+#define WAR2 "ADVERTENCIA: - No se encontro la resolucion del escenario. Se colocara por defecto -"
+#define WAR3 "ADVERTENCIA: - No se encontro Color para fondo de Figura. Se colocara por defecto -"
+#define WAR4 "ADVERTENCIA: - No se encontro Color de Linea. Se colocara por defecto -"
+#define WAR5 "ADVERTENCIA: - No se encontro Color de fondo de Escenario. Se colocara por defecto -"
+#define WAR6 "ADVERTENCIA: - No se encontro Textura para la Figura. No se colocara Ninguna -"
+#define WAR7 "ADVERTENCIA: - No se encontro Textura para el escenario. No se colocara Ninguna -"
+#define WAR8 "ADVERTENCIA: - No se encontro el cierre del tag general -"
+#define WAR9 "ADVERTENCIA: - No se encontro el cierre del tag ListadoDeElementos -"
+#define WAR10 "ADVERTENCIA: - No se encontro el cierre del tag ListadoDeTexturas -"
+#define WAR11 "ADVERTENCIA: - No se encontro el cierre de la textura -"
+#define WAR12 "ADVERTENCIA: - El elemento no tiene textura asignada -"
+#define WAR13 "ADVERTENCIA: - El elemento no tiene un color de Fondo asignado -"
+#define WAR14 "ADVERTENCIA: - El elemento no tiene un color de Linea asignada -"
+#define WAR15 "ADVERTENCIA: - No se encontro el cierre del Cuadrado -"
+#define WAR16 "ADVERTENCIA: - No se encontro el cierre del Rectangulo -"
+#define WAR17 "ADVERTENCIA: - No se encontro el cierre del Triangulo -"
+#define WAR18 "ADVERTENCIA: - No se encontro el cierre del Segmento -"
+#define WAR19 "ADVERTENCIA: - No se encontro el cierre del Circulo -"
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -16,6 +71,15 @@ Parser::Parser()
 Parser::~Parser()
 {
 
+}
+
+void imprimirError(char* linea,FILE* archivoErrores,char* err){
+	fprintf(archivoErrores,"Linea: ");
+	if (linea!=NULL) fprintf(archivoErrores,linea);
+	else fprintf(archivoErrores,"linea no encontrada");
+	fprintf(archivoErrores,"\n");
+	fprintf(archivoErrores,err);
+	fprintf(archivoErrores,"\n\n");
 }
 
 Uint32 Parser::getColor(int r, int g, int b)
@@ -79,17 +143,15 @@ bool equals(punto p1, punto p2){
 
 
 
-int validaPuntosTriangulo(punto vertices[3] ){
+int Parser::validaPuntosTriangulo(punto vertices[3]){
     // primero compruebo que los puntos no sean iguales aunque sea 2 de ellos
     if( equals(vertices[1], vertices[0]) || equals(vertices[2], vertices[0]) || equals(vertices[1], vertices[2]) ){
-        cout << "Puntos del triangulo en la misma recta" << endl;
         return INVALID_FORMAT;
     }
     // ahora debo comprobar si algun par no forma una recta con pendiente inf
     float m;
     if(vertices[1].x - vertices[0].x == 0){
         if(vertices[2].x == vertices[1].x){
-            cout << "puntos en la misma recta X" << endl;
             return INVALID_FORMAT;  // el tercer punto tiene coordenada x igual a los otros puntos            
         }else{
             cout << "triangulo valido" << endl;
@@ -103,7 +165,6 @@ int validaPuntosTriangulo(punto vertices[3] ){
     float b = (- m)*vertices[1].y + vertices[1].x;
     
     if(vertices[2].y == m * vertices[2].x + b){
-        cout << "Puntos del triangulo en la misma recta" << endl;
 		return INVALID_FORMAT;
     }else{
         cout << "triangulo valido" << endl;
@@ -128,16 +189,16 @@ int Parser::validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,
 	}
 	
 	if (tag!=NULL) ver1 = (string) tag;
-	found = ver1.find("<ver1 ");
+	found = ver1.find("ver1 ");
 	if(found == string::npos){
-		fprintf(archivoErrores,"No se encontro Vertice 1 de Triangulo. No se Dibujara\n");
+		imprimirError(tag,archivoErrores,ERR17);
         cout<<"ERROR EN LA VERTICE 1"<<endl;
 		return INVALID_FORMAT;
 	} else {
 		cout<<"VERTICE 1"<<endl;
 		found = ver1.find("x=\"");
 		if (found == string::npos){
-			fprintf(archivoErrores,"No se encontro la coordenada X del V1 del Triangulo. No se Dibujara\n");
+			imprimirError(tag,archivoErrores,ERR20);
 			cout<<"NO HAY X"<<endl;
 			return INVALID_FORMAT;
 		} else {
@@ -148,7 +209,7 @@ int Parser::validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,
 		}
 		found = ver1.find("y=\"");
 		if (found == string::npos){
-			fprintf(archivoErrores,"No se encontro la coordenada Y del V1 del Triangulo. No se Dibujara\n");
+			imprimirError(tag,archivoErrores,ERR21);
 			cout<<"NO HAY Y"<<endl;
 			return INVALID_FORMAT;
 		} else {
@@ -166,16 +227,16 @@ int Parser::validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,
 	}
 
 	if (tag!=NULL) ver2 = (string) tag;
-	found = ver2.find("<ver2 ");
+	found = ver2.find("ver2 ");
 	if(found == string::npos){
-		fprintf(archivoErrores,"No se encontro el vertice 2 de Triangulo. No se Dibujara\n");
+		imprimirError(tag,archivoErrores,ERR18);
         cout<<"ERROR EN EL VERTICE 2"<<endl;
 		return INVALID_FORMAT;
 	} else {
 		cout<<"VERTICE 2"<<endl;
 		found = ver2.find("x=\"");
 		if (found == string::npos){
-			fprintf(archivoErrores,"No se encontro la coordenada X del V2 del Triangulo. No se Dibujara\n");
+			imprimirError(tag,archivoErrores,ERR22);
 			cout<<"NO HAY X"<<endl;
 			return INVALID_FORMAT;
 		} else {
@@ -186,7 +247,7 @@ int Parser::validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,
 		}
 		found = ver2.find("y=\"");
 		if (found == string::npos){
-			fprintf(archivoErrores,"No se encontro la coordenada Y del V2 del Triangulo. No se Dibujara\n");
+			imprimirError(tag,archivoErrores,ERR23);
 			cout<<"NO HAY Y"<<endl;
 			return INVALID_FORMAT;
 		} else {
@@ -205,16 +266,16 @@ int Parser::validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,
 	}
 
 	if (tag!=NULL) ver3 = (string) tag;
-	found = ver3.find("<ver3 ");
+	found = ver3.find("ver3 ");
 	if(found == string::npos){
-		fprintf(archivoErrores,"No se encontro el vertice 3 de Triangulo. No se Dibujara\n");
+		imprimirError(tag,archivoErrores,ERR19);
         cout<<"ERROR EN EL VERTICE 3"<<endl;
 		return INVALID_FORMAT;
 	} else {
 		cout<<"VERTICE 3"<<endl;
 		found = ver3.find("x=\"");
 		if (found == string::npos){
-			fprintf(archivoErrores,"No se encontro la coordenada X del V3 del Triangulo. No se Dibujara\n");
+			imprimirError(tag,archivoErrores,ERR24);
 			cout<<"NO HAY X"<<endl;
 			return INVALID_FORMAT;
 		} else {
@@ -225,7 +286,7 @@ int Parser::validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,
 		}
 		found = ver3.find("y=\"");
 		if (found == string::npos){
-			fprintf(archivoErrores,"No se encontro la coordenada Y del V3 del Triangulo. No se Dibujara\n");
+			imprimirError(tag,archivoErrores,ERR25);
 			cout<<"NO HAY Y"<<endl;
 			return INVALID_FORMAT;
 		} else {
@@ -246,8 +307,12 @@ int Parser::validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,
 	vertices[0] = v1;
 	vertices[1] = v2;
 	vertices[2] = v3;
-	return validaPuntosTriangulo(vertices);		
+	res1 = validaPuntosTriangulo(vertices);		
+	if (res1 != 0){
+		imprimirError("Vertices del Triangulo",archivoErrores,ERR33);
+	}
 
+	return res1;
 }
 
 
@@ -270,14 +335,15 @@ int Parser::validaInicioFin(FILE* archivo,FILE* archivoErrores,punto&i, punto&f)
 	if (tag!=NULL) inicio = (string) tag;
 	found = inicio.find("<inicio ");
 	if(found == string::npos){
-		fprintf(archivoErrores,"No se encontro Inicio de Segmento. No se Dibujara\n");
+		imprimirError(tag,archivoErrores,ERR27);
         cout<<"ERROR EN LA INICIO"<<endl;
 		return INVALID_FORMAT;
 	} else {
 		cout<<"INICIO"<<endl;
 		found = inicio.find("x=\"");
 		if (found == string::npos){
-			fprintf(archivoErrores,"No se encontro la coordenada X. No se Dibujara\n");
+			imprimirError(tag,archivoErrores,ERR28);
+	
 			cout<<"NO HAY X"<<endl;
 			return INVALID_FORMAT;
 		} else {
@@ -288,7 +354,7 @@ int Parser::validaInicioFin(FILE* archivo,FILE* archivoErrores,punto&i, punto&f)
 		}
 		found = inicio.find("y=\"");
 		if (found == string::npos){
-			fprintf(archivoErrores,"No se encontro la coordenada Y. No se Dibujara\n");
+			imprimirError(tag,archivoErrores,ERR29);
 			cout<<"NO HAY Y"<<endl;
 			return INVALID_FORMAT;
 		} else {
@@ -308,14 +374,14 @@ int Parser::validaInicioFin(FILE* archivo,FILE* archivoErrores,punto&i, punto&f)
 	if (tag!=NULL) fin = (string) tag;
 	found = fin.find("<fin ");
 	if(found == string::npos){
-		fprintf(archivoErrores,"No se encontro Fin de Segmento. No se Dibujara\n");
+		imprimirError(tag,archivoErrores,ERR30);
         cout<<"ERROR EN LA FIN"<<endl;
 		return INVALID_FORMAT;
 	} else {
 		cout<<"FIN"<<endl;
 		found = fin.find("x=\"");
 		if (found == string::npos){
-			fprintf(archivoErrores,"No se encontro la coordenada X. No se Dibujara\n");
+			imprimirError(tag,archivoErrores,ERR31);
 			cout<<"NO HAY X"<<endl;
 			return INVALID_FORMAT;
 		} else {
@@ -326,7 +392,7 @@ int Parser::validaInicioFin(FILE* archivo,FILE* archivoErrores,punto&i, punto&f)
 		}
 		found = fin.find("y=\"");
 		if (found == string::npos){
-			fprintf(archivoErrores,"No se encontro la coordenada Y. No se Dibujara\n");
+			imprimirError(tag,archivoErrores,ERR32);
 			cout<<"NO HAY Y"<<endl;
 			return INVALID_FORMAT;
 		} else {
@@ -361,16 +427,17 @@ int Parser::validaPos(FILE* archivo,FILE* archivoErrores,punto&p) {
 	}
 	if (tag!=NULL) pos = (string) tag;
 	
-	found = pos.find("<posicion ");
+	found = pos.find("posicion ");
 	if(found == string::npos){
 		fsetpos (archivo, &position);
-		fprintf(archivoErrores,"No se encontro Posicion de Elemento. No se Dibujara\n");
+		imprimirError(tag,archivoErrores,ERR8);
         cout<<"ERROR EN LA POSICION"<<endl;
 		return INVALID_FORMAT;
 	} else {
 		found = pos.find("x=\"");
 		if (found == string::npos){
-			fprintf(archivoErrores,"No se encontro la coordenada X. No se Dibujara\n");
+			imprimirError(tag,archivoErrores,ERR9);
+	
 			cout<<"NO HAY X"<<endl;
 			return INVALID_FORMAT;
 		} else {
@@ -381,7 +448,8 @@ int Parser::validaPos(FILE* archivo,FILE* archivoErrores,punto&p) {
 		}
 		found = pos.find("y=\"");
 		if (found == string::npos){
-			fprintf(archivoErrores,"No se encontro la coordenada Y. No se Dibujara\n");
+			imprimirError(tag,archivoErrores,ERR10);
+		
 			cout<<"NO HAY Y"<<endl;
 			return INVALID_FORMAT;
 		} else {
@@ -396,20 +464,22 @@ int Parser::validaPos(FILE* archivo,FILE* archivoErrores,punto&p) {
 	return VALID_FORMAT;
 }
 
-int Parser::validaCuadrado(string s,FILE* archivoErrores,Cuadrado* nCuadrado) {
+int Parser::validaCuadrado(char* tag,FILE* archivoErrores,Cuadrado* nCuadrado) {
     //primero se fija si la sintaxis esta bien hecha, es decir, si empieza con "<cuadrado"
     size_t found; 
 	int begin, end;
 	Uint32 cF,cL;
-	string textura,id,colorFondo,colorLinea;
+	string textura,id,colorFondo,colorLinea,s;
 	int res = VALID_FORMAT;
-  
-    found = s.find("<cuadrado id=\"");
+	
+	s = (string) tag;
+
+    found = s.find("id=\"");
     
-	if(found != 0){
+	if(found == string::npos){
 		cout<<"Error en el id del Cuadrado"<<endl;
-		fprintf(archivoErrores,"Error en el id del Cuadrado\n");
-        res = INVALID_FORMAT;
+		imprimirError(tag,archivoErrores,ERR6);
+        return INVALID_FORMAT;
     } else {
 		// obtengo el ID
 		begin = s.find("id=\"") + 4;
@@ -424,8 +494,8 @@ int Parser::validaCuadrado(string s,FILE* archivoErrores,Cuadrado* nCuadrado) {
     found = s.find("lado=\"");
     if(found == string::npos){
 		cout<<"Error en el lado del Cuadrado"<<endl;
-		fprintf(archivoErrores,"Error en el lado del Cuadrado\n");
-        res = INVALID_FORMAT;;
+		imprimirError(tag,archivoErrores,ERR7);
+        return INVALID_FORMAT;;
     } else {
 		// se busca obtener el valor del lado
 		int lado;
@@ -439,6 +509,7 @@ int Parser::validaCuadrado(string s,FILE* archivoErrores,Cuadrado* nCuadrado) {
 	// controla la existencia de una textura...
 	found = s.find("idTextura=\"");
 	if(found == string::npos){
+		imprimirError(tag,archivoErrores,WAR12);
 		cout<<"El cuadrado no tiene textura asignada"<<endl;
     } else {
 		// obtengo el la textura
@@ -454,6 +525,7 @@ int Parser::validaCuadrado(string s,FILE* archivoErrores,Cuadrado* nCuadrado) {
 	// controla la existencia de un color de fondo
 	found = s.find("colorFigura=\"");
 	if(found == string::npos){
+		imprimirError(tag,archivoErrores,WAR13);
 		cout<<"El cuadrado no tiene un color de Fondo asignado"<<endl;
     } else {
 		// obtengo el el colorFondo
@@ -469,6 +541,7 @@ int Parser::validaCuadrado(string s,FILE* archivoErrores,Cuadrado* nCuadrado) {
 	// controla la existencia de un color de Linea
 	found = s.find("colorLinea=\"");
 	if(found == string::npos){
+		imprimirError(tag,archivoErrores,WAR14);
 		cout<<"El cuadrado no tiene un color de Linea asignada"<<endl;
     } else {
 		// obtengo el colorLinea
@@ -483,24 +556,24 @@ int Parser::validaCuadrado(string s,FILE* archivoErrores,Cuadrado* nCuadrado) {
 }
 
 
-int Parser::validaCirculo(string s,FILE* archivoErrores,Circulo* nCirculo) {
+int Parser::validaCirculo(char* tag,FILE* archivoErrores,Circulo* nCirculo) {
     //primero se fija si la sintaxis esta bien hecha, es decir, si empieza con "<circulo"
     size_t found; 
 	int begin, end, radio;
 	Uint32 cF,cL;
-	string id,textura,colorFondo,colorLinea;
-  
+	string id,textura,colorFondo,colorLinea,s;
+	
+	s = (string) tag;
 	int res = VALID_FORMAT;
 
-    found = s.find("<circulo id=\"");
+    found = s.find("id=\"");
     
-	if(found != 0){
+	if(found == string::npos){
         cout<<"Error en el id del Circulo"<<endl;
-		fprintf(archivoErrores,"Error en el id del Ciruclo\n");
-        res = INVALID_FORMAT;
+		imprimirError(tag,archivoErrores,ERR11);
+        return INVALID_FORMAT;
     } else {
 		// obtengo el ID
-		
 		begin = s.find("id=\"") + 4;
 		end = s.find("\"", begin + 1);
 		id = s.substr(begin, end - begin);
@@ -511,11 +584,11 @@ int Parser::validaCirculo(string s,FILE* archivoErrores,Circulo* nCirculo) {
 
     // controla la existencia del dato "radio"
     found = s.find("radio=\"");
-
     if(found == string::npos){
         cout<<"Error en el radio del Circulo"<<endl;
-		fprintf(archivoErrores,"Error en el radio del Circulo\n");
-        res = INVALID_FORMAT;;
+		imprimirError(tag,archivoErrores,ERR12);
+        return INVALID_FORMAT;;
+
     } else {
 		// se busca obtener el valor del radio
 		begin = found + 7;
@@ -528,6 +601,7 @@ int Parser::validaCirculo(string s,FILE* archivoErrores,Circulo* nCirculo) {
 	// controla la existencia de una textura...
 	found = s.find("idTextura=\"");
 	if(found == string::npos){
+		imprimirError(tag,archivoErrores,WAR12);
 		cout<<"El circulo no tiene textura asignada"<<endl;
     } else {
 		// obtengo el la textura
@@ -542,6 +616,7 @@ int Parser::validaCirculo(string s,FILE* archivoErrores,Circulo* nCirculo) {
 	// controla la existencia de un color de fondo
 	found = s.find("colorFigura=\"");
 	if(found == string::npos){
+		imprimirError(tag,archivoErrores,WAR13);
 		cout<<"El circulo no tiene un color de Fondo asignado"<<endl;
     } else {
 		// obtengo el el colorFondo
@@ -555,6 +630,7 @@ int Parser::validaCirculo(string s,FILE* archivoErrores,Circulo* nCirculo) {
 	// controla la existencia de un color de Linea
 	found = s.find("colorLinea=\"");
 	if(found == string::npos){
+		imprimirError(tag,archivoErrores,WAR14);
 		cout<<"El circulo no tiene un color de Linea asignada"<<endl;
     } else {
 		// obtengo el colorLinea
@@ -568,20 +644,21 @@ int Parser::validaCirculo(string s,FILE* archivoErrores,Circulo* nCirculo) {
 	return res;
 }
 
-int Parser::validaRectangulo(string s,FILE* archivoErrores,Rectangulo* nRectangulo) {
+int Parser::validaRectangulo(char* tag,FILE* archivoErrores,Rectangulo* nRectangulo) {
     //primero se fija si la sintaxis esta bien hecha, es decir, si empieza con "<cuadrado"
     size_t found; 
 	int begin, end, base, altura;
-	string textura,id,colorFondo,colorLinea;
+	string textura,id,colorFondo,colorLinea,s;
 	Uint32 cF,cL;
-
+	s = (string) tag;
 	int res = VALID_FORMAT;
 	
-    found = s.find("<rectangulo id=\"");   
-	if(found != 0){
+    found = s.find("id=\"");   
+	if(found == string::npos){
         cout<<"Error en el id del Rectangulo"<<endl;
-		fprintf(archivoErrores,"Error en el id del Rectangulo\n");
-        res = INVALID_FORMAT;
+		imprimirError(tag,archivoErrores,ERR13);
+        return INVALID_FORMAT;
+
     } else {
 		// obtengo el ID
 		begin = s.find("id=\"") + 4;
@@ -595,8 +672,8 @@ int Parser::validaRectangulo(string s,FILE* archivoErrores,Rectangulo* nRectangu
 
     if(found == string::npos){
         cout<<"Error en la base del Rectangulo"<<endl;
-		fprintf(archivoErrores,"Error en la base del Rectangulo\n");
-        res = INVALID_FORMAT;;
+		imprimirError(tag,archivoErrores,ERR14);
+        return INVALID_FORMAT;;
     } else {
 		// se busca obtener el valor del base
 		begin = found + 6;
@@ -610,8 +687,8 @@ int Parser::validaRectangulo(string s,FILE* archivoErrores,Rectangulo* nRectangu
     found = s.find("altura=\"");
     if(found == string::npos){
         cout<<"Error en la altura del Rectangulo"<<endl;
-		fprintf(archivoErrores,"Error en la altura del Rectangulo\n");
-        res = INVALID_FORMAT;;
+		imprimirError(tag,archivoErrores,ERR15);
+        return INVALID_FORMAT;;
     } else {
 		// se busca obtener el valor del altura
 		begin = found + 8;
@@ -624,6 +701,7 @@ int Parser::validaRectangulo(string s,FILE* archivoErrores,Rectangulo* nRectangu
 	// controla la existencia de una textura...
 	found = s.find("idTextura=\"");
 	if(found == string::npos){
+		imprimirError(tag,archivoErrores,WAR12);
 		cout<<"El Rectangulo no tiene textura asignada"<<endl;
     } else {
 		// obtengo el la textura
@@ -638,6 +716,7 @@ int Parser::validaRectangulo(string s,FILE* archivoErrores,Rectangulo* nRectangu
 	// controla la existencia de un color de fondo
 	found = s.find("colorFigura=\"");
 	if(found == string::npos){
+		imprimirError(tag,archivoErrores,WAR13);
 		cout<<"El rectangulo no tiene un color de Fondo asignado"<<endl;
     } else {
 		// obtengo el el colorFondo
@@ -651,6 +730,7 @@ int Parser::validaRectangulo(string s,FILE* archivoErrores,Rectangulo* nRectangu
 	// controla la existencia de un color de Linea
 	found = s.find("colorLinea=\"");
 	if(found == string::npos){
+		imprimirError(tag,archivoErrores,WAR14);
 		cout<<"El rectangulo no tiene un color de Linea asignada"<<endl;
     } else {
 		// obtengo el colorLinea
@@ -663,24 +743,24 @@ int Parser::validaRectangulo(string s,FILE* archivoErrores,Rectangulo* nRectangu
 	return res;
 }
 
-int Parser::validaTriangulo(string s, FILE* archivoErrores,Triangulo* nTriangulo) {
+int Parser::validaTriangulo(char* tag, FILE* archivoErrores,Triangulo* nTriangulo) {
     //primero se fija si la sintaxis esta bien hecha, es decir, si empieza con "<circulo"
     size_t found; 
 	int begin, end; 
-	string id,textura,colorFondo,colorLinea;
+	string id,textura,colorFondo,colorLinea,s;
 	Uint32 cF,cL;
 
+	s = (string) tag;
     int res = VALID_FORMAT;
     
-	found = s.find("<triangulo id=\"");
+	found = s.find("id=\"");
     
-	if(found != 0){
+	if(found == string::npos){
 		cout<<"Error en el id del Triangulo"<<endl;
-		fprintf(archivoErrores,"Error en el id del Triangulo\n");
-        res = INVALID_FORMAT;
+		imprimirError(tag,archivoErrores,ERR16);
+        return INVALID_FORMAT;
     } else {
 		// obtengo el ID
-		
 		begin = s.find("id=\"") + 4;
 		end = s.find("\"", begin + 1);  
 		id = s.substr(begin, end - begin);
@@ -692,6 +772,7 @@ int Parser::validaTriangulo(string s, FILE* archivoErrores,Triangulo* nTriangulo
 	// controla la existencia de una textura...
 	found = s.find("idTextura=\"");
 	if(found == string::npos){
+		imprimirError(tag,archivoErrores,WAR12);
 		cout<<"El Triangulo no tiene textura asignada"<<endl;
     } else {
 		// obtengo el la textura
@@ -706,6 +787,7 @@ int Parser::validaTriangulo(string s, FILE* archivoErrores,Triangulo* nTriangulo
 	// controla la existencia de un color de fondo
 	found = s.find("colorFigura=\"");
 	if(found == string::npos){
+		imprimirError(tag,archivoErrores,WAR13);
 		cout<<"El triangulo no tiene un color de Fondo asignado"<<endl;
     } else {
 		// obtengo el el colorFondo
@@ -719,6 +801,7 @@ int Parser::validaTriangulo(string s, FILE* archivoErrores,Triangulo* nTriangulo
 	// controla la existencia de un color de Linea
 	found = s.find("colorLinea=\"");
 	if(found == string::npos){
+			imprimirError(tag,archivoErrores,WAR14);
 		cout<<"El triangulo no tiene un color de Linea asignada"<<endl;
     } else {
 		// obtengo el colorLinea
@@ -733,21 +816,22 @@ int Parser::validaTriangulo(string s, FILE* archivoErrores,Triangulo* nTriangulo
 	return res;
 }
 
-int Parser::validaSegmento(string s, FILE* archivoErrores,Segmento* nSegmento) {
+int Parser::validaSegmento(char* tag, FILE* archivoErrores,Segmento* nSegmento) {
     //primero se fija si la sintaxis esta bien hecha, es decir, si empieza con "<circulo"
     size_t found; 
 	int begin, end;
-	string id,colorLinea;
+	string id,colorLinea,s;
 	Uint32 cL;
 
+	s = (string) tag;
 	int res = VALID_FORMAT;
 
-    found = s.find("<segmento id=\"");
+    found = s.find("id=\"");
     
-	if(found != 0){
+	if(found == string::npos){
 		cout<<"Error en el id del Segmento"<<endl;
-		fprintf(archivoErrores,"Error en el id del Rectangulo\n");
-		res = INVALID_FORMAT;
+		imprimirError(tag,archivoErrores,ERR26);
+		return INVALID_FORMAT;
     } else {
 		// obtengo el ID
 		
@@ -762,6 +846,7 @@ int Parser::validaSegmento(string s, FILE* archivoErrores,Segmento* nSegmento) {
 	// controla la existencia de un color de Linea
 	found = s.find("colorLinea=\"");
 	if(found == string::npos){
+		imprimirError(tag,archivoErrores,WAR14);
 		cout<<"El segmento no tiene un color de Linea asignada"<<endl;
     } else {
 		// obtengo el colorLinea
@@ -828,19 +913,22 @@ void Parser::imprimeColor(color c) {
 	cout<<"R: "<<c.R<<" "<<"G: "<<c.G<<" "<<"B: "<<c.B<<endl;
 }
 
-int Parser::validaGeneral(string linea,FILE* archivoErrores) 
+int Parser::validaGeneral(char* tag,FILE* archivoErrores) 
 {
 	size_t found; 
 	int begin, end, reso;
-	string aux;
+	string aux,linea;
 	Uint32 cFF,cL,cFE;
 	Escenario* escenario = Escenario::obtenerInstancia();
+
+	//para buscar dentro del char* lo casteo a string...
+	linea = (string)tag;
 
 	//controlo la resolucion
 	found = linea.find("resolucion=\"");
 	if(found == string::npos)
 	{
-		fprintf(archivoErrores,"No se encontro Resolucion. Se colocara por defecto\n");
+		imprimirError(tag,archivoErrores,WAR2);
         reso = RESO_DEF;
     }
 	else 
@@ -858,7 +946,7 @@ int Parser::validaGeneral(string linea,FILE* archivoErrores)
 	found = linea.find("colorFondoFig=\"");
 	if(found == string::npos)
 	{
-		fprintf(archivoErrores,"No se encontro Color para fondo de Figura. Se colocara por defecto\n");
+		imprimirError(tag,archivoErrores,WAR3);
         cFF = colorXdef();
 	}
 	else 
@@ -876,7 +964,7 @@ int Parser::validaGeneral(string linea,FILE* archivoErrores)
 	//controlo la colorLinea
 	found = linea.find("colorLinea=\"");
 	if(found == string::npos){
-		fprintf(archivoErrores,"No se encontro Color de Linea. Se colocara por defecto\n");
+		imprimirError(tag,archivoErrores,WAR4);
         cL = colorXdef();
 	}
 	else {
@@ -892,7 +980,7 @@ int Parser::validaGeneral(string linea,FILE* archivoErrores)
 	//controlo la colorFondoEsc
 	found = linea.find("colorFondoEsc=\"");
 	if(found == string::npos){
-		fprintf(archivoErrores,"No se encontro Color de fondo de Escenario. Se colocara por defecto\n");
+		imprimirError(tag,archivoErrores,WAR5);
         cFE = colorXdef();
 	}
 	else {
@@ -908,7 +996,7 @@ int Parser::validaGeneral(string linea,FILE* archivoErrores)
 	//controlo la texturaFig
 	found = linea.find("texturaFig=\"");
 	if(found == string::npos){
-		fprintf(archivoErrores,"No se encontro Textura para la Figura. No se colocara Ninguna\n");
+		imprimirError(tag,archivoErrores,WAR6);
         cout<<"NO HAY TEXTURA DE FIGURA"<<endl;
 	}
 	else {
@@ -925,7 +1013,7 @@ int Parser::validaGeneral(string linea,FILE* archivoErrores)
 	//controlo la texturaEsc
 	found = linea.find("texturaEsc=\"");
 	if(found == string::npos){
-		fprintf(archivoErrores,"No se encontro Textura para el escenario. No se colocara Ninguna\n");
+		imprimirError(tag,archivoErrores,WAR7);
         cout<<"NO HAY TEXTURA DE ESCENARIO"<<endl;
 	}
 	else {
@@ -959,7 +1047,7 @@ int Parser::validarGeneralCierre(FILE* archivo,FILE* archivoErrores) {
 		return VALID_FORMAT;
 	} else {
 		fsetpos (archivo, &position);
-		fprintf(archivoErrores,"General No cerrado\n");
+		imprimirError(tag,archivoErrores,WAR8);
 		cout<<"!!!!GENERAL NO CERRADO!!!!"<<endl;
 		return NO_CLOSE;
 	}
@@ -983,7 +1071,7 @@ int Parser::validaCirculoCierre(FILE* archivo,FILE* archivoErrores) {
 	found = fin.find("</circulo>");
 	if (found == string::npos){
 		fsetpos (archivo, &position);
-		fprintf(archivoErrores,"No se encontro cierre de Circulo.\n");
+		imprimirError(tag,archivoErrores,WAR19);
 		cout<<"NO CIERRA EL CIRCULO"<<endl;
 		return NO_CLOSE;
 	} else {
@@ -1008,7 +1096,7 @@ int Parser::validaCuadradoCierre(FILE* archivo,FILE* archivoErrores) {
 	found = fin.find("</cuadrado>");
 	if (found == string::npos){
 		fsetpos (archivo, &position);
-		fprintf(archivoErrores,"No se encontro cierre de Cuadrado.\n");
+		imprimirError(tag,archivoErrores,WAR15);
 		cout<<"NO CIERRA EL CUADRADO"<<endl;
 		return NO_CLOSE;
 	} else {
@@ -1032,7 +1120,7 @@ int Parser::validaRectanguloCierre(FILE* archivo,FILE* archivoErrores) {
 	found = fin.find("</rectangulo>");
 	if (found == string::npos){
 		fsetpos (archivo, &position);
-		fprintf(archivoErrores,"No se encontro cierre de rectangulo.\n");
+		imprimirError(tag,archivoErrores,WAR16);
 		cout<<"NO CIERRA EL RECTANGULO"<<endl;
 		return NO_CLOSE;
 	} else {
@@ -1056,7 +1144,7 @@ int Parser::validaSegmentoCierre(FILE* archivo,FILE* archivoErrores) {
 	found = fin.find("</segmento>");
 	if (found == string::npos){
 		fsetpos (archivo, &position);
-		fprintf(archivoErrores,"No se encontro cierre de segmento.\n");
+		imprimirError(tag,archivoErrores,WAR18);
 		cout<<"NO CIERRA EL SEGMENTO"<<endl;
 		return NO_CLOSE;
 	} else {
@@ -1080,7 +1168,7 @@ int Parser::validaTrianguloCierre(FILE* archivo,FILE* archivoErrores) {
 	found = fin.find("</triangulo>");
 	if (found == string::npos){
 		fsetpos (archivo, &position);
-		fprintf(archivoErrores,"No se encontro cierre de triangulo.\n");
+		imprimirError(tag,archivoErrores,WAR17);
 		cout<<"NO CIERRA EL TRIANGULO"<<endl;
 		return NO_CLOSE;
 	} else {
@@ -1089,18 +1177,21 @@ int Parser::validaTrianguloCierre(FILE* archivo,FILE* archivoErrores) {
 }
 
 
-int Parser::validaElementos(string linea,FILE* archivo,FILE* archivoErrores) {
+int Parser::validaElementos(char* tag,FILE* archivo,FILE* archivoErrores) {
 	size_t found; 
 	int res = 0;
+	string linea;
 	punto p,v1,v2,v3,i,f;
 	Escenario* escenario = Escenario::obtenerInstancia();
 			
-	found = linea.find("<cuadrado ");
-	if (found == 0) 
+	linea = (string) tag;
+
+	found = linea.find("cuadrado ");
+	if (found != string::npos) 
 	{
 		cout<<"CUADRADO"<<endl;
 		Cuadrado* nuevoCuadrado = new Cuadrado();
-		res = validaCuadrado(linea,archivoErrores,nuevoCuadrado);
+		res = validaCuadrado(tag,archivoErrores,nuevoCuadrado);
 		if (res==VALID_FORMAT) 
 		{
 			res = validaPos(archivo,archivoErrores,p); // agregar el punto con &
@@ -1122,12 +1213,12 @@ int Parser::validaElementos(string linea,FILE* archivo,FILE* archivoErrores) {
 		return(res);
 	}
 	
-	found = linea.find("<circulo ");
-	if (found == 0) 
+	found = linea.find("circulo ");
+	if (found != string::npos) 
 	{
 		cout<<"CIRCULO"<<endl;
 		Circulo* nuevoCirculo = new Circulo();
-		res = validaCirculo(linea,archivoErrores,nuevoCirculo);
+		res = validaCirculo(tag,archivoErrores,nuevoCirculo);
 		if (res==VALID_FORMAT) 
 		{
 			res = validaPos(archivo,archivoErrores,p);
@@ -1149,12 +1240,12 @@ int Parser::validaElementos(string linea,FILE* archivo,FILE* archivoErrores) {
 		return(res);
 	}
 	
-	found = linea.find("<rectangulo id=\"");
-	if (found == 0) 
+	found = linea.find("rectangulo ");
+	if (found != string::npos) 
 	{
 		cout<<"RECTANGULO"<<endl;
 		Rectangulo* nuevoRectangulo = new Rectangulo();
-		res = validaRectangulo(linea,archivoErrores,nuevoRectangulo);
+		res = validaRectangulo(tag,archivoErrores,nuevoRectangulo);
 		if (res==VALID_FORMAT) 
 		{
 			res = validaPos(archivo,archivoErrores,p);
@@ -1176,13 +1267,12 @@ int Parser::validaElementos(string linea,FILE* archivo,FILE* archivoErrores) {
 		return(res);
 	}
 	
-	found = linea.find("<triangulo id=\"");
-	if (found == 0) 
+	found = linea.find("triangulo ");
+	if (found != string::npos) 
 	{
-
 		cout<<"TRIANGULO"<<endl;
 		Triangulo* nuevoTriangulo = new Triangulo();
-		res = validaTriangulo(linea,archivoErrores,nuevoTriangulo);
+		res = validaTriangulo(tag,archivoErrores,nuevoTriangulo);
 		if (res==VALID_FORMAT) 
 		{
 			res = validaVertices(archivo,archivoErrores,v1,v2,v3);
@@ -1209,12 +1299,12 @@ int Parser::validaElementos(string linea,FILE* archivo,FILE* archivoErrores) {
 		return(res);
 	}
 	
-	found = linea.find("<segmento id=\"");
-	if (found == 0) 
+	found = linea.find("segmento ");
+	if (found != string::npos) 
 	{
 		cout<<"SEGMENTO"<<endl;
 		Segmento* nuevoSegmento = new Segmento();
-		res = validaSegmento(linea,archivoErrores,nuevoSegmento);
+		res = validaSegmento(tag,archivoErrores,nuevoSegmento);
 		if (res==VALID_FORMAT) 
 		{
 			res = validaInicioFin(archivo,archivoErrores,i,f);
@@ -1223,7 +1313,7 @@ int Parser::validaElementos(string linea,FILE* archivo,FILE* archivoErrores) {
 				nuevoSegmento->setPuntoInicio(i);
 				nuevoSegmento->setPuntoFinal(f);
 				escenario->addFigura(nuevoSegmento);
-			} 
+			}
 			else 
 			{
 				delete(nuevoSegmento);
@@ -1240,21 +1330,21 @@ int Parser::validaElementos(string linea,FILE* archivo,FILE* archivoErrores) {
 	return INVALID_FORMAT;
 }
 
-int Parser::validaTextura(string linea,FILE* archivo, FILE* archivoErrores){
+int Parser::validaTextura(char* tag,FILE* archivo, FILE* archivoErrores){
 	size_t found; 
 	int begin, end, res;
-	string tex,path;
+	string tex,path,linea;
 	string fin;
 	Escenario* escenario = Escenario::obtenerInstancia();
-
-	char* tag;
 	fpos_t position;
+
+	linea = (string) tag;
 
 	//controlo que esta la id de la textura bien formado
 	found = linea.find("<textura id=\"");
 	if(found == string::npos){
 		cout<<"Error en el id de la textura."<<endl;
-		fprintf(archivoErrores,"Error en el id de la textura.\n");
+		imprimirError(tag,archivoErrores,ERR3);
         res = INVALID_FORMAT;
     }
 	else {
@@ -1269,7 +1359,7 @@ int Parser::validaTextura(string linea,FILE* archivo, FILE* archivoErrores){
 	found = linea.find("path=\"");
 	if(found == string::npos){
 		cout<<"No existe el atributo path en la textura"<<endl;
-		fprintf(archivoErrores,"No existe el atributo path en la textura.\n");
+		imprimirError(tag,archivoErrores,ERR4);
         res = INVALID_FORMAT;
     }
 	else {
@@ -1304,7 +1394,7 @@ int Parser::validaTextura(string linea,FILE* archivo, FILE* archivoErrores){
 		else 
 		{
 			fsetpos(archivo, &position);
-			fprintf(archivoErrores,"Textura no cerrada\n");
+			imprimirError(tag,archivoErrores,WAR11);
 			cout<<"TEXTURA NO CERRADA"<<endl;
 			return NO_CLOSE;
 		}
@@ -1313,19 +1403,21 @@ int Parser::validaTextura(string linea,FILE* archivo, FILE* archivoErrores){
 	return res;
 }
 
-int Parser::validaTagPadre(string linea, FILE* archivo, FILE* archivoErrores) {
+int Parser::validaTagPadre(char* tag, FILE* archivo, FILE* archivoErrores) {
 	size_t found;
-	char* tag;
 	string fin;
 	int res = 0;
 	int res1 = 0;
 	fpos_t position;
 
+	string linea;
+	linea = (string) tag;
+
 	//Si encutnra el general entra y valida hasta su cierre....
 	found = linea.find("<General ");
 	if (found == 0) {
 		cout<<"GENERAL"<<endl;
-		res = validaGeneral(linea,archivoErrores);
+		res = validaGeneral(tag,archivoErrores);
 		res = validarGeneralCierre(archivo,archivoErrores);
 		return res;
 	}
@@ -1347,22 +1439,22 @@ int Parser::validaTagPadre(string linea, FILE* archivo, FILE* archivoErrores) {
 			if ((tag != NULL) && ( (fin.find("</ListadoDeElementos>")!=0)&&(fin.find("<ListadoDeTexturas>")!= 0)&&(fin.find("<General>")!= 0)&&(fin.find("</escenario>")!= 0) ) ) {
 				
 				cout<<"LINEA A VALIDAR: "<<tag<<endl;
-				
 				res1 = validaElementos(tag,archivo,archivoErrores);
+
 				if ((res1 != VALID_FORMAT) && (res1!=NO_CLOSE))  {
 					cout<<"Error Fatal a iniciar un Elemento"<<endl;
-					fprintf(archivoErrores,"Error Fatal a iniciar un Elemento\n");
+					imprimirError(tag,archivoErrores,ERR5);
 				}
 			}
 		}
 		//nos dice si cerro el listado de elementos, sino sigue validando elementos.
 		if (fin.find("</ListadoDeElementos>") == 0) {
 			return VALID_FORMAT;
-		}
-		if ( (fin.find("<ListadoDeTexturas>")) || (fin.find("<General>")) ){
+		} else {
 			cout<<"No se cerro el ListadoDeElementos"<<endl;
-			fprintf(archivoErrores,"No se cerro el ListadoDeElementos\n");
+			imprimirError(tag,archivoErrores,WAR9);
 			fsetpos (archivo, &position);
+			if ((fin.find("<ListadoDeTexturas>")) || (fin.find("<General>"))) return INVALID_FORMAT;
 		}
 	}
 	
@@ -1385,12 +1477,11 @@ int Parser::validaTagPadre(string linea, FILE* archivo, FILE* archivoErrores) {
 		//nos dice si cerro el listado de texturas, sino sigue validando texturas...
 		if (fin.find("</ListadoDeTexturas>") == 0) {
 			return VALID_FORMAT;
-		}
-
-		if ( (fin.find("<ListadoDeElementos>")) || (fin.find("<General>")) ){
+		} else {
 			cout<<"No se cerro el ListadoDeTexturas"<<endl;
-			fprintf(archivoErrores,"No se cerro el ListadoDeTexturas\n");
+			imprimirError(tag,archivoErrores,WAR10);
 			fsetpos (archivo, &position);
+			if ( (fin.find("<ListadoDeElementos>")) || (fin.find("<General>"))) return INVALID_FORMAT;
 		}
 	}
 
@@ -1412,7 +1503,7 @@ int Parser::validar(FILE* archivo, FILE* archivoErrores) {
 	if (found == 0) {
 		cout<<"ESCENARIO ENCONTRADO"<<endl;
 	} else {
-		fprintf(archivoErrores,"No se encontro el escenario\n");
+		imprimirError(tag,archivoErrores,ERR2);
 		cout<<"No se ha econtrado el escenario el programa se cerrara"<<endl;
 		return INVALID_FORMAT;
 	}
@@ -1435,13 +1526,14 @@ int Parser::validar(FILE* archivo, FILE* archivoErrores) {
 			int resultado = validaTagPadre(tag,archivo,archivoErrores);
 			
 			if ((resultado != VALID_FORMAT) && (resultado != NO_CLOSE)) {
+				imprimirError(tag,archivoErrores,ERR1);
 				cout<<"Error Grabe en un Tag padre."<<endl;
-				fprintf(archivoErrores,"Error Grabe en un Tag Principal.\n");
+				
 			}	
 		}
 		
 	}
 	cout<<"No se encontro el cierre del escenario"<<endl;
-	fprintf(archivoErrores,"No se encontro el cierre del escenario.\n");
+	imprimirError(tag,archivoErrores,WAR1);
 	return INVALID_FORMAT;
 }
