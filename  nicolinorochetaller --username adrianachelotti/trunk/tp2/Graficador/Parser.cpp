@@ -4,62 +4,7 @@
 
 #include "Parser.h"
 
-#define COLOR_VACIO 0xFF000000
 
-#define ERR1 "ERROR: - Error grave en un Tag principal -"
-#define ERR2 "ERROR: - No se encontro el inicio del escenario -"
-#define ERR3 "ERROR: - No se encontro el id de la textura -"
-#define ERR4 "ERROR: - Mo se encontro el path de la textura -"
-#define ERR5 "ERROR: - Error grave al iniciar un Elemento -"
-#define ERR6 "ERROR: - No se encontro el id del Cuadrado -"
-#define ERR7 "ERROR: - No se encontro un lado valido en el Cuadrado -"
-#define ERR8 "ERROR: - No se encontro Posicion de Elemento -"
-#define ERR9 "ERROR: - No se encontro una coordenada X valida -"
-#define ERR10 "ERROR: - No se encontro una coordenada Y valida -"
-#define ERR11 "ERROR: - No se encontro el id del Circulo -"
-#define ERR12 "ERROR: - No se encontro un radio valido de Circulo -"
-#define ERR13 "ERROR: - No se encontro el id del Rectangulo -"
-#define ERR14 "ERROR: - No se encontro una base valida en el Rectangulo -"
-#define ERR15 "ERROR: - No se encontro una altura valida en el Rectangulo -"
-#define ERR16 "ERROR: - No se encontro la id del Triangulo -"
-#define ERR17 "ERROR: - No se encontro Vertice 1 de Triangulo -"
-#define ERR18 "ERROR: - No se encontro Vertice 2 de Triangulo -"
-#define ERR19 "ERROR: - No se encontro Vertice 3 de Triangulo -"
-#define ERR20 "ERROR: - No se encontro la coordenada X valida del Vertice 1 del Triangulo -"
-#define ERR21 "ERROR: - No se encontro la coordenada Y valida del Vertice 1 del Triangulo -"
-#define ERR22 "ERROR: - No se encontro la coordenada X valida del Vertice 2 del Triangulo -"
-#define ERR23 "ERROR: - No se encontro la coordenada Y valida del Vertice 2 del Triangulo -" 
-#define ERR24 "ERROR: - No se encontro la coordenada X valida del Vertice 3 del Triangulo -"
-#define ERR25 "ERROR: - No se encontro la coordenada Y valida del Vertice 3 del Triangulo -"
-#define ERR26 "ERROR: - No se encontro el id del Segmento -"
-#define ERR27 "ERROR: - No se encontro el Inicio de Segmento -"
-#define ERR28 "ERROR: - No se encontro la coordenada X valida del Inicio del Segmento -"
-#define ERR29 "ERROR: - No se encontro la coordenada Y valida del Inicio del Segmento -"
-#define ERR30 "ERROR: - No se encontro el Fin de Segmento -"
-#define ERR31 "ERROR: - No se encontro la coordenada X del Fin del Segmento -"
-#define ERR32 "ERROR: - No se encontro la coordenada y del Fin del Segmento -"
-#define ERR33 "ERROR: - Los vertices del triangulo se encuentran sobre una misma recta -"
-#define ERR34 "ERROR: - La linea no contiene un formato correcto de tag -"
-
-#define WAR1 "ADVERTENCIA: - No se encontro el cierre del escenario -"
-#define WAR2 "ADVERTENCIA: - No se encontro la resolucion del escenario. Se colocara por defecto -"
-#define WAR3 "ADVERTENCIA: - No se encontro Color para fondo de Figura. Se colocara por defecto -"
-#define WAR4 "ADVERTENCIA: - No se encontro Color de Linea. Se colocara por defecto -"
-#define WAR5 "ADVERTENCIA: - No se encontro Color de fondo de Escenario. Se colocara por defecto -"
-#define WAR6 "ADVERTENCIA: - No se encontro Textura para la Figura. No se colocara Ninguna -"
-#define WAR7 "ADVERTENCIA: - No se encontro Textura para el escenario. No se colocara Ninguna -"
-#define WAR8 "ADVERTENCIA: - No se encontro el cierre del tag general -"
-#define WAR9 "ADVERTENCIA: - No se encontro el cierre del tag ListadoDeElementos -"
-#define WAR10 "ADVERTENCIA: - No se encontro el cierre del tag ListadoDeTexturas -"
-#define WAR11 "ADVERTENCIA: - No se encontro el cierre de la textura -"
-#define WAR12 "ADVERTENCIA: - El elemento no tiene textura asignada -"
-#define WAR13 "ADVERTENCIA: - El elemento no tiene un color de Fondo asignado -"
-#define WAR14 "ADVERTENCIA: - El elemento no tiene un color de Linea asignada -"
-#define WAR15 "ADVERTENCIA: - No se encontro el cierre del Cuadrado -"
-#define WAR16 "ADVERTENCIA: - No se encontro el cierre del Rectangulo -"
-#define WAR17 "ADVERTENCIA: - No se encontro el cierre del Triangulo -"
-#define WAR18 "ADVERTENCIA: - No se encontro el cierre del Segmento -"
-#define WAR19 "ADVERTENCIA: - No se encontro el cierre del Circulo -"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -696,7 +641,7 @@ int Parser::validaCuadrado(char* tag,FILE* archivoErrores,Cuadrado* nCuadrado) {
 		begin = s.find("colorFigura=\"") + 13;
 		end = s.find("\"", begin + 1);
 		colorFondo = s.substr(begin, end - begin);
-		cF = validaColor(colorFondo);
+		cF = validaColor(tag,colorFondo,archivoErrores,'F');
 		nCuadrado->setColorFondo(cF);
 	}
 
@@ -711,7 +656,7 @@ int Parser::validaCuadrado(char* tag,FILE* archivoErrores,Cuadrado* nCuadrado) {
 		begin = s.find("colorLinea=\"") + 12;
 		end = s.find("\"", begin + 1);
 		colorLinea = s.substr(begin, end - begin);
-		cL = validaColor(colorLinea);
+		cL = validaColor(tag,colorLinea,archivoErrores,'L');
 		//cout<<cL<<endl;
 		nCuadrado->setColorLinea(cL);
 	}
@@ -797,7 +742,7 @@ int Parser::validaCirculo(char* tag,FILE* archivoErrores,Circulo* nCirculo) {
 		begin = s.find("colorFigura=\"") + 13;
 		end = s.find("\"", begin + 1);
 		colorFondo = s.substr(begin, end - begin);
-		cF = validaColor(colorFondo);
+		cF = validaColor(tag,colorFondo,archivoErrores,'F');
 		nCirculo->setColorFondo(cF);
 	}
 
@@ -812,7 +757,7 @@ int Parser::validaCirculo(char* tag,FILE* archivoErrores,Circulo* nCirculo) {
 		begin = s.find("colorLinea=\"") + 12;
 		end = s.find("\"", begin + 1);
 		colorLinea = s.substr(begin, end - begin);
-		cL = validaColor(colorLinea);
+		cL = validaColor(tag,colorLinea,archivoErrores,'T');
 		nCirculo->setColorLinea(cL);
 	}
 
@@ -920,7 +865,7 @@ int Parser::validaRectangulo(char* tag,FILE* archivoErrores,Rectangulo* nRectang
 		begin = s.find("colorFigura=\"") + 13;
 		end = s.find("\"", begin + 1);
 		colorFondo = s.substr(begin, end - begin);
-		cF = validaColor(colorFondo);
+		cF = validaColor(tag,colorFondo,archivoErrores,'F');
 		nRectangulo->setColorFondo(cF);
 	}
 
@@ -935,7 +880,7 @@ int Parser::validaRectangulo(char* tag,FILE* archivoErrores,Rectangulo* nRectang
 		begin = s.find("colorLinea=\"") + 12;
 		end = s.find("\"", begin + 1);
 		colorLinea = s.substr(begin, end - begin);
-		cL = validaColor(colorLinea);
+		cL = validaColor(tag,colorLinea,archivoErrores,'L');
 		nRectangulo->setColorLinea(cL);
 	}
 	return res;
@@ -993,7 +938,7 @@ int Parser::validaTriangulo(char* tag, FILE* archivoErrores,Triangulo* nTriangul
 		begin = s.find("colorFigura=\"") + 13;
 		end = s.find("\"", begin + 1);
 		colorFondo = s.substr(begin, end - begin);
-		cF = validaColor(colorFondo);
+		cF = validaColor(tag,colorFondo,archivoErrores,'F');
 		nTriangulo->setColorFondo(cF);
 	}
 
@@ -1008,7 +953,7 @@ int Parser::validaTriangulo(char* tag, FILE* archivoErrores,Triangulo* nTriangul
 		begin = s.find("colorLinea=\"") + 12;
 		end = s.find("\"", begin + 1);
 		colorLinea = s.substr(begin, end - begin);
-		cL = validaColor(colorLinea);
+		cL = validaColor(tag,colorLinea,archivoErrores,'L');
 		nTriangulo->setColorLinea(cL);
 	}
 
@@ -1054,7 +999,7 @@ int Parser::validaSegmento(char* tag, FILE* archivoErrores,Segmento* nSegmento) 
 		begin = s.find("colorLinea=\"") + 12;
 		end = s.find("\"", begin + 1);
 		colorLinea = s.substr(begin, end - begin);
-		cL = validaColor(colorLinea);
+		cL = validaColor(tag,colorLinea,archivoErrores,'L');
 		nSegmento->setColorLinea(cL);
 	}
 
@@ -1063,10 +1008,11 @@ int Parser::validaSegmento(char* tag, FILE* archivoErrores,Segmento* nSegmento) 
 
 
 
-int Parser::validaReso(int r){
+int Parser::validaReso(int r,char* linea,FILE* archivoError){
 	if ((r==640) || (r==800) || (r==1024) || (r==1280)) {
 		return(r);
 	} else {
+		imprimirError(linea,archivoError,WAR2);
 		return(RESO_DEF);
 	}
 }
@@ -1079,46 +1025,46 @@ Uint32 Parser::colorXdef() {
 	return(getColor(r,g,b));
 }
 
-int Parser::colorValido(int c) {
+int Parser::colorValido(char* linea, int c,FILE* archivoError,char tipo) {
 	if (c>=0 && c<=255) {
 		return c;
 	} else {
+		if (tipo == 'F') imprimirError(linea,archivoError,WAR20);
+		if (tipo == 'L') imprimirError(linea,archivoError,WAR21);
+		if (tipo == 'E') imprimirError(linea,archivoError,WAR22);
 		return 111;
 	}
 }
 
-Uint32 Parser::validaColor(string aux) {
+Uint32 Parser::validaColor(char* linea, string aux, FILE* archivoError,char tipo) {
 	int g,r,b;
 	
 	if (aux.length() != 9)
 	{
-		g = 111;
-		r = 111;
-		b = 111;
+		if (tipo == 'F') imprimirError(linea,archivoError,WAR13);
+		if (tipo == 'L') imprimirError(linea,archivoError,WAR14);
+		if (tipo == 'E') imprimirError(linea,archivoError,WAR5);
+		return COLOR_VACIO;
 	}
 	else 
 	{
 		r = atoi(aux.substr(0, 3).c_str());
-		r = colorValido(r);
+		r = colorValido(linea,r,archivoError,tipo);
 		g = atoi(aux.substr(3, 3).c_str());
-		g = colorValido(g);
+		g = colorValido(linea,g,archivoError,tipo);
 		b = atoi(aux.substr(6, 3).c_str());
-		b = colorValido(b);
+		b = colorValido(linea,b,archivoError,tipo);
 	}
 	return(getColor(r,g,b));
 
 }
 
 
-void Parser::imprimeColor(color c) {
-	cout<<"R: "<<c.R<<" "<<"G: "<<c.G<<" "<<"B: "<<c.B<<endl;
-}
-
 int Parser::validaGeneral(char* tag,FILE* archivoErrores) 
 {
 	size_t found; 
 	int begin, end, reso;
-	string aux,linea;
+	string aux,linea,aux1;
 	Uint32 cFF,cL,cFE;
 	Escenario* escenario = Escenario::obtenerInstancia();
 
@@ -1137,8 +1083,17 @@ int Parser::validaGeneral(char* tag,FILE* archivoErrores)
 		// obtengo la resolucion
 		begin = linea.find("resolucion=\"") + 12;
 		end = linea.find("\"", begin + 1);
-		reso = atoi(linea.substr(begin, end - begin).c_str());
-		reso = validaReso(reso);	
+		aux1 = linea.substr(begin, end - begin).c_str();
+		if (isNumber(aux1)==0) 
+		{
+			reso = atoi(linea.substr(begin, end - begin).c_str());
+			reso = validaReso(reso,tag,archivoErrores);	
+		}
+		else
+		{
+			imprimirError(tag,archivoErrores,WAR2);
+			reso = RESO_DEF;
+		}
 	}
 	escenario->setResolucion(reso);
 	cout<<"RESOLUCION: "<<reso<<endl;
@@ -1156,7 +1111,7 @@ int Parser::validaGeneral(char* tag,FILE* archivoErrores)
 		begin = linea.find("colorFondoFig=\"") + 15;
 		end = linea.find("\"", begin + 1);
 		aux = linea.substr(begin, end - begin).c_str();
-		cFF = validaColor(aux);
+		cFF = validaColor(tag,aux,archivoErrores,'F');
 	}
 	
 	escenario->setColorFondoFigura(cFF);
@@ -1173,7 +1128,7 @@ int Parser::validaGeneral(char* tag,FILE* archivoErrores)
 		begin = linea.find("colorLinea=\"") + 12;
 		end = linea.find("\"", begin + 1);
 		aux = linea.substr(begin, end - begin).c_str();
-		cL = validaColor(aux);	
+		cL = validaColor(tag,aux,archivoErrores,'L');	
 	}
 	
 	escenario->setColorLinea(cL);
@@ -1189,7 +1144,7 @@ int Parser::validaGeneral(char* tag,FILE* archivoErrores)
 		begin = linea.find("colorFondoEsc=\"") + 15;
 		end = linea.find("\"", begin + 1);
 		aux = linea.substr(begin, end - begin).c_str();
-		cFE = validaColor(aux);
+		cFE = validaColor(tag,aux,archivoErrores,'E');
 	}
 
 	escenario->setColorFondoEscenario(cFE);

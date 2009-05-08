@@ -19,6 +19,66 @@
 
 using namespace std;
 
+#define ERR1 "ERROR: - Error grave en un Tag principal -"
+#define ERR2 "ERROR: - No se encontro el inicio del escenario -"
+#define ERR3 "ERROR: - No se encontro el id de la textura -"
+#define ERR4 "ERROR: - Mo se encontro el path de la textura -"
+#define ERR5 "ERROR: - Error grave al iniciar un Elemento -"
+#define ERR6 "ERROR: - No se encontro el id del Cuadrado -"
+#define ERR7 "ERROR: - No se encontro un lado valido en el Cuadrado -"
+#define ERR8 "ERROR: - No se encontro Posicion de Elemento -"
+#define ERR9 "ERROR: - No se encontro una coordenada X valida -"
+#define ERR10 "ERROR: - No se encontro una coordenada Y valida -"
+#define ERR11 "ERROR: - No se encontro el id del Circulo -"
+#define ERR12 "ERROR: - No se encontro un radio valido de Circulo -"
+#define ERR13 "ERROR: - No se encontro el id del Rectangulo -"
+#define ERR14 "ERROR: - No se encontro una base valida en el Rectangulo -"
+#define ERR15 "ERROR: - No se encontro una altura valida en el Rectangulo -"
+#define ERR16 "ERROR: - No se encontro la id del Triangulo -"
+#define ERR17 "ERROR: - No se encontro Vertice 1 de Triangulo -"
+#define ERR18 "ERROR: - No se encontro Vertice 2 de Triangulo -"
+#define ERR19 "ERROR: - No se encontro Vertice 3 de Triangulo -"
+#define ERR20 "ERROR: - No se encontro la coordenada X valida del Vertice 1 del Triangulo -"
+#define ERR21 "ERROR: - No se encontro la coordenada Y valida del Vertice 1 del Triangulo -"
+#define ERR22 "ERROR: - No se encontro la coordenada X valida del Vertice 2 del Triangulo -"
+#define ERR23 "ERROR: - No se encontro la coordenada Y valida del Vertice 2 del Triangulo -" 
+#define ERR24 "ERROR: - No se encontro la coordenada X valida del Vertice 3 del Triangulo -"
+#define ERR25 "ERROR: - No se encontro la coordenada Y valida del Vertice 3 del Triangulo -"
+#define ERR26 "ERROR: - No se encontro el id del Segmento -"
+#define ERR27 "ERROR: - No se encontro el Inicio de Segmento -"
+#define ERR28 "ERROR: - No se encontro la coordenada X valida del Inicio del Segmento -"
+#define ERR29 "ERROR: - No se encontro la coordenada Y valida del Inicio del Segmento -"
+#define ERR30 "ERROR: - No se encontro el Fin de Segmento -"
+#define ERR31 "ERROR: - No se encontro la coordenada X del Fin del Segmento -"
+#define ERR32 "ERROR: - No se encontro la coordenada y del Fin del Segmento -"
+#define ERR33 "ERROR: - Los vertices del triangulo se encuentran sobre una misma recta -"
+#define ERR34 "ERROR: - La linea no contiene un formato correcto de tag -"
+
+#define WAR1 "ADVERTENCIA: - No se encontro el cierre del escenario -"
+#define WAR2 "ADVERTENCIA: - No se encontro la resolucion valida del escenario. Se colocara por defecto -"
+#define WAR3 "ADVERTENCIA: - No se encontro Color para fondo de Figura. Se colocara por defecto -"
+#define WAR4 "ADVERTENCIA: - No se encontro Color de Linea. Se colocara por defecto -"
+#define WAR5 "ADVERTENCIA: - No se encontro Color de fondo de Escenario. Se colocara por defecto -"
+#define WAR6 "ADVERTENCIA: - No se encontro Textura para la Figura. No se colocara Ninguna -"
+#define WAR7 "ADVERTENCIA: - No se encontro Textura para el escenario. No se colocara Ninguna -"
+#define WAR8 "ADVERTENCIA: - No se encontro el cierre del tag general -"
+#define WAR9 "ADVERTENCIA: - No se encontro el cierre del tag ListadoDeElementos -"
+#define WAR10 "ADVERTENCIA: - No se encontro el cierre del tag ListadoDeTexturas -"
+#define WAR11 "ADVERTENCIA: - No se encontro el cierre de la textura -"
+#define WAR12 "ADVERTENCIA: - El elemento no tiene textura asignada -"
+#define WAR13 "ADVERTENCIA: - El elemento no tiene un color de Fondo asignado valido -"
+#define WAR14 "ADVERTENCIA: - El elemento no tiene un color de Linea asignada valido -"
+#define WAR15 "ADVERTENCIA: - No se encontro el cierre del Cuadrado -"
+#define WAR16 "ADVERTENCIA: - No se encontro el cierre del Rectangulo -"
+#define WAR17 "ADVERTENCIA: - No se encontro el cierre del Triangulo -"
+#define WAR18 "ADVERTENCIA: - No se encontro el cierre del Segmento -"
+#define WAR19 "ADVERTENCIA: - No se encontro el cierre del Circulo -"
+#define WAR20 "ADVERTENCIA: - Una componente del Color de fondo de la figura no es valido. Se reemplazara por 111 -"
+#define WAR21 "ADVERTENCIA: - Una componente del Color de linea de la figura no es valido. Se reemplazara por 111 -"
+#define WAR22 "ADVERTENCIA: - Una componente del Color del Fondo del Escenario no es valido. Se reemplazara por 111 -"
+
+
+#define COLOR_VACIO 0xFF000000
 #define VALID_FORMAT 0
 #define POSITION_MISS -1
 #define SIDE_MISS -2
@@ -43,6 +103,8 @@ public:
 	Parser();
 	virtual ~Parser();
 	Uint32 getColor(int r, int g, int b);
+	Uint32 validaColor(char* linea, string aux,FILE* archivoError,char t);
+	Uint32 colorXdef();
 	int validar(FILE* archivo, FILE* archivoErrores);
 	int validaTagPadre(char* linea, FILE* archivo, FILE* archivoErrores);
 	int validaTextura(char* tag,FILE* archivo, FILE* archivoErrores);
@@ -54,11 +116,8 @@ public:
 	int validaCirculoCierre(FILE* archivo,FILE* archivoErrores);
 	int validarGeneralCierre(FILE* archivo,FILE* archivoErrores);
 	int validaGeneral(char* tag,FILE* archivoErrores);
-	void imprimeColor(color c);
-	Uint32 validaColor(string aux);
-	int colorValido(int c);
-	Uint32 colorXdef();
-	int validaReso(int r);
+	int colorValido(char* linea, int c,FILE* archivoError,char t);
+	int validaReso(int r,char* tag,FILE* arhivoError);
 	int validaSegmento(char* tag, FILE* archivoErrores,Segmento* nSegmento);
 	int validaTriangulo(char* tag, FILE* archivoErrores,Triangulo* nTriangulo);
 	int validaRectangulo(char* tag,FILE* archivoErrores,Rectangulo* nRectangulo);
