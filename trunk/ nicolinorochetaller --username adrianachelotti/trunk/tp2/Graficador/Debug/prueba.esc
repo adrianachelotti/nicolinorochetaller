@@ -1,14 +1,14 @@
 <escenario>
-	<General resolucion="600" colorFondoFig="255000000" colorLinea="123200100" colorFondoEsc="237928930">
+	<General resolucion="33" colorFondoFig="255000000" colorLinea="123200100" colorFondoEsc="237928930">
 	</General>
 	<ListadoDeElementos>
-		<cuadrado id="dario" lado="100"  colorLinea="000000123">
+		<cuadrado id="dario" lado="100" colorFigura="403000000" colorLinea="100000123">
 				<posicion x="10" y="400"/>
 		</cuadrado>
-		<rectangulo id="dario" base="320" altura="100" idTextura="id3" colorFigura="111111200" colorLinea="000000123">
+		<rectangulo id="dario" base="320" altura="100" colorFigura="111111111" colorLinea="000000123">
 				<posicion x="600" y="400"/>
 		</rectangulo>
-		<circulo id="circualo2df" radio="100" idTextura="id4"  colorFigura="111111000" >
+		<circulo id="circualo2df" radio="100" idTextura="id4"  colorFigura="411111000" >
 				<posicion x="400" y="10"/>
 		</circulo> 
 		<triangulo id="tria" colorFigura="150000100" idTextura="id2"  colorLinea="100000100">
