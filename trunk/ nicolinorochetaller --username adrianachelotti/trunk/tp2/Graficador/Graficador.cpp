@@ -98,7 +98,8 @@ Graficador* Graficador::obtenerInstancia()
  
 /**************************************************************************
 * Dibujar un rectangulo en el punto (x,y) con ancho(w) , alto(h) y 
-* del color pasado como parametro                
+* del color pasado como parametro. Dibuja pixel por pixel empezando por el 
+* inferior izquierdo (x,y) barriendo hacia arriba y hacia la derecha.           
 **************************************************************************/
 
 void Graficador::rellenarRectangulo( SDL_Surface *screen,Punto punto,int w, int h,Uint32 color)
@@ -124,7 +125,8 @@ void Graficador::rellenarRectangulo( SDL_Surface *screen,Punto punto,int w, int 
 }
 
 /**************************************************************************
-* Dibuja un lado horizontal
+* Dibuja un lado horizontal, para ello dibuja un rectangulo en la posicion
+*(x,y) de altura igual 1 y ancho igual width.
 ***************************************************************************/
 
 void Graficador::dibujarLadoHorizontal( SDL_Surface *screen,int x,int y,int width, Uint32 color)
@@ -139,7 +141,8 @@ void Graficador::dibujarLadoHorizontal( SDL_Surface *screen,int x,int y,int widt
 
 
 /**************************************************************************
-* Dibuja un lado vertical
+* Dibuja un lado vertical, para ello dibuja un rectangulo en posicion (x,y)
+* de ancho igual 1 y alto height.
 ***************************************************************************/
 
 void Graficador::dibujarLadoVertical( SDL_Surface *screen,int x, int y,int height, Uint32 color)
@@ -155,7 +158,8 @@ void Graficador::dibujarLadoVertical( SDL_Surface *screen,int x, int y,int heigh
 
 /*************************************************************************
 * Dibujar un rectangulo vacio en el punto (x,y) con ancho(w) , alto(h) y 
-* del color pasado como parametro                
+* del color pasado como parametro. Para ello se dibujan los lados verticales
+* y horizontales del mismo.                
 **************************************************************************/
 void Graficador::dibujarRectangulo( SDL_Surface *screen,Punto punto,int width, int height,Uint32 color)
 {
@@ -171,7 +175,7 @@ void Graficador::dibujarRectangulo( SDL_Surface *screen,Punto punto,int width, i
 
 
 /**************************************************************************************
- * Algoritmo para dibujar la mejor recta entre dos puntos
+ * Algoritmo de BresenHam para dibujar la mejor recta entre dos puntos
  **************************************************************************************/
 
 
@@ -182,7 +186,7 @@ int funcionBresenHam( SDL_Surface* screen,Punto A, Punto B,Uint32 color){
     int W2, H2;         //valores anteriores multiplicados por 2
     int temp;           //para ahorramos multiplicaciones en casa paso
     int x,y;            //punto de partida
-    int F;              //funci?n punto medio
+    int F;              //funcion punto medio
     int inc_x, inc_y;   //Valores que utilizaremos para incrementar la variable
     
 
@@ -285,8 +289,8 @@ int funcionBresenHam( SDL_Surface* screen,Punto A, Punto B,Uint32 color){
 
 
 /*************************************************************************
-* Dibujar una recta que una a los puntos a y b
-*                
+* Dibujar una recta que una a los puntos a y b, para lo cual aplica el 
+* algoritmo de BresenHam
 **************************************************************************/
 void Graficador::dibujarSegmento(SDL_Surface *screen,Punto a ,Punto b ,Uint32 color)
 {
@@ -297,8 +301,8 @@ void Graficador::dibujarSegmento(SDL_Surface *screen,Punto a ,Punto b ,Uint32 co
 
 
 /*************************************************************************
-* Dibujar un triangulo con los puntos a , b y c
-*                
+* Dibujar un triangulo con los puntos a , b y c. Para ello dibuja los 
+* segmentos entre (a,b) , (b,c)   y (c,a)            
 **************************************************************************/
 void Graficador::dibujarTriangulo(SDL_Surface *screen,Punto a ,Punto b , Punto c, Uint32 color)
 {
@@ -309,7 +313,7 @@ void Graficador::dibujarTriangulo(SDL_Surface *screen,Punto a ,Punto b , Punto c
 }
 
 /****************************************************************************
- * Intercambia las coordenadas de los puntos                                *				
+ * Intercambia las coordenadas (x,y) de los puntos                                			
  ****************************************************************************/
 void intercambiarPuntos(Punto* punto1 ,Punto* punto2)
 { 
@@ -345,8 +349,9 @@ void Graficador::rellenarTriangulo(SDL_Surface* screen , Punto* a, Punto*  b, Pu
 	
 	C.x = int(c->x)<<16;
 	C.y = int(c->y);
-
-	
+	//Se calcula las pendientes de las rectas que unen a los puntos 
+	//Si los puntos A y B estan a la  misma altura se hace toma a la pendiente 
+	//como el diferencial en x entre A y B
 	if (A.y < B.y)	{ dxab = int((B.x -A.x) /float(B.y -A.y)); }else{ dxab = (B.x -A.x); }
 	if (A.y < C.y)	{ dxac = int((C.x -A.x) /float(C.y -A.y)); }else{ dxac = 0; }
 	if (B.y < C.y)	{ dxbc = int((C.x -B.x) /float(C.y -B.y)); }else{ dxbc = 0; }
@@ -354,6 +359,12 @@ void Graficador::rellenarTriangulo(SDL_Surface* screen , Punto* a, Punto*  b, Pu
 	int x1	= A.x;
 	int x2	= x1;
 	int y	= A.y;
+	/* Si la pendiente del segmento que une a AB es mayor que la pendiente que
+	* une AC ,entonces del resultado de la interseccion de los segmentos con la 
+	* recta igual y=k ,se obtienen dos raices,las cuales las llamamos x1, x2, donde
+	* x2 resulta ser mayor que x1. Esto se debe a que x2 es igual a la interseccion
+	* de la recta de mayor pendiente con la recta y.
+	*/
 	if (dxab > dxac)
 	{
 		if (A.y == B.y) 
@@ -361,12 +372,18 @@ void Graficador::rellenarTriangulo(SDL_Surface* screen , Punto* a, Punto*  b, Pu
 			x1 += dxac;
 			x2 += dxab;
 		}
+		/*
+		*Se llena el triangulo que esta por debajo de la recta y(x)=B.y
+		*/
 		for (; y < B.y; ++y, x1+=dxac, x2+=dxab){
 			for (int x = (x1>>16); x < (x2>>16); ++x)
 			{
 				dibujarPixel(screen , x,y,color);
 			}
 		}
+		/*
+		*Se llena el triangulo que esta por encima de la recta y(x)=B.y
+		*/
 		for (; y < C.y; ++y, x1+=dxac, x2+=dxbc)
 		{
 			for (int x = (x1>>16); x < (x2>>16); ++x)
@@ -411,8 +428,10 @@ void Graficador::rellenarCirculo( SDL_Surface *screen,Punto punto, int radio ,Ui
 	int i=0;
 	for(index = -radio;index<=radio ;index++)
 	{
+		// calculo los puntos raiz1, raiz2 que son la interseccion del ciruclo con la recta y(x)= index
 		double raiz1 = (double)sqrt((double)(radio*radio - index*index));
 		double raiz2 = -raiz1;
+		//dibujo la recta que une a dichos puntos
 	    for(i=-raiz1;i<=raiz1;i++)	dibujarPixel(screen,i+x,index +y,color);
 	}
 
@@ -428,16 +447,20 @@ void Graficador::dibujarCirculo(SDL_Surface *screen, Punto punto, int radio ,Uin
 	int y = punto.y;
 
 	int index=0;
+	//Dibujo el circulo barriendo en forma horizontal
 	for( index = -radio;index<=radio ;index++)
 	 {
+		// calculo los puntos raiz1, raiz2 que son la interseccion del ciruclo con la recta y(x)= index
 		 double raiz1 = (double)sqrt((double)(radio*radio - index*index));
 		 double raiz2 = -raiz1;
 		 dibujarPixel(screen,x-raiz1,index +y,color);
 		 dibujarPixel(screen,x-raiz2,index +y,color);
 
 	 }
-		for( index = -radio;index<=radio ;index++)
+	 //Dibujo el circulo barriendo en forma vertical
+	for( index = -radio;index<=radio ;index++)
 	 {
+		// calculo los puntos raiz1, raiz2 que son la interseccion del ciruclo con la recta x(y)= index
 		 double raiz1 = (double)sqrt((double)(radio*radio - index*index));
 		 double raiz2 = -raiz1;
 		 dibujarPixel(screen,index +x,y-raiz1,color);
@@ -451,10 +474,11 @@ void Graficador::dibujarCirculo(SDL_Surface *screen, Punto punto, int radio ,Uin
 ***************************************************************************************/
 Uint32 getColor(SDL_Surface *screen,int r, int g, int  b)
 {
+	//Si algunos de los parametros es invalido r, g, b retorna -1
 	if((0>r)||(r>255)) return -1;
 	if((0>g)||(g>255)) return -1;
 	if((0>b)||(b>255)) return -1;
-	
+	//convierte tres bytes en un entero de 32, segun el formato de la pantalla
 	Uint32 color = SDL_MapRGB(screen->format,r,g,b);
 	
 	return color;
@@ -466,7 +490,7 @@ Uint32 getColor(SDL_Surface *screen,int r, int g, int  b)
 Uint32 getPixel(SDL_Surface *surface, int x, int y)
 {
     int bpp = surface->format->BytesPerPixel;
-//     Here p is the address to the pixel we want to retrieve
+
     Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
 
     switch (bpp)
@@ -487,12 +511,14 @@ Uint32 getPixel(SDL_Surface *surface, int x, int y)
         return *(Uint32 *)p;
 
     default:
-        return 0;       /* shouldn't happen, but avoids warnings */
+        return 0;       
     }
+	
 }
 
 /******************************************************************************
- * rellenar un circulo con una imagen 
+ * Rellena un circulo con una imagen en un punto que representa el centro de
+ * la imagen, y el radio es igual al menor de los lados de la imagen
  ******************************************************************************/
 void Graficador::rellenarCirculoConTextura(SDL_Surface* screen, SDL_Surface* imagen1, Punto punto, int radio)
 {
@@ -505,14 +531,15 @@ void Graficador::rellenarCirculoConTextura(SDL_Surface* screen, SDL_Surface* ima
 		{
 			int resul= j*j+i*i;
 			if(resul<=radio_2)
-			dibujarPixel(screen,punto.x + j,punto.y + i,getPixel(imagen1,j+centroX,i+centroY));
+				dibujarPixel(screen,punto.x + j,punto.y + i,getPixel(imagen1,j+centroX,i+centroY));
 			
 		}
 	}		
 }
 
 /******************************************************************************
- * dibuja un rectangulo con una imagen 
+ * Dibuja un rectangulo con una imagen, toma el punto pasado como argumento que 
+ * representa el vertice inferior izquierdo.
  ******************************************************************************/
 void Graficador::rellenarRectanguloConTextura(SDL_Surface* screen, SDL_Surface* imagen ,Punto punto)
 {
@@ -533,7 +560,9 @@ void Graficador::rellenarRectanguloConTextura(SDL_Surface* screen, SDL_Surface* 
 
 
 /******************************************************************************
- * dibuja un triangulo con una imagen 
+ * Dibuja un triangulo con una imagen , para ello se recibe una imagen cuyo 
+ * ancho y alto coincida con el ancho y alto de la imagen. Se hace una traslacion
+ * para hacer encagar el triangulo dentro del rectangulo que sea la imagen
  ******************************************************************************/
 void Graficador::rellenarTrianguloConTextura(SDL_Surface* screen ,SDL_Surface* imagen ,Punto* a, Punto*  b, Punto* c)
 {
@@ -618,8 +647,11 @@ void Graficador::rellenarTrianguloConTextura(SDL_Surface* screen ,SDL_Surface* i
 }
 
 
-
-SDL_Surface* Graficador::getImageResized(Textura* textura, int Width, int Height)
+/*
+* Dada una textura toma la imagen, se la contrae y expande a otra de tamaño 
+* ancho x alto.
+*/
+SDL_Surface* Graficador::getImageResized(Textura* textura, int ancho, int alto)
 {
 
 
@@ -634,21 +666,21 @@ SDL_Surface* Graficador::getImageResized(Textura* textura, int Width, int Height
 	amask = 0x00000000;
 	
 
-	if((Width==0)||(Height==0)) return NULL;
+	if((ancho==0)||(alto==0)) return NULL;
 	SDL_Surface* Surface = SDL_LoadBMP( textura->getPath().c_str());
-    SDL_Surface *_ret = SDL_CreateRGBSurface(Surface->flags, Width, Height, 32,
+    SDL_Surface *_ret = SDL_CreateRGBSurface(Surface->flags, ancho, alto, 32,
     rmask, gmask, bmask, amask);
 
     if((Surface == NULL) ||(_ret==NULL)) 
 	{
 
         fprintf(stderr, "resizeTextura failed: %s\n", SDL_GetError());
-        exit(1);
+        return NULL;
     } 
     
-   
-  double  _stretch_factor_x = (static_cast<double>(Width)  / static_cast<double>(Surface->w)),
-        _stretch_factor_y = (static_cast<double>(Height) / static_cast<double>(Surface->h));
+   if (Surface->w==0 ||Surface->w==0) return NULL;
+  double  _stretch_factor_x = (static_cast<double>(ancho)  / static_cast<double>(Surface->w)),
+        _stretch_factor_y = (static_cast<double>(alto) / static_cast<double>(Surface->h));
 
     for(Sint32 y = 0; y < Surface->h; y++)
         for(Sint32 x = 0; x < Surface->w; x++)
