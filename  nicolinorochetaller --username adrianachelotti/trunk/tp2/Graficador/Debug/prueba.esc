@@ -1,23 +1,34 @@
 <escenario>
-	<General resolucion="800" colorFondoFig="1200100" colorLinea="123200100" colorFondoEsc="237928930">
+	<General resolucion="600" colorFondoFig="255000000" colorLinea="123200100" colorFondoEsc="237928930">
 	</General>
 	<ListadoDeElementos>
-		<cuadrado id="dario" lado="50" idTextura="id1" colorFigura="111111000" colorLinea="000000123">
-				<posicion x="400" y="400"/>
+		<cuadrado id="dario" lado="100"  colorLinea="000000123">
+				<posicion x="10" y="400"/>
 		</cuadrado>
-		<circulo id="dario" radio="100"  idTextura="id2"  colorFigura="100100100" colorLnea="000000123">
-				<posicion x="400" y="400"/>
-		</circulo>
-		<triangulo id="adri" colorFigura="150255000" colorLinea="100000100" idTextura="id2" >
+		<rectangulo id="dario" base="320" altura="100" idTextura="id3" colorFigura="111111200" colorLinea="000000123">
+				<posicion x="600" y="400"/>
+		</rectangulo>
+		<circulo id="circualo2df" radio="100" idTextura="id4"  colorFigura="111111000" >
+				<posicion x="400" y="10"/>
+		</circulo> 
+		<triangulo id="tria" colorFigura="150000100" idTextura="id2"  colorLinea="100000100">
 				<ver1 x="100" y="100"/>
 				<ver2 x="100" y="200"/>
-				<ver3 x="600" y="300"/>
+				<ver3 x="300" y="300"/>
 		</triangulo>
+		<segmento id="segmento" colorLinea="100000123">
+				<inicio x="32" y="100"/>
+				<fin x="600" y="200"/>
+		</segmento>
 	</ListadoDeElementos>
 	<ListadoDeTexturas>
-		<textura id="id1" path="tex.bmp">
+		<textura id="id1" path="Dibujo.bmp">
 		</textura>
-		<textura id="id2" path="Dibujo.bmp">
+		<textura id="id2" path="ma.bmp">
+		</textura>
+		<textura id="id3" path="ferrari.bmp">
+		</textura>
+		<textura id="id4" path="diego.bmp">
 		</textura>
 
 	</ListadoDeTexturas>
