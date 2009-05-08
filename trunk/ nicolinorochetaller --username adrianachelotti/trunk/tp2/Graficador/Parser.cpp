@@ -174,6 +174,17 @@ int Parser::validaPuntosTriangulo(punto vertices[3]){
 }
 
 
+int isNumber(string s){
+
+	int intAux = atoi(s.c_str());
+	if(intAux < 0)
+		return 1; // no hace falta seguir procesando si ya el numero que parsea tiene un "-" adelante
+	char* charAux = itoa(intAux,charAux,10);
+	return strcmp(s.c_str(), charAux);
+
+
+}
+
 
 int Parser::validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,punto&v3) {
 	size_t found; 
