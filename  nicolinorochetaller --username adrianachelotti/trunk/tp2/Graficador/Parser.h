@@ -68,7 +68,7 @@ public:
 	int validaInicioFin(FILE* archivo,FILE* archivoErrores,punto&i,punto&f);
 	int validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,punto&v3);
 	int validaPuntosTriangulo(punto vertices[3]);
-	char* readTag(FILE* arch);
+	char* readTag(FILE* arch,FILE* archivoError);
 };
 
 #endif 

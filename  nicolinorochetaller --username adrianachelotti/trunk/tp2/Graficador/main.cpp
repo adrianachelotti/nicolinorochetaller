@@ -33,6 +33,31 @@ IMPRIME RECTANGULO
 *                
 **************************************************************************/
 
+//obtiene la otra componente... podria estar en escenario... TODO
+int getResoCompo(int reso1) {
+	int res2;
+	switch (reso1)
+	{
+		case 640:
+				cout<<"se retorna 480"<<endl;
+				res2 = 480;
+				break;
+		case 800:
+				cout<<"se retorna 600"<<endl;
+				res2 = 600;
+				break;
+		case 1024:
+				cout<<"se retorna 768"<<endl;
+				res2 = 768;
+				break;
+		case 1280:
+				cout<<"se retorna 768"<<endl;
+				res2 = 768;
+				break;
+	}
+	return res2;
+}
+
 int main(int argc, char *argv[]) {
     SDL_Surface *screen;
 	Parser* parser = new Parser();
@@ -90,8 +115,7 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 
-	//TODO que la reso el segundo int se coloque segun el primero....   
-    screen = SDL_SetVideoMode(escenario2->getResolucion(), 600, 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
+    screen = SDL_SetVideoMode(escenario2->getResolucion(), getResoCompo(escenario2->getResolucion()), 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
 	if ( screen == NULL )
 	{
 		fprintf(stderr, "Couldn't set 640x480x8 video mode: %s\n",SDL_GetError());
@@ -111,4 +135,3 @@ int main(int argc, char *argv[]) {
 	SDL_Quit( );
 	return 0;
 }
-
