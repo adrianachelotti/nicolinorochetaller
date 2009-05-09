@@ -76,6 +76,20 @@ using namespace std;
 #define WAR20 "ADVERTENCIA: - Una componente del Color de fondo de la figura no es valido. Se reemplazara por 111 -"
 #define WAR21 "ADVERTENCIA: - Una componente del Color de linea de la figura no es valido. Se reemplazara por 111 -"
 #define WAR22 "ADVERTENCIA: - Una componente del Color del Fondo del Escenario no es valido. Se reemplazara por 111 -"
+#define WAR23 "ADVERTENCIA: - Se repite la etiqueta id -"
+#define WAR24 "ADVERTENCIA: - Se repite la etiqueta lado -"
+#define WAR25 "ADVERTENCIA: - Se repite la etiqueta colorFigura -"
+#define WAR26 "ADVERTENCIA: - Se repite la etiqueta idTextura -"
+#define WAR27 "ADVERTENCIA: - Se repite la etiqueta colorLinea -"
+#define WAR28 "ADVERTENCIA: - Se repite la etiqueta radio -"
+#define WAR29 "ADVERTENCIA: - Se repite la etiqueta base -"
+#define WAR30 "ADVERTENCIA: - Se repite la etiqueta altura -"
+#define WAR31 "ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -"
+#define WAR32 "ADVERTENCIA: - Se repite la etiqueta resolucion -"
+#define WAR33 "ADVERTENCIA: - Se repite la etiqueta colorFondoFig -"
+#define WAR34 "ADVERTENCIA: - Se repite la etiqueta texturaFig -"
+#define WAR35 "ADVERTENCIA: - Se repite la etiqueta colorFondoEsc -"
+#define WAR36 "ADVERTENCIA: - Se repite la etiqueta texturaEsc -"
 
 
 #define COLOR_VACIO 0xFF000000
@@ -85,11 +99,10 @@ using namespace std;
 #define ID_MISS -3
 #define INVALID_FORMAT -4
 #define NO_CLOSE -5
-
 #define RESO_DEF 640
-
 #define LONGITUD_INICIAL 128
 #define INCREMENTO 10
+#define TAGSCONOCIDOS "id lado base altura radio colorFigura colorLinea idTextura path x y resolucion colorFondoFig texturaFig colorLinea colorFondoEsc texturaEsc"
 
 struct color {
 	int R;
