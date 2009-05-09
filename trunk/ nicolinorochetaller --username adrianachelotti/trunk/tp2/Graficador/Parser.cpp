@@ -15,6 +15,7 @@ Parser::Parser()
 
 }
 
+
 Parser::~Parser()
 {
 
@@ -40,32 +41,6 @@ int esConocido(const char* line){
 		return 1;
 	}
 }
-
-void invalidTextFound(char* line, FILE* er){
-	int lenght;
-	int i;
-	int subAux = 0;
-	string l (line);
-	lenght = l.length();
-	string aux;
-	i = 0;
-	while(i < lenght){
-		while(l[i] != ' '){
-			aux[subAux] = l[i];
-			subAux++;
-		}
-		if(esConocido(aux.c_str()) != 0){ // entra si no es conocido
-			imprimirError(line, er, WAR31);
-		}
-		i++;
-		subAux = 0;
-	}
-
-
-}
-
-
-
 
 Uint32 Parser::getColor(int r, int g, int b)
 {
@@ -340,8 +315,6 @@ int isNumber(string s){
     int val = s.compare(x);	
 	free(charAux);
 	return val;
-
-
 }
 
 
@@ -870,7 +843,7 @@ int Parser::validaCuadrado(char* tag,FILE* archivoErrores,Cuadrado* nCuadrado) {
 	s = (string) tag;
 
 	isRepeatedCuadrado(tag, archivoErrores);
-	invalidTextFound(tag, archivoErrores);
+
     found = s.find("id=\"");
     
 	if(found == string::npos){
@@ -1074,6 +1047,7 @@ int Parser::validaRectangulo(char* tag,FILE* archivoErrores,Rectangulo* nRectang
 	s = (string) tag;
 	int res = VALID_FORMAT;
 	isRepeatedRectangulo(tag, archivoErrores);
+
     found = s.find("id=\"");
 	if(found == string::npos){
         cout<<"Error en el id del Rectangulo"<<endl;
@@ -1280,7 +1254,6 @@ int Parser::validaSegmento(char* tag, FILE* archivoErrores,Segmento* nSegmento) 
 		return INVALID_FORMAT;
     } else {
 		// obtengo el ID
-		
 		begin = s.find("id=\"") + 4;
 		end = s.find("\"", begin + 1);
 		id = s.substr(begin, end - begin);
