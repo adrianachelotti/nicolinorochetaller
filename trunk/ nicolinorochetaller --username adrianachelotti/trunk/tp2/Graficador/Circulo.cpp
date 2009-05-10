@@ -52,16 +52,20 @@ Punto Circulo::getCentro()
 }
 
 
+
+
+
 int Circulo::dibujar()
 {
 	Graficador* graficador = Graficador::obtenerInstancia(); 
 	SDL_Surface* imagen = NULL;
 	Textura* text = NULL;
-
 	bool contieneTextura = false;
 
 	Escenario* escenario = Escenario::obtenerInstancia();
 
+	this->establecerColores();	
+	
 	text = escenario->getTextura(this->getIdTextura());
 
 	if (text!=NULL) contieneTextura = true;
@@ -70,6 +74,7 @@ int Circulo::dibujar()
 	{
 		imagen = SDL_LoadBMP(text->getPath().c_str());
 	}
+	printf("color del circulo : %d" , this->getColorFondo());
 
 	if(imagen==NULL)
 	{
@@ -127,6 +132,8 @@ int Circulo::dibujar()
 
 			anchoX = diametro;
 		}
+
+		printf("%d %d" , anchoX, altoY);
 
 		SDL_Surface* imagenResized  = graficador->getImageResized(text, anchoX,altoY);
 	

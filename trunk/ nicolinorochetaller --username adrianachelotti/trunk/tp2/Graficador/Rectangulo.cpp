@@ -70,7 +70,9 @@ int Rectangulo::dibujar()
 	bool contieneTextura = false;
 
 	Escenario* escenario = Escenario::obtenerInstancia();
-
+	
+	this->establecerColores();
+	
 	text = escenario->getTextura(this->getIdTextura());
 
 	if (text!=NULL) contieneTextura = true;
