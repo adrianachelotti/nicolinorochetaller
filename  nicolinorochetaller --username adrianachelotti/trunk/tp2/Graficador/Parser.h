@@ -53,6 +53,8 @@ using namespace std;
 #define ERR32 "ERROR: - No se encontro la coordenada y del Fin del Segmento -"
 #define ERR33 "ERROR: - Los vertices del triangulo se encuentran sobre una misma recta -"
 #define ERR34 "ERROR: - La linea no contiene un formato correcto de tag -"
+#define ERR35 "ERROR: - Ya existe una figura con el identificador dado. La misma no se dibujara -"
+#define ERR36 "ERROR: - Ya existe una textura con el identificador dado. La misma no se cargara -"
 
 #define WAR1 "ADVERTENCIA: - No se encontro el cierre del escenario -"
 #define WAR2 "ADVERTENCIA: - No se encontro la resolucion valida del escenario. Se colocara por defecto -"

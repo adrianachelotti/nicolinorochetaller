@@ -48,6 +48,8 @@ Punto Segmento::getPuntoFinal()
 int Segmento::dibujar()
 {
 	Graficador* graficador = Graficador::obtenerInstancia(); 
+
+	if(this->getColorLinea()==COLOR_VACIO) this->setColorLinea(Escenario::getColorLinea());
 	if(this->getColorLinea()!=COLOR_VACIO)
 	{
 		graficador->dibujarSegmento(Escenario::screen,this->puntoInicio,this->puntoFinal,this->getColorLinea());

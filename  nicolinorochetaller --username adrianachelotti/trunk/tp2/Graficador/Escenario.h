@@ -4,6 +4,8 @@
 #if !defined ESCENARIO_H
 #define ESCENARIO_H
 
+#define RES_ERROR_FIGURA_EXISTENTE 3
+#define RES_ERROR_TEXTURA_EXISTENTE 2
 #define RES_ERROR_CARGANDO_TEXTURA 1
 #define RES_OK 0
 
@@ -91,13 +93,16 @@ public:
 	list<Textura*> getListadoDeTexturas();
 
 	/*Se agrega una textura */
-	void addTextura(Textura* textura);
+	int addTextura(Textura* textura);
 
 	/*Se agrega una Figura */
-	void addFigura(Figura* figura);
+	int addFigura(Figura* figura);
 
 	/*Retorna la textura que poseea el id pasado como parametro */
     Textura* getTextura(string idTextura);
+
+	/*Retorna la figura que poseea el id pasado como parametro */
+	Figura* getFigura(string idFigura);
 
 	/*Metodo encargado de dibujar el escenario */
 	int dibujar();

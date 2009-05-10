@@ -41,6 +41,8 @@ public:
 	/*Metodo encargado de dibujar el circulo */
 	virtual int dibujar();
 
+	
+
 };
 
 #endif

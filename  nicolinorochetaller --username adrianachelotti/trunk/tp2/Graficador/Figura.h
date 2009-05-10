@@ -56,6 +56,8 @@ public:
 	/*Retorna el color de linea de la figura */
 	Uint32 getColorLinea();
 
+	void establecerColores();
+
 	/*Setea el color de fondo de la figura */
 	void setColorFondo(Uint32 colorFondo);
 	

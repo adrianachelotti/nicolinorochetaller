@@ -127,20 +127,36 @@ list<Textura*> Escenario::getListadoDeTexturas()
 	return this->listadoDeTexturas;
 }
 
-void Escenario::addTextura(Textura* textura)
+int Escenario::addTextura(Textura* textura)
 {
-	list<Textura*> lista;
-	lista = this->getListadoDeTexturas();
-	lista.push_front(textura);
-	this->setListadoDeTexturas(lista);
+	if(this->getTextura(textura->getId()) == NULL)
+	{
+		list<Textura*> lista;
+		lista = this->getListadoDeTexturas();
+		lista.push_front(textura);
+		this->setListadoDeTexturas(lista);
+		return RES_OK;
+	}
+	else
+	{
+		return RES_ERROR_TEXTURA_EXISTENTE;
+	}
 }
 
-void Escenario::addFigura(Figura* figura)
+int Escenario::addFigura(Figura* figura)
 {
-	list<Figura*> lista;
-	lista = this->getListadoDeFiguras();
-	lista.push_front(figura);
-	this->setListadoDeFiguras(lista);
+	if(this->getFigura(figura->getId()) == NULL)
+	{
+		list<Figura*> lista;
+		lista = this->getListadoDeFiguras();
+		lista.push_front(figura);
+		this->setListadoDeFiguras(lista);
+		return RES_OK;
+	}
+	else
+	{
+		return RES_ERROR_FIGURA_EXISTENTE;
+	}
 }
 
 
@@ -171,6 +187,35 @@ Textura* Escenario::getTextura(string idTextura)
 	if(encontrado) return texturaActual;
 	return NULL;
 }
+
+Figura* Escenario::getFigura(string idFigura)
+{
+	bool encontrado = false;
+
+	Figura* figuraActual = NULL;
+
+	list<Figura*>::iterator it;
+ 
+    it = this->getListadoDeFiguras().begin();
+    
+	while( (it != this->getListadoDeFiguras().end())&&(!encontrado))
+	{
+      figuraActual = *it;
+
+	  if(idFigura.compare(figuraActual->getId()) == 0)
+	  {
+		encontrado= true;
+	  }
+	  else
+	  {
+	  	  it++;
+	  }
+    }
+	if(encontrado) return figuraActual;
+	return NULL;
+}
+
+
 
 int Escenario::dibujar()
 {
