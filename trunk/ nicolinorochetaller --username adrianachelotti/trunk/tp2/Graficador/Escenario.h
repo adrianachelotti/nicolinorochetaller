@@ -25,6 +25,7 @@ private:
 	Uint32 colorFondoEscenario;
 	list<Figura*> listadoDeFiguras;
 	list<Textura*> listadoDeTexturas;
+	FILE* archivoErrores;
 
 	/*Constructor	 */
 	Escenario();
@@ -92,6 +93,12 @@ public:
 	/*Retorna las texturas del escenario */
 	list<Textura*> getListadoDeTexturas();
 
+	/*Retorna el archivo de errores */
+	FILE* getArchivoErrores();
+
+	/*Setea el archivo de errores */
+	void setArchivoErrores(FILE* archivo);
+
 	/*Se agrega una textura */
 	int addTextura(Textura* textura);
 
@@ -103,6 +110,9 @@ public:
 
 	/*Retorna la figura que poseea el id pasado como parametro */
 	Figura* getFigura(string idFigura);
+
+	/*Metodo encargado de imprimir los errores al dibujar en el archivo de errores*/
+	void imprimirError(string linea,FILE* archivoErrores,string err);
 
 	/*Metodo encargado de dibujar el escenario */
 	int dibujar();

@@ -70,13 +70,15 @@ int main(int argc, char *argv[]) {
 	char nombreEr[100] = "Debug/errores.err";
 
 	archivoErrores = fopen(nombreEr,"w");
-	if (archivoErrores == NULL) {
+	if (archivoErrores == NULL)
+	{
 		cout<<"No se pudo abrir el archivo de errores"<<endl;
 		exit(1);
 	}
 
 	archivo = fopen(nombre,"r");
-	if (archivo == NULL) {
+	if (archivo == NULL)
+	{
 		cout<<"No se pudo abrir el archivo"<<endl;
 		fprintf(archivoErrores,"No se pudo encontrar el archivo de datos\n");
 		exit(1);
@@ -84,19 +86,18 @@ int main(int argc, char *argv[]) {
 	
 	resultado = parser->validar(archivo,archivoErrores);	
 	
-	fclose(archivo);
-	fclose(archivoErrores);
-
 	//Dibujo del escenario.
-	Escenario* escenario2 = Escenario::obtenerInstancia();
-    
+	Escenario* escenario = Escenario::obtenerInstancia();
+
+    escenario->setArchivoErrores(archivoErrores);
+
 	if( SDL_Init(SDL_INIT_VIDEO) < 0 ) 
 	{
 		fprintf(stderr,"Couldn't initialize SDL: %s\n", SDL_GetError());
 		exit(1);
 	}
 
-    screen = SDL_SetVideoMode(escenario2->getResolucion(), getResoCompo(escenario2->getResolucion()), 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
+    screen = SDL_SetVideoMode(escenario->getResolucion(), getResoCompo(escenario->getResolucion()), 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
 	if ( screen == NULL )
 	{
 		fprintf(stderr, "Couldn't set 640x480x8 video mode: %s\n",SDL_GetError());
@@ -108,7 +109,10 @@ int main(int argc, char *argv[]) {
 
 	Graficador* graficador = Graficador::obtenerInstancia();
 
-	escenario2->dibujar();
+	escenario->dibujar();
+
+	fclose(archivo);
+	fclose(archivoErrores);
 
 	SDL_Flip(screen);
 	getchar();
