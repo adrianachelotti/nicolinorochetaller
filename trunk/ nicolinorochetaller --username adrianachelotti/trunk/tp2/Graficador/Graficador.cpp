@@ -522,16 +522,18 @@ Uint32 getPixel(SDL_Surface *surface, int x, int y)
  ******************************************************************************/
 void Graficador::rellenarCirculoConTextura(SDL_Surface* screen, SDL_Surface* imagen1, Punto punto, int radio)
 {
-	int centroX = imagen1->w/2-1;
-	int centroY = imagen1->h/2-1;
-	int radio_2 = radio*radio;
-	for(int i=-radio;i<=radio;i++)
+	int centroX = (imagen1->w/2);
+	int centroY = (imagen1->h/2);
+	long int radio_2 = radio*radio;
+	for(int i=-radio;i<radio;i++)
 	{
-		for(int j=-radio; j<=radio;j++)
+		for(int j=-radio; j<radio;j++)
 		{
-			int resul= j*j+i*i;
+			long int resul= j*j+i*i;
 			if(resul<=radio_2)
+			{
 				dibujarPixel(screen,punto.x + j,punto.y + i,getPixel(imagen1,j+centroX,i+centroY));
+			}
 			
 		}
 	}		
