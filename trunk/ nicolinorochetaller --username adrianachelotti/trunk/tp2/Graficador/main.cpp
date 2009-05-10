@@ -1,4 +1,3 @@
-
 /****************************************************************************
 IMPRIME RECTANGULO
 ******************************************************************************/
@@ -61,24 +60,6 @@ int getResoCompo(int reso1) {
 int main(int argc, char *argv[]) {
     SDL_Surface *screen;
 	Parser* parser = new Parser();
- 	Punto a1, b1,c1,d1,e1 ,f1;
-	Punto vertices[3] ; 
-	a1.x=1;
-	a1.y=100;
-	b1.x=345;
-	b1.y=230;
-	c1.x= 400;
-	c1.y= 350;
-	//para la recta
-	e1.x= 12;
-	e1.y= 420;
-	d1.x= 190;
-	d1.y= 350;
-	f1.x = 50;
-	f1.y = 100;
-	vertices[0] = d1;
-	vertices[1] = e1;
-	vertices[2] = f1;
 
 	//Lectura de archivo y parser.
 	FILE *archivo;
@@ -126,7 +107,6 @@ int main(int argc, char *argv[]) {
 	Escenario::screen=screen;
 
 	Graficador* graficador = Graficador::obtenerInstancia();
-
 
 	escenario2->dibujar();
 
