@@ -298,22 +298,16 @@ void isRepeatedSegmento(char* line, FILE* aError){
 
 }
 
-
-
-
 int isNumber(string s){
-	
 	char* charAux = (char*)malloc(sizeof(char) * s.length());
-    
 	int intAux = atoi(s.c_str());
     if(intAux < 1)
             return 1; // no hace falta seguir procesando si ya el numero que parsea tiene un "-" adelante    
 	
 	strcpy(charAux, itoa(intAux, charAux, 10));
 	string x (charAux);	
-	
     int val = s.compare(x);	
-	free(charAux);
+//	free(charAux);
 	return val;
 }
 
