@@ -2,19 +2,19 @@
 <General resolucion="800"  colorFondoFig="255000000" colorLinea="000255000" colorFondoEsc="000000255">
 	</General>
 	<ListadoDeElementos>
-		<circulo id="id1" radio="85" >
+		<circulo id="id1" radio="85" idTextura="id2">
 			<posicion x="100" y="300"/>
 		</circulo> 
-		<cuadrado id="id1" lado="300" idTextura="id5"  colorFigura="411111000" >
-			<posicion x="720" y="720"/>
-		</cuadrado> 
-	</ListadoDeElementos>
+		<circulo id="bbid2" radio="85" idTextura="id2">
+			<posicion x="200" y="300"/>
+		</circulo> 
+		</ListadoDeElementos>
 	<ListadoDeTexturas>
 		<textura id="id1" path="Dibujo.bmp">
 		</textura>
-		<textura id="id1" path="ma.bmp">
+		<textura id="id2" path="mam.bmp">
 		</textura>
-		<textura id="id5" path="ford.bmp">
+		<textura id="id5" path="forda.bmp">
 		</textura>
 		<textura id="id3" path="ferrari.bmp">
 		</textura>

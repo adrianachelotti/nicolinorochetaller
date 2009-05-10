@@ -42,13 +42,16 @@ Graficador* Graficador::obtenerInstancia()
 	if ((x > 0 && x < screen->w) && (y > 0 && y < screen->h))
 	{
 	
-	  if ( SDL_MUSTLOCK(screen) ) { 
-		  if ( SDL_LockSurface(screen) < 0 ) { 
+	  if ( SDL_MUSTLOCK(screen))
+	  { 
+		  if ( SDL_LockSurface(screen) < 0 ) 
+		  { 
 			  return; 
 		  } 
 	  } 
 	 	  
-	  switch (screen->format->BytesPerPixel) { 
+	  switch (screen->format->BytesPerPixel)
+	  { 
 	  case 1: 
 		  { 
 			  /* Assuming 8-bpp */ 
@@ -85,7 +88,8 @@ Graficador* Graficador::obtenerInstancia()
 		  break; 
 	  } 
 
-	  if ( SDL_MUSTLOCK(screen) ) { 
+	  if ( SDL_MUSTLOCK(screen) ) 
+	  { 
 		  SDL_UnlockSurface(screen); 
 	  } 
 	 
@@ -115,13 +119,9 @@ void Graficador::rellenarRectangulo( SDL_Surface *screen,Punto punto,int w, int 
 	   for (i=0;i<w;i++)
 	   {
 			dibujarPixel(screen,x+i,y-j,color);
-	
 	   }
    }
-   
-   
-  
-   
+      
 }
 
 /**************************************************************************
@@ -178,10 +178,8 @@ void Graficador::dibujarRectangulo( SDL_Surface *screen,Punto punto,int width, i
  * Algoritmo de BresenHam para dibujar la mejor recta entre dos puntos
  **************************************************************************************/
 
-
-int funcionBresenHam( SDL_Surface* screen,Punto A, Punto B,Uint32 color){
-
-    
+int funcionBresenHam( SDL_Surface* screen,Punto A, Punto B,Uint32 color)
+{
     int W, H;           //diferencia entre las componentes x e y de cada punto y su valor
     int W2, H2;         //valores anteriores multiplicados por 2
     int temp;           //para ahorramos multiplicaciones en casa paso
@@ -189,24 +187,23 @@ int funcionBresenHam( SDL_Surface* screen,Punto A, Punto B,Uint32 color){
     int F;              //funcion punto medio
     int inc_x, inc_y;   //Valores que utilizaremos para incrementar la variable
     
-
     
-    //comenzamos el algoritmo
-   
     W = B.x - A.x;
     H = B.y - A.y;   
    
     x = A.x;
     y = A.y;
     
-    if (W < 0) {        //línea a la derecha
+    if (W < 0)        //línea a la derecha
+	{
         inc_x = -1;
         //usamos el valor absoluto
         W = -W;
     }
     else inc_x = 1;     //línea a la izquierda
     
-    if (H < 0){         //línea hacia arriba
+    if (H < 0)         //línea hacia arriba
+	{
         inc_y = -1;
         //usamos el valor absoluto
         H = -H;    
@@ -217,75 +214,72 @@ int funcionBresenHam( SDL_Surface* screen,Punto A, Punto B,Uint32 color){
     H2 = H << 1;
 
     
-    if (SDL_MUSTLOCK (screen) )
+    if (SDL_MUSTLOCK (screen))
         SDL_LockSurface (screen);  
-        
-        
-    if (W == 0){             //Recta vertical
-        while (y!= B.y){ 
+             
+    if (W == 0)             //Recta vertical
+	{
+        while (y!= B.y)
+		{ 
             dibujarPixel(screen, A.x, y, color);
             y += inc_y;
         }    
             
     }//Fin recta vertical
         
-    else if (H == 0){        //Recta horizontal
-        while(x != B.x){
+    else if (H == 0)        //Recta horizontal
+	{
+        while(x != B.x)
+		{
             dibujarPixel(screen, x, A.y, color);
             x+=inc_x;
         }    
     }//fin recta horizontal
     
     
-   else if (  W > H ){       
-       
+   else if ( W > H )
+   {       
         F = H2 - W;
         temp = (W-H)<<1;
         
-        while (x != B.x){
+        while (x != B.x)
+		{
             dibujarPixel(screen, x, y, color);
             
-            if (F<0)
-                F += H2;
-            else{
+            if (F<0) F += H2;
+            else
+			{
                 y += inc_y;
                 F -= temp;
             }    
             x += inc_x;
         }
 	}
-	
-	else{  //H > W 
+	else   //H > W 
+	{
     
         F = W2 - H;
-     temp =(H-W)<<1;
+		temp =(H-W)<<1;
      
-     while (y != B.y){
+		while (y != B.y)
+		{
             dibujarPixel(screen, x, y, color);
-            if (F<0)
-                F += W2;
-            else{
+            if (F<0) F += W2;
+            else
+			{
                 x += inc_x;
                 F -= temp;
             }    
             y += inc_y;
-     }    
-     
+		}    
 	}    
 
-    if (SDL_MUSTLOCK (screen) )
-        SDL_UnlockSurface (screen);
+    if (SDL_MUSTLOCK (screen)) SDL_UnlockSurface (screen);
         
     //SDL_UpdateRect(screen, 0,0,0,0);
   
     return 1;
 }
-
-
-
-
-
-
 
 
 /*************************************************************************
@@ -435,7 +429,6 @@ void Graficador::rellenarCirculo( SDL_Surface *screen,Punto punto, int radio ,Ui
 	    for(i=-raiz1;i<=raiz1;i++)	dibujarPixel(screen,i+x,index +y,color);
 	}
 
-
 }
 
 /**************************************************************************************
@@ -548,15 +541,11 @@ void Graficador::rellenarRectanguloConTextura(SDL_Surface* screen, SDL_Surface* 
 	
 	for(int i=0;i<imagen->h;i++)
 	{
-			for(int j=0; j<imagen->w;j++)
-			{
-				
-				
-				dibujarPixel(screen,punto.x+j,punto.y+i-imagen->h,getPixel(imagen,j,i));
-				
-			}
+		for(int j=0; j<imagen->w;j++)
+		{
+			dibujarPixel(screen,punto.x+j,punto.y+i-imagen->h,getPixel(imagen,j,i));
+		}
 	}
-
 
 }
 
@@ -655,8 +644,6 @@ void Graficador::rellenarTrianguloConTextura(SDL_Surface* screen ,SDL_Surface* i
 */
 SDL_Surface* Graficador::getImageResized(Textura* textura, int ancho, int alto)
 {
-
-
 	int baseTextura=0;
 	int alturaTextura=0;
 	double escalaX=0;
@@ -680,9 +667,9 @@ SDL_Surface* Graficador::getImageResized(Textura* textura, int ancho, int alto)
         return NULL;
     } 
     
-   if (Surface->w==0 ||Surface->w==0) return NULL;
-  double  _stretch_factor_x = (static_cast<double>(ancho)  / static_cast<double>(Surface->w)),
-        _stretch_factor_y = (static_cast<double>(alto) / static_cast<double>(Surface->h));
+	if (Surface->w==0 ||Surface->w==0) return NULL;
+	double  _stretch_factor_x = (static_cast<double>(ancho)  / static_cast<double>(Surface->w)),
+		    _stretch_factor_y = (static_cast<double>(alto) / static_cast<double>(Surface->h));
 
     for(Sint32 y = 0; y < Surface->h; y++)
         for(Sint32 x = 0; x < Surface->w; x++)

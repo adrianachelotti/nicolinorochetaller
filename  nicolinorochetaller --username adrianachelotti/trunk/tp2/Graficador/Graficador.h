@@ -19,6 +19,11 @@
 #define SCREEN_HEIGHT 240
 #define SCREEN_DEPTH 8
 
+#define MSG_CTX_FIGURA "Figura con identificador: "
+#define MSG_CTX_TEXTURA "Textura con identificador: "
+#define GRAF_WARN1 "ADVERTENCA: - No existe la textura con identificador: "
+#define GRAF_WARN2 "ADVERTENCA: - No pudo cargarse la textura con identificador: "
+
 
 class Graficador  
 {

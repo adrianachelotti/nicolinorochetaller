@@ -52,9 +52,6 @@ Punto Circulo::getCentro()
 }
 
 
-
-
-
 int Circulo::dibujar()
 {
 	Graficador* graficador = Graficador::obtenerInstancia(); 
@@ -66,16 +63,39 @@ int Circulo::dibujar()
 
 	this->establecerColores();	
 	
-	text = escenario->getTextura(this->getIdTextura());
+	if(!this->getIdTextura().empty())
+	{
+		text = escenario->getTextura(this->getIdTextura());
+		if(text==NULL)
+		{
+			string mensajeError = GRAF_WARN1;
+			mensajeError+= this->getIdTextura();
+			mensajeError+= " - ";
 
-	if (text!=NULL) contieneTextura = true;
+			string contextoError = MSG_CTX_FIGURA;
+			contextoError+= this->getId();
+	
+			escenario->imprimirError(contextoError,escenario->getArchivoErrores(),mensajeError);
+		}
+		else contieneTextura = true;
+	}
 
 	if(contieneTextura)
 	{
 		imagen = SDL_LoadBMP(text->getPath().c_str());
-	}
-	printf("color del circulo : %d" , this->getColorFondo());
+		
+		if(imagen == NULL)
+		{
+			string mensajeError = GRAF_WARN2;
+			mensajeError+= this->getIdTextura();
+			mensajeError+= " - ";
 
+			string contextoError = MSG_CTX_FIGURA;
+			contextoError+= this->getId();
+	
+			escenario->imprimirError(contextoError,escenario->getArchivoErrores(),mensajeError);
+		}
+	}
 	if(imagen==NULL)
 	{
 
@@ -148,3 +168,4 @@ int Circulo::dibujar()
 
 	return RES_OK;
 }
+

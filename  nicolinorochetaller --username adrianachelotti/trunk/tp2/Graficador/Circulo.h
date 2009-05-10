@@ -14,6 +14,7 @@ private:
 	Punto posicionCentro;
 
 public:
+
 	/*Constructor sin parametros */
 	Circulo();
 

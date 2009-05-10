@@ -127,13 +127,24 @@ list<Textura*> Escenario::getListadoDeTexturas()
 	return this->listadoDeTexturas;
 }
 
+
+FILE* Escenario::getArchivoErrores()
+{
+	return this->archivoErrores;
+}
+
+void Escenario::setArchivoErrores(FILE* archivo)
+{
+	this->archivoErrores = archivo;
+}
+
 int Escenario::addTextura(Textura* textura)
 {
 	if(this->getTextura(textura->getId()) == NULL)
 	{
 		list<Textura*> lista;
 		lista = this->getListadoDeTexturas();
-		lista.push_front(textura);
+		lista.push_back(textura);
 		this->setListadoDeTexturas(lista);
 		return RES_OK;
 	}
@@ -145,18 +156,19 @@ int Escenario::addTextura(Textura* textura)
 
 int Escenario::addFigura(Figura* figura)
 {
-	if(this->getFigura(figura->getId()) == NULL)
-	{
+	//if(this->getFigura(figura->getId()) == NULL)
+	//{
 		list<Figura*> lista;
 		lista = this->getListadoDeFiguras();
-		lista.push_front(figura);
+		lista.push_back(figura);
 		this->setListadoDeFiguras(lista);
 		return RES_OK;
-	}
+	/*}
 	else
 	{
 		return RES_ERROR_FIGURA_EXISTENTE;
 	}
+	*/
 }
 
 
@@ -175,7 +187,7 @@ Textura* Escenario::getTextura(string idTextura)
 	{
       texturaActual = *it;
 
-      if(idTextura.compare(texturaActual->getId()) == 0)
+      if(idTextura.compare(texturaActual->getId().c_str()) == 0)
 	  {
 		encontrado= true;
 	  }
@@ -202,7 +214,7 @@ Figura* Escenario::getFigura(string idFigura)
 	{
       figuraActual = *it;
 
-	  if(idFigura.compare(figuraActual->getId()) == 0)
+	  if(idFigura.compare(figuraActual->getId().c_str()) == 0)
 	  {
 		encontrado= true;
 	  }
@@ -215,7 +227,14 @@ Figura* Escenario::getFigura(string idFigura)
 	return NULL;
 }
 
-
+void Escenario::imprimirError(string linea,FILE* archivoErrores,string err)
+{
+	fprintf(archivoErrores,"Dibujando: ");
+	if (!linea.empty()) fprintf(archivoErrores,linea.c_str());
+	fprintf(archivoErrores,"\n");
+	fprintf(archivoErrores,err.c_str());
+	fprintf(archivoErrores,"\n\n");
+}
 
 int Escenario::dibujar()
 {
@@ -229,7 +248,8 @@ int Escenario::dibujar()
 	{
       figuraActual = *it;
 	  figuraActual->dibujar();	
-      it++;
+	  string cadena = figuraActual->getId();
+	  it++;
     }
 
 	return RES_OK;

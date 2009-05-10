@@ -42,7 +42,7 @@ public:
 	void setId(string id);
 	
 	/*Retorna el identificador de la figura */
-	string getId();
+	 string getId();
 
 	/*Setea el identificador de la textura de la figura */
 	void setIdTextura(string idTextura);
