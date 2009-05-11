@@ -12,7 +12,7 @@
 
 Parser::Parser()
 {
-
+	this->nroLinea = 0;
 }
 
 
@@ -21,11 +21,35 @@ Parser::~Parser()
 
 }
 
-
-void imprimirError(char* linea,FILE* archivoErrores,char* err)
+void Parser::setNroLinea(int linea)
 {
-	fprintf(archivoErrores,"Linea: ");
-	if (linea!=NULL) fprintf(archivoErrores,linea);
+	this->nroLinea = linea;
+}
+
+int Parser::getNroLinea()
+{
+	return(this->nroLinea);
+}
+
+void Parser::plusLinea(){
+	int aux = 0;
+	aux = getNroLinea();
+	aux++;
+	setNroLinea(aux);
+}
+
+void Parser::imprimirError(char* linea,FILE* archivoErrores,char* err)
+{
+	fprintf(archivoErrores,"Linea ");
+	if (linea!=NULL) 
+	{
+		char* a = (char*) malloc (sizeof(char) * 3); 
+		itoa(getNroLinea(),a,10);
+		fprintf(archivoErrores,a);
+		fprintf(archivoErrores," - ");
+		fprintf(archivoErrores,linea);
+		free(a);
+	}
 	else fprintf(archivoErrores,"linea no encontrada");
 	fprintf(archivoErrores,"\n");
 	fprintf(archivoErrores,err);
@@ -55,7 +79,7 @@ Uint32 Parser::getColor(int r, int g, int b)
 	return color;
 }
 
-void isRepeatedCuadrado(char* line, FILE* aError)
+void Parser::isRepeatedCuadrado(char* line, FILE* aError)
 {
 	// primero para la ID
 	size_t found1; 
@@ -109,7 +133,7 @@ void isRepeatedCuadrado(char* line, FILE* aError)
 
 }
 
-void isRepeatedGeneral(char* line, FILE* aError)
+void Parser::isRepeatedGeneral(char* line, FILE* aError)
 {
 	// primero para la ID
 	size_t found1; 
@@ -173,7 +197,7 @@ void isRepeatedGeneral(char* line, FILE* aError)
 
 }
 
-void isRepeatedCirculo(char* line, FILE* aError)
+void Parser::isRepeatedCirculo(char* line, FILE* aError)
 {
 	// primero para la ID
 	size_t found1; 
@@ -227,7 +251,7 @@ void isRepeatedCirculo(char* line, FILE* aError)
 
 }
 
-void isRepeatedRectangulo(char* line, FILE* aError)
+void Parser::isRepeatedRectangulo(char* line, FILE* aError)
 {
 	// primero para la ID
 	size_t found1; 
@@ -291,7 +315,7 @@ void isRepeatedRectangulo(char* line, FILE* aError)
 }
 
 
-void isRepeatedTriangulo(char* line, FILE* aError)
+void Parser::isRepeatedTriangulo(char* line, FILE* aError)
 {
 	// primero para la ID
 	size_t found1; 
@@ -336,7 +360,7 @@ void isRepeatedTriangulo(char* line, FILE* aError)
 
 }
 
-void isRepeatedSegmento(char* line, FILE* aError)
+void Parser::isRepeatedSegmento(char* line, FILE* aError)
 {
 	// primero para la ID
 	size_t found1; 
@@ -452,7 +476,7 @@ char* Parser::readTag(FILE* arch,FILE* archivoError)
 				szCadena[iAllocUsed]='>';		
 				szCadena[iAllocUsed+1]='\0';
 			}
-			
+			plusLinea();
 			imprimirError(szCadena,archivoError,ERR34);
 			return "ENTER";
 		}
@@ -535,7 +559,8 @@ int Parser::validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,
 	{
 		tag = readTag(archivo,archivoErrores);
 	}
-	
+	plusLinea();
+
 	if (tag!=NULL) ver1 = (string) tag;
 	found = ver1.find("ver1 ");
 	if(found == string::npos)
@@ -604,6 +629,7 @@ int Parser::validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,
 	{
 		tag = readTag(archivo,archivoErrores);
 	}
+	plusLinea();
 
 	if (tag!=NULL) ver2 = (string) tag;
 	found = ver2.find("ver2 ");
@@ -671,6 +697,7 @@ int Parser::validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,
 	{
 		tag = readTag(archivo,archivoErrores);
 	}
+	plusLinea();
 
 	if (tag!=NULL) ver3 = (string) tag;
 	found = ver3.find("ver3 ");
@@ -767,7 +794,8 @@ int Parser::validaInicioFin(FILE* archivo,FILE* archivoErrores,punto&i, punto&f)
 	{
 		tag = readTag(archivo,archivoErrores);
 	}
-	
+	plusLinea();
+
 	if (tag!=NULL) inicio = (string) tag;
 	found = inicio.find("<inicio ");
 	if(found == string::npos)
@@ -834,6 +862,7 @@ int Parser::validaInicioFin(FILE* archivo,FILE* archivoErrores,punto&i, punto&f)
 	{
 		tag = readTag(archivo,archivoErrores);
 	}
+	plusLinea();
 
 	if (tag!=NULL) fin = (string) tag;
 	found = fin.find("<fin ");
@@ -900,6 +929,7 @@ int Parser::validaPos(FILE* archivo,FILE* archivoErrores,punto&p)
 	{
 		tag = readTag(archivo,archivoErrores);
 	}
+	plusLinea();
 	if (tag!=NULL) pos = (string) tag;
 	
 	found = pos.find("posicion ");
@@ -1680,6 +1710,7 @@ int Parser::validarGeneralCierre(FILE* archivo,FILE* archivoErrores)
 	{
 		tag = readTag(archivo,archivoErrores);
 	}
+	plusLinea();
 	if (tag!=NULL) fin = (string) tag;
 	
 	found = fin.find("</General>");
@@ -1710,7 +1741,8 @@ int Parser::validaCirculoCierre(FILE* archivo,FILE* archivoErrores)
 	{
 		tag = readTag(archivo,archivoErrores);
 	}
-	
+	plusLinea();
+
 	if (tag!=NULL) fin = (string) tag;
 	found = fin.find("</circulo>");
 	if (found == string::npos)
@@ -1740,7 +1772,8 @@ int Parser::validaCuadradoCierre(FILE* archivo,FILE* archivoErrores)
 	{
 		tag = readTag(archivo,archivoErrores);
 	}
-	
+	plusLinea();
+
 	if (tag!=NULL) fin = (string) tag;
 	found = fin.find("</cuadrado>");
 	if (found == string::npos)
@@ -1769,7 +1802,8 @@ int Parser::validaRectanguloCierre(FILE* archivo,FILE* archivoErrores)
 	{
 		tag = readTag(archivo,archivoErrores);
 	}
-	
+	plusLinea();
+
 	if (tag!=NULL) fin = (string) tag;
 	found = fin.find("</rectangulo>");
 	if (found == string::npos)
@@ -1798,7 +1832,8 @@ int Parser::validaSegmentoCierre(FILE* archivo,FILE* archivoErrores)
 	{
 		tag = readTag(archivo,archivoErrores);
 	}
-	
+	plusLinea();
+
 	if (tag!=NULL) fin = (string) tag;
 	found = fin.find("</segmento>");
 	if (found == string::npos)
@@ -1827,7 +1862,8 @@ int Parser::validaTrianguloCierre(FILE* archivo,FILE* archivoErrores)
 	{
 		tag = readTag(archivo,archivoErrores);
 	}
-	
+	plusLinea();
+
 	if (tag!=NULL) fin = (string) tag;
 	found = fin.find("</triangulo>");
 	if (found == string::npos)
@@ -2063,6 +2099,7 @@ int Parser::validaTextura(char* tag,FILE* archivo, FILE* archivoErrores)
 	{
 		tag = readTag(archivo,archivoErrores);
 	}
+	plusLinea();
 	if (tag != NULL) 
 	{
 		fin = (string) tag;
@@ -2116,6 +2153,7 @@ int Parser::validaTagPadre(char* tag, FILE* archivo, FILE* archivoErrores)
 			{
 				tag = readTag(archivo,archivoErrores);
 			}
+			plusLinea();
 			if (tag != NULL) fin = (string)tag;
 
 			if ((tag != NULL) && ( (fin.find("</ListadoDeElementos>")!=0)&&(fin.find("<ListadoDeTexturas>")!= 0)&&(fin.find("<General>")!= 0)&&(fin.find("</escenario>")!= 0) ) ) 
@@ -2157,6 +2195,7 @@ int Parser::validaTagPadre(char* tag, FILE* archivo, FILE* archivoErrores)
 			{
 				tag = readTag(archivo,archivoErrores);
 			}
+			plusLinea();
 			if (tag != NULL) fin = (string)tag;
 
 			if ((tag != NULL) && ( (fin.find("</ListadoDeTexturas>")!=0)&&(fin.find("<ListadoDeElementos>")!= 0)&&(fin.find("<General>")!= 0)&&(fin.find("</escenario>")!= 0) ) ) 
@@ -2193,6 +2232,8 @@ int Parser::validar(FILE* archivo, FILE* archivoErrores)
 	{
 		tag = readTag(archivo,archivoErrores);
 	}
+	plusLinea();
+
 	if (tag!=NULL) primera = (string) tag;
 
 	found = primera.find("<escenario>");
@@ -2202,6 +2243,7 @@ int Parser::validar(FILE* archivo, FILE* archivoErrores)
 	} 
 	else 
 	{
+		cout<<"en Linea numero "<<getNroLinea()<<endl;
 		imprimirError(tag,archivoErrores,ERR2);
 		cout<<"No se ha econtrado el escenario el programa se cerrara"<<endl;
 		return INVALID_FORMAT;
@@ -2215,6 +2257,8 @@ int Parser::validar(FILE* archivo, FILE* archivoErrores)
 		{
 			tag = readTag(archivo,archivoErrores);
 		}
+		plusLinea();
+
 		if (tag!= NULL) fin=(string)tag;
 
 		if (fin.find("</escenario>") == 0) 
@@ -2230,6 +2274,7 @@ int Parser::validar(FILE* archivo, FILE* archivoErrores)
 			
 			if ((resultado != VALID_FORMAT) && (resultado != NO_CLOSE)) 
 			{
+				cout<<"en Linea numero "<<getNroLinea()<<endl;
 				imprimirError(tag,archivoErrores,ERR1);
 				cout<<"Error Grabe en un Tag padre."<<endl;
 			}	
