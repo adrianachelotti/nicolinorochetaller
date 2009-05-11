@@ -38,7 +38,6 @@ public:
 	static string texturaFigura;
 	static SDL_Surface* screen;
 		
-	
 	/*Destructor	 */
 	virtual ~Escenario();
 	

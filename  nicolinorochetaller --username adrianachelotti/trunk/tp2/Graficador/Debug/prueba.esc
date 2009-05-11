@@ -5,8 +5,14 @@
 		<circulo id="id1" radio="85" idTextura="id2">
 			<posicion x="100" y="300"/>
 		</circulo> 
-		<circulo id="bbid2" radio="85" idTextura="id2">
+		<circulo id="id2" radio="85" idTextura="id1">
 			<posicion x="200" y="300"/>
+		</circulo> 
+		<circulo id="id3" radio="85" idTextura="id6">
+			<posicion x="400" y="300"/>
+		</circulo> 
+		<circulo id="id4" radio="85" idTextura="id3">
+			<posicion x="200" y="100"/>
 		</circulo> 
 		</ListadoDeElementos>
 	<ListadoDeTexturas>

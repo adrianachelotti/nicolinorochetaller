@@ -153,8 +153,6 @@ int Circulo::dibujar()
 			anchoX = diametro;
 		}
 
-		printf("%d %d" , anchoX, altoY);
-
 		SDL_Surface* imagenResized  = graficador->getImageResized(text, anchoX,altoY);
 	
 		graficador->rellenarCirculoConTextura(Escenario::screen,imagenResized ,this->getCentro(), this->getRadio());
