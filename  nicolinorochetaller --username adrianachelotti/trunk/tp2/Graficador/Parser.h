@@ -114,9 +114,15 @@ struct color {
 
 class Parser  
 {
+private:
+	int nroLinea;
 public:
 	Parser();
 	virtual ~Parser();
+	void setNroLinea(int l);
+	int getNroLinea();
+	void plusLinea();
+	void imprimirError(char* linea,FILE* archivoErrores,char* err);
 	Uint32 getColor(int r, int g, int b);
 	Uint32 validaColor(char* linea, string aux,FILE* archivoError,char t);
 	Uint32 colorXdef();
@@ -143,6 +149,13 @@ public:
 	int validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,punto&v3);
 	int validaPuntosTriangulo(punto vertices[3]);
 	char* readTag(FILE* arch,FILE* archivoError);
+
+	void isRepeatedCuadrado(char* line, FILE* aError);
+	void isRepeatedGeneral(char* line, FILE* aError);
+	void isRepeatedCirculo(char* line, FILE* aError);
+	void isRepeatedRectangulo(char* line, FILE* aError);
+	void isRepeatedTriangulo(char* line, FILE* aError);
+	void isRepeatedSegmento(char* line, FILE* aError);
 };
 
 #endif 
