@@ -4,7 +4,6 @@
 
 #include "Escenario.h"
 
-
 Uint32 Escenario::colorFondoFigura = COLOR_VACIO;
 Uint32 Escenario::colorLinea = COLOR_VACIO;
 string Escenario::texturaFigura = "";
@@ -15,7 +14,7 @@ using namespace std;
 
 Escenario::Escenario()
 {
-
+	
 }
 
 Escenario::~Escenario()
@@ -142,10 +141,7 @@ int Escenario::addTextura(Textura* textura)
 {
 	if(this->getTextura(textura->getId()) == NULL)
 	{
-		list<Textura*> lista;
-		lista = this->getListadoDeTexturas();
-		lista.push_back(textura);
-		this->setListadoDeTexturas(lista);
+		this->listadoDeTexturas.push_back(textura);
 		return RES_OK;
 	}
 	else
@@ -156,19 +152,16 @@ int Escenario::addTextura(Textura* textura)
 
 int Escenario::addFigura(Figura* figura)
 {
-	//if(this->getFigura(figura->getId()) == NULL)
-	//{
-		list<Figura*> lista;
-		lista = this->getListadoDeFiguras();
-		lista.push_back(figura);
-		this->setListadoDeFiguras(lista);
+	if(this->getFigura(figura->getId()) == NULL)
+	{
+		this->listadoDeFiguras.push_back(figura);
 		return RES_OK;
-	/*}
+	}
 	else
 	{
 		return RES_ERROR_FIGURA_EXISTENTE;
 	}
-	*/
+	
 }
 
 
@@ -187,7 +180,7 @@ Textura* Escenario::getTextura(string idTextura)
 	{
       texturaActual = *it;
 
-      if(idTextura.compare(texturaActual->getId().c_str()) == 0)
+      if(idTextura.compare(texturaActual->getId()) == 0)
 	  {
 		encontrado= true;
 	  }
@@ -208,13 +201,13 @@ Figura* Escenario::getFigura(string idFigura)
 
 	list<Figura*>::iterator it;
  
-    it = this->getListadoDeFiguras().begin();
+	it = this->listadoDeFiguras.begin();
     
-	while( (it != this->getListadoDeFiguras().end())&&(!encontrado))
+	while( (it != this->listadoDeFiguras.end())&&(!encontrado))
 	{
       figuraActual = *it;
 
-	  if(idFigura.compare(figuraActual->getId().c_str()) == 0)
+      if(idFigura.compare(figuraActual->getId()) == 0)
 	  {
 		encontrado= true;
 	  }
@@ -223,6 +216,7 @@ Figura* Escenario::getFigura(string idFigura)
 	  	  it++;
 	  }
     }
+	
 	if(encontrado) return figuraActual;
 	return NULL;
 }
@@ -248,7 +242,6 @@ int Escenario::dibujar()
 	{
       figuraActual = *it;
 	  figuraActual->dibujar();	
-	  string cadena = figuraActual->getId();
 	  it++;
     }
 

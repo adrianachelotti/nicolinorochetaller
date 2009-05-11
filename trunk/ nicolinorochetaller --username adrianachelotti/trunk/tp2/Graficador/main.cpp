@@ -38,19 +38,15 @@ int getResoCompo(int reso1) {
 	switch (reso1)
 	{
 		case 640:
-				cout<<"se retorna 480"<<endl;
 				res2 = 480;
 				break;
 		case 800:
-				cout<<"se retorna 600"<<endl;
 				res2 = 600;
 				break;
 		case 1024:
-				cout<<"se retorna 768"<<endl;
 				res2 = 768;
 				break;
 		case 1280:
-				cout<<"se retorna 768"<<endl;
 				res2 = 768;
 				break;
 	}
@@ -58,7 +54,9 @@ int getResoCompo(int reso1) {
 }
 
 int main(int argc, char *argv[]) {
-    SDL_Surface *screen;
+    
+
+	SDL_Surface *screen;
 	Parser* parser = new Parser();
 
 	//Lectura de archivo y parser.
@@ -117,5 +115,6 @@ int main(int argc, char *argv[]) {
 	SDL_Flip(screen);
 	getchar();
 	SDL_Quit( );
+
 	return 0;
 }

@@ -8,7 +8,6 @@
 
 Figura::Figura()
 {
-
 	this->colorFondo = Escenario::getColorFondoFigura();
 	this->colorLinea = Escenario::getColorLinea();
 	this->idTextura = Escenario::getTexturaFigura();
