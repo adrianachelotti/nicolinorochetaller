@@ -38,13 +38,27 @@ void Parser::plusLinea(){
 	setNroLinea(aux);
 }
 
+void Parser::minusLinea(){
+	int aux = 0;
+	aux = getNroLinea();
+	aux--;
+	setNroLinea(aux);
+}
+
 void Parser::imprimirError(char* linea,FILE* archivoErrores,char* err)
 {
 	fprintf(archivoErrores,"Linea ");
 	if (linea!=NULL) 
 	{
-		char* a = (char*) malloc (sizeof(char) * 3); 
-		itoa(getNroLinea(),a,10);
+		char* a = (char*) malloc (sizeof(char) * 4); 
+		if (err == ERR35)
+		{
+			itoa(getNroLinea()-1,a,10);
+		} 
+		else 
+		{
+			itoa(getNroLinea(),a,10);
+		}
 		fprintf(archivoErrores,a);
 		fprintf(archivoErrores," - ");
 		fprintf(archivoErrores,linea);
@@ -390,7 +404,7 @@ void Parser::isRepeatedSegmento(char* line, FILE* aError)
 
 int isNumber(string s)
 {
-	char* charAux = (char*)malloc(sizeof(char) * s.length());
+	char* charAux = (char*) malloc (sizeof(char) * s.length());
 	int intAux = atoi(s.c_str());
     if(intAux < 1)
             return 1; // no hace falta seguir procesando si ya el numero que parsea tiene un "-" adelante    
@@ -398,7 +412,9 @@ int isNumber(string s)
 	strcpy(charAux, itoa(intAux, charAux, 10));
 	string x (charAux);	
     int val = s.compare(x);	
-//	free(charAux);
+
+	//SI LO PONGO NO ANDA EL DEBUG??????????
+	//free(charAux);
 	return val;
 }
 
@@ -937,6 +953,7 @@ int Parser::validaPos(FILE* archivo,FILE* archivoErrores,punto&p)
 	{
 		fsetpos (archivo, &position);
 		imprimirError(tag,archivoErrores,ERR8);
+		minusLinea();
         cout<<"ERROR EN LA POSICION"<<endl;
 		return INVALID_FORMAT;
 	}
@@ -1082,7 +1099,7 @@ int Parser::validaCuadrado(char* tag,FILE* archivoErrores,Cuadrado* nCuadrado)
 	found = s.find("colorFigura=\"");
 	if(found == string::npos)
 	{
-		imprimirError(tag,archivoErrores,WAR13);
+		imprimirError(tag,archivoErrores,WAR13N);
 		cout<<"El cuadrado no tiene un color de Fondo asignado"<<endl;
     }
 	else 
@@ -1099,7 +1116,7 @@ int Parser::validaCuadrado(char* tag,FILE* archivoErrores,Cuadrado* nCuadrado)
 	found = s.find("colorLinea=\"");
 	if(found == string::npos)
 	{
-		imprimirError(tag,archivoErrores,WAR14);
+		imprimirError(tag,archivoErrores,WAR14N);
 		cout<<"El cuadrado no tiene un color de Linea asignada"<<endl;
     }
 	else
@@ -1199,7 +1216,7 @@ int Parser::validaCirculo(char* tag,FILE* archivoErrores,Circulo* nCirculo)
 	found = s.find("colorFigura=\"");
 	if(found == string::npos)
 	{
-		imprimirError(tag,archivoErrores,WAR13);
+		imprimirError(tag,archivoErrores,WAR13N);
 		cout<<"El circulo no tiene un color de Fondo asignado"<<endl;
 	}
 	else
@@ -1216,7 +1233,7 @@ int Parser::validaCirculo(char* tag,FILE* archivoErrores,Circulo* nCirculo)
 	found = s.find("colorLinea=\"");
 	if(found == string::npos)
 	{
-		imprimirError(tag,archivoErrores,WAR14);
+		imprimirError(tag,archivoErrores,WAR14N);
 		cout<<"El circulo no tiene un color de Linea asignada"<<endl;
 	
     }
@@ -1340,7 +1357,7 @@ int Parser::validaRectangulo(char* tag,FILE* archivoErrores,Rectangulo* nRectang
 	found = s.find("colorFigura=\"");
 	if(found == string::npos)
 	{
-		imprimirError(tag,archivoErrores,WAR13);
+		imprimirError(tag,archivoErrores,WAR13N);
 		cout<<"El rectangulo no tiene un color de Fondo asignado"<<endl;
     }
 	else
@@ -1357,7 +1374,7 @@ int Parser::validaRectangulo(char* tag,FILE* archivoErrores,Rectangulo* nRectang
 	found = s.find("colorLinea=\"");
 	if(found == string::npos)
 	{
-		imprimirError(tag,archivoErrores,WAR14);
+		imprimirError(tag,archivoErrores,WAR14N);
 		cout<<"El rectangulo no tiene un color de Linea asignada"<<endl;
     }
 	else
@@ -1424,7 +1441,7 @@ int Parser::validaTriangulo(char* tag, FILE* archivoErrores,Triangulo* nTriangul
 	found = s.find("colorFigura=\"");
 	if(found == string::npos)
 	{
-		imprimirError(tag,archivoErrores,WAR13);
+		imprimirError(tag,archivoErrores,WAR13N);
 		cout<<"El triangulo no tiene un color de Fondo asignado"<<endl;
     } 
 	else 
@@ -1441,7 +1458,7 @@ int Parser::validaTriangulo(char* tag, FILE* archivoErrores,Triangulo* nTriangul
 	found = s.find("colorLinea=\"");
 	if(found == string::npos)
 	{
-		imprimirError(tag,archivoErrores,WAR14);
+		imprimirError(tag,archivoErrores,WAR14N);
 		nTriangulo->setColorLinea(COLOR_VACIO);
 		cout<<"El triangulo no tiene un color de Linea asignada"<<endl;
     } 
@@ -1492,7 +1509,7 @@ int Parser::validaSegmento(char* tag, FILE* archivoErrores,Segmento* nSegmento)
 	found = s.find("colorLinea=\"");
 	if(found == string::npos)
 	{
-		imprimirError(tag,archivoErrores,WAR14);
+		imprimirError(tag,archivoErrores,WAR14N);
 		cout<<"El segmento no tiene un color de Linea asignada"<<endl;
     } 
 	else 
@@ -1722,6 +1739,7 @@ int Parser::validarGeneralCierre(FILE* archivo,FILE* archivoErrores)
 	{
 		fsetpos (archivo, &position);
 		imprimirError(tag,archivoErrores,WAR8);
+		minusLinea();
 		cout<<"!!!!GENERAL NO CERRADO!!!!"<<endl;
 		return NO_CLOSE;
 	}
@@ -1749,6 +1767,7 @@ int Parser::validaCirculoCierre(FILE* archivo,FILE* archivoErrores)
 	{
 		fsetpos (archivo, &position);
 		imprimirError(tag,archivoErrores,WAR19);
+		minusLinea();
 		cout<<"NO CIERRA EL CIRCULO"<<endl;
 		return NO_CLOSE;
 	} 
@@ -1780,6 +1799,7 @@ int Parser::validaCuadradoCierre(FILE* archivo,FILE* archivoErrores)
 	{
 		fsetpos (archivo, &position);
 		imprimirError(tag,archivoErrores,WAR15);
+		minusLinea();
 		cout<<"NO CIERRA EL CUADRADO"<<endl;
 		return NO_CLOSE;
 	} 
@@ -1810,6 +1830,7 @@ int Parser::validaRectanguloCierre(FILE* archivo,FILE* archivoErrores)
 	{
 		fsetpos (archivo, &position);
 		imprimirError(tag,archivoErrores,WAR16);
+		minusLinea();
 		cout<<"NO CIERRA EL RECTANGULO"<<endl;
 		return NO_CLOSE;
 	} 
@@ -1840,6 +1861,7 @@ int Parser::validaSegmentoCierre(FILE* archivo,FILE* archivoErrores)
 	{
 		fsetpos (archivo, &position);
 		imprimirError(tag,archivoErrores,WAR18);
+		minusLinea();
 		cout<<"NO CIERRA EL SEGMENTO"<<endl;
 		return NO_CLOSE;
 	} 
@@ -1870,6 +1892,7 @@ int Parser::validaTrianguloCierre(FILE* archivo,FILE* archivoErrores)
 	{
 		fsetpos (archivo, &position);
 		imprimirError(tag,archivoErrores,WAR17);
+		minusLinea();
 		cout<<"NO CIERRA EL TRIANGULO"<<endl;
 		return NO_CLOSE;
 	} 
@@ -2111,6 +2134,7 @@ int Parser::validaTextura(char* tag,FILE* archivo, FILE* archivoErrores)
 		{
 			fsetpos(archivo, &position);
 			imprimirError(tag,archivoErrores,WAR11);
+			minusLinea();
 			cout<<"TEXTURA NO CERRADA"<<endl;
 			return NO_CLOSE;
 		}
@@ -2179,6 +2203,7 @@ int Parser::validaTagPadre(char* tag, FILE* archivo, FILE* archivoErrores)
 			cout<<"No se cerro el ListadoDeElementos"<<endl;
 			imprimirError(tag,archivoErrores,WAR9);
 			fsetpos (archivo, &position);
+			minusLinea();
 			if ((fin.find("<ListadoDeTexturas>")) || (fin.find("<General>"))) return INVALID_FORMAT;
 		}
 	}
@@ -2214,6 +2239,7 @@ int Parser::validaTagPadre(char* tag, FILE* archivo, FILE* archivoErrores)
 			cout<<"No se cerro el ListadoDeTexturas"<<endl;
 			imprimirError(tag,archivoErrores,WAR10);
 			fsetpos (archivo, &position);
+			minusLinea();
 			if ( (fin.find("<ListadoDeElementos>")) || (fin.find("<General>"))) return INVALID_FORMAT;
 		}
 	}
