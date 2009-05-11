@@ -21,6 +21,8 @@ class Escenario
 {
 private:
 	int resolucion;
+	int alto;
+	int ancho;
     string texturaEscenario;	
 	Uint32 colorFondoEscenario;
 	list<Figura*> listadoDeFiguras;
@@ -30,6 +32,19 @@ private:
 	/*Constructor	 */
 	Escenario();
 	static Escenario* instancia;
+
+
+	
+	/* Setea el ancho del escenario*/
+	void setAncho(int ancho);
+
+	/* Setea el alto del escenario*/
+	void setAlto(int alto);
+
+	
+	//obtiene el alto segun la resolucion
+	int getResoCompo(int reso1) ;
+	
 
 public:
 	
@@ -115,7 +130,14 @@ public:
 
 	/*Metodo encargado de dibujar el escenario */
 	int dibujar();
-	
+
+	/* Retorna el ancho del escenario*/
+	int getAncho();
+
+
+	/* Retorna el alto del escenario*/
+	int getAlto();
+
 };
 
 #endif 

@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Escenario.h"
-
+#include "Graficador.h"
 Uint32 Escenario::colorFondoFigura = COLOR_VACIO;
 Uint32 Escenario::colorLinea = COLOR_VACIO;
 string Escenario::texturaFigura = "";
@@ -33,6 +33,11 @@ Escenario* Escenario::obtenerInstancia()
 void Escenario::setResolucion(int resolucion)
 {
 	this->resolucion = resolucion;
+
+	this->setAncho( resolucion);
+	this->setAlto( this->getResoCompo(resolucion));
+	
+
 }
 	
 int Escenario::getResolucion()
@@ -233,11 +238,67 @@ void Escenario::imprimirError(string linea,FILE* archivoErrores,string err)
 int Escenario::dibujar()
 {
 	Figura* figuraActual = NULL;
+	Punto punto;
+	punto.x = 0;
+	punto.y = this->getAlto(); 
+	Textura* text  = NULL;
+	bool contieneTextura = false;
+	SDL_Surface* imagen = NULL;
 
 	list<Figura*>::iterator it;
  
     it = this->listadoDeFiguras.begin();
     
+	Graficador* graficador = Graficador::obtenerInstancia();
+	
+	if(!this->getTexturaEscenario().empty())
+	{
+		text = this->getTextura(this->getTexturaEscenario());
+		if(text==NULL)
+		{
+			string mensajeError = GRAF_WARN1;
+			mensajeError+= this->getTexturaEscenario();
+			mensajeError+= " - ";
+
+			string contextoError = MSG_CTX_TEXTURA;
+			contextoError+= "Escenario";
+	
+			this->imprimirError(contextoError,this->getArchivoErrores(),mensajeError);
+		}
+		else contieneTextura = true;
+	}
+
+	if(contieneTextura)
+	{
+		imagen = SDL_LoadBMP(text->getPath().c_str());
+		
+		if(imagen == NULL)
+		{
+			string mensajeError = GRAF_WARN2;
+			mensajeError+= this->getTexturaEscenario();
+			mensajeError+= " - ";
+
+			string contextoError = MSG_CTX_TEXTURA;
+			contextoError+= "Escenario";
+	
+			this->imprimirError(contextoError,this->getArchivoErrores(),mensajeError);
+		}
+	}
+
+	if(imagen==NULL)
+	{
+		if((this->getColorFondoEscenario()!=COLOR_VACIO))
+		{
+			
+			graficador->rellenarRectangulo(screen,punto,this->getAncho(),this->getAlto(),this->getColorFondoEscenario());
+		}
+	}
+	else
+	{
+		SDL_Surface* imagenResized  = graficador->getImageResized(text,this->ancho, this->alto);
+		graficador->rellenarRectanguloConTextura(screen,imagenResized ,punto);
+
+	}
 	while( it != this->listadoDeFiguras.end())
 	{
       figuraActual = *it;
@@ -247,3 +308,45 @@ int Escenario::dibujar()
 
 	return RES_OK;
 }
+
+int Escenario::getAncho()
+{
+	return this->ancho;
+}
+
+void Escenario::setAncho(int ancho)
+{
+	this->ancho = ancho;
+}
+
+int Escenario::getAlto()
+{
+	return this->alto;
+}
+
+void Escenario::setAlto(int alto)
+{
+	this->alto = alto;
+}
+
+int Escenario::getResoCompo(int reso1) 
+{
+	int res2;
+	switch (reso1)
+	{
+		case 640:
+				res2 = 480;
+				break;
+		case 800:
+				res2 = 600;
+				break;
+		case 1024:
+				res2 = 768;
+				break;
+		case 1280:
+				res2 = 768;
+				break;
+	}
+	return res2;
+}
+	

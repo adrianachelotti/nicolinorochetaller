@@ -1,5 +1,5 @@
 <escenario>
-<General resolucion="800"  colorFondoFig="255000000" colorLinea="000255000" colorFondoEsc="000000255">
+<General resolucion="800"  texturaEsc="id1" colorFondoFig="255000000" colorLinea="000255000" colorFondoEsc="000000255">
 	</General>
 	<ListadoDeElementos>
 		<circulo id="id1" radio="85" idTextura="id2">
