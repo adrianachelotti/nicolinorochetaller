@@ -22,6 +22,7 @@ using namespace std;
 #define ERR1	"ERROR: - Error grave en un Tag principal -"
 #define ERR2	"ERROR: - No se encontro el inicio del escenario -"
 #define ERR3	"ERROR: - No se encontro el id de la textura -"
+#define ERR3M	"ERROR: - No se encontro formato valido de textura -"
 #define ERR4	"ERROR: - Mo se encontro el path de la textura -"
 #define ERR5	"ERROR: - Error grave al iniciar un Elemento -"
 #define ERR6	"ERROR: - No se encontro el id del Cuadrado -"
@@ -94,6 +95,7 @@ using namespace std;
 #define WAR34	"ADVERTENCIA: - Se repite la etiqueta texturaFig -"
 #define WAR35	"ADVERTENCIA: - Se repite la etiqueta colorFondoEsc -"
 #define WAR36	"ADVERTENCIA: - Se repite la etiqueta texturaEsc -"
+#define WAR37	"ADVERTENCIA: - No se encontro la etiqueta General. Se creara una por defecto. -"
 
 
 #define COLOR_VACIO 0xFF000000
@@ -118,11 +120,14 @@ class Parser
 {
 private:
 	int nroLinea;
+	bool hayGeneral;
 public:
 	Parser();
 	virtual ~Parser();
 	void setNroLinea(int l);
 	int getNroLinea();
+	void setHayGeneral(bool hay);
+	bool getHayGeneral();
 	void plusLinea();
 	void minusLinea();
 	void imprimirError(char* linea,FILE* archivoErrores,char* err);
