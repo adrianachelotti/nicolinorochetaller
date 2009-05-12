@@ -663,11 +663,10 @@ SDL_Surface* Graficador::getImageResized(Textura* textura, int ancho, int alto)
     if((Surface == NULL) ||(_ret==NULL)) 
 	{
 
-        fprintf(stderr, "resizeTextura failed: %s\n", SDL_GetError());
-        return NULL;
+		return NULL;
     } 
     
-	if (Surface->w==0 ||Surface->w==0) return NULL;
+	if (Surface->w==0 ||Surface->h==0) return NULL;
 	double  _stretch_factor_x = (static_cast<double>(ancho)  / static_cast<double>(Surface->w)),
 		    _stretch_factor_y = (static_cast<double>(alto) / static_cast<double>(Surface->h));
 

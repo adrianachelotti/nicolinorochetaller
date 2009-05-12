@@ -23,7 +23,7 @@
 #define MSG_CTX_TEXTURA "Textura con identificador: "
 #define GRAF_WARN1 "ADVERTENCA: - No existe la textura con identificador: "
 #define GRAF_WARN2 "ADVERTENCA: - No pudo cargarse la textura con identificador: "
-
+#define GRAF_WARN3 "ADVERTENCA: - Error en el resizin: "
 
 class Graficador  
 {
