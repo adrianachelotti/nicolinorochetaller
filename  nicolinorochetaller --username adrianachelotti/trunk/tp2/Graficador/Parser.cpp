@@ -14,6 +14,18 @@ Parser::Parser()
 {
 	this->nroLinea = 0;
 	this->hayGeneral = false;
+	list<string>::iterator it;
+	string aux;
+
+	fstream filestr ("Debug\\reser.txt", fstream::in | fstream::out );	
+	while(filestr.good() == true){
+		char* linea = (char*) malloc (sizeof(char) * 100);
+		filestr.getline(linea, 100);
+		aux = (string) linea;
+		(this->tags).push_back(aux);		
+		free(linea);
+	}
+	filestr.close();
 }
 
 
@@ -81,19 +93,76 @@ void Parser::imprimirError(char* linea,FILE* archivoErrores,char* err)
 	fprintf(archivoErrores,"\n\n");
 }
 
-int esConocido(const char* line)
+int Parser::esConocido(string line)
 {
-	size_t found;
-	string l (line);
-	found = l.find(TAGSCONOCIDOS, 0);
-	if(found != string::npos){
-		return 0;
+	size_t found;	
+	string temp;
+	list<string>::iterator it;
+
+	for(it = this->tags.begin(); it != this->tags.end(); it++){
+		temp = (string)*it;
+		found = line.find(temp);
+		if( (found != string::npos) && (temp.length() == line.length()) ){
+			return 0;
+		}
+		temp = "";
 	}
-	else
+	return 1;
+}
+
+void Parser::invalidTextFound(char* line, FILE* er){
+	int lenght = strlen(line);
+	int i;	
+    string aux;    
+	string temp;
+	i = 0;
+	while((i < lenght) && (line[i] != '>') && (line[i] != '/'))
 	{
-		return 1;
+		while( (line[i] != ' ') && (line[i] != '=') && (i < lenght))
+		{
+			temp = line[i];
+			if ((temp!="<") && (temp!=">"))
+			{
+				aux.append(temp);
+			}
+			i++;
+		}
+		//me corro los espacios despues de la palabra encontrada
+		while ((line[i] == ' ') && (i < lenght)) 
+		{
+			i++;
+		}
+
+		// entra si no es conocido
+		if(esConocido(aux) != 0)
+		{ 
+			cout<< "TextoDesconocido"<<endl;
+			imprimirError(line,er,WAR38);
+			break;
+		}
+		
+		//me corro de lo que esta entre comillas
+		if (line[i] == '=') 
+		{
+			i = i + 2; //salto las comillas
+			while ((line[i] != '"') && (i < lenght)) 
+			{
+				i++;
+			}
+			i++; //salto la segunda comilla
+		}
+
+		//me corro si hay espacios
+		while ( ((line[i] == ' ') || (line[i] == 9)) && (i < lenght)) 
+		{
+			i++;
+		}
+		
+		char a = line[i];
+		aux = "";
 	}
 }
+
 
 Uint32 Parser::getColor(int r, int g, int b)
 {
@@ -106,10 +175,22 @@ Uint32 Parser::getColor(int r, int g, int b)
 
 void Parser::isRepeatedCuadrado(char* line, FILE* aError)
 {
-	// primero para la ID
+	
 	size_t found1; 
 	size_t found2;
 	string s (line);
+	
+	found1 = s.find("cuadrado", 0);
+	found2 = s.find("cuadrado", found1 + 3);
+	if(found1 != string::npos)
+	{
+		if( found2 != string::npos)
+		{
+			imprimirError(line, aError, WAR40);
+		}
+	}
+
+	// primero para la ID
 	found1 = s.find("id=", 0);
 	found2 = s.find("id=", found1 + 3);
 	if(found1 != string::npos)
@@ -160,10 +241,21 @@ void Parser::isRepeatedCuadrado(char* line, FILE* aError)
 
 void Parser::isRepeatedGeneral(char* line, FILE* aError)
 {
-	// primero para la ID
 	size_t found1; 
 	size_t found2;
 	string s (line);
+
+	found1 = s.find("General", 0);
+	found2 = s.find("General", found1 + 3);
+	if(found1 != string::npos)
+	{
+		if( found2 != string::npos)
+		{
+			imprimirError(line, aError, WAR44);
+		}
+	}
+
+	// primero para la ID
 	found1 = s.find("resolucion=", 0);
 	found2 = s.find("resolucion=", found1 + 3);
 	if(found1 != string::npos)
@@ -224,10 +316,22 @@ void Parser::isRepeatedGeneral(char* line, FILE* aError)
 
 void Parser::isRepeatedCirculo(char* line, FILE* aError)
 {
-	// primero para la ID
+	
 	size_t found1; 
 	size_t found2;
 	string s (line);
+
+	found1 = s.find("circulo", 0);
+	found2 = s.find("circulo", found1 + 3);
+	if(found1 != string::npos)
+	{
+		if( found2 != string::npos)
+		{
+			imprimirError(line, aError, WAR39);
+		}
+	}
+	
+	// primero para la ID
 	found1 = s.find("id=", 0);
 	found2 = s.find("id=", found1 + 3);
 	if(found1 != string::npos)
@@ -278,10 +382,22 @@ void Parser::isRepeatedCirculo(char* line, FILE* aError)
 
 void Parser::isRepeatedRectangulo(char* line, FILE* aError)
 {
-	// primero para la ID
+
 	size_t found1; 
 	size_t found2;
 	string s (line);
+
+	found1 = s.find("rectangulo", 0);
+	found2 = s.find("rectangulo", found1 + 3);
+	if(found1 != string::npos)
+	{
+		if( found2 != string::npos)
+		{
+			imprimirError(line, aError, WAR41);
+		}
+	}
+
+	// primero para la ID
 	found1 = s.find("id=", 0);
 	found2 = s.find("id=", found1 + 3);
 	if(found1 != string::npos)
@@ -342,10 +458,22 @@ void Parser::isRepeatedRectangulo(char* line, FILE* aError)
 
 void Parser::isRepeatedTriangulo(char* line, FILE* aError)
 {
-	// primero para la ID
+	
 	size_t found1; 
 	size_t found2;
 	string s (line);
+
+	found1 = s.find("triangulo", 0);
+	found2 = s.find("triangulo", found1 + 3);
+	if(found1 != string::npos)
+	{
+		if( found2 != string::npos)
+		{
+			imprimirError(line, aError, WAR42);
+		}
+	}	
+
+	// primero para la ID
 	found1 = s.find("id=", 0);
 	found2 = s.find("id=", found1 + 3);
 	if(found1 != string::npos)
@@ -387,10 +515,22 @@ void Parser::isRepeatedTriangulo(char* line, FILE* aError)
 
 void Parser::isRepeatedSegmento(char* line, FILE* aError)
 {
-	// primero para la ID
+	
 	size_t found1; 
 	size_t found2;
 	string s (line);
+
+	found1 = s.find("segmento", 0);
+	found2 = s.find("segmento", found1 + 3);
+	if(found1 != string::npos)
+	{
+		if( found2 != string::npos)
+		{
+			imprimirError(line, aError, WAR43);
+		}
+	}	
+
+	// primero para la ID
 	found1 = s.find("id=", 0);
 	found2 = s.find("id=", found1 + 3);
 	if(found1 != string::npos)
@@ -411,6 +551,223 @@ void Parser::isRepeatedSegmento(char* line, FILE* aError)
 		}
 	}
 
+}
+
+void Parser::isRepeatedPosition(char* line, FILE* aError)
+{
+	
+	size_t found1; 
+	size_t found2;
+	string s (line);
+
+	found1 = s.find("posicion", 0);
+	found2 = s.find("posicion", found1 + 3);
+	if(found1 != string::npos)
+	{
+		if( found2 != string::npos)
+		{
+			imprimirError(line, aError, WAR45);
+		}
+	}	
+
+	// primero para la x
+	found1 = s.find("x=", 0);
+	found2 = s.find("x=", found1 + 3);
+	if(found1 != string::npos)
+	{
+		if( found2 != string::npos)
+		{
+			imprimirError(line, aError, WAR46);
+		}
+	}	
+	
+
+	// primero para la y
+	found1 = s.find("y=", 0);
+	found2 = s.find("y=", found1 + 3);
+	if(found1 != string::npos)
+	{
+		if( found2 != string::npos)
+		{
+			imprimirError(line, aError, WAR47);
+		}
+	}	
+
+}
+
+void Parser::isRepeatedTextura(char* line, FILE* aError)
+{
+	
+	size_t found1; 
+	size_t found2;
+	string s (line);
+
+	found1 = s.find("textura", 0);
+	found2 = s.find("textura", found1 + 3);
+	if(found1 != string::npos)
+	{
+		if( found2 != string::npos)
+		{
+			imprimirError(line, aError, WAR48);
+		}
+	}	
+
+	// primero para la id
+	found1 = s.find("id=", 0);
+	found2 = s.find("id=", found1 + 3);
+	if(found1 != string::npos)
+	{
+		if( found2 != string::npos)
+		{
+			imprimirError(line, aError, WAR23);
+		}
+	}	
+
+	// primero para la path
+	found1 = s.find("path=", 0);
+	found2 = s.find("path=", found1 + 3);
+	if(found1 != string::npos)
+	{
+		if( found2 != string::npos)
+		{
+			imprimirError(line, aError, WAR49);
+		}
+	}	
+	
+
+}
+
+void Parser::isRepeatedInicio(char* line, FILE* aError)
+{
+	
+	size_t found1; 
+	size_t found2;
+	string s (line);
+
+	found1 = s.find("inicio", 0);
+	found2 = s.find("inicio", found1 + 3);
+	if(found1 != string::npos)
+	{
+		if( found2 != string::npos)
+		{
+			imprimirError(line, aError, WAR50);
+		}
+	}	
+
+	// primero para la x
+	found1 = s.find("x=", 0);
+	found2 = s.find("x=", found1 + 3);
+	if(found1 != string::npos)
+	{
+		if( found2 != string::npos)
+		{
+			imprimirError(line, aError, WAR46);
+		}
+	}	
+
+	// primero para la y
+	found1 = s.find("y=", 0);
+	found2 = s.find("y=", found1 + 3);
+	if(found1 != string::npos)
+	{
+		if( found2 != string::npos)
+		{
+			imprimirError(line, aError, WAR47);
+		}
+	}	
+	
+
+}
+
+void Parser::isRepeatedFin(char* line, FILE* aError)
+{
+	
+	size_t found1; 
+	size_t found2;
+	string s (line);
+
+	found1 = s.find("fin", 0);
+	found2 = s.find("fin", found1 + 3);
+	if(found1 != string::npos)
+	{
+		if( found2 != string::npos)
+		{
+			imprimirError(line, aError, WAR51);
+		}
+	}	
+
+	// primero para la x
+	found1 = s.find("x=", 0);
+	found2 = s.find("x=", found1 + 3);
+	if(found1 != string::npos)
+	{
+		if( found2 != string::npos)
+		{
+			imprimirError(line, aError, WAR46);
+		}
+	}	
+
+	// primero para la y
+	found1 = s.find("y=", 0);
+	found2 = s.find("y=", found1 + 3);
+	if(found1 != string::npos)
+	{
+		if( found2 != string::npos)
+		{
+			imprimirError(line, aError, WAR47);
+		}
+	}	
+}
+
+void Parser::isRepeatedVertice(char* line, FILE* aError,int num)
+{
+	
+	size_t found1; 
+	size_t found2;
+	string s (line);
+	string vertice;
+
+	if (num == 1){
+		vertice = "ver1";
+	}
+	if (num == 2){
+		vertice = "ver2";
+	}
+	if (num == 3){
+		vertice = "ver3";
+	}
+
+	found1 = s.find(vertice, 0);
+	found2 = s.find(vertice, found1 + 3);
+	if(found1 != string::npos)
+	{
+		if( found2 != string::npos)
+		{
+			imprimirError(line, aError, WAR52);
+		}
+	}	
+
+	// primero para la x
+	found1 = s.find("x=", 0);
+	found2 = s.find("x=", found1 + 3);
+	if(found1 != string::npos)
+	{
+		if( found2 != string::npos)
+		{
+			imprimirError(line, aError, WAR46);
+		}
+	}	
+
+	// primero para la y
+	found1 = s.find("y=", 0);
+	found2 = s.find("y=", found1 + 3);
+	if(found1 != string::npos)
+	{
+		if( found2 != string::npos)
+		{
+			imprimirError(line, aError, WAR47);
+		}
+	}	
 }
 
 int isNumber(string s)
@@ -598,6 +955,8 @@ int Parser::validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,
 	}
 	else
 	{
+		isRepeatedVertice(tag,archivoErrores,1);
+		invalidTextFound(tag,archivoErrores);
 		cout<<"VERTICE 1"<<endl;
 		found = ver1.find("x=\"");
 		if (found == string::npos)
@@ -668,6 +1027,8 @@ int Parser::validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,
 	}
 	else
 	{
+		isRepeatedVertice(tag,archivoErrores,2);
+		invalidTextFound(tag,archivoErrores);
 		cout<<"VERTICE 2"<<endl;
 		found = ver2.find("x=\"");
 		if (found == string::npos)
@@ -736,6 +1097,8 @@ int Parser::validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,
 	}
 	else
 	{
+		isRepeatedVertice(tag,archivoErrores,3);
+		invalidTextFound(tag,archivoErrores);
 		cout<<"VERTICE 3"<<endl;
 		found = ver3.find("x=\"");
 		if (found == string::npos)
@@ -833,6 +1196,8 @@ int Parser::validaInicioFin(FILE* archivo,FILE* archivoErrores,punto&i, punto&f)
 	}
 	else
 	{
+		isRepeatedInicio(tag,archivoErrores);
+		invalidTextFound(tag,archivoErrores);
 		cout<<"INICIO"<<endl;
 		found = inicio.find("x=\"");
 		if (found == string::npos)
@@ -901,6 +1266,8 @@ int Parser::validaInicioFin(FILE* archivo,FILE* archivoErrores,punto&i, punto&f)
 	}
 	else
 	{
+		isRepeatedFin(tag,archivoErrores);
+		invalidTextFound(tag,archivoErrores);
 		cout<<"FIN"<<endl;
 		found = fin.find("x=\"");
 		if (found == string::npos)
@@ -949,7 +1316,7 @@ int Parser::validaPos(FILE* archivo,FILE* archivoErrores,punto&p)
 	int x,y;
 	int begin, end;
 	fpos_t position;
-	
+
 	fgetpos (archivo, &position);
 	tag = readTag(archivo,archivoErrores);
 	while ((tag!=NULL) && (tag=="ENTER"))
@@ -970,6 +1337,9 @@ int Parser::validaPos(FILE* archivo,FILE* archivoErrores,punto&p)
 	}
 	else
 	{
+		isRepeatedPosition(tag,archivoErrores);
+		invalidTextFound(tag,archivoErrores);
+
 		found = pos.find("x=\"");
 		if (found == string::npos)
 		{
@@ -1038,6 +1408,7 @@ int Parser::validaCuadrado(char* tag,FILE* archivoErrores,Cuadrado* nCuadrado)
 	s = (string) tag;
 
 	isRepeatedCuadrado(tag, archivoErrores);
+	invalidTextFound(tag,archivoErrores);
 
     found = s.find("id=\"");
     
@@ -1156,6 +1527,7 @@ int Parser::validaCirculo(char* tag,FILE* archivoErrores,Circulo* nCirculo)
 	int res = VALID_FORMAT;
 
 	isRepeatedCirculo(tag,archivoErrores);
+	invalidTextFound(tag,archivoErrores);
 
     found = s.find("id=\"");
     
@@ -1270,7 +1642,9 @@ int Parser::validaRectangulo(char* tag,FILE* archivoErrores,Rectangulo* nRectang
 	Uint32 cF,cL;
 	s = (string) tag;
 	int res = VALID_FORMAT;
+	
 	isRepeatedRectangulo(tag, archivoErrores);
+	invalidTextFound(tag, archivoErrores);
 
     found = s.find("id=\"");
 	if(found == string::npos)
@@ -1496,7 +1870,10 @@ int Parser::validaSegmento(char* tag, FILE* archivoErrores,Segmento* nSegmento)
 
 	s = (string) tag;
 	int res = VALID_FORMAT;
+	
 	isRepeatedSegmento(tag, archivoErrores);
+	invalidTextFound(tag, archivoErrores);
+
     found = s.find("id=\"");
     
 	if(found == string::npos)
@@ -1610,6 +1987,8 @@ int Parser::validaGeneral(char* tag,FILE* archivoErrores)
 
 	linea = (string)tag;
 	isRepeatedGeneral(tag, archivoErrores);
+	invalidTextFound(tag, archivoErrores);
+
 	//controlo la resolucion
 	found = linea.find("resolucion=\"");
 	if(found == string::npos)
@@ -2081,6 +2460,8 @@ int Parser::validaTextura(char* tag,FILE* archivo, FILE* archivoErrores)
 	string fin;
 	Escenario* escenario = Escenario::obtenerInstancia();
 	fpos_t position;
+
+	isRepeatedTextura(tag,archivoErrores);
 
 	linea = (string) tag;
 	//controlo que esta la palabre textura
