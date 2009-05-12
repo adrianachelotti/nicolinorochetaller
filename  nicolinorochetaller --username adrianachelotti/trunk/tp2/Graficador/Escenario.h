@@ -8,6 +8,7 @@
 #define RES_ERROR_TEXTURA_EXISTENTE 2
 #define RES_ERROR_CARGANDO_TEXTURA 1
 #define RES_OK 0
+#define RESOLUCION_DEFAULT 800
 
 #include <iostream>
 #include <list>

@@ -14,17 +14,55 @@ using namespace std;
 
 Escenario::Escenario()
 {
+	this->setResolucion(RESOLUCION_DEFAULT);
 	
 }
 
 Escenario::~Escenario()
 {
+	Textura* texturaActual = NULL;
+
+	list<Textura*>::iterator it;
+ 
+    it = this->listadoDeTexturas.begin();
+    
+	while(it != this->listadoDeTexturas.end())
+	{
+      texturaActual = *it;
+	  delete texturaActual;
+	  texturaActual = NULL;
+      it++;
+	
+    }
+
+	
+
+	Figura* figuraActual = NULL;
+
+	list<Figura*>::iterator it2;
+ 
+    it2 = this->listadoDeFiguras.begin();
+    
+	while(it2 != this->listadoDeFiguras.end())
+	{
+      figuraActual = *it2;
+	  delete figuraActual;
+	  figuraActual = NULL;
+      it2++;
+	
+    }
+
+	
 
 }
 
 Escenario* Escenario::obtenerInstancia()
 {
-	if(instancia==NULL) instancia = new Escenario();
+	if(instancia==NULL)
+	{
+		instancia = new Escenario();
+		
+	}
 	
 	return instancia;
 
