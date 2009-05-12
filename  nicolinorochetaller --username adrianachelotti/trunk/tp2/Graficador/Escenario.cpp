@@ -260,8 +260,7 @@ int Escenario::dibujar()
 			mensajeError+= this->getTexturaEscenario();
 			mensajeError+= " - ";
 
-			string contextoError = MSG_CTX_TEXTURA;
-			contextoError+= "Escenario";
+			string contextoError = "Escenario";
 	
 			this->imprimirError(contextoError,this->getArchivoErrores(),mensajeError);
 		}
@@ -278,8 +277,8 @@ int Escenario::dibujar()
 			mensajeError+= this->getTexturaEscenario();
 			mensajeError+= " - ";
 
-			string contextoError = MSG_CTX_TEXTURA;
-			contextoError+= "Escenario";
+			string contextoError = "Escenario";
+			
 	
 			this->imprimirError(contextoError,this->getArchivoErrores(),mensajeError);
 		}
