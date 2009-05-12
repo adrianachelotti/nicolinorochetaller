@@ -7,6 +7,9 @@
 
 #include <string>
 #include <iostream>
+#include <list>
+#include <vector>
+#include <fstream>
 
 #include "Escenario.h"
 #include "Cuadrado.h"
@@ -96,6 +99,21 @@ using namespace std;
 #define WAR35	"ADVERTENCIA: - Se repite la etiqueta colorFondoEsc -"
 #define WAR36	"ADVERTENCIA: - Se repite la etiqueta texturaEsc -"
 #define WAR37	"ADVERTENCIA: - No se encontro la etiqueta General. Se creara una por defecto. -"
+#define WAR38	"ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -"
+#define WAR39	"ADVERTENCIA: - Se repite la etiqueta circulo -"
+#define WAR40	"ADVERTENCIA: - Se repite la etiqueta cuadrado -"
+#define WAR41	"ADVERTENCIA: - Se repite la etiqueta rectangulo -"
+#define WAR42	"ADVERTENCIA: - Se repite la etiqueta triangulo -"
+#define WAR43	"ADVERTENCIA: - Se repite la etiqueta segmento -"
+#define WAR44	"ADVERTENCIA: - Se repite la etiqueta General -"
+#define WAR45	"ADVERTENCIA: - Se repite la etiqueta posicion -"
+#define WAR46	"ADVERTENCIA: - Se repite la etiqueta x -"
+#define WAR47	"ADVERTENCIA: - Se repite la etiqueta y -"
+#define WAR48	"ADVERTENCIA: - Se repite la etiqueta textura -"
+#define WAR49	"ADVERTENCIA: - Se repite la etiqueta path -"
+#define WAR50	"ADVERTENCIA: - Se repite la etiqueta inicio -"
+#define WAR51	"ADVERTENCIA: - Se repite la etiqueta fin -"
+#define WAR52	"ADVERTENCIA: - Se repite la etiqueta ver -"
 
 
 #define COLOR_VACIO 0xFF000000
@@ -121,6 +139,9 @@ class Parser
 private:
 	int nroLinea;
 	bool hayGeneral;
+	list<string> tags;
+	int esConocido(string line);
+	void invalidTextFound(char* line, FILE* er);
 public:
 	Parser();
 	virtual ~Parser();
@@ -158,6 +179,11 @@ public:
 	int validaPuntosTriangulo(punto vertices[3]);
 	char* readTag(FILE* arch,FILE* archivoError);
 
+	void isRepeatedVertice(char* line, FILE* aError,int num);
+	void isRepeatedInicio(char* line, FILE* aError);
+	void isRepeatedFin(char* line, FILE* aError);
+	void isRepeatedTextura(char* line, FILE* aError);
+	void isRepeatedPosition(char* line, FILE* aError);
 	void isRepeatedCuadrado(char* line, FILE* aError);
 	void isRepeatedGeneral(char* line, FILE* aError);
 	void isRepeatedCirculo(char* line, FILE* aError);
