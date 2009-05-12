@@ -13,12 +13,23 @@
 Parser::Parser()
 {
 	this->nroLinea = 0;
+	this->hayGeneral = false;
 }
 
 
 Parser::~Parser()
 {
 
+}
+
+void Parser::setHayGeneral(bool hay)
+{
+	this->hayGeneral = hay;
+}
+
+bool Parser::getHayGeneral()
+{
+	return(this->hayGeneral);
 }
 
 void Parser::setNroLinea(int linea)
@@ -2072,9 +2083,17 @@ int Parser::validaTextura(char* tag,FILE* archivo, FILE* archivoErrores)
 	fpos_t position;
 
 	linea = (string) tag;
+	//controlo que esta la palabre textura
+	found = linea.find("textura");
+	if(found == string::npos)
+	{
+		cout<<"Error en el formato de textura."<<endl;
+		imprimirError(tag,archivoErrores,ERR3M);
+        res = INVALID_FORMAT;
+    }
 
 	//controlo que esta la id de la textura bien formado
-	found = linea.find("<textura id=\"");
+	found = linea.find("id=\"");
 	if(found == string::npos)
 	{
 		cout<<"Error en el id de la textura."<<endl;
@@ -2159,6 +2178,7 @@ int Parser::validaTagPadre(char* tag, FILE* archivo, FILE* archivoErrores)
 	if (found == 0) 
 	{
 		cout<<"GENERAL"<<endl;
+		setHayGeneral(true);
 		res = validaGeneral(tag,archivoErrores);
 		res = validarGeneralCierre(archivo,archivoErrores);
 		return res;
@@ -2243,7 +2263,6 @@ int Parser::validaTagPadre(char* tag, FILE* archivo, FILE* archivoErrores)
 			if ( (fin.find("<ListadoDeElementos>")) || (fin.find("<General>"))) return INVALID_FORMAT;
 		}
 	}
-
 	return INVALID_FORMAT;
 }
 
@@ -2289,6 +2308,10 @@ int Parser::validar(FILE* archivo, FILE* archivoErrores)
 
 		if (fin.find("</escenario>") == 0) 
 		{
+			if(getHayGeneral() == false) {
+				cout<<"NO HAY GENERAL"<<endl;
+				imprimirError(NULL,archivoErrores,WAR37);
+			}
 			return VALID_FORMAT;		
 		}
 		
@@ -2306,6 +2329,11 @@ int Parser::validar(FILE* archivo, FILE* archivoErrores)
 			}	
 		}
 		
+	}
+
+	if(getHayGeneral() == false) {
+		cout<<"NO HAY GENERAL"<<endl;
+		imprimirError(NULL,archivoErrores,WAR37);
 	}
 	cout<<"No se encontro el cierre del escenario"<<endl;
 	imprimirError(tag,archivoErrores,WAR1);
