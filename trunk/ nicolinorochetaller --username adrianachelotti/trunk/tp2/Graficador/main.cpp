@@ -9,6 +9,7 @@ IMPRIME RECTANGULO
 
 #include "SDL.h"
 #include "stdio.h"
+#include "string.h"
 #include <math.h>
 #include "Figura.h"
 #include "Escenario.h"
@@ -41,7 +42,7 @@ void addError(string linea,FILE* archivoErrores,string err)
 *                
 **************************************************************************/
 
-//obtiene la otra componente... podria estar en escenario... TODO
+//obtiene la otra componente... podria estar en escenario...
 int getResoCompo(int reso1) {
 	int res2;
 	switch (reso1)
@@ -62,6 +63,14 @@ int getResoCompo(int reso1) {
 	return res2;
 }
 
+void sacaEnter(char *cadena) {
+	char* p;
+	p = strchr(cadena, '\n');
+	if(p) 
+		*p = '\0';
+}
+
+
 int main(int argc, char *argv[]) {
     
 
@@ -73,9 +82,16 @@ int main(int argc, char *argv[]) {
 	FILE *archivoErrores;
 	int resultado;
 	string contexto = "main";
-	char nombre[100] = "Debug/prueba.esc";
-	char nombreEr[100] = "Debug/errores.err";
 
+	
+	char nombreEr[100] = "Debug/errores.err";
+	char nombre[100];
+
+	printf("Ingrese el nombre del archivo a dibujar: ");
+	fgets(nombre,100,stdin);
+	sacaEnter(nombre);
+	
+	
 	archivoErrores = fopen(nombreEr,"w");
 	if (archivoErrores == NULL)
 	{
