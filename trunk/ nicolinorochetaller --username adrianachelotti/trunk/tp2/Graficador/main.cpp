@@ -27,6 +27,15 @@ IMPRIME RECTANGULO
 
 
 
+void addError(string linea,FILE* archivoErrores,string err)
+{
+	fprintf(archivoErrores,"Programa principal: ");
+	if (!linea.empty()) fprintf(archivoErrores,linea.c_str());
+	fprintf(archivoErrores,"\n");
+	fprintf(archivoErrores,err.c_str());
+	fprintf(archivoErrores,"\n\n");
+}
+
 /*************************************************************************
 * Dibujar un pixel en el punto (x,y) del color pasado como parametro
 *                
@@ -63,7 +72,7 @@ int main(int argc, char *argv[]) {
 	FILE *archivo;
 	FILE *archivoErrores;
 	int resultado;
-
+	string contexto = "main";
 	char nombre[100] = "Debug/prueba.esc";
 	char nombreEr[100] = "Debug/errores.err";
 
@@ -71,35 +80,45 @@ int main(int argc, char *argv[]) {
 	if (archivoErrores == NULL)
 	{
 		cout<<"No se pudo abrir el archivo de errores"<<endl;
-		exit(1);
+		getchar();
+		return 0;
 	}
 
 	archivo = fopen(nombre,"r");
+	Escenario* escenario = Escenario::obtenerInstancia();
 	if (archivo == NULL)
 	{
-		cout<<"No se pudo abrir el archivo"<<endl;
-		fprintf(archivoErrores,"No se pudo encontrar el archivo de datos\n");
-		exit(1);
+		cout<<"No se pudo abrir el archivo prueba.esc"<<endl;
+		string error  = "No se pudo encontrar el archivo de datos";
+		addError(contexto,archivoErrores,error);
+		getchar();
+		return 0;
+
 	}
 	
 	resultado = parser->validar(archivo,archivoErrores);	
 	
-	//Dibujo del escenario.
-	Escenario* escenario = Escenario::obtenerInstancia();
 
     escenario->setArchivoErrores(archivoErrores);
 
 	if( SDL_Init(SDL_INIT_VIDEO) < 0 ) 
 	{
-		fprintf(stderr,"Couldn't initialize SDL: %s\n", SDL_GetError());
-		exit(1);
+		fprintf(stderr,"Error al inicializar la libreria SDL: %s\n", SDL_GetError());
+		string errorSDL = "Error al inicializar la libreria SDL";
+		addError(contexto,archivoErrores,errorSDL);
+		getchar();
+		return 0;
 	}
 
     screen = SDL_SetVideoMode(escenario->getResolucion(), getResoCompo(escenario->getResolucion()), 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
 	if ( screen == NULL )
 	{
-		fprintf(stderr, "Couldn't set 640x480x8 video mode: %s\n",SDL_GetError());
-		exit(1);
+		fprintf(stderr, "Error al obtener el area de dibujo: %s\n",SDL_GetError());
+		string errorScreen = "Error al inicializar la libreria SDL";
+		addError(contexto,archivoErrores,errorScreen);
+		getchar();
+		return 0;
+
 	}
 
 	//seteo la pantalla del escenario

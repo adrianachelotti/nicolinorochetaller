@@ -1,30 +1,32 @@
 <escenario>
-<General resolucion="800"  texturaEsc="id1" colorFondoFig="255000000" colorLinea="000255000" colorFondoEsc="000000255">
+<General resolucion="800"  texturaEsc="id1" colorFondoFig="255000000" colorLinea="000255000" >
 	</General>
 	<ListadoDeElementos>
-		<circulo id="id1" radio="85" idTextura="id2">
+		<circulo id="id1" radio="85" idTextura="id1">
 			<posicion x="100" y="300"/>
 		</circulo> 
-		<circulo id="id2" radio="85" idTextura="id1">
-			<posicion x="200" y="300"/>
+		<circulo id="id2" radio="85" idTextura="id5">
+			<posicion x="290" y="300"/>
 		</circulo> 
 		<circulo id="id3" radio="85" idTextura="id6">
-			<posicion x="400" y="300"/>
+			<posicion x="580" y="300"/>
 		</circulo> 
-		<circulo id="id4" radio="85" idTextura="id3">
-			<posicion x="200" y="100"/>
+		<circulo id="id4" radio="85" idTextura="id2">
+			<posicion x="300" y="100"/>
 		</circulo> 
 		</ListadoDeElementos>
 	<ListadoDeTexturas>
-		<textura id="id1" path="Dibujo.bmp">
+		<textura id="id1" path="Anochecer.bmp">
 		</textura>
-		<textura id="id2" path="mam.bmp">
+		<textura id="id2" path="paisajes.bmp">
 		</textura>
-		<textura id="id5" path="forda.bmp">
+		<textura id="id5" path="maspalomas1.bmp">
 		</textura>
 		<textura id="id3" path="ferrari.bmp">
 		</textura>
-		<textura id="id1" path="diego.bmp">
+		<textura id="id6" path="montañas.bmp">
+		</textura>
+		<textura id="id4" path="flores.bmp">
 		</textura>
 	</ListadoDeTexturas>
 	
