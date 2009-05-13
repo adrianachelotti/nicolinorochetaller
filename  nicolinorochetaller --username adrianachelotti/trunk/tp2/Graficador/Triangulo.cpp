@@ -204,13 +204,3 @@ int Triangulo::dibujar()
 	return RES_OK;
 }
 
-
-
-
-
-
-
-
-
-
-

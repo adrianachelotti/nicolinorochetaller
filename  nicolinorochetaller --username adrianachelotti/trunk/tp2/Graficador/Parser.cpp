@@ -785,8 +785,7 @@ int isNumberColor(string s)
 	string x (charAux);	
     int val = s.compare(x);	
 
-	//SI LO PONGO NO ANDA EL DEBUG??????????
-	//free(charAux);
+	free(charAux);
 	if (val==1) {
 		return -1;
 	} else {
@@ -805,8 +804,7 @@ int isNumber(string s)
 	string x (charAux);	
     int val = s.compare(x);	
 
-	//SI LO PONGO NO ANDA EL DEBUG??????????
-	//free(charAux);
+	free(charAux);
 	return val;
 }
 
