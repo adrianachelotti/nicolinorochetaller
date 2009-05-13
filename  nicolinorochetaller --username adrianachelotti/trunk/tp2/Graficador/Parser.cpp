@@ -1611,7 +1611,7 @@ int Parser::validaCirculo(char* tag,FILE* archivoErrores,Circulo* nCirculo)
     }
 	else
 	{
-		// obtengo el la textura
+		// obtengo la textura
 		begin = s.find("idTextura=\"") + 11;
 		end = s.find("\"", begin + 1);
 		textura = s.substr(begin, end - begin);
