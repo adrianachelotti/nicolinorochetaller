@@ -24,6 +24,7 @@ private:
 	string idTextura;
 	Uint32 colorLinea;
 	Uint32 colorFondo;
+	bool colorPropio;
 public:
 	
 	/*Constructor */
@@ -67,6 +68,12 @@ public:
 
 	/*Metodo encargado de dibujar la figura */
 	virtual int dibujar()=0;
+
+	/* Setea un flag para saber si tiene color propio o adopta el del escenario*/
+	void setColorPropio(bool tiene);
+
+	/* Retorna un flag para saber si tiene color propio o adopta el del escenario*/
+	bool esColorPropio();
 
 };
 

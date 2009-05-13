@@ -24,14 +24,15 @@ Figura::Figura(string identificador, string idTextura,Uint32 colorLinea,Uint32 c
 	this->idTextura = idTextura;
 	this->colorLinea = colorLinea;
 	this->colorFondo = colorFondo;
+	this->colorPropio = false;
 }
 
 Figura::Figura(string identificador)
 {
 	this->id =identificador;
-	this->colorFondo = Escenario::getColorFondoFigura();
-	this->colorLinea = Escenario::getColorLinea();
-	this->idTextura = Escenario::getTexturaFigura();
+	this->colorFondo = COLOR_VACIO;
+	this->colorLinea = COLOR_VACIO;
+	this->idTextura = "";
 }
 
 void Figura::setId(string id)
@@ -66,7 +67,11 @@ Uint32 Figura::getColorLinea()
 
 void Figura::establecerColores()
 {
-	if((this->getIdTextura().empty())&&(this->getColorFondo()==COLOR_VACIO))
+	Escenario* escenario = Escenario::obtenerInstancia();
+	Textura*	text = escenario->getTextura(this->getIdTextura());
+	
+	
+	if(((this->getIdTextura().empty() )|| (text==NULL))&&(!this->colorPropio))
 	{
 		this->setIdTextura(Escenario::getTexturaFigura());
 	}
@@ -93,3 +98,12 @@ Uint32 Figura::getColorFondo()
 	return this->colorFondo;
 }
 
+void Figura::setColorPropio(bool tiene)
+{
+	this->colorPropio  = tiene;
+}
+
+bool Figura::esColorPropio()
+{
+	return colorPropio;
+}
