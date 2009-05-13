@@ -4,6 +4,7 @@
 
 #include "Figura.h"
 #include "Escenario.h"
+#include "Graficador.h"
 
 
 Figura::Figura()
@@ -74,6 +75,18 @@ void Figura::establecerColores()
 
 	if(((this->getIdTextura().empty())||(text==NULL))&&(!this->colorPropio))
 	{
+		if((text==NULL)&&(!this->getIdTextura().empty()))
+		{
+			string mensajeError = GRAF_WARN1;
+			mensajeError+= this->getIdTextura();
+			mensajeError+= " - ";
+
+			string contextoError = MSG_CTX_FIGURA;
+			contextoError+= this->getId();
+	
+			escenario->imprimirError(contextoError,escenario->getArchivoErrores(),mensajeError);
+		}
+
 		this->setIdTextura(Escenario::getTexturaFigura());
 	}
 	

@@ -96,7 +96,7 @@ int Circulo::dibujar()
 			escenario->imprimirError(contextoError,escenario->getArchivoErrores(),mensajeError);
 
 			//Se intenta cargar la textura del escenario
-			if((!Escenario::getTexturaFigura().empty()) && (!this->esColorPropio()))
+			if((!Escenario::getTexturaFigura().empty()) && (!this->esColorPropio()) &&(Escenario::getTexturaFigura().compare(this->getIdTextura())!=0))
 			{
 				text = escenario->getTextura(Escenario::getTexturaFigura());
 				
