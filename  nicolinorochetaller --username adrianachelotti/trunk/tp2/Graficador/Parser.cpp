@@ -770,6 +770,30 @@ void Parser::isRepeatedVertice(char* line, FILE* aError,int num)
 	}	
 }
 
+//vale que sea 0
+int isNumberColor(string s)
+{
+	char* charAux = (char*) malloc (sizeof(char) * s.length());
+	int intAux = atoi(s.c_str());
+	if (intAux == 0) {
+		return 0;
+	}
+    if(intAux < 0)
+            return -1; // no hace falta seguir procesando si ya el numero que parsea tiene un "-" adelante    
+	
+	strcpy(charAux, itoa(intAux, charAux, 10));
+	string x (charAux);	
+    int val = s.compare(x);	
+
+	//SI LO PONGO NO ANDA EL DEBUG??????????
+	//free(charAux);
+	if (val==1) {
+		return -1;
+	} else {
+		return 0;
+	}
+}
+
 int isNumber(string s)
 {
 	char* charAux = (char*) malloc (sizeof(char) * s.length());
@@ -1492,6 +1516,7 @@ int Parser::validaCuadrado(char* tag,FILE* archivoErrores,Cuadrado* nCuadrado)
 		colorFondo = s.substr(begin, end - begin);
 		cF = validaColor(tag,colorFondo,archivoErrores,'F');
 		nCuadrado->setColorFondo(cF);
+		nCuadrado->setColorPropio(true);
 	}
 
 	// controla la existencia de un color de Linea
@@ -1610,6 +1635,7 @@ int Parser::validaCirculo(char* tag,FILE* archivoErrores,Circulo* nCirculo)
 		colorFondo = s.substr(begin, end - begin);
 		cF = validaColor(tag,colorFondo,archivoErrores,'F');
 		nCirculo->setColorFondo(cF);
+		nCirculo->setColorPropio(true);
 	}
 
 	// controla la existencia de un color de Linea
@@ -1626,7 +1652,7 @@ int Parser::validaCirculo(char* tag,FILE* archivoErrores,Circulo* nCirculo)
 		begin = s.find("colorLinea=\"") + 12;
 		end = s.find("\"", begin + 1);
 		colorLinea = s.substr(begin, end - begin);
-		cL = validaColor(tag,colorLinea,archivoErrores,'T');
+		cL = validaColor(tag,colorLinea,archivoErrores,'L');
 		nCirculo->setColorLinea(cL);
 	}
 
@@ -1753,6 +1779,7 @@ int Parser::validaRectangulo(char* tag,FILE* archivoErrores,Rectangulo* nRectang
 		colorFondo = s.substr(begin, end - begin);
 		cF = validaColor(tag,colorFondo,archivoErrores,'F');
 		nRectangulo->setColorFondo(cF);
+		nRectangulo->setColorPropio(true);
 	}
 
 	// controla la existencia de un color de Linea
@@ -1837,6 +1864,7 @@ int Parser::validaTriangulo(char* tag, FILE* archivoErrores,Triangulo* nTriangul
 		colorFondo = s.substr(begin, end - begin);
 		cF = validaColor(tag,colorFondo,archivoErrores,'F');
 		nTriangulo->setColorFondo(cF);
+		nTriangulo->setColorPropio(true);
 	}
 
 	// controla la existencia de un color de Linea
@@ -1955,22 +1983,55 @@ int Parser::colorValido(char* linea, int c,FILE* archivoError,char tipo)
 Uint32 Parser::validaColor(char* linea, string aux, FILE* archivoError,char tipo) 
 {
 	int g,r,b;
-	
+	string vali;
+
 	if (aux.length() != 9)
 	{
-		if (tipo == 'F') imprimirError(linea,archivoError,WAR13);
-		if (tipo == 'L') imprimirError(linea,archivoError,WAR14);
-		if (tipo == 'E') imprimirError(linea,archivoError,WAR5);
+		if (tipo == 'F') {
+			imprimirError(linea,archivoError,WAR13);
+		}
+		if (tipo == 'L') {
+			imprimirError(linea,archivoError,WAR14);
+		}
+		if (tipo == 'E') {
+			imprimirError(linea,archivoError,WAR5);
+		}
 		return COLOR_VACIO;
 	}
 	else 
 	{
-		r = atoi(aux.substr(0, 3).c_str());
-		r = colorValido(linea,r,archivoError,tipo);
-		g = atoi(aux.substr(3, 3).c_str());
-		g = colorValido(linea,g,archivoError,tipo);
-		b = atoi(aux.substr(6, 3).c_str());
-		b = colorValido(linea,b,archivoError,tipo);
+		vali = aux.substr(0, 3).c_str();
+		if (isNumberColor(vali)!= -1) {
+			r = atoi(aux.substr(0, 3).c_str());
+			r = colorValido(linea,r,archivoError,tipo);
+		}else {
+			if (tipo == 'F') imprimirError(linea,archivoError,WAR20);
+			if (tipo == 'L') imprimirError(linea,archivoError,WAR21);
+			if (tipo == 'E') imprimirError(linea,archivoError,WAR22);
+			return COLOR_VACIO;
+		}
+
+		vali = aux.substr(3, 3).c_str();
+		if (isNumberColor(vali)!=-1) {
+			g = atoi(aux.substr(3, 3).c_str());
+			g = colorValido(linea,g,archivoError,tipo);
+		}else {
+			if (tipo == 'F') imprimirError(linea,archivoError,WAR20);
+			if (tipo == 'L') imprimirError(linea,archivoError,WAR21);
+			if (tipo == 'E') imprimirError(linea,archivoError,WAR22);
+			return COLOR_VACIO;
+		}
+
+		vali = aux.substr(6, 3).c_str();
+		if (isNumberColor(vali)!=-1) {
+			b = atoi(aux.substr(6, 3).c_str());
+			b = colorValido(linea,b,archivoError,tipo);
+		}else{
+			if (tipo == 'F') imprimirError(linea,archivoError,WAR20);
+			if (tipo == 'L') imprimirError(linea,archivoError,WAR21);
+			if (tipo == 'E') imprimirError(linea,archivoError,WAR22);
+			return COLOR_VACIO;
+		}
 	}
 	return(getColor(r,g,b));
 
@@ -2021,6 +2082,7 @@ int Parser::validaGeneral(char* tag,FILE* archivoErrores)
 	if(found == string::npos)
 	{
 		imprimirError(tag,archivoErrores,WAR3);
+		cFF = COLOR_VACIO;
     }
 	else 
 	{
@@ -2037,6 +2099,7 @@ int Parser::validaGeneral(char* tag,FILE* archivoErrores)
 	if(found == string::npos)
 	{
 		imprimirError(tag,archivoErrores,WAR4);
+		cL = COLOR_VACIO;
     }
 	else 
 	{
@@ -2053,7 +2116,7 @@ int Parser::validaGeneral(char* tag,FILE* archivoErrores)
 	if(found == string::npos)
 	{
 		imprimirError(tag,archivoErrores,WAR5);
-        cFE = colorXdef();
+        cFE = COLOR_VACIO;
 	}
 	else
 	{
