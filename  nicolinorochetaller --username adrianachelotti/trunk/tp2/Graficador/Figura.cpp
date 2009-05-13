@@ -11,6 +11,7 @@ Figura::Figura()
 	this->colorFondo = Escenario::getColorFondoFigura();
 	this->colorLinea = Escenario::getColorLinea();
 	this->idTextura = Escenario::getTexturaFigura();
+	this->colorPropio = false;
 }
 
 Figura::~Figura()
@@ -70,8 +71,8 @@ void Figura::establecerColores()
 	Escenario* escenario = Escenario::obtenerInstancia();
 	Textura*	text = escenario->getTextura(this->getIdTextura());
 	
-	
-	if(((this->getIdTextura().empty() )|| (text==NULL))&&(!this->colorPropio))
+
+	if(((this->getIdTextura().empty())||(text==NULL))&&(!this->colorPropio))
 	{
 		this->setIdTextura(Escenario::getTexturaFigura());
 	}
