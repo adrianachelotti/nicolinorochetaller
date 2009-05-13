@@ -1626,6 +1626,7 @@ int Parser::validaCirculo(char* tag,FILE* archivoErrores,Circulo* nCirculo)
 	{
 		imprimirError(tag,archivoErrores,WAR13N);
 		cout<<"El circulo no tiene un color de Fondo asignado"<<endl;
+		
 	}
 	else
 	{
