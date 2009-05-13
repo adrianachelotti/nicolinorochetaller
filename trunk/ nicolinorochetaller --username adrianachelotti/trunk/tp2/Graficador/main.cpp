@@ -87,10 +87,10 @@ int main(int argc, char *argv[]) {
 	char nombreEr[100] = "errores.err";
 	//char nombre[100] = "Debug/prueba.esc";
 	
-	char nombre[100];
-	printf("Ingrese el nombre del archivo a dibujar: ");
+	char* nombre = argv[1];
+/*	printf("Ingrese el nombre del archivo a dibujar: ");
 	fgets(nombre,100,stdin);
-	sacaEnter(nombre);
+	sacaEnter(nombre);*/
 	
 	
 	archivoErrores = fopen(nombreEr,"w");
