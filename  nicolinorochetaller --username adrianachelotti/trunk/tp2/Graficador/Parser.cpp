@@ -17,7 +17,7 @@ Parser::Parser()
 	list<string>::iterator it;
 	string aux;
 
-	fstream filestr ("Debug\\reser.txt", fstream::in | fstream::out );	
+	fstream filestr ("reser.txt", fstream::in | fstream::out );	
 	while(filestr.good() == true){
 		char* linea = (char*) malloc (sizeof(char) * 100);
 		filestr.getline(linea, 100);
@@ -1516,7 +1516,10 @@ int Parser::validaCuadrado(char* tag,FILE* archivoErrores,Cuadrado* nCuadrado)
 		colorFondo = s.substr(begin, end - begin);
 		cF = validaColor(tag,colorFondo,archivoErrores,'F');
 		nCuadrado->setColorFondo(cF);
-		nCuadrado->setColorPropio(true);
+
+		if (cF!=COLOR_VACIO) {
+			nCuadrado->setColorPropio(true);
+		}
 	}
 
 	// controla la existencia de un color de Linea
@@ -1533,7 +1536,6 @@ int Parser::validaCuadrado(char* tag,FILE* archivoErrores,Cuadrado* nCuadrado)
 		end = s.find("\"", begin + 1);
 		colorLinea = s.substr(begin, end - begin);
 		cL = validaColor(tag,colorLinea,archivoErrores,'L');
-		//cout<<cL<<endl;
 		nCuadrado->setColorLinea(cL);
 	}
 	return res;
@@ -1636,7 +1638,10 @@ int Parser::validaCirculo(char* tag,FILE* archivoErrores,Circulo* nCirculo)
 		colorFondo = s.substr(begin, end - begin);
 		cF = validaColor(tag,colorFondo,archivoErrores,'F');
 		nCirculo->setColorFondo(cF);
-		nCirculo->setColorPropio(true);
+
+		if(cF!= COLOR_VACIO) {
+			nCirculo->setColorPropio(true);
+		}
 	}
 
 	// controla la existencia de un color de Linea
@@ -1780,7 +1785,10 @@ int Parser::validaRectangulo(char* tag,FILE* archivoErrores,Rectangulo* nRectang
 		colorFondo = s.substr(begin, end - begin);
 		cF = validaColor(tag,colorFondo,archivoErrores,'F');
 		nRectangulo->setColorFondo(cF);
-		nRectangulo->setColorPropio(true);
+
+		if (cF!=COLOR_VACIO) {
+			nRectangulo->setColorPropio(true);
+		}
 	}
 
 	// controla la existencia de un color de Linea
@@ -1865,7 +1873,10 @@ int Parser::validaTriangulo(char* tag, FILE* archivoErrores,Triangulo* nTriangul
 		colorFondo = s.substr(begin, end - begin);
 		cF = validaColor(tag,colorFondo,archivoErrores,'F');
 		nTriangulo->setColorFondo(cF);
-		nTriangulo->setColorPropio(true);
+
+		if (cF != COLOR_VACIO) {
+			nTriangulo->setColorPropio(true);
+		}
 	}
 
 	// controla la existencia de un color de Linea

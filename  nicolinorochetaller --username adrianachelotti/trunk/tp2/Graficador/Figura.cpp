@@ -8,9 +8,9 @@
 
 Figura::Figura()
 {
-	this->colorFondo = Escenario::getColorFondoFigura();
-	this->colorLinea = Escenario::getColorLinea();
-	this->idTextura = Escenario::getTexturaFigura();
+	this->colorFondo = COLOR_VACIO;
+	this->colorLinea = COLOR_VACIO;
+	this->idTextura = "";
 	this->colorPropio = false;
 }
 

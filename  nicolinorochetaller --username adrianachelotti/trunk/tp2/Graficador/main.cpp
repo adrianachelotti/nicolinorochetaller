@@ -84,9 +84,10 @@ int main(int argc, char *argv[]) {
 	string contexto = "main";
 
 	
-	char nombreEr[100] = "Debug/errores.err";
+	char nombreEr[100] = "errores.err";
+	//char nombre[100] = "Debug/prueba.esc";
+	
 	char nombre[100];
-
 	printf("Ingrese el nombre del archivo a dibujar: ");
 	fgets(nombre,100,stdin);
 	sacaEnter(nombre);
