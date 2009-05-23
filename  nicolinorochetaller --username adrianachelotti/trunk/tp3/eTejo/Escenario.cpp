@@ -68,6 +68,17 @@ Escenario* Escenario::obtenerInstancia()
 
 }
 
+
+long Escenario::getVelocidad()
+{
+	return this->velocidad;
+}
+
+void Escenario::setVelocidad(long vel)
+{
+	this->velocidad = vel;
+}
+
 void Escenario::setResolucion(int resolucion)
 {
 	this->resolucion = resolucion;

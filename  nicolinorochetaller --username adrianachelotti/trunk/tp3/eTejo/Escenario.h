@@ -21,6 +21,7 @@ using namespace std;
 class Escenario  
 {
 private:
+	long velocidad;
 	int resolucion;
 	int alto;
 	int ancho;
@@ -138,6 +139,10 @@ public:
 
 	/* Retorna el alto del escenario*/
 	int getAlto();
+
+	
+	void setVelocidad(long vel);
+	long getVelocidad();
 
 };
 
