@@ -51,6 +51,11 @@ void handle_input(SDL_Event event, Punto *sqre, int altura, int screen_height)
 				sqre->y-=DELTA_Y;
 				 break;
          
+			case SDLK_SPACE:
+				 printf("largo la bola");
+				 break;
+
+			
         }
     }
 
@@ -207,7 +212,9 @@ int main(int argc, char *argv[]) {
 			{
 
                 quit = 1;
+
 			}
+			
 			rectangulo->setPosicionVerticeInferiorIzquierdo(posicion);
 			escenario->dibujar();
 			rectangulo->dibujar();
