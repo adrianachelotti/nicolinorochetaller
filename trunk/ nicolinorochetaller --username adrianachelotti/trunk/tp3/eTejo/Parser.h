@@ -115,6 +115,8 @@ using namespace std;
 #define WAR51	"ADVERTENCIA: - Se repite la etiqueta fin -"
 #define WAR52	"ADVERTENCIA: - Se repite la etiqueta ver -"
 
+#define WAR53	"ADVERTENCIA: - La velocidad no es valida. Se colocara una por defecto -"
+#define WAR54	"ADVERTENCIA: - No se encontro la etiqueta velocidad -"
 
 #define COLOR_VACIO 0xFF000000
 #define VALID_FORMAT 0
@@ -126,6 +128,7 @@ using namespace std;
 #define RESO_DEF 800
 #define LONGITUD_INICIAL 128
 #define INCREMENTO 10
+#define VELO_DEF 20
 
 struct color {
 	int R;
@@ -177,6 +180,8 @@ public:
 	int validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,punto&v3);
 	int validaPuntosTriangulo(punto vertices[3]);
 	char* readTag(FILE* arch,FILE* archivoError);
+
+	long validaVelo(long velo,char* tag,FILE* archivoErrores);
 
 	void isRepeatedVertice(char* line, FILE* aError,int num);
 	void isRepeatedInicio(char* line, FILE* aError);

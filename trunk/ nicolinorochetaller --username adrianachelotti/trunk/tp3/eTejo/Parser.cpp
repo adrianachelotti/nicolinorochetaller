@@ -34,6 +34,58 @@ Parser::~Parser()
 
 }
 
+//vale que sea 0
+int isNumberColor(string s)
+{
+	char* charAux = (char*) malloc (sizeof(char) * s.length());
+	int intAux = atoi(s.c_str());
+	if (intAux == 0) {
+		return 0;
+	}
+    if(intAux < 0)
+            return -1; // no hace falta seguir procesando si ya el numero que parsea tiene un "-" adelante    
+	
+	strcpy(charAux, itoa(intAux, charAux, 10));
+	string x (charAux);	
+    int val = s.compare(x);	
+
+	free(charAux);
+	if (val==1) {
+		return -1;
+	} else {
+		return 0;
+	}
+}
+
+int isNumber(string s)
+{
+	char* charAux = (char*) malloc (sizeof(char) * s.length());
+	int intAux = atoi(s.c_str());
+    if(intAux < 1)
+            return 1; // no hace falta seguir procesando si ya el numero que parsea tiene un "-" adelante    
+	
+	strcpy(charAux, itoa(intAux, charAux, 10));
+	string x (charAux);	
+    int val = s.compare(x);	
+
+	free(charAux);
+	return val;
+}
+
+long isNumberLong(string s) 
+{
+	char* charAux = (char*) malloc (sizeof(char) * s.length());
+	long lAux = atol(s.c_str());
+
+	strcpy(charAux, ltoa(lAux, charAux, 10));
+	string x (charAux);	
+    int val = s.compare(x);	
+		//SI LO PONGO NO ANDA EL DEBUG??????????
+	free(charAux);
+	return val;
+
+}
+
 void Parser::setHayGeneral(bool hay)
 {
 	this->hayGeneral = hay;
@@ -770,43 +822,7 @@ void Parser::isRepeatedVertice(char* line, FILE* aError,int num)
 	}	
 }
 
-//vale que sea 0
-int isNumberColor(string s)
-{
-	char* charAux = (char*) malloc (sizeof(char) * s.length());
-	int intAux = atoi(s.c_str());
-	if (intAux == 0) {
-		return 0;
-	}
-    if(intAux < 0)
-            return -1; // no hace falta seguir procesando si ya el numero que parsea tiene un "-" adelante    
-	
-	strcpy(charAux, itoa(intAux, charAux, 10));
-	string x (charAux);	
-    int val = s.compare(x);	
 
-	free(charAux);
-	if (val==1) {
-		return -1;
-	} else {
-		return 0;
-	}
-}
-
-int isNumber(string s)
-{
-	char* charAux = (char*) malloc (sizeof(char) * s.length());
-	int intAux = atoi(s.c_str());
-    if(intAux < 1)
-            return 1; // no hace falta seguir procesando si ya el numero que parsea tiene un "-" adelante    
-	
-	strcpy(charAux, itoa(intAux, charAux, 10));
-	string x (charAux);	
-    int val = s.compare(x);	
-
-	free(charAux);
-	return val;
-}
 
 
 char* Parser::readTag(FILE* arch,FILE* archivoError)
@@ -2047,10 +2063,25 @@ Uint32 Parser::validaColor(char* linea, string aux, FILE* archivoError,char tipo
 
 }
 
+long Parser::validaVelo(long velo,char* tag,FILE* archivoErrores) {
+	if (velo>= LONG_MIN && velo<=LONG_MAX ) 
+	{
+		return velo;
+	}
+	else 
+	{
+		cout<<"VELO FUERA DE RANGO"<<endl;
+		//TODO IMPRIMIR ERROR EN ARCHIVO
+		return VELO_DEF;
+	}
+
+}
+
 
 int Parser::validaGeneral(char* tag,FILE* archivoErrores) 
 {
 	size_t found; 
+	long velo;
 	int begin, end, reso;
 	string aux,linea,aux1;
 	Uint32 cFF,cL,cFE;
@@ -2172,6 +2203,36 @@ int Parser::validaGeneral(char* tag,FILE* archivoErrores)
 		cout<<"TEXTURA ESCENARIO: "<<aux<<endl;
 		escenario->setTexturaEscenario(aux);
 	}
+
+	//controlo la velocidad
+	found = linea.find("velocidad=\"");
+	if(found == string::npos)
+	{
+		imprimirError(tag,archivoErrores,WAR54);
+		cout<<"NO HAY VELO"<<endl;
+        velo = VELO_DEF;
+    }
+	else 
+	{
+		// obtengo la velocidad
+		begin = linea.find("velocidad=\"") + 11;
+		end = linea.find("\"", begin + 1);
+		aux1 = linea.substr(begin, end - begin).c_str();
+		if (isNumberLong(aux1)==0) 
+		{
+			velo = atol(linea.substr(begin, end - begin).c_str());
+			velo = validaVelo(velo,tag,archivoErrores);	
+		}
+		else
+		{
+			imprimirError(tag,archivoErrores,WAR53);
+			cout<<"NO ES UN NUMERO"<<endl;
+			velo = VELO_DEF;
+		}
+	}
+	escenario->setVelocidad(velo);
+	cout<<"VELOCIDAD: "<<velo<<endl;
+
 	return VALID_FORMAT;
 }
 
