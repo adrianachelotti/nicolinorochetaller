@@ -1,0 +1,25 @@
+<escenario>
+<General resolucion="800" texturaFig="id3" texturaEsc="id1" colorFondoFig="255000000" colorLinea="000255000" >
+	</General>
+	<ListadoDeElementos>
+		<circulo id="id2" radio="85" idTextura="id2">
+			<posicion x="290" y="300"/>
+		</circulo> 
+		</ListadoDeElementos>
+	<ListadoDeTexturas>
+		<textura id="id1" path="texturas/Anochecer.bmp">
+		</textura>
+		<textura id="id2" path="texturas/paisajesX.bmp">
+		</textura>
+		<textura id="id3" path="texturas/ferrari.bmp">
+		</textura>
+		<textura id="id4" path="texturas/flores.bmp">
+		</textura>
+		<textura id="id5" path="texturas/maspalomas1.bmp">
+		</textura>
+		<textura id="id6" path="texturas/montañas.bmp">
+		</textura>
+	</ListadoDeTexturas>
+	
+</escenario>
+
