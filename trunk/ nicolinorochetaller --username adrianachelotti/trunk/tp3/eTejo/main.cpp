@@ -25,6 +25,40 @@ IMPRIME RECTANGULO
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
 #define SCREEN_DEPTH 8
+#define DELTA_Y 10
+
+
+/*************************************************************************
+* Dado un evento que arroja la SDL cambia la posicion y de la paleta
+*                
+**************************************************************************/
+void handle_input(SDL_Event event, Punto *sqre, int altura, int screen_height)
+{
+    //si el evento fue que se presiono una tecla
+    if( event.type == SDL_KEYDOWN )
+    {
+        
+        switch( event.key.keysym.sym )
+        {
+			// si se presiono la flecha down
+			case SDLK_DOWN:
+				if(sqre->y+ altura  <screen_height)
+				sqre->y+=DELTA_Y;
+				break;
+			// si se presiono la flecha down
+			case SDLK_UP:
+				if(sqre->y - altura >altura)
+				sqre->y-=DELTA_Y;
+				 break;
+         
+        }
+    }
+
+}
+
+
+
+
 
 
 
@@ -144,12 +178,55 @@ int main(int argc, char *argv[]) {
 	Graficador* graficador = Graficador::obtenerInstancia();
 
 	escenario->dibujar();
+//	SDL_Flip(screen);
+	/*****************************************************************/
+	/*                  ENTRADA TECLADO							     */
+	/*****************************************************************/
 
+	SDL_Event event;
+    int quit;
+    quit = 0;
+    Punto posicion;
+    posicion.x = 80;
+    posicion.y = 370;
+	int altoPantalla= escenario->getAlto();
+	
+
+    Rectangulo* rectangulo = new Rectangulo("paleta1", 20,100, posicion);
+	rectangulo->setColorFondo(0xFFFF00);
+	rectangulo->setColorLinea(0);
+	rectangulo->setColorPropio(true);
+
+    SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,SDL_DEFAULT_REPEAT_INTERVAL);
+     while(quit == 0)
+	 {
+        while (SDL_PollEvent(&event) )
+		{
+            handle_input(event, &posicion, rectangulo->getAltura(), altoPantalla);
+            if( event.key.keysym.sym == SDLK_ESCAPE )
+			{
+
+                quit = 1;
+			}
+			rectangulo->setPosicionVerticeInferiorIzquierdo(posicion);
+			escenario->dibujar();
+			rectangulo->dibujar();
+			SDL_UpdateRect(screen, 0,0,0,0);
+			//SDL_Flip(screen);
+			
+		}    
+        
+		
+             
+     }
+
+
+	/****************************************************************/
 	fclose(archivo);
 	fclose(archivoErrores);
-
+/*
 	SDL_Flip(screen);
-	getchar();
+	getchar();*/
 	SDL_Quit( );
 
 	return 0;
