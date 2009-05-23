@@ -1,6 +1,7 @@
-/****************************************************************************
-IMPRIME RECTANGULO
-******************************************************************************/
+/*************************************************************************
+* Main - programa principal
+*                
+**************************************************************************/
 
 #ifdef WIN32
 #pragma comment(lib, "SDL.lib")
@@ -36,11 +37,6 @@ void addError(string linea,FILE* archivoErrores,string err)
 	fprintf(archivoErrores,err.c_str());
 	fprintf(archivoErrores,"\n\n");
 }
-
-/*************************************************************************
-* Dibujar un pixel en el punto (x,y) del color pasado como parametro
-*                
-**************************************************************************/
 
 //obtiene la otra componente... podria estar en escenario...
 int getResoCompo(int reso1) {

@@ -21,6 +21,7 @@ using namespace std;
 class Escenario  
 {
 private:
+	long velocidad;
 	int resolucion;
 	int alto;
 	int ancho;
@@ -48,7 +49,7 @@ private:
 	
 
 public:
-	
+
 	static Uint32 colorFondoFigura;
 	static Uint32 colorLinea;
 	static string texturaFigura;
@@ -135,10 +136,11 @@ public:
 	/* Retorna el ancho del escenario*/
 	int getAncho();
 
-
 	/* Retorna el alto del escenario*/
 	int getAlto();
 
+	void setVelocidad(long vel);
+	long getVelocidad();
 };
 
 #endif 
