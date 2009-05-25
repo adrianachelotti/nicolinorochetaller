@@ -19,6 +19,9 @@ Textura::Textura(string id,string path)
 {
 	this->id = id;
 	this->path = path;
+	//TODO
+	this->imagen =  NULL;
+	
 	
 }
 
@@ -40,4 +43,15 @@ void Textura::setPath(string path)
 string Textura::getPath()
 {
 	return this->path;
+}
+SDL_Surface* Textura::getImagen()
+{
+	if(this->imagen==NULL)
+	this->imagen =  SDL_LoadBMP(path.c_str());
+	
+	return this->imagen;
+}
+void Textura::setImagen(SDL_Surface* imagen)
+{
+	this->imagen = imagen;
 }

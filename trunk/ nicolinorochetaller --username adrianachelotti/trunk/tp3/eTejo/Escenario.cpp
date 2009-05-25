@@ -14,6 +14,7 @@ using namespace std;
 
 Escenario::Escenario()
 {
+	this->imagenEscenario= NULL;
 	this->setResolucion(RESOLUCION_DEFAULT);
 	
 }
@@ -51,6 +52,7 @@ Escenario::~Escenario()
       it2++;
 	
     }
+	
 
 	
 
@@ -318,7 +320,7 @@ int Escenario::dibujar()
 
 	if(contieneTextura)
 	{
-		imagen = SDL_LoadBMP(text->getPath().c_str());
+		imagen = text->getImagen();
 		
 		if(imagen == NULL)
 		{
@@ -343,8 +345,14 @@ int Escenario::dibujar()
 	}
 	else
 	{
-		SDL_Surface* imagenResized  = graficador->getImageResized(text,this->ancho, this->alto);
-		graficador->rellenarRectanguloConTextura(screen,imagenResized ,punto);
+	
+		if(this->imagenEscenario==NULL)
+		this->imagenEscenario  = graficador->getImageResized(text,this->ancho, this->alto);
+		//graficador->rellenarRectanguloConTextura(screen,imagenEscenario ,punto);
+		SDL_BlitSurface (imagenEscenario, NULL, screen, NULL);
+
+
+
 
 	}
 	while( it != this->listadoDeFiguras.end())
@@ -397,4 +405,9 @@ int Escenario::getResoCompo(int reso1)
 	}
 	return res2;
 }
-	
+
+SDL_Surface* Escenario::getImagenEscenario()
+{
+
+	return this->imagenEscenario;
+}

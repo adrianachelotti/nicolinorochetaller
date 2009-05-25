@@ -113,7 +113,7 @@ int Cuadrado::dibujar()
 				}
 				else
 				{
-					imagen = SDL_LoadBMP(text->getPath().c_str());
+					imagen = text->getImagen();
 					if(imagen==NULL)
 					{
 						string contextoError = MSG_CTX_FIGURA;
@@ -163,6 +163,7 @@ int Cuadrado::dibujar()
 		{
 			graficador->dibujarRectangulo(Escenario::screen,this->getPosicionVerticeInferiorIzquierdo(),this->lado,this->lado,this->getColorLinea());
 		}
+		
 	}
 
 	return RES_OK;
