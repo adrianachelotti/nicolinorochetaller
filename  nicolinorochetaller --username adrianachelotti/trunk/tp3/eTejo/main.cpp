@@ -203,7 +203,7 @@ int main(int argc, char *argv[]) {
 	rectangulo->setColorFondo(0xFFFF00);
 	rectangulo->setColorLinea(0);
 	rectangulo->setColorPropio(true);
-
+	rectangulo->dibujar();
     //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,SDL_DEFAULT_REPEAT_INTERVAL);
 	SDL_EnableKeyRepeat(3,3);
      while(quit == 0)
@@ -223,13 +223,13 @@ int main(int argc, char *argv[]) {
 			escenario->dibujar();
 			printf("dibujo \n");
 			rectangulo->dibujar();
-		//    SDL_UnlockSurface( screen);
-		//	SDL_UpdateRect(screen, posicion.x,posicion.y-100,20,100);
+			SDL_Delay(10);
 			SDL_Flip(screen);
 			
 			}
 			
-		}    
+		}   
+		
         
 		
              
