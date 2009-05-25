@@ -185,7 +185,7 @@ int main(int argc, char *argv[]) {
 	Graficador* graficador = Graficador::obtenerInstancia();
 
 	escenario->dibujar();
-	SDL_Flip(screen);
+	
 	/*****************************************************************/
 	/*                  ENTRADA TECLADO							     */
 	/*****************************************************************/
@@ -197,40 +197,83 @@ int main(int argc, char *argv[]) {
     posicion.x = 80;
     posicion.y = 370;
 	int altoPantalla= escenario->getAlto();
+	bool esPaletaMovida = false;
 	
-
+	// creo la paleta del jugador 1	
+	Uint32 colorBlink = 0x00FF00;
+	Uint32 colorNormal = 0xFFFF00;
+	Uint32 temp = colorNormal;
     Rectangulo* rectangulo = new Rectangulo("paleta1", 20,100, posicion);
-	rectangulo->setColorFondo(0xFFFF00);
+	rectangulo->setColorFondo(colorNormal);
 	rectangulo->setColorLinea(0x00FF00);
 	rectangulo->setColorPropio(true);
 	rectangulo->setPosicionVerticeInferiorIzquierdo(posicion);
 	rectangulo->dibujar();
+	
+
+
+   //* creo el tejo
+	Punto centroTejo ;
+	centroTejo.x = 120;
+	centroTejo.y = 320;
+	Circulo* tejo = new Circulo("tejo", 20,centroTejo);
+	tejo->setColorFondo(0x0000FF);
+	tejo->setColorLinea(0xFFFFFF);
+	tejo->setColorPropio(true);
+	tejo->dibujar();
+
+	SDL_Flip(screen);
+
+    int blinkTimer = 0;
+
     //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,SDL_DEFAULT_REPEAT_INTERVAL);
 	SDL_EnableKeyRepeat(1,1);
      while(quit == 0)
 	 {
-        while (SDL_PollEvent(&event) )
+
+		 //Pequeña animacion de pestañeo
+		 if(!esPaletaMovida)
+		 {
+				if(blinkTimer<50)			
+					temp = colorNormal;
+				else
+					temp = colorBlink;
+				rectangulo->setColorFondo(temp);
+				rectangulo->dibujar();
+				SDL_Flip(screen);
+		}
+        
+		while (SDL_PollEvent(&event) )
 		{
-            handle_input(event, &posicion, rectangulo->getAltura(), altoPantalla);
+		    handle_input(event, &posicion, rectangulo->getAltura(), altoPantalla);
             if( event.key.keysym.sym == SDLK_ESCAPE )
 			{
 
                 quit = 1;
 
 			}
+			
+
+		
 			if( event.type == SDL_KEYDOWN )
 			{
-			rectangulo->setPosicionVerticeInferiorIzquierdo(posicion);
-			escenario->dibujar();
-			printf("dibujo \n");
-			rectangulo->dibujar();
-//			SDL_Delay(10);
-			SDL_Flip(screen);
+				esPaletaMovida = true;
+				//actualizo
+				rectangulo->setPosicionVerticeInferiorIzquierdo(posicion);
+				rectangulo->setColorFondo(colorNormal);
+				// dibujo 
+				escenario->dibujar();
+				rectangulo->dibujar();
+				tejo->dibujar();
+				SDL_Flip(screen);
+			
 			
 			}
 			
+			
 		}   
-		
+		 	if(blinkTimer>100) blinkTimer =0;
+			blinkTimer ++;
         
 		
              
