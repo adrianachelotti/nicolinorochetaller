@@ -235,6 +235,7 @@ int main(int argc, char *argv[]) {
     posicion.y = 370;
 	int altoPantalla= escenario->getAlto();
 	bool esPaletaMovida = false;
+	bool tejoLanzado = false;
 	
 	// creo la paleta del jugador 1	
 	Uint32 colorBlink = 0x00FF00;
@@ -289,6 +290,7 @@ int main(int argc, char *argv[]) {
 		    handle_input(event, &posicion, rectangulo->getAltura(), altoPantalla);
 			
 
+			
             if( event.key.keysym.sym == SDLK_ESCAPE )
 			{
                 quit = 1;
@@ -304,13 +306,26 @@ int main(int argc, char *argv[]) {
 			
 			
 			}
+			if( event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE )
+			{
+				tejoLanzado = true;
+			}
+
 			if(esPaletaMovida)
 			{
 				escenario->dibujar();
 				
-				velocidadTejo = resolverChoqueConParedes(tejo,velocidadTejo);
-
-				moverTejo(tejo, velocidadTejo);
+				if(tejoLanzado)
+				{
+					velocidadTejo = resolverChoqueConParedes(tejo,velocidadTejo);
+					moverTejo(tejo, velocidadTejo);
+				}
+				else 
+				{
+					centroTejo.x = rectangulo->getPosicionVerticeInferiorIzquierdo().x + rectangulo->getBase()+ tejo->getRadio();
+					centroTejo.y = rectangulo->getPosicionVerticeInferiorIzquierdo().y  - (rectangulo->getAltura()/2);
+					tejo->setCentro(centroTejo);
+				}
 				rectangulo->dibujar();
 				tejo->dibujar();
 
