@@ -134,7 +134,7 @@ int Cuadrado::dibujar()
 	{
 		if((this->getColorFondo()!=COLOR_VACIO))
 		{
-			
+					
 			graficador->rellenarRectangulo(Escenario::screen,this->getPosicionVerticeInferiorIzquierdo(),this->lado,this->lado,this->getColorFondo());
 			
 			if(this->getColorLinea()!=COLOR_VACIO)
@@ -155,9 +155,10 @@ int Cuadrado::dibujar()
 	else
 	{
 			//dibujar Textura
-		SDL_Surface* imagenResized  = graficador->getImageResized(text,this->lado, this->lado);
+		if(this->getImagenFigura()==NULL)
+		this->setImagenFigura( graficador->getImageResized(text,this->lado, this->lado));
 
-		graficador->rellenarRectanguloConTextura(Escenario::screen,imagenResized ,this->getPosicionVerticeInferiorIzquierdo());
+		graficador->rellenarRectanguloConTextura(Escenario::screen,this->getImagenFigura() ,this->getPosicionVerticeInferiorIzquierdo());
 
 		if(this->getColorLinea()!=COLOR_VACIO)
 		{

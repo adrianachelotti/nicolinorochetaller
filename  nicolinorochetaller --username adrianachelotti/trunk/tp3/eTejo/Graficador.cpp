@@ -110,19 +110,18 @@ Graficador* Graficador::obtenerInstancia()
 
 void Graficador::rellenarRectangulo( SDL_Surface *screen,Punto punto,int w, int h,Uint32 color)
 {
-  
-   int i =0;
-   int j =0;
-   int x = punto.x;
-   int y = punto.y;
-  
-   for (j=0;j<h;j++)
-   {
-	   for (i=0;i<w;i++)
-	   {
-			dibujarPixel(screen,x+i,y-j,color);
-	   }
-   }
+
+	int i =0;
+	int j =0;
+	int x = punto.x;
+	int y = punto.y;
+	SDL_Rect rectangulo;
+	rectangulo.x = punto.x;
+	rectangulo.y = punto.y - h;
+	rectangulo.w = w;
+	rectangulo.h = h;;
+	SDL_FillRect(screen,&rectangulo,color);
+   
       
 }
 

@@ -186,9 +186,10 @@ int Circulo::dibujar()
 			anchoX = diametro;
 		}
 
-		SDL_Surface* imagenResized  = graficador->getImageResized(text, anchoX,altoY);
+		if(this->getImagenFigura()==NULL)
+		this->setImagenFigura( graficador->getImageResized(text, anchoX,altoY));
 	
-		graficador->rellenarCirculoConTextura(Escenario::screen,imagenResized ,this->getCentro(), this->getRadio());
+		graficador->rellenarCirculoConTextura(Escenario::screen,this->getImagenFigura() ,this->getCentro(), this->getRadio());
 
 		if(this->getColorLinea()!=COLOR_VACIO)
 		{

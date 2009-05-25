@@ -25,7 +25,7 @@ IMPRIME RECTANGULO
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
 #define SCREEN_DEPTH 8
-#define DELTA_Y 5
+#define DELTA_Y 8
 
 
 /*************************************************************************
@@ -201,11 +201,12 @@ int main(int argc, char *argv[]) {
 
     Rectangulo* rectangulo = new Rectangulo("paleta1", 20,100, posicion);
 	rectangulo->setColorFondo(0xFFFF00);
-	rectangulo->setColorLinea(0);
+	rectangulo->setColorLinea(0x00FF00);
 	rectangulo->setColorPropio(true);
+	rectangulo->setPosicionVerticeInferiorIzquierdo(posicion);
 	rectangulo->dibujar();
     //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,SDL_DEFAULT_REPEAT_INTERVAL);
-	SDL_EnableKeyRepeat(3,3);
+	SDL_EnableKeyRepeat(1,1);
      while(quit == 0)
 	 {
         while (SDL_PollEvent(&event) )
@@ -223,7 +224,7 @@ int main(int argc, char *argv[]) {
 			escenario->dibujar();
 			printf("dibujo \n");
 			rectangulo->dibujar();
-			SDL_Delay(10);
+//			SDL_Delay(10);
 			SDL_Flip(screen);
 			
 			}
