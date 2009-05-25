@@ -148,7 +148,7 @@ int Triangulo::dibujar()
 				}
 				else
 				{
-					imagen = SDL_LoadBMP(text->getPath().c_str());
+					imagen = text->getImagen();
 					if(imagen==NULL)
 					{
 						string contextoError = MSG_CTX_FIGURA;
@@ -194,6 +194,7 @@ int Triangulo::dibujar()
 	
 
 		graficador->rellenarTrianguloConTextura(Escenario::screen,imagenResized ,&this->vertices[0],&this->vertices[1],&this->vertices[2]);
+
 
 		if(this->getColorLinea()!=COLOR_VACIO)
 		{

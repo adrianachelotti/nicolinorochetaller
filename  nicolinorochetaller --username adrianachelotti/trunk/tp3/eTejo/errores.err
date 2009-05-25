@@ -1,3 +1,114 @@
-Programa principal: main
-No se pudo encontrar el archivo de datos
+Linea 2 - <General resolucion="800" texturaFig="id1" texturaEsc="id1" colorFondoFig="255255255" colorLinea="000000000" >
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 2 - <General resolucion="800" texturaFig="id1" texturaEsc="id1" colorFondoFig="255255255" colorLinea="000000000" >
+ADVERTENCIA: - No se encontro Color de fondo de Escenario. Se colocara por defecto -
+
+Linea 5 - <rectangulo id="paleta2" base="20" altura="100" colorFigura="255255000" colorLinea="000000000">
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 5 - <rectangulo id="paleta2" base="20" altura="100" colorFigura="255255000" colorLinea="000000000">
+ADVERTENCIA: - El elemento no tiene textura asignada -
+
+Linea 6 - <posicion x="700" y="370"/>
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 8 - <rectangulo id="arco" base="8" altura="300" colorFigura="255000000" colorLinea="000000000">
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 8 - <rectangulo id="arco" base="8" altura="300" colorFigura="255000000" colorLinea="000000000">
+ADVERTENCIA: - El elemento no tiene textura asignada -
+
+Linea 9 - <posicion x="20" y="470"/>
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 11 - <rectangulo id="arco1" base="8" altura="300" colorFigura="255000000" colorLinea="000000000">
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 11 - <rectangulo id="arco1" base="8" altura="300" colorFigura="255000000" colorLinea="000000000">
+ADVERTENCIA: - El elemento no tiene textura asignada -
+
+Linea 12 - <posicion x="760" y="470"/>
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 14 - <circulo id="dispensor1" idTextura="id2" colorFigura="255233000" radio="60" >
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 14 - <circulo id="dispensor1" idTextura="id2" colorFigura="255233000" radio="60" >
+ADVERTENCIA: - No se encontro el color de Linea del elemento -
+
+Linea 15 - <posicion x="400" y="320"/>
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 17 - <triangulo id="dispensorArrow1" idTextura="id3"  >
+ADVERTENCIA: - No se encontro el color de Fondo del elemento -
+
+Linea 17 - <triangulo id="dispensorArrow1" idTextura="id3"  >
+ADVERTENCIA: - No se encontro el color de Linea del elemento -
+
+Linea 18 - <ver1 x="370" y="230"/>
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 19 - <ver2 x="430" y="230"/>
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 20 - <ver3 x="400" y="180"/>
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 22 - <triangulo id="dispensorArrow2" idTextura="id4"  >
+ADVERTENCIA: - No se encontro el color de Fondo del elemento -
+
+Linea 22 - <triangulo id="dispensorArrow2" idTextura="id4"  >
+ADVERTENCIA: - No se encontro el color de Linea del elemento -
+
+Linea 23 - <ver1 x="370" y="410"/>
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 24 - <ver2 x="430" y="410"/>
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 25 - <ver3 x="400" y="460"/>
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 27 - <triangulo id="dispensorArrow3" idTextura="id5"  >
+ADVERTENCIA: - No se encontro el color de Fondo del elemento -
+
+Linea 27 - <triangulo id="dispensorArrow3" idTextura="id5"  >
+ADVERTENCIA: - No se encontro el color de Linea del elemento -
+
+Linea 28 - <ver1 x="310" y="290"/>
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 29 - <ver2 x="310" y="350"/>
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 30 - <ver3 x="260" y="320"/>
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 32 - <triangulo id="dispensorArrow4" idTextura="id6"  >
+ADVERTENCIA: - No se encontro el color de Fondo del elemento -
+
+Linea 32 - <triangulo id="dispensorArrow4" idTextura="id6"  >
+ADVERTENCIA: - No se encontro el color de Linea del elemento -
+
+Linea 33 - <ver1 x="490" y="290"/>
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 34 - <ver2 x="490" y="350"/>
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 35 - <ver3 x="540" y="320"/>
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 37 - <circulo id="bola" colorFigura="000000255" radio="20" >
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 37 - <circulo id="bola" colorFigura="000000255" radio="20" >
+ADVERTENCIA: - El elemento no tiene textura asignada -
+
+Linea 37 - <circulo id="bola" colorFigura="000000255" radio="20" >
+ADVERTENCIA: - No se encontro el color de Linea del elemento -
+
+Linea 38 - <posicion x="280" y="120"/>
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
 

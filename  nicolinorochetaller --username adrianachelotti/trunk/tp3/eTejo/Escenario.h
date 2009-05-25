@@ -30,6 +30,7 @@ private:
 	list<Figura*> listadoDeFiguras;
 	list<Textura*> listadoDeTexturas;
 	FILE* archivoErrores;
+	SDL_Surface* imagenEscenario;
 
 	/*Constructor	 */
 	Escenario();
@@ -140,9 +141,15 @@ public:
 	/* Retorna el alto del escenario*/
 	int getAlto();
 
-	
+	/*Setea la velocidad del nivel*/
 	void setVelocidad(long vel);
+	
+	/*Retorna la velocidad del nivel*/
 	long getVelocidad();
+
+	/*Retorna la imagen del escenario ya cargada de memoria y resizeada*/
+	SDL_Surface* getImagenEscenario();
+
 
 };
 

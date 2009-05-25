@@ -5,6 +5,11 @@
 #if !defined TEXTURA_H
 #define TEXTURA_H
 
+#ifdef WIN32
+#pragma comment(lib, "SDL.lib")
+#pragma comment(lib, "SDLmain.lib")
+#endif
+#include "SDL.h"
 #include <iostream>
 
 using namespace std;
@@ -15,6 +20,7 @@ class Textura
 private:
 	string id;
 	string path;
+	SDL_Surface* imagen;
 
 public:
 
@@ -38,6 +44,12 @@ public:
 
 	/*Retorna el path de la textura*/
 	string getPath();
+
+	/*Retorna la imagen ya cargada de memoria*/
+	SDL_Surface* getImagen();
+
+	/*Setea la imagen ya cargada de memoria*/
+	void setImagen(SDL_Surface* imagen);
 };
 
 #endif

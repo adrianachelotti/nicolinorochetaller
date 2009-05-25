@@ -25,7 +25,7 @@ IMPRIME RECTANGULO
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
 #define SCREEN_DEPTH 8
-#define DELTA_Y 10
+#define DELTA_Y 5
 
 
 /*************************************************************************
@@ -42,12 +42,12 @@ void handle_input(SDL_Event event, Punto *sqre, int altura, int screen_height)
         {
 			// si se presiono la flecha down
 			case SDLK_DOWN:
-				if(sqre->y+ altura  <screen_height)
+				if(sqre->y  <screen_height)
 				sqre->y+=DELTA_Y;
 				break;
 			// si se presiono la flecha down
 			case SDLK_UP:
-				if(sqre->y - altura >altura)
+				if(sqre->y >altura)
 				sqre->y-=DELTA_Y;
 				 break;
          
@@ -123,7 +123,7 @@ int main(int argc, char *argv[]) {
 	string contexto = "main";
 
 	
-	char nombreEr[100] = "errores.err";
+	char nombreEr[100] = "Debug/errores.err";
 	//char nombre[100] = "Debug/prueba.esc";
 	
 	char* nombre = argv[1];
@@ -166,7 +166,9 @@ int main(int argc, char *argv[]) {
 		return 0;
 	}
 
+
     screen = SDL_SetVideoMode(escenario->getResolucion(), getResoCompo(escenario->getResolucion()), 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
+
 	if ( screen == NULL )
 	{
 		fprintf(stderr, "Error al obtener el area de dibujo: %s\n",SDL_GetError());
@@ -183,7 +185,7 @@ int main(int argc, char *argv[]) {
 	Graficador* graficador = Graficador::obtenerInstancia();
 
 	escenario->dibujar();
-//	SDL_Flip(screen);
+	SDL_Flip(screen);
 	/*****************************************************************/
 	/*                  ENTRADA TECLADO							     */
 	/*****************************************************************/
@@ -202,7 +204,8 @@ int main(int argc, char *argv[]) {
 	rectangulo->setColorLinea(0);
 	rectangulo->setColorPropio(true);
 
-    SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,SDL_DEFAULT_REPEAT_INTERVAL);
+    //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,SDL_DEFAULT_REPEAT_INTERVAL);
+	SDL_EnableKeyRepeat(3,3);
      while(quit == 0)
 	 {
         while (SDL_PollEvent(&event) )
@@ -214,12 +217,17 @@ int main(int argc, char *argv[]) {
                 quit = 1;
 
 			}
-			
+			if( event.type == SDL_KEYDOWN )
+			{
 			rectangulo->setPosicionVerticeInferiorIzquierdo(posicion);
 			escenario->dibujar();
+			printf("dibujo \n");
 			rectangulo->dibujar();
-			SDL_UpdateRect(screen, 0,0,0,0);
-			//SDL_Flip(screen);
+		//    SDL_UnlockSurface( screen);
+		//	SDL_UpdateRect(screen, posicion.x,posicion.y-100,20,100);
+			SDL_Flip(screen);
+			
+			}
 			
 		}    
         
@@ -231,9 +239,9 @@ int main(int argc, char *argv[]) {
 	/****************************************************************/
 	fclose(archivo);
 	fclose(archivoErrores);
-/*
+
 	SDL_Flip(screen);
-	getchar();*/
+	//getchar();
 	SDL_Quit( );
 
 	return 0;

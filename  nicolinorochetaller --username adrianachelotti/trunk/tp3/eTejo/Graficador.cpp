@@ -38,17 +38,19 @@ Graficador* Graficador::obtenerInstancia()
  void dibujarPixel(SDL_Surface *screen, int x, int y, Uint32 color)
     
 {
+	 if (SDL_MUSTLOCK(screen))
+	{
+		  if (-1 == SDL_LockSurface(screen))
+		  {
+			printf("Can't lock hardware surface\n");
+			exit(1);
+		  }
+	}
+
     // dibujar(screen,x,y,1,1,color);
 	if ((x > 0 && x < screen->w) && (y > 0 && y < screen->h))
 	{
 	
-	  if ( SDL_MUSTLOCK(screen))
-	  { 
-		  if ( SDL_LockSurface(screen) < 0 ) 
-		  { 
-			  return; 
-		  } 
-	  } 
 	 	  
 	  switch (screen->format->BytesPerPixel)
 	  { 
@@ -88,14 +90,14 @@ Graficador* Graficador::obtenerInstancia()
 		  break; 
 	  } 
 
-	  if ( SDL_MUSTLOCK(screen) ) 
-	  { 
-		  SDL_UnlockSurface(screen); 
-	  } 
+	  
 	 
 	}
 
-
+	if (SDL_MUSTLOCK(screen))
+	{
+	  SDL_UnlockSurface(screen);
+	}
 }
 
 
@@ -214,8 +216,6 @@ int funcionBresenHam( SDL_Surface* screen,Punto A, Punto B,Uint32 color)
     H2 = H << 1;
 
     
-    if (SDL_MUSTLOCK (screen))
-        SDL_LockSurface (screen);  
              
     if (W == 0)             //Recta vertical
 	{
@@ -274,7 +274,7 @@ int funcionBresenHam( SDL_Surface* screen,Punto A, Punto B,Uint32 color)
 		}    
 	}    
 
-    if (SDL_MUSTLOCK (screen)) SDL_UnlockSurface (screen);
+    
         
     //SDL_UpdateRect(screen, 0,0,0,0);
   
@@ -656,16 +656,19 @@ SDL_Surface* Graficador::getImageResized(Textura* textura, int ancho, int alto)
 	
 
 	if((ancho==0)||(alto==0)) return NULL;
-	SDL_Surface* Surface = SDL_LoadBMP( textura->getPath().c_str());
+	SDL_Surface* Surface = textura->getImagen();
+	
     SDL_Surface *_ret = SDL_CreateRGBSurface(Surface->flags, ancho, alto, 32,
     rmask, gmask, bmask, amask);
 
     if((Surface == NULL) ||(_ret==NULL)) 
-	{
+	{ 
+	
 
 		return NULL;
     } 
     
+	
 	if (Surface->w==0 ||Surface->h==0) return NULL;
 	double  _stretch_factor_x = (static_cast<double>(ancho)  / static_cast<double>(Surface->w)),
 		    _stretch_factor_y = (static_cast<double>(alto) / static_cast<double>(Surface->h));
@@ -676,6 +679,8 @@ SDL_Surface* Graficador::getImageResized(Textura* textura, int ancho, int alto)
                 for(Sint32 o_x = 0; o_x < _stretch_factor_x; ++o_x)
                     dibujarPixel(_ret, static_cast<Sint32>(_stretch_factor_x * x) + o_x,
                         static_cast<Sint32>(_stretch_factor_y * y) + o_y, getPixel(Surface, x, y));
+
+
 
     return _ret;
 }
