@@ -138,6 +138,33 @@ Velocidad resolverChoqueConParedes(Circulo* tejo, Velocidad velocidadTejo)
 	return velocidadTejo;
 }
 
+
+Velocidad resolverChoqueConPaleta(Circulo* tejo, Rectangulo* paleta,Velocidad velocidadTejo)
+{
+	
+	int topeXSuperior = paleta->getPosicionVerticeInferiorIzquierdo().x + paleta->getBase();
+	int topeXInferior = paleta->getPosicionVerticeInferiorIzquierdo().x ;
+	int topeYInferior = paleta->getPosicionVerticeInferiorIzquierdo().y;
+	int topeYSuperior = paleta->getPosicionVerticeInferiorIzquierdo().y - paleta->getAltura();
+	
+	if(((tejo->getCentro().x - tejo->getRadio())<topeXSuperior )&& ((tejo->getCentro().x - tejo->getRadio())>topeXInferior))
+	{
+		
+		if((tejo->getCentro().y - tejo->getRadio())>=topeYInferior)
+		{
+			velocidadTejo.x=-1*velocidadTejo.x;
+			velocidadTejo.y=-1*velocidadTejo.y;
+		}
+		if((tejo->getCentro().y + tejo->getRadio())>topeXSuperior)
+		{
+			velocidadTejo.x=-1*velocidadTejo.x;
+			velocidadTejo.y=velocidadTejo.y*-1;
+		}
+	}
+	return velocidadTejo;
+}
+
+
 void moverTejo(Circulo* tejo, Velocidad velocidad)
 {
 
@@ -318,6 +345,7 @@ int main(int argc, char *argv[]) {
 				if(tejoLanzado)
 				{
 					velocidadTejo = resolverChoqueConParedes(tejo,velocidadTejo);
+					velocidadTejo= resolverChoqueConPaleta(tejo,rectangulo,velocidadTejo);
 					moverTejo(tejo, velocidadTejo);
 				}
 				else 
@@ -325,6 +353,7 @@ int main(int argc, char *argv[]) {
 					centroTejo.x = rectangulo->getPosicionVerticeInferiorIzquierdo().x + rectangulo->getBase()+ tejo->getRadio();
 					centroTejo.y = rectangulo->getPosicionVerticeInferiorIzquierdo().y  - (rectangulo->getAltura()/2);
 					tejo->setCentro(centroTejo);
+
 				}
 				rectangulo->dibujar();
 				tejo->dibujar();
