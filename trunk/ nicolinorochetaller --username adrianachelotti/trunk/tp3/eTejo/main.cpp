@@ -26,6 +26,12 @@ IMPRIME RECTANGULO
 #define SCREEN_HEIGHT 240
 #define SCREEN_DEPTH 8
 #define DELTA_Y 8
+#define DELTA_T 2
+
+typedef struct Velocidad 
+{   long x;
+	long y;
+}Velocidad;
 
 
 /*************************************************************************
@@ -109,6 +115,37 @@ void sacaEnter(char *cadena) {
 		*p = '\0';
 }
 
+
+Velocidad resolverChoqueConParedes(Circulo* tejo, Velocidad velocidadTejo)
+{
+	Escenario* escenario = Escenario::obtenerInstancia();
+	if((tejo->getCentro().x +  tejo->getRadio() )> escenario->getAncho())
+	{
+		velocidadTejo.x=-1*velocidadTejo.x;
+	}
+	if((tejo->getCentro().x - tejo->getRadio())<0)
+	{
+		velocidadTejo.x=-1*velocidadTejo.x;
+	}
+	if((tejo->getCentro().y - tejo->getRadio())<0)
+	{
+		velocidadTejo.y=-1*velocidadTejo.y;
+	}
+	if((tejo->getCentro().y + tejo->getRadio())>escenario->getAlto())
+	{
+		velocidadTejo.y=velocidadTejo.y*-1;
+	}
+	return velocidadTejo;
+}
+
+void moverTejo(Circulo* tejo, Velocidad velocidad)
+{
+
+	Punto centro = tejo->getCentro();
+	centro.x = centro.x + velocidad.x * DELTA_T;
+	centro.y = centro.y + velocidad.y * DELTA_T;
+	tejo->setCentro(centro);
+}
 
 int main(int argc, char *argv[]) {
     
@@ -216,6 +253,9 @@ int main(int argc, char *argv[]) {
 	Punto centroTejo ;
 	centroTejo.x = 120;
 	centroTejo.y = 320;
+	Velocidad velocidadTejo; 
+	velocidadTejo.x = 1;
+	velocidadTejo.y = 1;
 	Circulo* tejo = new Circulo("tejo", 20,centroTejo);
 	tejo->setColorFondo(0x0000FF);
 	tejo->setColorLinea(0xFFFFFF);
@@ -232,42 +272,49 @@ int main(int argc, char *argv[]) {
 	 {
 
 		 //Pequeña animacion de pestañeo
-		 if(!esPaletaMovida)
-		 {
-				if(blinkTimer<50)			
-					temp = colorNormal;
-				else
-					temp = colorBlink;
-				rectangulo->setColorFondo(temp);
-				rectangulo->dibujar();
-				SDL_Flip(screen);
+		if(!esPaletaMovida)
+		{
+			if(blinkTimer<50)			
+				temp = colorNormal;
+			else
+				temp = colorBlink;
+			rectangulo->setColorFondo(temp);
+			rectangulo->dibujar();
+			SDL_Flip(screen);
 		}
+
         
-		while (SDL_PollEvent(&event) )
+		while (SDL_PollEvent(&event)|| event.type==SDL_KEYUP)
 		{
 		    handle_input(event, &posicion, rectangulo->getAltura(), altoPantalla);
-            if( event.key.keysym.sym == SDLK_ESCAPE )
-			{
-
-                quit = 1;
-
-			}
 			
 
-		
+            if( event.key.keysym.sym == SDLK_ESCAPE )
+			{
+                quit = 1;
+			}
 			if( event.type == SDL_KEYDOWN )
 			{
 				esPaletaMovida = true;
-				//actualizo
+				//actualizo y dibujo la paleta
 				rectangulo->setPosicionVerticeInferiorIzquierdo(posicion);
 				rectangulo->setColorFondo(colorNormal);
-				// dibujo 
+				rectangulo->dibujar();
+				
+			
+			
+			}
+			if(esPaletaMovida)
+			{
 				escenario->dibujar();
+				
+				velocidadTejo = resolverChoqueConParedes(tejo,velocidadTejo);
+
+				moverTejo(tejo, velocidadTejo);
 				rectangulo->dibujar();
 				tejo->dibujar();
+
 				SDL_Flip(screen);
-			
-			
 			}
 			
 			
