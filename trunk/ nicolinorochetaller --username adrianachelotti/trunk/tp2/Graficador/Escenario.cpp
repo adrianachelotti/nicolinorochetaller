@@ -15,7 +15,7 @@ using namespace std;
 Escenario::Escenario()
 {
 	this->setResolucion(RESOLUCION_DEFAULT);
-	
+	this->setColorFondoEscenario(COLOR_VACIO);
 }
 
 Escenario::~Escenario()
