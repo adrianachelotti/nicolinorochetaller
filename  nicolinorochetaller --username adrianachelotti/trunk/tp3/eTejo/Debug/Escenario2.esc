@@ -1,5 +1,5 @@
 <escenario>
-<General resolucion="800" texturaFig="id1"  colorFondoFig="255255255" colorLinea="000000000" >
+<General resolucion="800" texturaFig="id1" texturaEsc="id1" colorFondoFig="255255255" colorLinea="000000000" >
 	</General>
 	<ListadoDeElementos>
 		<rectangulo id="paleta2" base="20" altura="100" colorFigura="255255000" colorLinea="000000000">
@@ -35,9 +35,7 @@
 			<ver2 x="490" y="350"/>
 			<ver3 x="540" y="320"/>
 		</triangulo> 		
-		<circulo id="bola" colorFigura="000000255" radio="20" >
-			<posicion x="280" y="120"/>
-		</circulo> 		
+		
 		</ListadoDeElementos>
 	<ListadoDeTexturas>
 		<textura id="id1" path="Debug/imagenes/TheSimpsons.bmp">
