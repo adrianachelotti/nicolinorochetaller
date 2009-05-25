@@ -13,6 +13,7 @@ Figura::Figura()
 	this->colorLinea = COLOR_VACIO;
 	this->idTextura = "";
 	this->colorPropio = false;
+	this->imagenFigura = NULL;
 }
 
 Figura::~Figura()
@@ -27,6 +28,7 @@ Figura::Figura(string identificador, string idTextura,Uint32 colorLinea,Uint32 c
 	this->colorLinea = colorLinea;
 	this->colorFondo = colorFondo;
 	this->colorPropio = false;
+	this->imagenFigura = NULL;
 }
 
 Figura::Figura(string identificador)
@@ -35,6 +37,8 @@ Figura::Figura(string identificador)
 	this->colorFondo = COLOR_VACIO;
 	this->colorLinea = COLOR_VACIO;
 	this->idTextura = "";
+	this->imagenFigura = NULL;
+	this->colorPropio = false;
 }
 
 void Figura::setId(string id)
@@ -121,3 +125,15 @@ bool Figura::esColorPropio()
 {
 	return colorPropio;
 }
+
+SDL_Surface* Figura::getImagenFigura()
+{
+	return this->imagenFigura;
+
+}
+
+void Figura::setImagenFigura(SDL_Surface* imagen)
+{
+	this->imagenFigura  = imagen;
+}
+

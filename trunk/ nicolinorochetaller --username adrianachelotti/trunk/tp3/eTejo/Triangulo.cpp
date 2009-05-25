@@ -190,10 +190,11 @@ int Triangulo::dibujar()
 	{
 		//dibujar Textura
 	
-		SDL_Surface* imagenResized  = graficador->getImageResized(text,this->getAncho(), this->getAlto());
+		if(this->getImagenFigura()==NULL)
+			this->setImagenFigura(graficador->getImageResized(text,this->getAncho(), this->getAlto()));
 	
 
-		graficador->rellenarTrianguloConTextura(Escenario::screen,imagenResized ,&this->vertices[0],&this->vertices[1],&this->vertices[2]);
+		graficador->rellenarTrianguloConTextura(Escenario::screen,this->getImagenFigura() ,&this->vertices[0],&this->vertices[1],&this->vertices[2]);
 
 
 		if(this->getColorLinea()!=COLOR_VACIO)

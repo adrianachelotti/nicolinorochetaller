@@ -338,19 +338,15 @@ int Escenario::dibujar()
 	if(imagen==NULL)
 	{
 		
-		SDL_Rect rectangulo;
-		rectangulo.x = 0;
-		rectangulo.y = 0;
-		rectangulo.w = this->getAncho();
-		rectangulo.h = this->getAlto();
+		
 		if((this->getColorFondoEscenario()!=COLOR_VACIO))
 		{
 			
-			SDL_FillRect(screen,&rectangulo,this->getColorFondoEscenario());
+			graficador->rellenarRectangulo(screen,punto,this->getAncho(),this->getAlto(),this->getColorFondoEscenario());
 		}
 		else
 		{
-			SDL_FillRect(screen,&rectangulo,0x000000);
+			graficador->rellenarRectangulo(screen,punto,this->getAncho(),this->getAlto(),0x000000);
 		}
 	}
 	else

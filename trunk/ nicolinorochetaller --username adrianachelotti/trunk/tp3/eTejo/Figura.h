@@ -25,6 +25,7 @@ private:
 	Uint32 colorLinea;
 	Uint32 colorFondo;
 	bool colorPropio;
+	SDL_Surface* imagenFigura;
 public:
 	
 	/*Constructor */
@@ -74,6 +75,13 @@ public:
 
 	/* Retorna un flag para saber si tiene color propio o adopta el del escenario*/
 	bool esColorPropio();
+
+	/* Retorna la imagen que tiene el mismo tamanio que la figura*/
+	SDL_Surface* getImagenFigura();
+
+	/* Setea la imagen que tiene el mismo tamanio que la figura*/
+	void  setImagenFigura(SDL_Surface* imagen);
+
 
 };
 

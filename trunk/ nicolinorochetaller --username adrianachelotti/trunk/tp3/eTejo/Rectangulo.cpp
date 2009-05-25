@@ -144,7 +144,7 @@ int Rectangulo::dibujar()
 	{
 		if((this->getColorFondo()!=COLOR_VACIO))
 		{
-			
+				
 			graficador->rellenarRectangulo(Escenario::screen,this->getPosicionVerticeInferiorIzquierdo(),this->base,this->altura,this->getColorFondo());
 			
 			if(this->getColorLinea()!=COLOR_VACIO)
@@ -169,9 +169,10 @@ int Rectangulo::dibujar()
 	{
 			//dibujar Textura
 		
-			
-		SDL_Surface* imagenResized  = graficador->getImageResized(text,this->base, this->altura);
-		graficador->rellenarRectanguloConTextura(Escenario::screen,imagenResized ,this->getPosicionVerticeInferiorIzquierdo());
+		if(this->getImagenFigura()==NULL)
+		this->setImagenFigura( graficador->getImageResized(text,this->base, this->altura));
+		
+		graficador->rellenarRectanguloConTextura(Escenario::screen,this->getImagenFigura() ,this->getPosicionVerticeInferiorIzquierdo());
 
 		if(this->getColorLinea()!=COLOR_VACIO)
 		{
