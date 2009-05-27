@@ -56,3 +56,8 @@ int Segmento::dibujar()
 	}
 	return 0;
 }
+
+void Segmento::resolverChoque()
+{
+
+}

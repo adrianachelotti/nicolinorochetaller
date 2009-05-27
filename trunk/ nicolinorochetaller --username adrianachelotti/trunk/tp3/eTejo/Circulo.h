@@ -7,6 +7,7 @@
 
 #include "Figura.h"
 
+
 class Circulo : public Figura  
 {
 private:
@@ -42,7 +43,8 @@ public:
 	/*Metodo encargado de dibujar el circulo */
 	virtual int dibujar();
 
-	
+	/*Metodo encargado de dibujar la figura */
+	virtual void resolverChoque();
 
 };
 

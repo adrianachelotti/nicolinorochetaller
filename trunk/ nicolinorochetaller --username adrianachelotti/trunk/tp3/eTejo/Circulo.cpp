@@ -202,3 +202,8 @@ int Circulo::dibujar()
 	return RES_OK;
 }
 
+
+void Circulo::resolverChoque()
+{
+
+}

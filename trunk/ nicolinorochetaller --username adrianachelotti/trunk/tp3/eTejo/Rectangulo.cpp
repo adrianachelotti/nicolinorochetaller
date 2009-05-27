@@ -185,5 +185,9 @@ int Rectangulo::dibujar()
 }
 
 
+void Rectangulo::resolverChoque()
+{
+
+}
 
 

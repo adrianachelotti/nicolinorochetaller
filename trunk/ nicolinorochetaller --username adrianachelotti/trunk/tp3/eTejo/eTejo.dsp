@@ -90,6 +90,14 @@ SOURCE=.\Circulo.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Cliente.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Constantes.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Cuadrado.cpp
 # End Source File
 # Begin Source File
@@ -110,7 +118,15 @@ SOURCE=.\main.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pad.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Parser.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Partida.cpp
 # End Source File
 # Begin Source File
 
@@ -119,6 +135,14 @@ SOURCE=.\Rectangulo.cpp
 # Begin Source File
 
 SOURCE=.\Segmento.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Servidor.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Tejo.cpp
 # End Source File
 # Begin Source File
 
@@ -138,6 +162,14 @@ SOURCE=.\Circulo.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Cliente.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Constantes.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Cuadrado.h
 # End Source File
 # Begin Source File
@@ -154,7 +186,15 @@ SOURCE=.\Graficador.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pad.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Parser.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Partida.h
 # End Source File
 # Begin Source File
 
@@ -163,6 +203,14 @@ SOURCE=.\Rectangulo.h
 # Begin Source File
 
 SOURCE=.\Segmento.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Servidor.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Tejo.h
 # End Source File
 # Begin Source File
 
