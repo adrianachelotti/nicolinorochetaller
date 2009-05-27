@@ -40,7 +40,9 @@ public:
 	
 	/*Metodo encargado de dibujar el triangulo */
 	virtual int dibujar();
-	
+
+	/*Metodo encargado de dibujar la figura */
+	virtual void resolverChoque();
 };
 
 #endif 

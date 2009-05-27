@@ -38,6 +38,8 @@ public:
 	/*Metodo encargado de dibujar el cuadrado*/
 	virtual int dibujar();
 
+	/*Metodo encargado de dibujar la figura */
+	virtual void resolverChoque();
 };
 
 #endif 

@@ -6,6 +6,7 @@
 #define FIGURA_H
 #define COLOR_VACIO 0xFF000000
 
+
 #include <iostream>
 #include <SDL.h>
 
@@ -13,6 +14,11 @@ typedef struct punto
 {   int x;
 	int y;
 }Punto;
+
+typedef struct Velocidad 
+{   long x;
+	long y;
+}Velocidad;
 
 using namespace std;
 
@@ -66,10 +72,6 @@ public:
 	/*Retorna el color de fondo la figura */
 	Uint32 getColorFondo();
 
-
-	/*Metodo encargado de dibujar la figura */
-	virtual int dibujar()=0;
-
 	/* Setea un flag para saber si tiene color propio o adopta el del escenario*/
 	void setColorPropio(bool tiene);
 
@@ -82,7 +84,11 @@ public:
 	/* Setea la imagen que tiene el mismo tamanio que la figura*/
 	void  setImagenFigura(SDL_Surface* imagen);
 
+	/*Metodo encargado de dibujar la figura */
+	virtual int dibujar()=0;
 
+	/*Metodo encargado de dibujar la figura */
+	virtual void resolverChoque()=0;
 };
 
 #endif 

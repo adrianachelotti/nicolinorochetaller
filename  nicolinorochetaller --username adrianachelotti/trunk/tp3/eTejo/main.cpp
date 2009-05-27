@@ -28,11 +28,6 @@ IMPRIME RECTANGULO
 #define DELTA_Y 8
 #define DELTA_T 2
 
-typedef struct Velocidad 
-{   long x;
-	long y;
-}Velocidad;
-
 
 /*************************************************************************
 * Dado un evento que arroja la SDL cambia la posicion y de la paleta

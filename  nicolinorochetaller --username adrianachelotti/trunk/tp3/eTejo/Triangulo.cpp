@@ -206,3 +206,7 @@ int Triangulo::dibujar()
 	return RES_OK;
 }
 
+void Triangulo::resolverChoque()
+{
+
+}

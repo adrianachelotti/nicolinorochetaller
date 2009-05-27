@@ -169,3 +169,9 @@ int Cuadrado::dibujar()
 
 	return RES_OK;
 }
+
+
+void Cuadrado::resolverChoque()
+{
+
+}

@@ -39,6 +39,8 @@ public:
 	/*Metodo encargado de dibujar el segmento */
 	virtual int dibujar();
 
+	/*Metodo encargado de dibujar la figura */
+	virtual void resolverChoque();
 };
 
-#endif // !defined(AFX_SEGMENTO_H__4B4F5A62_4AFF_47AB_9608_CDE0F1072FED__INCLUDED_)
+#endif
