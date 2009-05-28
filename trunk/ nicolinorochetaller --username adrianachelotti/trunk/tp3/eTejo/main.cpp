@@ -21,6 +21,7 @@ IMPRIME RECTANGULO
 #include "Graficador.h"
 #include "Textura.h"
 #include "Parser.h" 
+#include "Formula.h"
 
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
@@ -160,7 +161,97 @@ Velocidad resolverChoqueConPaleta(Circulo* tejo, Rectangulo* paleta,Velocidad ve
 }
 
 
+
+bool hayChoqueConSegmento(Segmento*  segmento , Circulo* tejo)
+{
+
+	Punto puntoA, puntoB, centro, delta, direccion; 
+	/****************************************************************
+		Formula de la recta X= t(B-A) + A  con t (0,1)
+		Formula del circulo  |X-C| = R       R= radio
+		llamamos direccion = B-A
+		y delta = A-C       donde C es el centro del tejo
+
+		Reemplazando en la formula del circulo la formula de la recta, 
+		se obtiene una cuadratica de variable t
+
+          t^2.|direccion|^2 + 2.t.direccion.delta + |delta|^2 - R^2
+
+		
+		 t = [-b +- raiz( b^2 - 4.a.c )]/a
+		donde b^2 = (delta x direccion)^2      y
+		-4.a.c = -|direccion|^2 x [|delta|^2  - R^2]
+
+		si b^2 - 4.a.c
+			es igual a cero la recta y el circula intersectan en un punto
+			si es >0  hay interseccion en dos puntos
+			si es <0 no hay interseccion
+  
+		Como nuestro caso es un segmento, tenemos que ver que el t obtenido
+		este entre (0...1)
+	****************************************************************/
+
+	double b, b2 , ac4, a , t1, t2;
+	double radio2 = tejo->getRadio()* tejo->getRadio();
+	double diferencia = 0.0;
+	double diferencia2 = 0.0;
+	int diff =0;
+
+	
+	puntoA = segmento->getPuntoInicio();
+	puntoB = segmento->getPuntoFinal();
+
+	centro = tejo->getCentro();
+
+
+	printf("tejo x:%d y: %d con el segmento inicial x: %d y: %d  final x: %d  y: %d \n",centro.x, centro.y ,puntoA.x,puntoA.y,puntoB.x, puntoB.y );
+	direccion = Formula::restarPuntos(puntoA, puntoB);
+	delta = Formula::restarPuntos(puntoA,centro);
+
+	b2 = Formula::productoInterno(delta, direccion);
+	ac4 = Formula::normaAlCuadrado(direccion)* (Formula::normaAlCuadrado(delta)- radio2);
+	diferencia = b2 - ac4;
+	diferencia2 = b2 - ac4;
+	diff = (int)diferencia<<16;
+	printf("diff %d ", diff);
+	if(diff==0)
+	{
+		printf("unico Punto");
+	}
+
+	if(diff<0)
+	{
+		printf("no hay Punto");
+	}
+
+
+	if(diff>0)
+	{
+		printf("Hay Punto");
+	}
+
+   //Ahora calculamos t = [-2.direccion.delta +- raiz(diff)]/|direccion|^2
+	b = -2* Formula::productoInterno(direccion,delta);
+	a = Formula::normaAlCuadrado(direccion);
+	t1 = ( -b + sqrt((double)diferencia2))/(double)a;
+	t2 = ( -b - sqrt((double)diferencia2))/(double)a;
+	printf("t1 %f" ,t1);
+	printf("t2 %f" ,t2);
+	if ( (t1>=0)&&(t1<=1) ) printf("t1 es raiz %f", t1);
+	if ( (t2>=0)&&(t2<=1) ) printf("t2 es raiz %f", t2);
+
+
+
+
+
+  return true;
+
+
+
+}
+
 void moverTejo(Circulo* tejo, Velocidad velocidad)
+
 {
 
 	Punto centro = tejo->getCentro();
@@ -270,7 +361,15 @@ int main(int argc, char *argv[]) {
 	rectangulo->setPosicionVerticeInferiorIzquierdo(posicion);
 	rectangulo->dibujar();
 	
-
+	Segmento* se =  new Segmento();
+	Punto a ,b;
+	a.x = 130;
+	a.y = 120;
+	b.x = 130;
+	b.y = 510;
+	se->setPuntoInicio(a);
+	se->setPuntoFinal(b);
+    
 
    //* creo el tejo
 	Punto centroTejo ;
@@ -285,6 +384,7 @@ int main(int argc, char *argv[]) {
 	tejo->setColorPropio(true);
 	tejo->dibujar();
 
+	hayChoqueConSegmento(se,tejo);
 	SDL_Flip(screen);
 
     int blinkTimer = 0;
