@@ -12,7 +12,7 @@ class Tejo
 {
 private:
 	Circulo* representacionGrafica;
-	Velocidad* velocidad;
+	Velocidad velocidad;
 public:
 	
 	/*Constructor sin parametros*/
@@ -34,10 +34,13 @@ public:
 	void setRepresentacionGrafica(Circulo* representacion);
 
 	/*Retorna la velocidad del tejo*/
-	Velocidad* getVelocidad();
+	Velocidad getVelocidad();
 
 	/*Setea la velocidad del tejo*/
-	void setVelocidad(Velocidad* velocidad);
+	void setVelocidad(Velocidad velocidad);
+	
+	/*mueve el tejo segun la velocidad y el delta de tiempo*/
+	void moverTejo(int tiempo);
 };
 
 #endif 
