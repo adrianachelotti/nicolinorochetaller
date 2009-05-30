@@ -277,6 +277,39 @@ Figura* Escenario::getFigura(string idFigura)
 	return NULL;
 }
 
+Figura* Escenario::getTejo()
+{
+
+	bool encontrado = false;
+	string idFigura= "tejo";
+
+	Figura* figuraActual = NULL;
+
+	list<Figura*>::iterator it;
+ 
+	it = this->listadoDeFiguras.begin();
+    
+	while( (it != this->listadoDeFiguras.end())&&(!encontrado))
+	{
+      figuraActual = *it;
+
+      if(idFigura.compare(figuraActual->getId()) == 0)
+	  {
+		encontrado= true;
+
+		
+	  }
+	  else
+	  {
+	  	  it++;
+	  }
+    }
+	
+	if(encontrado) return figuraActual;
+	return NULL;
+}
+
+
 void Escenario::imprimirError(string linea,FILE* archivoErrores,string err)
 {
 	fprintf(archivoErrores,"Dibujando: ");
@@ -356,11 +389,9 @@ int Escenario::dibujar()
 		this->imagenEscenario  = graficador->getImageResized(text,this->ancho, this->alto);
 		//graficador->rellenarRectanguloConTextura(screen,imagenEscenario ,punto);
 		SDL_BlitSurface (imagenEscenario, NULL, screen, NULL);
-
-
-
-
 	}
+
+	
 	while( it != this->listadoDeFiguras.end())
 	{
       figuraActual = *it;

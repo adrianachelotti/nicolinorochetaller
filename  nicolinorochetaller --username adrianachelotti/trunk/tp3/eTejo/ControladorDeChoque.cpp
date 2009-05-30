@@ -59,9 +59,76 @@ void ControladorDeChoque::resolverChoqueConPaleta(Tejo* pTejo, Pad* pad)
 	int topeXInferior = paleta->getPosicionVerticeInferiorIzquierdo().x ;
 	int topeYInferior = paleta->getPosicionVerticeInferiorIzquierdo().y;
 	int topeYSuperior = paleta->getPosicionVerticeInferiorIzquierdo().y - paleta->getAltura();
+	Punto puntoA , puntoB, puntoC, puntoD;
+	/*
+			   C __________  B
+				|          |
+				|          |
+				|          |
+				|          |          
+				|          |          
+				|          |          
+				|          |          
+				|          |          
+				|          |          
+				|          |          
+			   D|__________| A     
 
+
+
+
+	*/
+	puntoA.x = paleta->getPosicionVerticeInferiorIzquierdo().x + paleta->getBase();
+	puntoA.y = paleta->getPosicionVerticeInferiorIzquierdo().y;
+	puntoB.x = paleta->getPosicionVerticeInferiorIzquierdo().x + paleta->getBase();
+	puntoB.y = paleta->getPosicionVerticeInferiorIzquierdo().y -  paleta->getAltura();
+	puntoC.x = paleta->getPosicionVerticeInferiorIzquierdo().x ;
+	puntoC.y = paleta->getPosicionVerticeInferiorIzquierdo().y -  paleta->getAltura();
+	puntoD.x = paleta->getPosicionVerticeInferiorIzquierdo().x ;
+	puntoD.y = paleta->getPosicionVerticeInferiorIzquierdo().y ;
+
+
+
+	Segmento* segmentoAB= new Segmento("AB",puntoA,puntoB);
+	Segmento* segmentoCB= new Segmento("CB",puntoC,puntoB);
+	Segmento* segmentoCD = new Segmento("CD",puntoC, puntoD);
+    if (hayChoqueConSegmento(pTejo,segmentoAB))
+	{
+
+		
+		velocidadTejo.x=-1*velocidadTejo.x;
+		velocidadTejo.y=velocidadTejo.y;
+		
+		pTejo->setVelocidad( velocidadTejo);
+		return;
+	}
+ 
+    /*if (hayChoqueConSegmento(pTejo,segmentoAB)&&hayChoqueConSegmento(pTejo,segmentoCB))
+	{
+		
+		
+		velocidadTejo.x=-1*velocidadTejo.x;
+		velocidadTejo.y=-1*velocidadTejo.y;
+		
+		pTejo->setVelocidad( velocidadTejo);
+	}*/
+
+	if (hayChoqueConSegmento(pTejo,segmentoCD))
+	{
+		
+		
+		velocidadTejo.x=-1*velocidadTejo.x;
+		velocidadTejo.y=1*velocidadTejo.y;
+		
+		pTejo->setVelocidad( velocidadTejo);
+	}
 	
-	if(((tejo->getCentro().x - tejo->getRadio())<topeXSuperior )&& ((tejo->getCentro().x - tejo->getRadio())>topeXInferior))
+	
+	
+	/*if(((tejo->getCentro().x + tejo->getRadio()>topeXSuperior )
+		&&(tejo->getCentro().x + tejo->getRadio()<topeXSuperior +4 )) 
+		||((tejo->getCentro().x - tejo->getRadio()<=topeXInferior)
+		&&(tejo->getCentro().x - tejo->getRadio()>topeXInferior -5)))
 	{
 		
 		if((tejo->getCentro().y - tejo->getRadio())>=topeYInferior)
@@ -69,13 +136,15 @@ void ControladorDeChoque::resolverChoqueConPaleta(Tejo* pTejo, Pad* pad)
 			velocidadTejo.x=-1*velocidadTejo.x;
 			velocidadTejo.y=-1*velocidadTejo.y;
 		}
-		if((tejo->getCentro().y + tejo->getRadio())>topeXSuperior)
+		if((tejo->getCentro().y + tejo->getRadio())<=topeYSuperior)
 		{
 			velocidadTejo.x=-1*velocidadTejo.x;
 			velocidadTejo.y=velocidadTejo.y*-1;
 		}
-	}
+	
 	pTejo->setVelocidad( velocidadTejo);
+	}
+	*/
 }
 
 
@@ -91,7 +160,7 @@ bool ControladorDeChoque::hayChoqueConCirculo(Tejo* pTejo, Circulo* circulo)
 	double u = Formula::norma(puntoAB);
 	int sumaDeRadios = circulo->getRadio() + tejo->getRadio();
 	int restaDeRadios = abs(circulo->getRadio() - tejo->getRadio());
-	
+	/*
 	cout<<"Radio dispersor: "<<circulo->getRadio()<<" - "<<"Radio tejo: "<<tejo->getRadio()<<endl; 
 	cout<<"Suma de radios:"<<sumaDeRadios<<endl;
 	cout<<"Resta de radios:"<<restaDeRadios<<endl;
@@ -100,6 +169,7 @@ bool ControladorDeChoque::hayChoqueConCirculo(Tejo* pTejo, Circulo* circulo)
 	if(u==sumaDeRadios) printf("Los circulos se tocan en un punto.\n");
 	if(u<=restaDeRadios) printf("Un circulo dentro de otro.\n");
 	if((u>restaDeRadios)&&(u<sumaDeRadios)) printf("Los circulos se intersectan en dos puntos.\n");
+	*/
 	
 //TODO
 	return true;
@@ -164,6 +234,7 @@ bool ControladorDeChoque::hayChoqueConSegmento(Tejo* pTejo, Segmento*  segmento 
 	diferencia2 = b2 - ac4;
 	diff = (int)diferencia<<16;
 	
+	/*
 	if(diff==0)
 	{
 		printf("Existe interseccion en un unico punto de la recta.\n");
@@ -178,23 +249,23 @@ bool ControladorDeChoque::hayChoqueConSegmento(Tejo* pTejo, Segmento*  segmento 
 	if(diff>0)
 	{
 		printf("Existe interseccion en dos puntos de la recta.\n");
-	}
+	}*/
 
    //Ahora calculamos t1,t2 = [-2.direccion.delta +- raiz(diff)]/(2*|direccion|^2)
 	b = 2* Formula::productoInterno(direccion,delta);
 	a = Formula::normaAlCuadrado(direccion);
 	t1 = ( -b + sqrt((double)diferencia2))/(double)(a*2);
 	t2 = ( -b - sqrt((double)diferencia2))/(double)(a*2);
-	printf("Valor raiz t1: %f\n" ,t1);
-	printf("Valor raiz t2: %f\n" ,t2);
-	if ( (t1>=0)&&(t1<=1) ) printf("t1 es raiz %f\n", t1);
-	if ( (t2>=0)&&(t2<=1) ) printf("t2 es raiz %f\n", t2);
+	//printf("Valor raiz t1: %f\n" ,t1);
+	//printf("Valor raiz t2: %f\n" ,t2);
+	if ( (t1>=0)&&(t1<=1) ) return true;
+	if ( (t2>=0)&&(t2<=1) )return true;
 
 
 
 //TODO
 
-  return true;
+  return false;
 
 
 
