@@ -150,7 +150,8 @@ public:
 	/*Retorna la imagen del escenario ya cargada de memoria y resizeada*/
 	SDL_Surface* getImagenEscenario();
 
-
+	/**/
+	Figura* getTejo();
 };
 
 #endif 

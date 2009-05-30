@@ -1,5 +1,5 @@
 <escenario>
-<General resolucion="800" texturaFig="id1" texturaEsc="id1" colorFondoFig="255255255" colorLinea="000000000" >
+<General resolucion="800" texturaFig="id1" colorFondoFig="255255255" colorLinea="000000000" >
 	</General>
 	<ListadoDeElementos>
 		<rectangulo id="paleta2" base="20" altura="100" colorFigura="255255000" colorLinea="000000000">
@@ -11,26 +11,26 @@
 		<rectangulo id="arco1" base="8" altura="300" colorFigura="255000000" colorLinea="000000000">
 			<posicion x="760" y="470"/>
 		</rectangulo> 
-		<circulo id="dispensor1" idTextura="id2" colorFigura="255233000" radio="60" >
+		<circulo id="dispensor1" colorFigura="255233000" radio="60" >
 			<posicion x="400" y="320"/>
 		</circulo> 		
-		<triangulo id="dispensorArrow1" idTextura="id3"  >
+		<triangulo id="dispensorArrow1" colorFigura="255233000"  >
 			<ver1 x="370" y="230"/>
 			<ver2 x="430" y="230"/>
 			<ver3 x="400" y="180"/>
 		</triangulo> 		
-		<triangulo id="dispensorArrow2" idTextura="id4"  >
+		<triangulo id="dispensorArrow2" colorFigura="255233000"  >
 			<ver1 x="370" y="410"/>
 			<ver2 x="430" y="410"/>
 			<ver3 x="400" y="460"/>
 		</triangulo> 		
-		<triangulo id="dispensorArrow3" idTextura="id5"  >
+		<triangulo id="dispensorArrow3" colorFigura="255233232"  >
 			<ver1 x="310" y="290"/>
 			<ver2 x="310" y="350"/>
 			<ver3 x="260" y="320"/>
 		</triangulo> 		
 		
-		<triangulo id="dispensorArrow4" idTextura="id6"  >
+		<triangulo id="dispensorArrow4" colorFigura="255233111"  >
 			<ver1 x="490" y="290"/>
 			<ver2 x="490" y="350"/>
 			<ver3 x="540" y="320"/>
