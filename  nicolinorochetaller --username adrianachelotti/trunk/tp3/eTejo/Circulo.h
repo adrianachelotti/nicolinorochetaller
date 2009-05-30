@@ -7,7 +7,6 @@
 
 #include "Figura.h"
 
-
 class Circulo : public Figura  
 {
 private:

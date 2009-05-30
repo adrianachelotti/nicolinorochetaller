@@ -1198,7 +1198,7 @@ int Parser::validaVertices(FILE* archivo,FILE* archivoErrores,punto&v1,punto&v2,
 	vertices[0] = v1;
 	vertices[1] = v2;
 	vertices[2] = v3;
-	res1 = validaPuntosTriangulo(vertices);		
+	//res1 = validaPuntosTriangulo(vertices);		
 	if (res1 != 0)
 	{
 		imprimirError("Vertices del Triangulo",archivoErrores,ERR33);

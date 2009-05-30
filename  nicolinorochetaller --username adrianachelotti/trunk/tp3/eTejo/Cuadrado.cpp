@@ -7,7 +7,6 @@
 #include "Escenario.h"
 
 
-
 Cuadrado::Cuadrado()
 {
 

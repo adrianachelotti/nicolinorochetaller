@@ -7,6 +7,7 @@
 
 #include "Figura.h"
 
+
 class Cuadrado : public Figura  
 {
 private:

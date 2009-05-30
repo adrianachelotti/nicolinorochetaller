@@ -98,6 +98,10 @@ SOURCE=.\Constantes.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\ControladorDeChoque.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Cuadrado.cpp
 # End Source File
 # Begin Source File
@@ -171,6 +175,10 @@ SOURCE=.\Cliente.h
 # Begin Source File
 
 SOURCE=.\Constantes.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ControladorDeChoque.h
 # End Source File
 # Begin Source File
 

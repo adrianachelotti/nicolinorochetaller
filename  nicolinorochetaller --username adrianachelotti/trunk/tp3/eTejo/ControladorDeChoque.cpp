@@ -260,15 +260,141 @@ bool ControladorDeChoque::hayChoqueConSegmento(Tejo* pTejo, Segmento*  segmento 
 	//printf("Valor raiz t2: %f\n" ,t2);
 	if ( (t1>=0)&&(t1<=1) ) return true;
 	if ( (t2>=0)&&(t2<=1) )return true;
-
-
-
-//TODO
-
   return false;
+}
 
+void ControladorDeChoque::calculoVeloReflejada(double pend,double pendN,Tejo* pTejo) 
+{
+	Velocidad velVieja = pTejo->getVelocidad();
+	Velocidad velNueva;
 
+	if (pend == 0) 
+	{
+		velNueva.x = velVieja.x;
+		velNueva.y = -velVieja.y;
+	} 
+	else {
+		if (pendN == 0)
+		{
+			velNueva.x = -velVieja.x;
+			velNueva.y = velVieja.y;
+		} 
+		if (pendN > 0)
+		{
+			velNueva.x = -velVieja.y;
+			velNueva.y = velVieja.x;
+		}
+		if (pendN < 0)
+		{
+			velNueva.x = velVieja.y;
+			velNueva.y = -velVieja.x;
+		}
+	}
+	pTejo->setVelocidad(velNueva);
+}
+
+double ControladorDeChoque::distanciaVector(Punto d)
+{
+	return(sqrt(d.x*d.x + d.y*d.y));
+}
+
+bool ControladorDeChoque::choqueVertices(Tejo* pTejo, Triangulo*  triang)
+{
+	Punto* vertices;
+	vertices = triang->getVertices();
+	int radio = pTejo->getRepresentacionGrafica()->getRadio();
+	Punto v1 = vertices[0];
+	Punto v2 = vertices[1];
+	Punto v3 = vertices[2];
+	
+
+	Punto C1 = Formula::restarPuntos(v1,pTejo->getPosicion());
+	Punto C2 = Formula::restarPuntos(v2,pTejo->getPosicion());
+	Punto C3 = Formula::restarPuntos(v3,pTejo->getPosicion());
+
+	if (distanciaVector(C1) <= radio)
+	{
+		cout<<"HAY CHOQUE CON EL VERTICE 1"<<endl;
+		return true;
+	} 
+	if (distanciaVector(C2) <= radio) 
+	{
+		cout<<"HAY CHOQUE CON EL VERTICE 2"<<endl;
+		return true;
+	}
+	if (distanciaVector(C3) <= radio) 
+	{
+		cout<<"HAY CHOQUE CON EL VERTICE 3"<<endl;
+		return true;
+	}
+	return false;
+}
+
+void ControladorDeChoque::ChoqueConTriangulo(Tejo* pTejo, Triangulo*  triang)
+{	
+	Punto* vertices;
+	vertices = triang->getVertices();
+	double pend;
+	double pendN;
+	bool choque;
+
+	Punto v1 = vertices[0];
+	Punto v2 = vertices[1];
+	Punto v3 = vertices[2];
+
+	
+	Segmento* seg1 = new Segmento("seg1",v1,v2);
+	choque = hayChoqueConSegmento(pTejo,seg1);
+	if (choque == true) {
+		pend = (((double)v1.y - (double)v2.y) / ((double)v1.x - (double)v2.x));
+		pendN = (double)((-1) * (1/pend));
+		calculoVeloReflejada(pend,pendN,pTejo);
+		cout<<"Hay choque"<<endl;
+	}
+
+	Segmento* seg2 = new Segmento("seg2",v2,v3);
+	choque = hayChoqueConSegmento(pTejo,seg2);
+	if (choque == true) {
+		pend = (((double)v2.y - (double)v3.y) / ((double)v2.x - (double)v3.x));
+		pendN = (double)((-1) * (1/pend));
+		calculoVeloReflejada(pend,pendN,pTejo);
+		cout<<"Hay choque"<<endl;
+	}
+
+	Segmento* seg3 = new Segmento("seg1",v3,v1);
+	choque = hayChoqueConSegmento(pTejo,seg3);
+	if (choque == true) {
+		pend = (((double)v3.y - (double)v1.y) / ((double)v3.x - (double)v1.x));
+		pendN = (double)((-1) * (1/pend));
+		calculoVeloReflejada(pend,pendN,pTejo);
+		cout<<"Hay choque"<<endl;
+	}
+
+	delete(seg1);
+	delete(seg2);
+	delete(seg3);
 
 }
 
+/*Le pasamos el escenario y se encarga de llamar a la resolucion de los choques segun la figura*/
+void ControladorDeChoque::resolverChoqueDispersores(Tejo* pTejo,Escenario* escenario)
+{
+	list<Figura*> listaFiguras = escenario->getListadoDeFiguras();
+	list<Figura*>::iterator it;
+	Figura* figuraActual;
+	size_t found;
+    it = listaFiguras.begin();
 
+	while( it != listaFiguras.end()) 
+	{
+		figuraActual = *it;
+		string id = figuraActual->getId();
+		//si encontramos tri en el id es un triangulo...
+		found = id.find("tri");
+		
+		if (found != string::npos)
+		{
+			//TODO CASTEAR CADA ELEMENTO PARA SOLUCIONAR SU CHOQUE...
+		}
+	}
+}

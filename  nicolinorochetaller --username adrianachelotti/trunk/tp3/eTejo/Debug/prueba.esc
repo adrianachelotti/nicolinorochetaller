@@ -2,10 +2,12 @@
 <General resolucion="800" texturaFig="id3" texturaEsc="id1" colorFondoFig="255000000" colorLinea="000255000" >
 	</General>
 	<ListadoDeElementos>
-		<circulo id="id2" radio="85" idTextura="id2">
-			<posicion x="290" y="300"/>
-		</circulo> 
-		</ListadoDeElementos>
+		<triangulo id="tri 1" colorFigura="255000255">
+			<ver1 x="400" y="1"/>
+			<ver2 x="600" y="1"/>
+			<ver3 x="500" y="600"/>
+		</triangulo> 
+	</ListadoDeElementos>
 	<ListadoDeTexturas>
 		<textura id="id1" path="texturas/Anochecer.bmp">
 		</textura>

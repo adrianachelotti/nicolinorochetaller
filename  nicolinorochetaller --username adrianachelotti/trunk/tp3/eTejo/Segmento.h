@@ -6,6 +6,7 @@
 #define SEGMENTO_H
 
 #include "Figura.h"
+#include "Tejo.h"
 
 class Segmento : public Figura  
 {
