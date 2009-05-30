@@ -6,7 +6,6 @@
 #include "Escenario.h"
 #include "Graficador.h"
 
-
 Segmento::Segmento()
 {
 

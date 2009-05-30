@@ -87,7 +87,7 @@ public:
 	/*Metodo encargado de dibujar la figura */
 	virtual int dibujar()=0;
 
-	/*Metodo encargado de dibujar la figura */
+	/*Metodo encargado de resolver el choque */
 	virtual void resolverChoque()=0;
 };
 

@@ -6,7 +6,6 @@
 #include "Escenario.h"
 #include "Graficador.h"
 
-
 Triangulo::Triangulo()
 {
 	this->vertices = new Punto[3];

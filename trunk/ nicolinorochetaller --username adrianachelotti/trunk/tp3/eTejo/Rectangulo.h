@@ -7,6 +7,7 @@
 
 #include "Figura.h"
 
+
 using namespace std;
 
 class Rectangulo:public Figura  
