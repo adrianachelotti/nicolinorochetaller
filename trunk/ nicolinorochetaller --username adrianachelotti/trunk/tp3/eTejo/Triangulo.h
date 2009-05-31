@@ -43,6 +43,8 @@ public:
 
 	/*Metodo encargado de dibujar la figura */
 	virtual void resolverChoque();
+
+	
 };
 
 #endif 
