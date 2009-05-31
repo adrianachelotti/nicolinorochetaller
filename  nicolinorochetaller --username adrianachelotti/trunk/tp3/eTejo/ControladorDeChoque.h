@@ -18,8 +18,7 @@
 
 class ControladorDeChoque  
 {
-private:
-	double distanciaVector(Punto d);
+
 public:
 	ControladorDeChoque();
 	virtual ~ControladorDeChoque();
@@ -38,16 +37,16 @@ public:
 	bool hayChoqueConSegmento(Tejo* pTejo, Segmento*  segmento );
 
 	/*releja la velo para el choque con el triangulo*/
-	void calculoVeloReflejada(double pend,double pendN,Tejo* pTejo); 
+	void calculoVelocidadReflejada(double pendiente,double pendienteN,Tejo* pTejo); 
 
 	/*detecta si hay un choque entre el tejo y un triangulo y resulve la nueva velo*/
-	void ChoqueConTriangulo(Tejo* pTejo, Triangulo*  triang);
+	void choqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo);
 
 	/*detecta choque de tejo con los vertices*/
-	bool choqueVertices(Tejo* pTejo, Triangulo*  triang);
+	bool choqueConVertices(Tejo* pTejo, Triangulo*  triangulo);
 
 	/*llama a los detetectores de cada dispersor*/
-	void ControladorDeChoque::resolverChoqueDispersores(Tejo* pTejo,Escenario* escenario);
+	void resolverChoqueDispersores(Tejo* pTejo,Escenario* escenario);
 };
 
 #endif 

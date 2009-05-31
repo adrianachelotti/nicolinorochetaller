@@ -20,3 +20,7 @@ void Pad::setRepresentacionGrafica(Rectangulo* representacion)
 {
 	this->representacionGrafica = representacion;
 }
+Punto Pad::getPosicion()
+{
+	return this->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo();
+}

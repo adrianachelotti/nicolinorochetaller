@@ -263,66 +263,63 @@ bool ControladorDeChoque::hayChoqueConSegmento(Tejo* pTejo, Segmento*  segmento 
   return false;
 }
 
-void ControladorDeChoque::calculoVeloReflejada(double pend,double pendN,Tejo* pTejo) 
+void ControladorDeChoque::calculoVelocidadReflejada(double pendiente,double pendienteNueva,Tejo* pTejo) 
 {
-	Velocidad velVieja = pTejo->getVelocidad();
-	Velocidad velNueva;
+	Velocidad velocidadVieja = pTejo->getVelocidad();
+	Velocidad velocidadNueva;
 
-	if (pend == 0) 
+	if (pendiente == 0) 
 	{
-		velNueva.x = velVieja.x;
-		velNueva.y = -velVieja.y;
+		velocidadNueva.x = velocidadVieja.x;
+		velocidadNueva.y = -velocidadVieja.y;
 	} 
 	else {
-		if (pendN == 0)
+		if (pendienteNueva == 0)
 		{
-			velNueva.x = -velVieja.x;
-			velNueva.y = velVieja.y;
+			velocidadNueva.x = -velocidadVieja.x;
+			velocidadNueva.y = velocidadVieja.y;
 		} 
-		if (pendN > 0)
+		if (pendienteNueva > 0)
 		{
-			velNueva.x = -velVieja.y;
-			velNueva.y = velVieja.x;
+			velocidadNueva.x = -velocidadVieja.y;
+			velocidadNueva.y = velocidadVieja.x;
 		}
-		if (pendN < 0)
+		if (pendienteNueva < 0)
 		{
-			velNueva.x = velVieja.y;
-			velNueva.y = -velVieja.x;
+			velocidadNueva.x = velocidadVieja.y;
+			velocidadNueva.y = -velocidadVieja.x;
 		}
 	}
-	pTejo->setVelocidad(velNueva);
+	pTejo->setVelocidad(velocidadNueva);
 }
 
-double ControladorDeChoque::distanciaVector(Punto d)
-{
-	return(sqrt(d.x*d.x + d.y*d.y));
-}
 
-bool ControladorDeChoque::choqueVertices(Tejo* pTejo, Triangulo*  triang)
+
+bool ControladorDeChoque::choqueConVertices(Tejo* pTejo, Triangulo*  triangulo)
 {
 	Punto* vertices;
-	vertices = triang->getVertices();
+	vertices = triangulo->getVertices();
 	int radio = pTejo->getRepresentacionGrafica()->getRadio();
 	Punto v1 = vertices[0];
 	Punto v2 = vertices[1];
 	Punto v3 = vertices[2];
 	
 
-	Punto C1 = Formula::restarPuntos(v1,pTejo->getPosicion());
-	Punto C2 = Formula::restarPuntos(v2,pTejo->getPosicion());
-	Punto C3 = Formula::restarPuntos(v3,pTejo->getPosicion());
+	Punto c1 = Formula::restarPuntos(v1,pTejo->getPosicion());
+	Punto c2 = Formula::restarPuntos(v2,pTejo->getPosicion());
+	Punto c3 = Formula::restarPuntos(v3,pTejo->getPosicion());
 
-	if (distanciaVector(C1) <= radio)
+	if (Formula::norma(c1) <= radio)
 	{
 		cout<<"HAY CHOQUE CON EL VERTICE 1"<<endl;
 		return true;
 	} 
-	if (distanciaVector(C2) <= radio) 
+	if (Formula::norma(c2) <= radio) 
 	{
 		cout<<"HAY CHOQUE CON EL VERTICE 2"<<endl;
 		return true;
 	}
-	if (distanciaVector(C3) <= radio) 
+	if (Formula::norma(c3) <= radio) 
 	{
 		cout<<"HAY CHOQUE CON EL VERTICE 3"<<endl;
 		return true;
@@ -330,12 +327,12 @@ bool ControladorDeChoque::choqueVertices(Tejo* pTejo, Triangulo*  triang)
 	return false;
 }
 
-void ControladorDeChoque::ChoqueConTriangulo(Tejo* pTejo, Triangulo*  triang)
+void ControladorDeChoque::choqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo)
 {	
 	Punto* vertices;
-	vertices = triang->getVertices();
-	double pend;
-	double pendN;
+	vertices = triangulo->getVertices();
+	double pendiente;
+	double pendienteNueva;
 	bool choque;
 
 	Punto v1 = vertices[0];
@@ -343,36 +340,36 @@ void ControladorDeChoque::ChoqueConTriangulo(Tejo* pTejo, Triangulo*  triang)
 	Punto v3 = vertices[2];
 
 	
-	Segmento* seg1 = new Segmento("seg1",v1,v2);
-	choque = hayChoqueConSegmento(pTejo,seg1);
+	Segmento* segmento1 = new Segmento("segmento1",v1,v2);
+	choque = hayChoqueConSegmento(pTejo,segmento1);
 	if (choque == true) {
-		pend = (((double)v1.y - (double)v2.y) / ((double)v1.x - (double)v2.x));
-		pendN = (double)((-1) * (1/pend));
-		calculoVeloReflejada(pend,pendN,pTejo);
+		pendiente = (((double)v1.y - (double)v2.y) / ((double)v1.x - (double)v2.x));
+		pendienteNueva = (double)((-1) * (1/pendiente));
+		calculoVelocidadReflejada(pendiente,pendienteNueva,pTejo);
 		cout<<"Hay choque"<<endl;
 	}
 
-	Segmento* seg2 = new Segmento("seg2",v2,v3);
-	choque = hayChoqueConSegmento(pTejo,seg2);
+	Segmento* segmento2 = new Segmento("segmento2",v2,v3);
+	choque = hayChoqueConSegmento(pTejo,segmento2);
 	if (choque == true) {
-		pend = (((double)v2.y - (double)v3.y) / ((double)v2.x - (double)v3.x));
-		pendN = (double)((-1) * (1/pend));
-		calculoVeloReflejada(pend,pendN,pTejo);
+		pendiente = (((double)v2.y - (double)v3.y) / ((double)v2.x - (double)v3.x));
+		pendienteNueva = (double)((-1) * (1/pendiente));
+		calculoVelocidadReflejada(pendiente,pendienteNueva,pTejo);
 		cout<<"Hay choque"<<endl;
 	}
 
-	Segmento* seg3 = new Segmento("seg1",v3,v1);
-	choque = hayChoqueConSegmento(pTejo,seg3);
+	Segmento* segmento3 = new Segmento("segmento1",v3,v1);
+	choque = hayChoqueConSegmento(pTejo,segmento3);
 	if (choque == true) {
-		pend = (((double)v3.y - (double)v1.y) / ((double)v3.x - (double)v1.x));
-		pendN = (double)((-1) * (1/pend));
-		calculoVeloReflejada(pend,pendN,pTejo);
+		pendiente = (((double)v3.y - (double)v1.y) / ((double)v3.x - (double)v1.x));
+		pendienteNueva = (double)((-1) * (1/pendiente));
+		calculoVelocidadReflejada(pendiente,pendienteNueva,pTejo);
 		cout<<"Hay choque"<<endl;
 	}
 
-	delete(seg1);
-	delete(seg2);
-	delete(seg3);
+	delete(segmento1);
+	delete(segmento2);
+	delete(segmento3);
 
 }
 
