@@ -47,7 +47,10 @@ string Textura::getPath()
 SDL_Surface* Textura::getImagen()
 {
 	if(this->imagen==NULL)
-	this->imagen =  SDL_LoadBMP(path.c_str());
+	{
+		printf("textura de id %s  se abrio",this->id);
+		this->imagen =  SDL_LoadBMP(path.c_str());
+	}
 	
 	return this->imagen;
 }

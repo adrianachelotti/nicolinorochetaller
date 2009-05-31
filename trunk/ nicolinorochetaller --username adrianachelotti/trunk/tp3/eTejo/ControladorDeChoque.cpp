@@ -311,17 +311,17 @@ bool ControladorDeChoque::choqueConVertices(Tejo* pTejo, Triangulo*  triangulo)
 
 	if (Formula::norma(c1) <= radio)
 	{
-		cout<<"HAY CHOQUE CON EL VERTICE 1"<<endl;
+	//	cout<<"HAY CHOQUE CON EL VERTICE 1"<<endl;
 		return true;
 	} 
 	if (Formula::norma(c2) <= radio) 
 	{
-		cout<<"HAY CHOQUE CON EL VERTICE 2"<<endl;
+	//	cout<<"HAY CHOQUE CON EL VERTICE 2"<<endl;
 		return true;
 	}
 	if (Formula::norma(c3) <= radio) 
 	{
-		cout<<"HAY CHOQUE CON EL VERTICE 3"<<endl;
+	//	cout<<"HAY CHOQUE CON EL VERTICE 3"<<endl;
 		return true;
 	}
 	return false;
