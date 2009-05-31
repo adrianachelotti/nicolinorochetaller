@@ -30,6 +30,11 @@ public:
 	/*calcula el  producto interno  entre los puntos1 y 2*/
 	static double productoInterno(Punto punto1, Punto punto2);
 
+	/*retorna un punto normal al pasado por argumento*/
+	static Punto getNormal(Punto punto);
+	
+	/*retorna el angulo entre los las rectas que pasan por dos puntos*/
+	static double obtenerAnguloEntrePuntos(Punto punto1 , Punto punto2);
 
 };
 

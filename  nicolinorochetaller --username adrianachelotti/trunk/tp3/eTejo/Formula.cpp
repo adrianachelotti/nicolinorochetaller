@@ -57,3 +57,25 @@ double Formula::productoInterno(Punto punto1, Punto punto2)
 		double producto  = (punto1.x*punto2.x ) +  (punto1.y*punto2.y ) ;
 		return producto;
 }
+
+Punto Formula::getNormal(Punto punto)
+{
+	int  z = 1;
+
+	Punto normal;
+	normal.x = punto.y *z - 0*0;
+	normal.y = -(punto.x*z - 0*0);
+	return normal;
+}
+
+double Formula::obtenerAnguloEntrePuntos(Punto punto1 , Punto punto2)
+{
+		// <p1,p2>= |p1|.|p2|.cos(ang)
+	double producto = Formula::productoInterno(punto1,punto2);
+	double normaPunto1 = Formula::norma(punto1);
+	double normaPunto2= Formula::norma(punto2);
+    double coseno = (double)producto/(normaPunto1*normaPunto2);
+	double angulo = acos(coseno);
+	return angulo;
+	
+}

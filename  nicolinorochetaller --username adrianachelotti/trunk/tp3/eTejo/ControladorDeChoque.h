@@ -27,8 +27,11 @@ public:
 
 	void resolverChoqueConParedes(Tejo* tejo);
 
-	/*Resuelve el choque entre la paleta*/
+	/*Resuelve el choque entre la paleta y el tejo*/
 	void resolverChoqueConPaleta(Tejo* tejo, Pad* paleta);
+
+	/*Resuelve el choque entre un circulo y el tejo*/
+	void resolverChoqueConCirculo(Tejo* tejo, Circulo* circulo);
 
 	/*detecta si hay un choque entre el tejo y un circulo*/
 	bool hayChoqueConCirculo(Tejo* tejo, Circulo* circulo);
@@ -36,10 +39,10 @@ public:
 	/*detecta si hay un choque entre el tejo y un segmento*/
 	bool hayChoqueConSegmento(Tejo* pTejo, Segmento*  segmento );
 
-	/*releja la velo para el choque con el triangulo*/
+	/*releja la velocidad para el choque con el triangulo*/
 	void calculoVelocidadReflejada(double pendiente,double pendienteN,Tejo* pTejo); 
 
-	/*detecta si hay un choque entre el tejo y un triangulo y resulve la nueva velo*/
+	/*detecta si hay un choque entre el tejo y un triangulo y resulve la nueva velocidad*/
 	void choqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo);
 
 	/*detecta choque de tejo con los vertices*/

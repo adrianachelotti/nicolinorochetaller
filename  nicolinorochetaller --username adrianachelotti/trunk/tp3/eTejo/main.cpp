@@ -27,8 +27,8 @@ IMPRIME RECTANGULO
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
 #define SCREEN_DEPTH 8
-#define DELTA_Y 8
-#define DELTA_T 2
+#define DELTA_Y 3
+#define DELTA_T 3
 
 
 /*************************************************************************
@@ -275,6 +275,15 @@ int main(int argc, char *argv[]) {
 //	Triangulo* dispersorTriangulo2 = new Triangulo("dispersor4",vert);
 //	delete(vert2);
 
+
+
+
+	Punto posicionCirculo ;
+	posicionCirculo.x=333;
+	posicionCirculo.y = 200;
+	Circulo* circulin = new Circulo("as",80,posicionCirculo);
+	circulin->setColorFondo(0x0000ff);
+	circulin->setColorPropio(true);
    //* creo el tejo
 	Tejo* pTejo = new Tejo();
 	Punto centroTejo ;
@@ -355,6 +364,7 @@ int main(int argc, char *argv[]) {
 				{
 					controlador->resolverChoqueConParedes(pTejo);
 					controlador->resolverChoqueConPaleta(pTejo,pad);
+				//	controlador->resolverChoqueConCirculo(pTejo,circulin);
 					
 					//VER PORQUE NO PUEDO HACER QUE LOS ELEMENTOS SALGAN DE LA LISTA DEL ESCENARIO (VER resolverChoqueDispersores...)
 					//controlador->resolverChoqueDispersores(pTejo,escenario); ---> le paso el escenario y resuelve todo los choques
@@ -389,6 +399,7 @@ int main(int argc, char *argv[]) {
 				rectangulo->dibujar();
 				dispersorTriangulo->dibujar();
 				tejo->dibujar();
+				circulin->dibujar();
 
 				SDL_Flip(screen);
 			}
