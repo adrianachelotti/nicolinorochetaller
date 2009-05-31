@@ -92,7 +92,8 @@ void ControladorDeChoque::resolverChoqueConPaleta(Tejo* pTejo, Pad* pad)
 	Segmento* segmentoAB= new Segmento("AB",puntoA,puntoB);
 	Segmento* segmentoCB= new Segmento("CB",puntoC,puntoB);
 	Segmento* segmentoCD = new Segmento("CD",puntoC, puntoD);
-    if (hayChoqueConSegmento(pTejo,segmentoAB))
+	Segmento* segmentoDA = new Segmento("DA",puntoD, puntoA);
+    if (hayChoqueConSegmento(pTejo,segmentoAB)&&velocidadTejo.x<0)
 	{
 
 		
@@ -103,17 +104,9 @@ void ControladorDeChoque::resolverChoqueConPaleta(Tejo* pTejo, Pad* pad)
 		return;
 	}
  
-    /*if (hayChoqueConSegmento(pTejo,segmentoAB)&&hayChoqueConSegmento(pTejo,segmentoCB))
-	{
-		
-		
-		velocidadTejo.x=-1*velocidadTejo.x;
-		velocidadTejo.y=-1*velocidadTejo.y;
-		
-		pTejo->setVelocidad( velocidadTejo);
-	}*/
 
-	if (hayChoqueConSegmento(pTejo,segmentoCD))
+
+	if (hayChoqueConSegmento(pTejo,segmentoCD)&&velocidadTejo.x>0)
 	{
 		
 		
@@ -123,31 +116,57 @@ void ControladorDeChoque::resolverChoqueConPaleta(Tejo* pTejo, Pad* pad)
 		pTejo->setVelocidad( velocidadTejo);
 	}
 	
-	
-	
-	/*if(((tejo->getCentro().x + tejo->getRadio()>topeXSuperior )
-		&&(tejo->getCentro().x + tejo->getRadio()<topeXSuperior +4 )) 
-		||((tejo->getCentro().x - tejo->getRadio()<=topeXInferior)
-		&&(tejo->getCentro().x - tejo->getRadio()>topeXInferior -5)))
+	if (hayChoqueConSegmento(pTejo,segmentoCB)&&velocidadTejo.y<0)
 	{
 		
-		if((tejo->getCentro().y - tejo->getRadio())>=topeYInferior)
-		{
-			velocidadTejo.x=-1*velocidadTejo.x;
-			velocidadTejo.y=-1*velocidadTejo.y;
-		}
-		if((tejo->getCentro().y + tejo->getRadio())<=topeYSuperior)
-		{
-			velocidadTejo.x=-1*velocidadTejo.x;
-			velocidadTejo.y=velocidadTejo.y*-1;
-		}
-	
-	pTejo->setVelocidad( velocidadTejo);
+		
+		velocidadTejo.x=1*velocidadTejo.x;
+		velocidadTejo.y=-1*velocidadTejo.y;
+		
+		pTejo->setVelocidad( velocidadTejo);
 	}
-	*/
+	
+	
+	if (hayChoqueConSegmento(pTejo,segmentoDA)&&velocidadTejo.y>0)
+	{
+		
+		
+		velocidadTejo.x=1*velocidadTejo.x;
+		velocidadTejo.y=-1*velocidadTejo.y;
+		
+		pTejo->setVelocidad( velocidadTejo);
+	}
+	
 }
 
+void  ControladorDeChoque::resolverChoqueConCirculo(Tejo* tejo, Circulo* circulo)
+{
+	if(hayChoqueConCirculo(tejo,circulo))
+	{
+		Punto distancia ;
+		distancia.x = tejo->getPosicion().x - circulo->getCentro().x;
+		distancia.y = tejo->getPosicion().y  - circulo->getCentro().y;
+		Punto normalADistancia = Formula::getNormal(distancia);
+		printf(" <%d ,  %d>   es normal a  <%d ,%d >",distancia.x,distancia.y,normalADistancia.x, normalADistancia.y);
+		Punto ejeY ;
+		ejeY.x = 0;
+		ejeY.y = normalADistancia.y;
+		Punto velo ;
+		velo.x =  tejo->getVelocidad().x;
+		velo.y =  tejo->getVelocidad().y;
+		double angulo = Formula::obtenerAnguloEntrePuntos(normalADistancia,ejeY);
+		printf("angulo %f", angulo);
+		Velocidad nuevaVelocidad;
+		double moduloVelocidad = (tejo->getVelocidad().x*tejo->getVelocidad().x) + (tejo->getVelocidad().y*tejo->getVelocidad().y);
+		nuevaVelocidad.x = moduloVelocidad*cos(angulo);
+		nuevaVelocidad.y = moduloVelocidad*sin(angulo);
+		tejo->setVelocidad(nuevaVelocidad);
 
+
+
+
+	}
+}
 
 bool ControladorDeChoque::hayChoqueConCirculo(Tejo* pTejo, Circulo* circulo)
 {
@@ -160,19 +179,23 @@ bool ControladorDeChoque::hayChoqueConCirculo(Tejo* pTejo, Circulo* circulo)
 	double u = Formula::norma(puntoAB);
 	int sumaDeRadios = circulo->getRadio() + tejo->getRadio();
 	int restaDeRadios = abs(circulo->getRadio() - tejo->getRadio());
-	/*
+	
 	cout<<"Radio dispersor: "<<circulo->getRadio()<<" - "<<"Radio tejo: "<<tejo->getRadio()<<endl; 
 	cout<<"Suma de radios:"<<sumaDeRadios<<endl;
 	cout<<"Resta de radios:"<<restaDeRadios<<endl;
 	cout<<"Distancia entre radios: "<<u<<endl;
-
+/*
 	if(u==sumaDeRadios) printf("Los circulos se tocan en un punto.\n");
 	if(u<=restaDeRadios) printf("Un circulo dentro de otro.\n");
 	if((u>restaDeRadios)&&(u<sumaDeRadios)) printf("Los circulos se intersectan en dos puntos.\n");
-	*/
+*/	
 	
 //TODO
-	return true;
+
+	if(u==sumaDeRadios) return true;
+	if(u<=restaDeRadios) return true;
+	if((u>restaDeRadios)&&(u<sumaDeRadios)) return true;
+	return false;
 
 
 }
