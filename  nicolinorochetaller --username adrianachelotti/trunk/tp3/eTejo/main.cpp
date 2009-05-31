@@ -27,8 +27,8 @@ IMPRIME RECTANGULO
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
 #define SCREEN_DEPTH 8
-#define DELTA_Y 3
-#define DELTA_T 3
+#define DELTA_Y 5
+#define DELTA_T 2
 
 
 /*************************************************************************
@@ -216,78 +216,12 @@ int main(int argc, char *argv[]) {
 	pad->setRepresentacionGrafica(rectangulo);
 	rectangulo->dibujar();
 	
-	Segmento* se =  new Segmento();
-	Punto a ,b;
-	a.x = 140;
-	a.y = 110;
-	b.x = 140;
-	b.y = 120;
-	se->setPuntoInicio(a);
-	se->setPuntoFinal(b);
-
-	Punto centroDispersor ;
-	centroDispersor.x = 110;
-	centroDispersor.y = 110;
-	Circulo* dispersorCircular =  new Circulo("dispersor", 10,centroDispersor); 
-	
-
-	
-	//dispersores triangulares. Este mismo hay que dibujarlo desde el arhivo para verlo....
-	Punto v1, v2, v3;
-	v1.x = 100;
-	v1.y = 20;
-	v2.x = 300;
-	v2.y = 50;
-	v3.x = 150;
-	v3.y = 200;
-	Punto* vert = new Punto[3];
-	vert[0] = v1;
-	vert[1] = v2;
-	vert[2] = v3;
-	Triangulo* dispersorTriangulo = new Triangulo("dispersor2",vert);
-	dispersorTriangulo->setColorFondo(0xFF00FF);
-	dispersorTriangulo->setColorPropio(true);
-	delete(vert);
-    
-	//v1.x = 600;
-//	v1.y = 200;
-//	v2.x = 700;
-//	v2.y = 200;
-//	v3.x = 500;
-//	v3.y = 300;
-//	Punto* vert1 = new Punto[3];
-//	vert[0] = v1;
-//	vert[1] = v2;
-//	vert[2] = v3;
-//	Triangulo* dispersorTriangulo1 = new Triangulo("dispersor3",vert);
-//	delete(vert1);
-
-//	v1.x = 600;
-//	v1.y = 600;
-//	v2.x = 700;
-//	v2.y = 600;
-//	v3.x = 500;
-//	v3.y = 500;
-//	Punto* vert2 = new Punto[3];
-//	vert[0] = v1;
-//	vert[1] = v2;
-//	vert[2] = v3;
-//	Triangulo* dispersorTriangulo2 = new Triangulo("dispersor4",vert);
-//	delete(vert2);
 
 
-
-
-	Punto posicionCirculo ;
-	posicionCirculo.x=333;
-	posicionCirculo.y = 200;
-	Circulo* circulin = new Circulo("as",80,posicionCirculo);
-	circulin->setColorFondo(0x0000ff);
-	circulin->setColorPropio(true);
-   //* creo el tejo
+	/*creo el tejo*/
 	Tejo* pTejo = new Tejo();
 	Punto centroTejo ;
-	centroTejo.x = pad->getPosicion().x + rectangulo->getBase();;
+	centroTejo.x = pad->getPosicion().x + rectangulo->getBase() + 10;
 	centroTejo.y = pad->getPosicion().y - rectangulo->getAltura()/2;
 	Velocidad velocidadTejo; 
 	velocidadTejo.x = 1;
@@ -301,19 +235,18 @@ int main(int argc, char *argv[]) {
 	pTejo->setVelocidad(velocidadTejo);
 
 
-	cout<<"*********Evaluar choque con dispersor circular**************"<<endl;
-	controlador->hayChoqueConCirculo(pTejo,dispersorCircular);
-	cout<<endl;
 	
-	cout<<"*********Evaluar choque con segmento**************"<<endl;
-	controlador->hayChoqueConSegmento(pTejo,se);
-	cout<<endl;
 
 	SDL_Flip(screen);
 
     int blinkTimer = 0;
 
     
+	SDL_EventState(SDL_ACTIVEEVENT, SDL_IGNORE);
+	SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
+	SDL_EventState(SDL_MOUSEBUTTONDOWN, SDL_IGNORE);
+	SDL_EventState(SDL_MOUSEBUTTONUP, SDL_IGNORE);
+
 	SDL_EnableKeyRepeat(1,1);
      while(quit == 0)
 	 {
@@ -369,21 +302,7 @@ int main(int argc, char *argv[]) {
 					//VER PORQUE NO PUEDO HACER QUE LOS ELEMENTOS SALGAN DE LA LISTA DEL ESCENARIO (VER resolverChoqueDispersores...)
 					controlador->resolverChoqueDispersores(pTejo,escenario);// ---> le paso el escenario y resuelve todo los choques
 						
-					//control de choques son los triangulos
-
-					if (controlador->choqueConVertices(pTejo,dispersorTriangulo) == false) 
-					{
-						controlador->choqueConTriangulo(pTejo,dispersorTriangulo);
-						
-					}
-				//	if (controlador->choqueVertices(pTejo,dispersorTriangulo1) == false) 
-			//		{
-			//			controlador->ChoqueConTriangulo(pTejo,dispersorTriangulo1);
-			//		}
-			//		if (controlador->choqueVertices(pTejo,dispersorTriangulo2) == false) 
-			//		{
-			//			controlador->ChoqueConTriangulo(pTejo,dispersorTriangulo2);
-			//		}
+					
 	
 					pTejo->moverTejo(DELTA_T);
 				}
@@ -397,9 +316,9 @@ int main(int argc, char *argv[]) {
 
 				}
 				rectangulo->dibujar();
-				dispersorTriangulo->dibujar();
+				
 				tejo->dibujar();
-				circulin->dibujar();
+				
 
 				SDL_Flip(screen);
 			}

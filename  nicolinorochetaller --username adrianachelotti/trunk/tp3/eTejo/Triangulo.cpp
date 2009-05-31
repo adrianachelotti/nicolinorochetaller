@@ -192,7 +192,7 @@ int Triangulo::dibujar()
 		if(this->getImagenFigura()==NULL)
 		{
 			this->setImagenFigura(graficador->getImageResized(text,this->getAncho(), this->getAlto()));
-			printf("resizeo el triangulo \n");
+			
 		}
 	
 

@@ -48,7 +48,6 @@ SDL_Surface* Textura::getImagen()
 {
 	if(this->imagen==NULL)
 	{
-		printf("textura de id %s  se abrio",this->id);
 		this->imagen =  SDL_LoadBMP(path.c_str());
 	}
 	

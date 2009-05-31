@@ -180,11 +180,11 @@ bool ControladorDeChoque::hayChoqueConCirculo(Tejo* pTejo, Circulo* circulo)
 	int sumaDeRadios = circulo->getRadio() + tejo->getRadio();
 	int restaDeRadios = abs(circulo->getRadio() - tejo->getRadio());
 	
-	cout<<"Radio dispersor: "<<circulo->getRadio()<<" - "<<"Radio tejo: "<<tejo->getRadio()<<endl; 
+/*	cout<<"Radio dispersor: "<<circulo->getRadio()<<" - "<<"Radio tejo: "<<tejo->getRadio()<<endl; 
 	cout<<"Suma de radios:"<<sumaDeRadios<<endl;
 	cout<<"Resta de radios:"<<restaDeRadios<<endl;
 	cout<<"Distancia entre radios: "<<u<<endl;
-/*
+
 	if(u==sumaDeRadios) printf("Los circulos se tocan en un punto.\n");
 	if(u<=restaDeRadios) printf("Un circulo dentro de otro.\n");
 	if((u>restaDeRadios)&&(u<sumaDeRadios)) printf("Los circulos se intersectan en dos puntos.\n");
@@ -318,7 +318,7 @@ void ControladorDeChoque::calculoVelocidadReflejada(double pendiente,double pend
 
 
 
-bool ControladorDeChoque::choqueConVertices(Tejo* pTejo, Triangulo*  triangulo)
+bool ControladorDeChoque::hayChoqueConVertices(Tejo* pTejo, Triangulo*  triangulo)
 {
 	Punto* vertices;
 	vertices = triangulo->getVertices();
@@ -350,7 +350,7 @@ bool ControladorDeChoque::choqueConVertices(Tejo* pTejo, Triangulo*  triangulo)
 	return false;
 }
 
-void ControladorDeChoque::choqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo)
+void ControladorDeChoque::hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo)
 {	
 	Punto* vertices;
 	vertices = triangulo->getVertices();
@@ -369,7 +369,7 @@ void ControladorDeChoque::choqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo)
 		pendiente = (((double)v1.y - (double)v2.y) / ((double)v1.x - (double)v2.x));
 		pendienteNueva = (double)((-1) * (1/pendiente));
 		calculoVelocidadReflejada(pendiente,pendienteNueva,pTejo);
-		cout<<"Hay choque"<<endl;
+		
 	}
 
 	Segmento* segmento2 = new Segmento("segmento2",v2,v3);
@@ -378,7 +378,7 @@ void ControladorDeChoque::choqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo)
 		pendiente = (((double)v2.y - (double)v3.y) / ((double)v2.x - (double)v3.x));
 		pendienteNueva = (double)((-1) * (1/pendiente));
 		calculoVelocidadReflejada(pendiente,pendienteNueva,pTejo);
-		cout<<"Hay choque"<<endl;
+		
 	}
 
 	Segmento* segmento3 = new Segmento("segmento1",v3,v1);
@@ -387,7 +387,7 @@ void ControladorDeChoque::choqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo)
 		pendiente = (((double)v3.y - (double)v1.y) / ((double)v3.x - (double)v1.x));
 		pendienteNueva = (double)((-1) * (1/pendiente));
 		calculoVelocidadReflejada(pendiente,pendienteNueva,pTejo);
-		cout<<"Hay choque"<<endl;
+		
 	}
 
 	delete(segmento1);
@@ -415,8 +415,13 @@ void ControladorDeChoque::resolverChoqueDispersores(Tejo* pTejo,Escenario* escen
 		if (found != string::npos)
 		{
 			//TODO CASTEAR CADA ELEMENTO PARA SOLUCIONAR SU CHOQUE...
-			Triangulo* trian = (Triangulo*) figuraActual;
+			Triangulo* triangulo = (Triangulo*) figuraActual;
 			
+			if (this->hayChoqueConVertices(pTejo,triangulo) == false) 
+			{
+				this->hayChoqueConTriangulo(pTejo,triangulo);
+				
+			}
 			
 		}
 		it++;

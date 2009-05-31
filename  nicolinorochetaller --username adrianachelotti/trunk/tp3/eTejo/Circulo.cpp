@@ -189,7 +189,7 @@ int Circulo::dibujar()
 		if(this->getImagenFigura()==NULL)
 		{
 			this->setImagenFigura( graficador->getImageResized(text, anchoX,altoY));
-			printf("resizeo el circulo \n");
+
 		}
 	
 		graficador->rellenarCirculoConTextura(Escenario::screen,this->getImagenFigura() ,this->getCentro(), this->getRadio());
