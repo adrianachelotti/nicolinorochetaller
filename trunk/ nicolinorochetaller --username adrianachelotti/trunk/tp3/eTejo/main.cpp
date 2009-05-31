@@ -113,158 +113,6 @@ void sacaEnter(char *cadena) {
 }
 
 
-
-
-
-Velocidad resolverChoqueConPaleta(Circulo* tejo, Rectangulo* paleta,Velocidad velocidadTejo)
-{
-	
-	int topeXSuperior = paleta->getPosicionVerticeInferiorIzquierdo().x + paleta->getBase();
-	int topeXInferior = paleta->getPosicionVerticeInferiorIzquierdo().x ;
-	int topeYInferior = paleta->getPosicionVerticeInferiorIzquierdo().y;
-	int topeYSuperior = paleta->getPosicionVerticeInferiorIzquierdo().y - paleta->getAltura();
-	
-	if(((tejo->getCentro().x - tejo->getRadio())<topeXSuperior )&& ((tejo->getCentro().x - tejo->getRadio())>topeXInferior))
-	{
-		
-		if((tejo->getCentro().y - tejo->getRadio())>=topeYInferior)
-		{
-			velocidadTejo.x=-1*velocidadTejo.x;
-			velocidadTejo.y=-1*velocidadTejo.y;
-		}
-		if((tejo->getCentro().y + tejo->getRadio())>topeXSuperior)
-		{
-			velocidadTejo.x=-1*velocidadTejo.x;
-			velocidadTejo.y=velocidadTejo.y*-1;
-		}
-	}
-	return velocidadTejo;
-}
-
-
-
-bool hayChoqueConCirculo(Circulo* circulo, Circulo* tejo)
-{
-	Punto puntoA = tejo->getCentro();
-	Punto puntoB = circulo->getCentro();
-	Punto puntoAB = Formula::restarPuntos(puntoA, puntoB);
-	double u = Formula::norma(puntoAB);
-	int sumaDeRadios = circulo->getRadio() + tejo->getRadio();
-	int restaDeRadios = abs(circulo->getRadio() - tejo->getRadio());
-	
-	cout<<"Radio dispersor: "<<circulo->getRadio()<<" - "<<"Radio tejo: "<<tejo->getRadio()<<endl; 
-	cout<<"Suma de radios:"<<sumaDeRadios<<endl;
-	cout<<"Resta de radios:"<<restaDeRadios<<endl;
-	cout<<"Distancia entre radios: "<<u<<endl;
-
-	if(u==sumaDeRadios) printf("Los circulos se tocan en un punto.\n");
-	if(u<=restaDeRadios) printf("Un circulo dentro de otro.\n");
-	if((u>restaDeRadios)&&(u<sumaDeRadios)) printf("Los circulos se intersectan en dos puntos.\n");
-	
-	return true;
-
-}
-
-bool hayChoqueConSegmento(Segmento*  segmento , Circulo* tejo)
-{
-
-	Punto puntoA, puntoB, centro, delta, direccion; 
-	/****************************************************************
-		Formula de la recta X= t(B-A) + A  con t (0,1)
-		Formula del circulo  |X-C| = R       R= radio
-		llamamos direccion = B-A
-		y delta = A-C       donde C es el centro del tejo
-		|t.(B-A) + A -C | = R
-		 |t.(direccion) + delta| = R
-		 |t.(direccion) + delta|^2 = R^2
-		 
-
-		Reemplazando en la formula del circulo la formula de la recta, 
-		se obtiene una cuadratica de variable t
-
-          t^2.|direccion|^2 + 2.t.direccion.delta + |delta|^2 - R^2 =0
-
-		
-		 t = [-b +- raiz( b^2 - 4.a.c )]/2.a
-		donde b^2 = 4(delta x direccion)^2      y
-		-4.a.c = -4.|direccion|^2 x [|delta|^2  - R^2]
-
-		si b^2 - 4.a.c
-			es igual a cero la recta y el circula intersectan en un punto
-			si es >0  hay interseccion en dos puntos
-			si es <0 no hay interseccion
-  
-		Como nuestro caso es un segmento, tenemos que ver que el t obtenido
-		este entre (0...1)
-	****************************************************************/
-
-	double b, b2 , ac4, a , t1, t2;
-	double radio2 = tejo->getRadio()* tejo->getRadio();
-	double diferencia = 0.0;
-	double diferencia2 = 0.0;
-	int diff =0;
-
-	
-	puntoA = segmento->getPuntoInicio();
-	puntoB = segmento->getPuntoFinal();
-
-	centro = tejo->getCentro();
-
-
-	//printf("tejo x:%d y: %d con el segmento inicial x: %d y: %d  final x: %d  y: %d \n",centro.x, centro.y ,puntoA.x,puntoA.y,puntoB.x, puntoB.y );
-	direccion = Formula::restarPuntos(puntoB, puntoA);
-	delta = Formula::restarPuntos(puntoA,centro);
-
-	b2 = Formula::productoInterno(delta, direccion)*Formula::productoInterno(delta, direccion) * 4;
-	ac4 = Formula::normaAlCuadrado(direccion)* (Formula::normaAlCuadrado(delta)- radio2)*4;
-	diferencia = b2 - ac4;
-	diferencia2 = b2 - ac4;
-	diff = (int)diferencia<<16;
-	
-	if(diff==0)
-	{
-		printf("Existe interseccion en un unico punto de la recta.\n");
-	}
-
-	if(diff<0)
-	{
-		printf("No hay punto de interseccion.\n");
-	}
-
-
-	if(diff>0)
-	{
-		printf("Existe interseccion en dos puntos de la recta.\n");
-	}
-
-   //Ahora calculamos t1,t2 = [-2.direccion.delta +- raiz(diff)]/(2*|direccion|^2)
-	b = 2* Formula::productoInterno(direccion,delta);
-	a = Formula::normaAlCuadrado(direccion);
-	t1 = ( -b + sqrt((double)diferencia2))/(double)(a*2);
-	t2 = ( -b - sqrt((double)diferencia2))/(double)(a*2);
-	printf("Valor raiz t1: %f\n" ,t1);
-	printf("Valor raiz t2: %f\n" ,t2);
-	if ( (t1>=0)&&(t1<=1) ) printf("t1 es raiz %f\n", t1);
-	if ( (t2>=0)&&(t2<=1) ) printf("t2 es raiz %f\n", t2);
-
-
-  return true;
-
-
-
-}
-
-void moverTejo(Circulo* tejo, Velocidad velocidad)
-
-{
-
-	Punto centro = tejo->getCentro();
-	centro.x = centro.x + velocidad.x * DELTA_T;
-	centro.y = centro.y + velocidad.y * DELTA_T;
-	tejo->setCentro(centro);
-}
-
-
 int main(int argc, char *argv[]) {
     
 
@@ -386,17 +234,19 @@ int main(int argc, char *argv[]) {
 	
 	//dispersores triangulares. Este mismo hay que dibujarlo desde el arhivo para verlo....
 	Punto v1, v2, v3;
-	v1.x = 400;
-	v1.y = 0;
-	v2.x = 600;
-	v2.y = 00;
-	v3.x = 500;
-	v3.y = 600;
+	v1.x = 100;
+	v1.y = 20;
+	v2.x = 300;
+	v2.y = 50;
+	v3.x = 150;
+	v3.y = 200;
 	Punto* vert = new Punto[3];
 	vert[0] = v1;
 	vert[1] = v2;
 	vert[2] = v3;
 	Triangulo* dispersorTriangulo = new Triangulo("dispersor2",vert);
+	dispersorTriangulo->setColorFondo(0xFF00FF);
+	dispersorTriangulo->setColorPropio(true);
 	delete(vert);
     
 	//v1.x = 600;
@@ -428,8 +278,8 @@ int main(int argc, char *argv[]) {
    //* creo el tejo
 	Tejo* pTejo = new Tejo();
 	Punto centroTejo ;
-	centroTejo.x = 120;
-	centroTejo.y = 110;
+	centroTejo.x = pad->getPosicion().x + rectangulo->getBase();;
+	centroTejo.y = pad->getPosicion().y - rectangulo->getAltura()/2;
 	Velocidad velocidadTejo; 
 	velocidadTejo.x = 1;
 	velocidadTejo.y = 1;
@@ -454,7 +304,7 @@ int main(int argc, char *argv[]) {
 
     int blinkTimer = 0;
 
-    //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,SDL_DEFAULT_REPEAT_INTERVAL);
+    
 	SDL_EnableKeyRepeat(1,1);
      while(quit == 0)
 	 {
@@ -511,9 +361,10 @@ int main(int argc, char *argv[]) {
 						
 					//control de choques son los triangulos
 
-					if (controlador->choqueVertices(pTejo,dispersorTriangulo) == false) 
+					if (controlador->choqueConVertices(pTejo,dispersorTriangulo) == false) 
 					{
-						controlador->ChoqueConTriangulo(pTejo,dispersorTriangulo);
+						controlador->choqueConTriangulo(pTejo,dispersorTriangulo);
+						
 					}
 				//	if (controlador->choqueVertices(pTejo,dispersorTriangulo1) == false) 
 			//		{
@@ -536,6 +387,7 @@ int main(int argc, char *argv[]) {
 
 				}
 				rectangulo->dibujar();
+				dispersorTriangulo->dibujar();
 				tejo->dibujar();
 
 				SDL_Flip(screen);

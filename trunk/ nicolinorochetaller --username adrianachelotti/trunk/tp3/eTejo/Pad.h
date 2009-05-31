@@ -11,6 +11,7 @@ class Pad
 {
 private:
 	Rectangulo* representacionGrafica;
+	Punto posicion;
 public:
 	
 	/*Constructor sin parametros*/
@@ -25,6 +26,10 @@ public:
 	/*Setea el rectangulo que representa al pad*/
 	void setRepresentacionGrafica(Rectangulo* representacion);
 
+	/*Devuelve la posicion del vertice inferior izquierdo de la paleta*/	
+	 Punto getPosicion();
+
+	 
 
 };
 
