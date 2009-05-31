@@ -367,7 +367,7 @@ int main(int argc, char *argv[]) {
 				//	controlador->resolverChoqueConCirculo(pTejo,circulin);
 					
 					//VER PORQUE NO PUEDO HACER QUE LOS ELEMENTOS SALGAN DE LA LISTA DEL ESCENARIO (VER resolverChoqueDispersores...)
-					//controlador->resolverChoqueDispersores(pTejo,escenario); ---> le paso el escenario y resuelve todo los choques
+					controlador->resolverChoqueDispersores(pTejo,escenario);// ---> le paso el escenario y resuelve todo los choques
 						
 					//control de choques son los triangulos
 

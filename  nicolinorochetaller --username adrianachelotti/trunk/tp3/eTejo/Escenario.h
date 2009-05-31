@@ -27,7 +27,7 @@ private:
 	int ancho;
     string texturaEscenario;	
 	Uint32 colorFondoEscenario;
-	list<Figura*> listadoDeFiguras;
+	
 	list<Textura*> listadoDeTexturas;
 	FILE* archivoErrores;
 	SDL_Surface* imagenEscenario;
@@ -50,7 +50,7 @@ private:
 	
 
 public:
-	
+	list<Figura*> listadoDeFiguras;
 	static Uint32 colorFondoFigura;
 	static Uint32 colorLinea;
 	static string texturaFigura;

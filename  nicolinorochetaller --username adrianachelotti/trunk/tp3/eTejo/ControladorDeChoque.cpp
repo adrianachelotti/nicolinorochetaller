@@ -399,7 +399,7 @@ void ControladorDeChoque::choqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo)
 /*Le pasamos el escenario y se encarga de llamar a la resolucion de los choques segun la figura*/
 void ControladorDeChoque::resolverChoqueDispersores(Tejo* pTejo,Escenario* escenario)
 {
-	list<Figura*> listaFiguras = escenario->getListadoDeFiguras();
+	list<Figura*> listaFiguras = escenario->listadoDeFiguras;
 	list<Figura*>::iterator it;
 	Figura* figuraActual;
 	size_t found;
@@ -415,6 +415,10 @@ void ControladorDeChoque::resolverChoqueDispersores(Tejo* pTejo,Escenario* escen
 		if (found != string::npos)
 		{
 			//TODO CASTEAR CADA ELEMENTO PARA SOLUCIONAR SU CHOQUE...
+			Triangulo* trian = (Triangulo*) figuraActual;
+			
+			
 		}
+		it++;
 	}
 }
