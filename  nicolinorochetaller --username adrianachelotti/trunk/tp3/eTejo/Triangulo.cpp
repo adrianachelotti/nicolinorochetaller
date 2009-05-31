@@ -116,7 +116,7 @@ int Triangulo::dibujar()
 
 	if(contieneTextura)
 	{
-		imagen = SDL_LoadBMP(text->getPath().c_str());
+		imagen = text->getImagen();
 		
 		if(imagen == NULL)
 		{
@@ -190,7 +190,10 @@ int Triangulo::dibujar()
 		//dibujar Textura
 	
 		if(this->getImagenFigura()==NULL)
+		{
 			this->setImagenFigura(graficador->getImageResized(text,this->getAncho(), this->getAlto()));
+			printf("resizeo el triangulo \n");
+		}
 	
 
 		graficador->rellenarTrianguloConTextura(Escenario::screen,this->getImagenFigura() ,&this->vertices[0],&this->vertices[1],&this->vertices[2]);
