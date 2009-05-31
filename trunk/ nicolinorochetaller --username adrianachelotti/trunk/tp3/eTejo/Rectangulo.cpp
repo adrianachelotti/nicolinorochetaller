@@ -91,7 +91,7 @@ int Rectangulo::dibujar()
 
 	if(contieneTextura)
 	{
-		imagen = SDL_LoadBMP(text->getPath().c_str());
+		imagen = text->getImagen();
 		
 		if(imagen == NULL)
 		{
