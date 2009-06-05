@@ -16,7 +16,8 @@ typedef struct punto
 }Punto;
 
 typedef struct Velocidad 
-{   long x;
+{   
+	long x;
 	long y;
 }Velocidad;
 

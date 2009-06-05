@@ -24,7 +24,6 @@ public:
 	virtual ~ControladorDeChoque();
 
 	/* Resuelve el choque con las paredes, devuelve la nueva velocidad del tejo*/
-
 	void resolverChoqueConParedes(Tejo* tejo);
 
 	/*Resuelve el choque entre la paleta y el tejo*/
@@ -40,16 +39,16 @@ public:
 	bool hayChoqueConSegmento(Tejo* pTejo, Segmento*  segmento );
 
 	/*releja la velocidad para el choque con el triangulo*/
-	void calculoVelocidadReflejada(double pendiente,double pendienteN,Tejo* pTejo); 
+	void calculoVelocidadReflejada(Punto inicio, Punto fin, Tejo* pTejo); 
 
 	/*detecta si hay un choque entre el tejo y un triangulo y resulve la nueva velocidad*/
-	void hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo);
+	void hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo, int lastTime);
 
 	/*detecta choque de tejo con los vertices*/
-	bool hayChoqueConVertices(Tejo* pTejo, Triangulo*  triangulo);
+	bool hayChoqueConVertices(Tejo* pTejo, Triangulo*  triangulo, int lastTime);
 
 	/*llama a los detetectores de cada dispersor*/
-	void resolverChoqueDispersores(Tejo* pTejo,Escenario* escenario);
+	void resolverChoqueDispersores(Tejo* pTejo,Escenario* escenario, int lastTime);
 };
 
 #endif 

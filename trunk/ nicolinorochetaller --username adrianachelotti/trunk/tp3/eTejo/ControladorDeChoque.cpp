@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "ControladorDeChoque.h"
-
+#define DELTA_T 2
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -390,39 +390,39 @@ bool ControladorDeChoque::hayChoqueConSegmento(Tejo* pTejo, Segmento*  segmento 
   return false;
 }
 
-void ControladorDeChoque::calculoVelocidadReflejada(double pendiente,double pendienteNueva,Tejo* pTejo) 
+void ControladorDeChoque::calculoVelocidadReflejada(Punto inicio,Punto fin,Tejo* pTejo) 
 {
 	Velocidad velocidadVieja = pTejo->getVelocidad();
 	Velocidad velocidadNueva;
+	
+	//calculo de los delta para sacar los angulo...
+	int dx_recta=fin.x - inicio.x;
+	int dy_recta=fin.y - inicio.y;	
 
-	if (pendiente == 0) 
-	{
-		velocidadNueva.x = velocidadVieja.x;
-		velocidadNueva.y = -velocidadVieja.y;
-	} 
-	else {
-		if (pendienteNueva == 0)
-		{
-			velocidadNueva.x = -velocidadVieja.x;
-			velocidadNueva.y = velocidadVieja.y;
-		} 
-		if (pendienteNueva > 0)
-		{
-			velocidadNueva.x = -velocidadVieja.y;
-			velocidadNueva.y = velocidadVieja.x;
-		}
-		if (pendienteNueva < 0)
-		{
-			velocidadNueva.x = velocidadVieja.y;
-			velocidadNueva.y = -velocidadVieja.x;
-		}
-	}
+	//angulo del lado con el que choca el tejo
+	float alfa_recta = atan2((double)dy_recta, (double)dx_recta);
+	
+	//angulo de la velociad
+	float alfa_tejo = atan2((double)(velocidadVieja.y), (double)(velocidadVieja.x));
+	
+	//angulo de choque
+	float alfa= alfa_recta - alfa_tejo;
+	
+	//calculo del angulo proyectado
+	float modulo= sqrt ((float)((velocidadVieja.x)*(velocidadVieja.x)) + (float)((velocidadVieja.y)*(velocidadVieja.y)));
+	float alfa_suma=alfa_recta + alfa;
+
+	//calculo de la velocidad
+	velocidadNueva.x=cos(alfa_suma) * (modulo);
+	velocidadNueva.y=sin(alfa_suma) * (modulo);
+
+	//cargamos la velo en el tejo..
 	pTejo->setVelocidad(velocidadNueva);
 }
 
 
 
-bool ControladorDeChoque::hayChoqueConVertices(Tejo* pTejo, Triangulo*  triangulo)
+bool ControladorDeChoque::hayChoqueConVertices(Tejo* pTejo, Triangulo*  triangulo,int lastTime)
 {
 	Punto* vertices;
 	vertices = triangulo->getVertices();
@@ -438,29 +438,34 @@ bool ControladorDeChoque::hayChoqueConVertices(Tejo* pTejo, Triangulo*  triangul
 
 	if (Formula::norma(c1) <= radio)
 	{
-	//	cout<<"HAY CHOQUE CON EL VERTICE 1"<<endl;
+		cout<<"HAY CHOQUE CON EL VERTICE 1"<<endl;
 		return true;
 	} 
 	if (Formula::norma(c2) <= radio) 
 	{
-	//	cout<<"HAY CHOQUE CON EL VERTICE 2"<<endl;
+		cout<<"HAY CHOQUE CON EL VERTICE 2"<<endl;
 		return true;
 	}
 	if (Formula::norma(c3) <= radio) 
 	{
-	//	cout<<"HAY CHOQUE CON EL VERTICE 3"<<endl;
+		cout<<"HAY CHOQUE CON EL VERTICE 3"<<endl;
 		return true;
 	}
 	return false;
 }
 
-void ControladorDeChoque::hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo)
+void ControladorDeChoque::hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo,int lastTime)
 {	
 	Punto* vertices;
 	vertices = triangulo->getVertices();
-	double pendiente;
-	double pendienteNueva;
 	bool choque;
+	
+	int thisTime = SDL_GetTicks();
+    float deltaTime = (float)((thisTime - lastTime)/(float)1000 );
+
+	//if (deltaTime == 0) {
+	//	deltaTime = 0.01;
+	//}
 
 	Punto v1 = vertices[0];
 	Punto v2 = vertices[1];
@@ -470,28 +475,38 @@ void ControladorDeChoque::hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangu
 	Segmento* segmento1 = new Segmento("segmento1",v1,v2);
 	choque = hayChoqueConSegmento(pTejo,segmento1);
 	if (choque == true) {
-		pendiente = (((double)v1.y - (double)v2.y) / ((double)v1.x - (double)v2.x));
-		pendienteNueva = (double)((-1) * (1/pendiente));
-		calculoVelocidadReflejada(pendiente,pendienteNueva,pTejo);
+		calculoVelocidadReflejada(v1,v2,pTejo);
+		pTejo->moverTejo(deltaTime);
+		choque = hayChoqueConSegmento(pTejo,segmento1);
+		while (choque == true) {
+			pTejo->moverTejo(deltaTime);
+			choque = hayChoqueConSegmento(pTejo,segmento1);
+		}
 		
 	}
 
 	Segmento* segmento2 = new Segmento("segmento2",v2,v3);
 	choque = hayChoqueConSegmento(pTejo,segmento2);
 	if (choque == true) {
-		pendiente = (((double)v2.y - (double)v3.y) / ((double)v2.x - (double)v3.x));
-		pendienteNueva = (double)((-1) * (1/pendiente));
-		calculoVelocidadReflejada(pendiente,pendienteNueva,pTejo);
-		
+		calculoVelocidadReflejada(v2,v3,pTejo);
+		pTejo->moverTejo(deltaTime);
+		choque = hayChoqueConSegmento(pTejo,segmento2);
+		while (choque == true) {
+			pTejo->moverTejo(deltaTime);
+			choque = hayChoqueConSegmento(pTejo,segmento2);
+		}
 	}
 
 	Segmento* segmento3 = new Segmento("segmento1",v3,v1);
 	choque = hayChoqueConSegmento(pTejo,segmento3);
 	if (choque == true) {
-		pendiente = (((double)v3.y - (double)v1.y) / ((double)v3.x - (double)v1.x));
-		pendienteNueva = (double)((-1) * (1/pendiente));
-		calculoVelocidadReflejada(pendiente,pendienteNueva,pTejo);
-		
+		calculoVelocidadReflejada(v3,v1,pTejo);
+		pTejo->moverTejo(deltaTime);
+		choque = hayChoqueConSegmento(pTejo,segmento3);
+		while (choque == true) {
+			pTejo->moverTejo(deltaTime);
+			choque = hayChoqueConSegmento(pTejo,segmento3);
+		}
 	}
 
 	delete(segmento1);
@@ -501,7 +516,7 @@ void ControladorDeChoque::hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangu
 }
 
 /*Le pasamos el escenario y se encarga de llamar a la resolucion de los choques segun la figura*/
-void ControladorDeChoque::resolverChoqueDispersores(Tejo* pTejo,Escenario* escenario)
+void ControladorDeChoque::resolverChoqueDispersores(Tejo* pTejo,Escenario* escenario, int lastTime)
 {
 	list<Figura*> listaFiguras = escenario->listadoDeFiguras;
 	list<Figura*>::iterator it;
@@ -518,16 +533,29 @@ void ControladorDeChoque::resolverChoqueDispersores(Tejo* pTejo,Escenario* escen
 		
 		if (found != string::npos)
 		{
-			//TODO CASTEAR CADA ELEMENTO PARA SOLUCIONAR SU CHOQUE...
 			Triangulo* triangulo = (Triangulo*) figuraActual;
 			
-			if (this->hayChoqueConVertices(pTejo,triangulo) == false) 
+			if (this->hayChoqueConVertices(pTejo,triangulo,lastTime) == false) 
 			{
-				this->hayChoqueConTriangulo(pTejo,triangulo);
-				
+				this->hayChoqueConTriangulo(pTejo,triangulo,lastTime);
 			}
 			
 		}
+	
+		found = id.find("cir");
+		if (found != string::npos)
+		{
+			Circulo* circulo = (Circulo*) figuraActual;
+			resolverChoqueConCirculo(pTejo,circulo);
+		}
+
+		found = id.find("rec");
+		if (found != string::npos)
+		{
+			//todo choque con el 
+			cout<<"CHOCA CONTRA UN TRIANGULO"<<endl;
+		}
+
 		it++;
 	}
 }

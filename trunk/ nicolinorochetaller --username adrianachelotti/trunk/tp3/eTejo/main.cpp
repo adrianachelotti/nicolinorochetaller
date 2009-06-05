@@ -27,20 +27,111 @@ IMPRIME RECTANGULO
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
 #define SCREEN_DEPTH 8
-#define DELTA_Y 500
-#define DELTA_T 2
+#define DELTA_Y 700
+#define DELTA_T 3
 
 
 /*************************************************************************
 * Dado un evento que arroja la SDL cambia la posicion y de la paleta
 *                
 **************************************************************************/
+
+void crearTejo(Tejo* pTejo,Pad* pad )
+{
+	Escenario* escenario = Escenario::obtenerInstancia();
+	list<Figura*> listaFiguras = escenario->listadoDeFiguras;
+	list<Figura*>::iterator it;
+	Figura* figuraActual;
+	size_t found;
+    it = listaFiguras.begin();
+
+	Punto centroTejo ;
+	centroTejo.x = pad->getPosicion().x + pad->getRepresentacionGrafica()->getBase() + 10;
+	centroTejo.y = pad->getPosicion().y - pad->getRepresentacionGrafica()->getAltura()/2;
+	
+	Velocidad velocidadTejo; 
+	velocidadTejo.x = escenario->getVelox();
+	velocidadTejo.y = escenario->getVeloy();
+
+	pTejo->setVelocidad(velocidadTejo);
+
+	bool tejoBien = false;
+
+	while( it != listaFiguras.end()) 
+	{
+		figuraActual = *it;
+		string id = figuraActual->getId();
+		//si encontramos tri en el id es un tejo...
+		found = id.find("tejo");
+		
+		if (found != string::npos)
+		{
+			Circulo* cir = (Circulo*) figuraActual;
+			pTejo->setRepresentacionGrafica(cir);
+			tejoBien = true;
+		}
+		it++;
+	}
+	
+	if (tejoBien == false) 
+	{
+		Circulo* tejo = new Circulo("tejo", 10,centroTejo);
+		tejo->setColorFondo(0x0000FF);
+		tejo->setColorLinea(0xFFFFFF);
+		tejo->setColorPropio(true);
+		tejo->dibujar();
+		pTejo->setRepresentacionGrafica(tejo);
+		pTejo->setVelocidad(velocidadTejo);
+	}
+}
+
+void crearPaleta(Pad* pad)
+{
+
+	Escenario* escenario = Escenario::obtenerInstancia();
+	list<Figura*> listaFiguras = escenario->listadoDeFiguras;
+	list<Figura*>::iterator it;
+	Figura* figuraActual;
+	size_t found;
+    it = listaFiguras.begin();
+	bool padBien = false;
+
+	while( it != listaFiguras.end()) 
+	{
+		figuraActual = *it;
+		string id = figuraActual->getId();
+		//si encontramos tri en el id es un pad...
+		found = id.find("pad");
+		
+		if (found != string::npos)
+		{
+			Rectangulo* rec = (Rectangulo*) figuraActual;
+			pad->setRepresentacionGrafica(rec);
+			padBien = true;
+		}
+		it++;
+	} 
+	
+	if (padBien == false) 
+	{
+		Punto posicion;
+		posicion.x = 80;
+		posicion.y = 370;
+		Uint32 colorNormal = 0xFFFF00;
+		Rectangulo* rectangulo = new Rectangulo("pad1", 20,100, posicion);
+		rectangulo->setColorFondo(colorNormal);
+		rectangulo->setColorLinea(0x00FF00);
+		rectangulo->setColorPropio(true);
+		rectangulo->setPosicionVerticeInferiorIzquierdo(posicion);
+		pad->setRepresentacionGrafica(rectangulo);
+	} 
+
+}
 void handle_input(SDL_Event event, Punto *sqre, int altura, int screen_height,float deltaTime)
 {
     //si el evento fue que se presiono una tecla
     if( event.type == SDL_KEYDOWN )
     {
-        
         switch( event.key.keysym.sym )
         {
 			// si se presiono la flecha down
@@ -56,17 +147,10 @@ void handle_input(SDL_Event event, Punto *sqre, int altura, int screen_height,fl
          
 			case SDLK_SPACE:
 				 break;
-
-			
         }
     }
 
 }
-
-
-
-
-
 
 
 void addError(string linea,FILE* archivoErrores,string err)
@@ -186,9 +270,7 @@ int main(int argc, char *argv[]) {
 
 	//seteo la pantalla del escenario
 	Escenario::screen=screen;
-
 	Graficador* graficador = Graficador::obtenerInstancia();
-
 	escenario->dibujar();
 	
 	/*****************************************************************/
@@ -209,76 +291,17 @@ int main(int argc, char *argv[]) {
 	Uint32 colorBlink = 0x00FF00;
 	Uint32 colorNormal = 0xFFFF00;
 	Uint32 temp = colorNormal;
+
+
+
 	Pad* pad = new Pad();
-    Rectangulo* rectangulo = new Rectangulo("paleta1", 20,100, posicion);
-	rectangulo->setColorFondo(colorNormal);
-	rectangulo->setColorLinea(0x00FF00);
-	rectangulo->setColorPropio(true);
-	rectangulo->setPosicionVerticeInferiorIzquierdo(posicion);
-	pad->setRepresentacionGrafica(rectangulo);
-	rectangulo->dibujar();
-	
-
-	Punto posicionCirculo ;
-	posicionCirculo.x=300;
-	posicionCirculo.y = 200;
-	Circulo* circulin = new Circulo("as",50,posicionCirculo);
-	circulin->setColorFondo(0xff0000);
-	circulin->setColorPropio(true);
-	circulin->dibujar();
-
-	Punto posicionCirculo1 ;
-	posicionCirculo1.x=450;
-	posicionCirculo1.y = 300;
-	Circulo* circulin1 = new Circulo("as",50,posicionCirculo1);
-	circulin1->setColorFondo(0xff00ff);
-	circulin1->setColorPropio(true);
-	circulin1->dibujar();
-
-	Punto posicionCirculo2 ;
-	posicionCirculo2.x=300;
-	posicionCirculo2.y = 400;
-	Circulo* circulin2 = new Circulo("as",70,posicionCirculo2);
-	circulin2->setColorFondo(0x00ffee);
-	circulin2->setColorPropio(true);
-	circulin2->dibujar();
-
-	Punto posicionCirculo3 ;
-	posicionCirculo3.x=600;
-	posicionCirculo3.y = 400;
-	Circulo* circulin3 = new Circulo("as",70,posicionCirculo3);
-	circulin3->setColorFondo(0x0000ff);
-	circulin3->setColorPropio(true);
-	circulin3->dibujar();
-
-	Punto posicionCirculo4 ;
-	posicionCirculo4.x=600;
-	posicionCirculo4.y = 200;
-	Circulo* circulin4 = new Circulo("as",50,posicionCirculo4);
-	circulin4->setColorFondo(0xeeaaff);
-	circulin4->setColorPropio(true);
-	circulin4->dibujar();
-	
-	
-	
-	
-	/*creo el tejo*/
 	Tejo* pTejo = new Tejo();
 	Punto centroTejo ;
-	centroTejo.x = pad->getPosicion().x + rectangulo->getBase() + 10;
-	centroTejo.y = pad->getPosicion().y - rectangulo->getAltura()/2;
-	Velocidad velocidadTejo; 
-	velocidadTejo.x = 300;
-	velocidadTejo.y = 300;
-	Circulo* tejo = new Circulo("tejo", 10,centroTejo);
-	tejo->setColorFondo(0x0000FF);
-	tejo->setColorLinea(0xFFFFFF);
-	tejo->setColorPropio(true);
-	tejo->dibujar();
-	pTejo->setRepresentacionGrafica(tejo);
-	pTejo->setVelocidad(velocidadTejo);
 
-	
+	crearPaleta(pad);
+	pad->getRepresentacionGrafica()->dibujar();
+	crearTejo(pTejo,pad);
+	pTejo->getRepresentacionGrafica()->dibujar();
 	
 
 	SDL_Flip(screen);
@@ -305,19 +328,17 @@ int main(int argc, char *argv[]) {
 				temp = colorNormal;
 			else
 				temp = colorBlink;
-			rectangulo->setColorFondo(temp);
-			rectangulo->dibujar();
+			pad->getRepresentacionGrafica()->setColorFondo(temp);
+			pad->getRepresentacionGrafica()->dibujar();
 			SDL_Flip(screen);
 		}
 
         SDL_PollEvent(&event);
-	//	while (SDL_PollEvent(&event)|| event.type==SDL_KEYUP)
+
 		if(event.type==SDL_KEYDOWN)
 		{
-		    handle_input(event, &posicion, rectangulo->getAltura(), altoPantalla,deltaTime);
-			
+		    handle_input(event, &posicion, pad->getRepresentacionGrafica()->getAltura(), altoPantalla,deltaTime);
 
-			
             if( event.key.keysym.sym == SDLK_ESCAPE )
 			{
                 quit = 1;
@@ -326,10 +347,9 @@ int main(int argc, char *argv[]) {
 			{
 				esPaletaMovida = true;
 				//actualizo y dibujo la paleta
-				rectangulo->setPosicionVerticeInferiorIzquierdo(posicion);
-				rectangulo->setColorFondo(colorNormal);
-				pad->setRepresentacionGrafica(rectangulo);
-				rectangulo->dibujar();
+				pad->getRepresentacionGrafica()->setPosicionVerticeInferiorIzquierdo(posicion);
+				pad->getRepresentacionGrafica()->setColorFondo(colorNormal);
+				pad->getRepresentacionGrafica()->dibujar();
 			}
 			if( event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE )
 			{
@@ -345,54 +365,24 @@ int main(int argc, char *argv[]) {
 				{
 					controlador->resolverChoqueConParedes(pTejo);
 					controlador->resolverChoqueConPaleta(pTejo,pad);
-					controlador->resolverChoqueConCirculo(pTejo,circulin);
-					controlador->resolverChoqueConCirculo(pTejo,circulin1);
-					controlador->resolverChoqueConCirculo(pTejo,circulin2);
-					controlador->resolverChoqueConCirculo(pTejo,circulin3);
-					controlador->resolverChoqueConCirculo(pTejo,circulin4);
-					
-
-
-					//VER PORQUE NO PUEDO HACER QUE LOS ELEMENTOS SALGAN DE LA LISTA DEL ESCENARIO (VER resolverChoqueDispersores...)
-				//	controlador->resolverChoqueDispersores(pTejo,escenario);// ---> le paso el escenario y resuelve todo los choques
-						
-						
+					controlador->resolverChoqueDispersores(pTejo,escenario,lastTime);
 					pTejo->moverTejo(deltaTime);
 				}
 				else 
 				{
-					centroTejo.x = rectangulo->getPosicionVerticeInferiorIzquierdo().x + rectangulo->getBase()+ tejo->getRadio();
-					centroTejo.y = rectangulo->getPosicionVerticeInferiorIzquierdo().y  - (rectangulo->getAltura()/2);
-					tejo->setCentro(centroTejo);
-					pTejo->setRepresentacionGrafica(tejo);
-
-
+					centroTejo.x = pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x + pad->getRepresentacionGrafica()->getBase()+ pTejo->getRepresentacionGrafica()->getRadio();
+					centroTejo.y = pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().y - (pad->getRepresentacionGrafica()->getAltura()/2);
+					pTejo->getRepresentacionGrafica()->setCentro(centroTejo);
 				}
-				rectangulo->dibujar();
 				
-				//TODO circulo de prueba
-				circulin->dibujar();
-				circulin1->dibujar();
-				circulin2->dibujar();
-				circulin3->dibujar();
-				circulin4->dibujar();
-				
-				
-				tejo->dibujar();
+				pad->getRepresentacionGrafica()->dibujar();	
+				pTejo->getRepresentacionGrafica()->dibujar();
 				
 				SDL_Delay(10);
 				SDL_Flip(screen);
-			
-		
-			
-			
 		}   
-			
 		 	if(blinkTimer>100) blinkTimer =0;
-			blinkTimer ++;
-        
-		
-             
+			blinkTimer ++;    
      }
 
 
