@@ -25,19 +25,19 @@ void ControladorDeChoque::resolverChoqueConParedes(Tejo* pTejo)
 	Escenario* escenario = Escenario::obtenerInstancia();
 	Velocidad velocidadTejo = pTejo->getVelocidad();
 	Circulo* tejo = pTejo->getRepresentacionGrafica();
-	if((tejo->getCentro().x +  tejo->getRadio() )> escenario->getAncho())
+	if((tejo->getCentro().x +  tejo->getRadio() )> escenario->getAncho() &&velocidadTejo.x>0)
 	{
 		velocidadTejo.x=-1*velocidadTejo.x;
 	}
-	if((tejo->getCentro().x - tejo->getRadio())<0)
+	if((tejo->getCentro().x - tejo->getRadio())<0 && velocidadTejo.x<0)
 	{
 		velocidadTejo.x=-1*velocidadTejo.x;
 	}
-	if((tejo->getCentro().y - tejo->getRadio())<0)
+	if((tejo->getCentro().y - tejo->getRadio())<0 && velocidadTejo.y<0)
 	{
 		velocidadTejo.y=-1*velocidadTejo.y;
 	}
-	if((tejo->getCentro().y + tejo->getRadio())>escenario->getAlto())
+	if((tejo->getCentro().y + tejo->getRadio())>escenario->getAlto()&& velocidadTejo.y>0)
 	{
 		velocidadTejo.y=velocidadTejo.y*-1;
 	}
@@ -114,9 +114,10 @@ void ControladorDeChoque::resolverChoqueConPaleta(Tejo* pTejo, Pad* pad)
 		velocidadTejo.y=1*velocidadTejo.y;
 		
 		pTejo->setVelocidad( velocidadTejo);
+		return;
 	}
 	
-	if (hayChoqueConSegmento(pTejo,segmentoCB)&&velocidadTejo.y<0)
+	if (hayChoqueConSegmento(pTejo,segmentoCB)&&velocidadTejo.y>0)
 	{
 		
 		
@@ -124,10 +125,11 @@ void ControladorDeChoque::resolverChoqueConPaleta(Tejo* pTejo, Pad* pad)
 		velocidadTejo.y=-1*velocidadTejo.y;
 		
 		pTejo->setVelocidad( velocidadTejo);
+		return;
 	}
 	
 	
-	if (hayChoqueConSegmento(pTejo,segmentoDA)&&velocidadTejo.y>0)
+	if (hayChoqueConSegmento(pTejo,segmentoDA)&&velocidadTejo.y<0)
 	{
 		
 		
@@ -135,36 +137,138 @@ void ControladorDeChoque::resolverChoqueConPaleta(Tejo* pTejo, Pad* pad)
 		velocidadTejo.y=-1*velocidadTejo.y;
 		
 		pTejo->setVelocidad( velocidadTejo);
+		return;
 	}
 	
 }
+
+/*
+void resolverChoqueConCirculo(Tejo* tejo, Circulo* circulo)
+{
+	if(hayChoqueConCirculo(tejo,circulo))
+	{
+		Punto distancia ;
+		distancia.x =  tejo->getPosicion().x - circulo->getCentro().x;
+		distancia.y = tejo->getPosicion().y  - circulo->getCentro().y;
+		Punto normalADistancia = Formula::getNormal(distancia);
+		
+		//Modifico la posicion del tejo al chocar
+		Punto nuevaPosicion;
+		
+		double moduloDistancia = Formula::norma(distancia);
+		double componenteDistanciaXNormalizada = (double)distancia.x / moduloDistancia;
+		double componenteDistanciaYNormalizada = (double)distancia.y / moduloDistancia;
+
+		int sumaRadios = circulo->getRadio() + tejo->getRepresentacionGrafica()->getRadio()+1;
+
+				
+		nuevaPosicion.x = circulo->getCentro().x + componenteDistanciaXNormalizada*sumaRadios;
+		nuevaPosicion.y = circulo->getCentro().y + componenteDistanciaYNormalizada*sumaRadios;
+		tejo->setPosicion(nuevaPosicion);
+
+				
+		double moduloNormalADistancia = Formula::norma(normalADistancia);
+		
+	//	printf(" distancia=<%d ,  %d>    normal=<%d ,%d >",distancia.x,distancia.y,normalADistancia.x, normalADistancia.y);
+		
+		double componenteNormalizadaDistanciaX = (double)normalADistancia.x / moduloNormalADistancia;
+		double componenteNormalizadaDistanciaY = (double)normalADistancia.y / moduloNormalADistancia;
+
+	//	printf("     normalNormalizada=<%f ,%f >\n",componenteNormalizadaDistanciaX, componenteNormalizadaDistanciaY);
+		
+				
+		Velocidad nuevaVelocidad;
+		double moduloVelocidad = sqrt((double)(tejo->getVelocidad().x*tejo->getVelocidad().x) + (tejo->getVelocidad().y*tejo->getVelocidad().y));
+      
+		//printf("angulo %f   modulo %f \n", angulo,moduloVelocidad);
+		
+		
+		nuevaVelocidad.x = moduloVelocidad*componenteNormalizadaDistanciaX;
+		nuevaVelocidad.y =  moduloVelocidad*componenteNormalizadaDistanciaY;
+		
+	//	printf(" Modulo= %f   \n",moduloVelocidad);
+	//	getchar();
+		tejo->setVelocidad(nuevaVelocidad);
+	
+	}
+}
+*/
 
 void  ControladorDeChoque::resolverChoqueConCirculo(Tejo* tejo, Circulo* circulo)
 {
 	if(hayChoqueConCirculo(tejo,circulo))
 	{
-		Punto distancia ;
-		distancia.x = tejo->getPosicion().x - circulo->getCentro().x;
-		distancia.y = tejo->getPosicion().y  - circulo->getCentro().y;
+		Punto velocidadTejo ;
+		velocidadTejo.x = tejo->getVelocidad().x;
+		velocidadTejo.y = tejo->getVelocidad().y;
+		double normaVelocidad = Formula::norma(velocidadTejo);
+		
+		Punto distancia = Formula::restarPuntos(tejo->getPosicion(),circulo->getCentro());
 		Punto normalADistancia = Formula::getNormal(distancia);
-		printf(" <%d ,  %d>   es normal a  <%d ,%d >",distancia.x,distancia.y,normalADistancia.x, normalADistancia.y);
-		Punto ejeY ;
-		ejeY.x = 0;
-		ejeY.y = normalADistancia.y;
-		Punto velo ;
-		velo.x =  tejo->getVelocidad().x;
-		velo.y =  tejo->getVelocidad().y;
-		double angulo = Formula::obtenerAnguloEntrePuntos(normalADistancia,ejeY);
-		printf("angulo %f", angulo);
-		Velocidad nuevaVelocidad;
-		double moduloVelocidad = (tejo->getVelocidad().x*tejo->getVelocidad().x) + (tejo->getVelocidad().y*tejo->getVelocidad().y);
-		nuevaVelocidad.x = moduloVelocidad*cos(angulo);
-		nuevaVelocidad.y = moduloVelocidad*sin(angulo);
-		tejo->setVelocidad(nuevaVelocidad);
 
 
 
+		double distanciaVelocidadNormal= Formula::norma(Formula::restarPuntos(normalADistancia,velocidadTejo));
+		
 
+		normalADistancia.x =normalADistancia.x*-1;
+		normalADistancia.y =normalADistancia.y*-1;
+
+		double distanciaVelocidadNormalInvertida= Formula::norma(Formula::restarPuntos(normalADistancia,velocidadTejo));
+
+		if(distanciaVelocidadNormalInvertida>distanciaVelocidadNormal)
+		{
+			normalADistancia.x =normalADistancia.x*-1;
+			normalADistancia.y =normalADistancia.y*-1;
+		}		
+
+		
+		double coseno = (double) (Formula::productoInterno(velocidadTejo,normalADistancia)/(double) (Formula::norma(velocidadTejo)*Formula::norma(normalADistancia)));
+		
+		Punto puntoProyeccion ;
+		puntoProyeccion.x = coseno * velocidadTejo.x;
+		puntoProyeccion.y = coseno * velocidadTejo.y;
+		
+		Punto velocidadFinalPunto;
+		Velocidad velocidadFinal;
+		velocidadFinal.x = 2*(puntoProyeccion.x ) - velocidadTejo.x;
+		velocidadFinal.y = 2*(puntoProyeccion.y ) - velocidadTejo.y;
+		velocidadFinalPunto.x = velocidadFinal.x;
+		velocidadFinalPunto.y = velocidadFinal.y;
+
+		double normalizador = Formula::norma(velocidadFinalPunto);
+		velocidadFinal.x  = normaVelocidad*velocidadFinal.x/normalizador;
+		velocidadFinal.y  = normaVelocidad*velocidadFinal.y/normalizador;
+		tejo->setVelocidad(velocidadFinal);
+	
+		
+		Punto nuevaPosicion;
+		
+		double moduloDistancia = Formula::norma(distancia);
+		double componenteDistanciaXNormalizada = (double)distancia.x / moduloDistancia;
+		double componenteDistanciaYNormalizada = (double)distancia.y / moduloDistancia;
+
+		int sumaRadios = circulo->getRadio() + tejo->getRepresentacionGrafica()->getRadio()+1;
+
+				
+		nuevaPosicion.x = circulo->getCentro().x + componenteDistanciaXNormalizada*sumaRadios;
+		nuevaPosicion.y = circulo->getCentro().y + componenteDistanciaYNormalizada*sumaRadios;
+		tejo->setPosicion(nuevaPosicion);
+
+		
+		
+		
+		
+/*		Punto puntoFinal ;
+		int sumaDeRadios = tejo->getRepresentacionGrafica()->getRadio()+circulo->getRadio();
+		puntoFinal.x  = (circulo->getCentro().x )+ (sumaDeRadios*velocidadFinal.x/(double)normalizador);
+		puntoFinal.y  = (circulo->getCentro().y )+ (sumaDeRadios*velocidadFinal.y/(double)normalizador);
+*/		
+		
+
+//		tejo->setPosicion(puntoFinal);
+
+	
 	}
 }
 
@@ -184,11 +288,11 @@ bool ControladorDeChoque::hayChoqueConCirculo(Tejo* pTejo, Circulo* circulo)
 	cout<<"Suma de radios:"<<sumaDeRadios<<endl;
 	cout<<"Resta de radios:"<<restaDeRadios<<endl;
 	cout<<"Distancia entre radios: "<<u<<endl;
-
+*/
 	if(u==sumaDeRadios) printf("Los circulos se tocan en un punto.\n");
 	if(u<=restaDeRadios) printf("Un circulo dentro de otro.\n");
 	if((u>restaDeRadios)&&(u<sumaDeRadios)) printf("Los circulos se intersectan en dos puntos.\n");
-*/	
+	
 	
 //TODO
 

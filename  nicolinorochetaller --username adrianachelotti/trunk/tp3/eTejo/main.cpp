@@ -27,7 +27,7 @@ IMPRIME RECTANGULO
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
 #define SCREEN_DEPTH 8
-#define DELTA_Y 5
+#define DELTA_Y 500
 #define DELTA_T 2
 
 
@@ -35,7 +35,7 @@ IMPRIME RECTANGULO
 * Dado un evento que arroja la SDL cambia la posicion y de la paleta
 *                
 **************************************************************************/
-void handle_input(SDL_Event event, Punto *sqre, int altura, int screen_height)
+void handle_input(SDL_Event event, Punto *sqre, int altura, int screen_height,float deltaTime)
 {
     //si el evento fue que se presiono una tecla
     if( event.type == SDL_KEYDOWN )
@@ -46,16 +46,15 @@ void handle_input(SDL_Event event, Punto *sqre, int altura, int screen_height)
 			// si se presiono la flecha down
 			case SDLK_DOWN:
 				if(sqre->y  <screen_height)
-				sqre->y+=DELTA_Y;
+				sqre->y+=DELTA_Y*deltaTime;
 				break;
 			// si se presiono la flecha down
 			case SDLK_UP:
-				if(sqre->y >altura)
-				sqre->y-=DELTA_Y;
+				 if(sqre->y >altura)
+				 sqre->y-=DELTA_Y*deltaTime;
 				 break;
          
 			case SDLK_SPACE:
-				 printf("largo la bola");
 				 break;
 
 			
@@ -115,6 +114,9 @@ void sacaEnter(char *cadena) {
 
 int main(int argc, char *argv[]) {
     
+	float deltaTime = 0.0;
+    int thisTime = 0;
+    int lastTime =  SDL_GetTicks();
 
 	SDL_Surface *screen;
 	Parser* parser = new Parser();
@@ -217,15 +219,57 @@ int main(int argc, char *argv[]) {
 	rectangulo->dibujar();
 	
 
+	Punto posicionCirculo ;
+	posicionCirculo.x=300;
+	posicionCirculo.y = 200;
+	Circulo* circulin = new Circulo("as",50,posicionCirculo);
+	circulin->setColorFondo(0xff0000);
+	circulin->setColorPropio(true);
+	circulin->dibujar();
 
+	Punto posicionCirculo1 ;
+	posicionCirculo1.x=450;
+	posicionCirculo1.y = 300;
+	Circulo* circulin1 = new Circulo("as",50,posicionCirculo1);
+	circulin1->setColorFondo(0xff00ff);
+	circulin1->setColorPropio(true);
+	circulin1->dibujar();
+
+	Punto posicionCirculo2 ;
+	posicionCirculo2.x=300;
+	posicionCirculo2.y = 400;
+	Circulo* circulin2 = new Circulo("as",70,posicionCirculo2);
+	circulin2->setColorFondo(0x00ffee);
+	circulin2->setColorPropio(true);
+	circulin2->dibujar();
+
+	Punto posicionCirculo3 ;
+	posicionCirculo3.x=600;
+	posicionCirculo3.y = 400;
+	Circulo* circulin3 = new Circulo("as",70,posicionCirculo3);
+	circulin3->setColorFondo(0x0000ff);
+	circulin3->setColorPropio(true);
+	circulin3->dibujar();
+
+	Punto posicionCirculo4 ;
+	posicionCirculo4.x=600;
+	posicionCirculo4.y = 200;
+	Circulo* circulin4 = new Circulo("as",50,posicionCirculo4);
+	circulin4->setColorFondo(0xeeaaff);
+	circulin4->setColorPropio(true);
+	circulin4->dibujar();
+	
+	
+	
+	
 	/*creo el tejo*/
 	Tejo* pTejo = new Tejo();
 	Punto centroTejo ;
 	centroTejo.x = pad->getPosicion().x + rectangulo->getBase() + 10;
 	centroTejo.y = pad->getPosicion().y - rectangulo->getAltura()/2;
 	Velocidad velocidadTejo; 
-	velocidadTejo.x = 1;
-	velocidadTejo.y = 1;
+	velocidadTejo.x = 300;
+	velocidadTejo.y = 300;
 	Circulo* tejo = new Circulo("tejo", 10,centroTejo);
 	tejo->setColorFondo(0x0000FF);
 	tejo->setColorLinea(0xFFFFFF);
@@ -234,7 +278,7 @@ int main(int argc, char *argv[]) {
 	pTejo->setRepresentacionGrafica(tejo);
 	pTejo->setVelocidad(velocidadTejo);
 
-
+	
 	
 
 	SDL_Flip(screen);
@@ -250,6 +294,9 @@ int main(int argc, char *argv[]) {
 	SDL_EnableKeyRepeat(1,1);
      while(quit == 0)
 	 {
+		thisTime = SDL_GetTicks();
+        deltaTime = (float)((thisTime - lastTime)/(float)1000 );
+        lastTime = thisTime; 
 
 		 //Pequeña animacion de pestañeo
 		if(!esPaletaMovida)
@@ -263,10 +310,11 @@ int main(int argc, char *argv[]) {
 			SDL_Flip(screen);
 		}
 
-        
-		while (SDL_PollEvent(&event)|| event.type==SDL_KEYUP)
+        SDL_PollEvent(&event);
+	//	while (SDL_PollEvent(&event)|| event.type==SDL_KEYUP)
+		if(event.type==SDL_KEYDOWN)
 		{
-		    handle_input(event, &posicion, rectangulo->getAltura(), altoPantalla);
+		    handle_input(event, &posicion, rectangulo->getAltura(), altoPantalla,deltaTime);
 			
 
 			
@@ -288,7 +336,7 @@ int main(int argc, char *argv[]) {
 				tejoLanzado = true;
 			}
 
-
+		}
 			if(esPaletaMovida)
 			{
 				escenario->dibujar();
@@ -297,14 +345,19 @@ int main(int argc, char *argv[]) {
 				{
 					controlador->resolverChoqueConParedes(pTejo);
 					controlador->resolverChoqueConPaleta(pTejo,pad);
-				//	controlador->resolverChoqueConCirculo(pTejo,circulin);
+					controlador->resolverChoqueConCirculo(pTejo,circulin);
+					controlador->resolverChoqueConCirculo(pTejo,circulin1);
+					controlador->resolverChoqueConCirculo(pTejo,circulin2);
+					controlador->resolverChoqueConCirculo(pTejo,circulin3);
+					controlador->resolverChoqueConCirculo(pTejo,circulin4);
 					
+
+
 					//VER PORQUE NO PUEDO HACER QUE LOS ELEMENTOS SALGAN DE LA LISTA DEL ESCENARIO (VER resolverChoqueDispersores...)
-					controlador->resolverChoqueDispersores(pTejo,escenario);// ---> le paso el escenario y resuelve todo los choques
+				//	controlador->resolverChoqueDispersores(pTejo,escenario);// ---> le paso el escenario y resuelve todo los choques
 						
-					
-	
-					pTejo->moverTejo(DELTA_T);
+						
+					pTejo->moverTejo(deltaTime);
 				}
 				else 
 				{
@@ -317,14 +370,24 @@ int main(int argc, char *argv[]) {
 				}
 				rectangulo->dibujar();
 				
+				//TODO circulo de prueba
+				circulin->dibujar();
+				circulin1->dibujar();
+				circulin2->dibujar();
+				circulin3->dibujar();
+				circulin4->dibujar();
+				
+				
 				tejo->dibujar();
 				
-
+				SDL_Delay(10);
 				SDL_Flip(screen);
-			}
+			
+		
 			
 			
 		}   
+			
 		 	if(blinkTimer>100) blinkTimer =0;
 			blinkTimer ++;
         

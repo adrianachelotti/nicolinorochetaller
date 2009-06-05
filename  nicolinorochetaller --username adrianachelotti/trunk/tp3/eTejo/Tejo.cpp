@@ -49,7 +49,7 @@ void Tejo::setVelocidad(Velocidad velocidad)
 	this->velocidad = velocidad;
 }
 
-void Tejo::moverTejo(int tiempo)
+void Tejo::moverTejo(float tiempo)
 
 {
 	Punto centro = this->getPosicion();

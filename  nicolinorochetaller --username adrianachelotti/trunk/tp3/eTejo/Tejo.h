@@ -40,7 +40,7 @@ public:
 	void setVelocidad(Velocidad velocidad);
 	
 	/*mueve el tejo segun la velocidad y el delta de tiempo*/
-	void moverTejo(int tiempo);
+	void moverTejo(float tiempo);
 
 	/*Dibuja la representacion grafica del tejo*/
 	int dibujar();
