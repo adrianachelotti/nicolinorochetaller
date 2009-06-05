@@ -60,22 +60,21 @@ double Formula::productoInterno(Punto punto1, Punto punto2)
 
 Punto Formula::getNormal(Punto punto)
 {
-	int  z = 1;
-
 	Punto normal;
-	normal.x = punto.y *z - 0*0;
-	normal.y = -(punto.x*z - 0*0);
+	normal.x = punto.y;
+	normal.y = -punto.x;
 	return normal;
 }
 
 double Formula::obtenerAnguloEntrePuntos(Punto punto1 , Punto punto2)
 {
 		// <p1,p2>= |p1|.|p2|.cos(ang)
-	double producto = Formula::productoInterno(punto1,punto2);
-	double normaPunto1 = Formula::norma(punto1);
-	double normaPunto2= Formula::norma(punto2);
-    double coseno = (double)producto/(normaPunto1*normaPunto2);
-	double angulo = acos(coseno);
+	long producto = Formula::productoInterno(punto1,punto2);
+	long normaPunto1 = Formula::norma(punto1);
+	long normaPunto2= Formula::norma(punto2);
+    double coseno = (double)producto/(double)(normaPunto1*normaPunto2);
+
+	double angulo = (double)acos((double)coseno);
 	return angulo;
 	
 }
