@@ -128,7 +128,7 @@ using namespace std;
 #define RESO_DEF 800
 #define LONGITUD_INICIAL 128
 #define INCREMENTO 10
-#define VELO_DEF 20
+#define VELO_DEF 300
 
 struct color {
 	int R;

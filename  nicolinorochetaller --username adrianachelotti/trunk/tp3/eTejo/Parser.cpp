@@ -49,7 +49,7 @@ int isNumberColor(string s)
 	string x (charAux);	
     int val = s.compare(x);	
 
-	free(charAux);
+	//free(charAux);
 	if (val==1) {
 		return -1;
 	} else {
@@ -68,7 +68,7 @@ int isNumber(string s)
 	string x (charAux);	
     int val = s.compare(x);	
 
-	free(charAux);
+	//free(charAux);
 	return val;
 }
 
@@ -81,7 +81,7 @@ long isNumberLong(string s)
 	string x (charAux);	
     int val = s.compare(x);	
 		//SI LO PONGO NO ANDA EL DEBUG??????????
-	free(charAux);
+	//free(charAux);
 	return val;
 
 }
@@ -2205,7 +2205,7 @@ int Parser::validaGeneral(char* tag,FILE* archivoErrores)
 	}
 
 	//controlo la velocidad
-	found = linea.find("velocidad=\"");
+	found = linea.find("velox=\"");
 	if(found == string::npos)
 	{
 		imprimirError(tag,archivoErrores,WAR54);
@@ -2215,7 +2215,7 @@ int Parser::validaGeneral(char* tag,FILE* archivoErrores)
 	else 
 	{
 		// obtengo la velocidad
-		begin = linea.find("velocidad=\"") + 11;
+		begin = linea.find("velox=\"") + 7;
 		end = linea.find("\"", begin + 1);
 		aux1 = linea.substr(begin, end - begin).c_str();
 		if (isNumberLong(aux1)==0) 
@@ -2230,8 +2230,37 @@ int Parser::validaGeneral(char* tag,FILE* archivoErrores)
 			velo = VELO_DEF;
 		}
 	}
-	escenario->setVelocidad(velo);
-	cout<<"VELOCIDAD: "<<velo<<endl;
+	escenario->setVelox(velo);
+	cout<<"VELOCIDAD X: "<<velo<<endl;
+
+	//controlo la velocidad
+	found = linea.find("veloy=\"");
+	if(found == string::npos)
+	{
+		imprimirError(tag,archivoErrores,WAR54);
+		cout<<"NO HAY VELO"<<endl;
+        velo = VELO_DEF;
+    }
+	else 
+	{
+		// obtengo la velocidad
+		begin = linea.find("veloy=\"") + 7;
+		end = linea.find("\"", begin + 1);
+		aux1 = linea.substr(begin, end - begin).c_str();
+		if (isNumberLong(aux1)==0) 
+		{
+			velo = atol(linea.substr(begin, end - begin).c_str());
+			velo = validaVelo(velo,tag,archivoErrores);	
+		}
+		else
+		{
+			imprimirError(tag,archivoErrores,WAR53);
+			cout<<"NO ES UN NUMERO"<<endl;
+			velo = VELO_DEF;
+		}
+	}
+	escenario->setVeloy(velo);
+	cout<<"VELOCIDAD Y: "<<velo<<endl;
 
 	return VALID_FORMAT;
 }

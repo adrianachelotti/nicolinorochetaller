@@ -1,25 +1,38 @@
 <escenario>
-<General resolucion="800" texturaFig="id3" texturaEsc="id1" colorFondoFig="255000000" colorLinea="000255000" >
+<General resolucion="800" texturaFig="id3" colorFondoFig="255000000" colorLinea="000255000" velox="500" veloy="500" >
 	</General>
 	<ListadoDeElementos>
+		<circulo id="tejo" colorFigura="100100100" radio="10">
+			<posicion x="110" y="320"/>
+		</circulo>
+
+		<rectangulo id="pad 1" base="20" altura="100" colorFigura="100100100">
+			<posicion x="80" y="370"/>
+		</rectangulo>	
+
 		<triangulo id="tri 1" colorFigura="255000255">
-			<ver1 x="400" y="1"/>
-			<ver2 x="600" y="1"/>
-			<ver3 x="500" y="600"/>
-		</triangulo> 
+			<ver1 x="300" y="100"/>
+			<ver2 x="500" y="100"/>
+			<ver3 x="500" y="200"/>
+		</triangulo>
+
+		<circulo id="cir 1" colorFigura="255000000" radio="80">
+			<posicion x="400" y="400">
+		<circulo/>
+
 	</ListadoDeElementos>
 	<ListadoDeTexturas>
-		<textura id="id1" path="texturas/Anochecer.bmp">
+		<textura id="id1" path="imagenes/Anochecer.bmp">
 		</textura>
-		<textura id="id2" path="texturas/paisajesX.bmp">
+		<textura id="id2" path="imagenes/paisajesX.bmp">
 		</textura>
-		<textura id="id3" path="texturas/ferrari.bmp">
+		<textura id="id3" path="Debug/imagenes/ferrari.bmp">
 		</textura>
-		<textura id="id4" path="texturas/flores.bmp">
+		<textura id="id4" path="imagenes/flores.bmp">
 		</textura>
-		<textura id="id5" path="texturas/maspalomas1.bmp">
+		<textura id="id5" path="imagenes/maspalomas1.bmp">
 		</textura>
-		<textura id="id6" path="texturas/montañas.bmp">
+		<textura id="id6" path="Debug/imagenes/montanas.bmp">
 		</textura>
 	</ListadoDeTexturas>
 	

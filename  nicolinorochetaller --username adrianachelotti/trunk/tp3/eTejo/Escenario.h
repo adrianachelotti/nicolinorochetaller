@@ -21,7 +21,8 @@ using namespace std;
 class Escenario  
 {
 private:
-	long velocidad;
+	long velox;
+	long veloy;
 	int resolucion;
 	int alto;
 	int ancho;
@@ -32,7 +33,7 @@ private:
 	FILE* archivoErrores;
 	SDL_Surface* imagenEscenario;
 
-	/*Constructor	 */
+	/*Constructor*/
 	Escenario();
 	static Escenario* instancia;
 
@@ -142,10 +143,16 @@ public:
 	int getAlto();
 
 	/*Setea la velocidad del nivel*/
-	void setVelocidad(long vel);
+	void setVelox(long velx);
 	
 	/*Retorna la velocidad del nivel*/
-	long getVelocidad();
+	long getVelox();
+
+	/*Setea la velocidad del nivel*/
+	void setVeloy(long vely);
+	
+	/*Retorna la velocidad del nivel*/
+	long getVeloy();
 
 	/*Retorna la imagen del escenario ya cargada de memoria y resizeada*/
 	SDL_Surface* getImagenEscenario();
