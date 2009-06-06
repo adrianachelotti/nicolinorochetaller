@@ -515,6 +515,60 @@ void ControladorDeChoque::hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangu
 
 }
 
+bool ControladorDeChoque::hayChoqueConArco(Tejo* pTejo, Arco* arco) 
+{
+	Punto v1,v2;
+	Rectangulo* rec = arco->getRepresentacionGrafica();
+	Escenario* escenario = Escenario::obtenerInstancia();
+
+	string id = rec->getId();
+	size_t found;
+
+	found = id.find("arco1");
+	if (found != string::npos) 
+	{
+		v1.x = (rec->getPosicionVerticeInferiorIzquierdo().x) + rec->getBase();
+		v1.y = rec->getPosicionVerticeInferiorIzquierdo().y;
+		v2.x = v1.x;
+		v2.y = v1.y - rec->getAltura();
+		Segmento* segmento = new Segmento("segmento1",v1,v2);
+		bool choque = hayChoqueConSegmento(pTejo,segmento);
+		if (choque == true)
+		{
+			Velocidad velo;
+			velo.x = escenario->getVelox();
+			velo.y = escenario->getVeloy();
+			pTejo->setVelocidad(velo);
+			cout<<"GOOOOOOOOOOOOLLLL DE JUGADOR IZQUIERDO"<<endl;
+
+			return(true);
+		}
+		delete(segmento);
+	}
+
+	found = id.find("arco2");
+	if (found != string::npos) 
+	{
+		v1.x = rec->getPosicionVerticeInferiorIzquierdo().x;
+		v1.y = rec->getPosicionVerticeInferiorIzquierdo().y;
+		v2.x = v1.x;
+		v2.y = v1.y - rec->getAltura();
+		Segmento* segmento1 = new Segmento("segmento1",v1,v2);
+		bool choque = hayChoqueConSegmento(pTejo,segmento1);
+		if (choque == true)
+		{
+			Velocidad velo;
+			velo.x = escenario->getVelox();
+			velo.y = escenario->getVeloy();
+			pTejo->setVelocidad(velo);
+			cout<<"GOOOOOOOOOOOOLLLL DE JUGADOR DERECHO"<<endl;
+			return(true);
+		}
+		delete(segmento1);
+	}
+	return(false);
+}
+
 /*Le pasamos el escenario y se encarga de llamar a la resolucion de los choques segun la figura*/
 void ControladorDeChoque::resolverChoqueDispersores(Tejo* pTejo,Escenario* escenario, int lastTime)
 {
@@ -552,10 +606,8 @@ void ControladorDeChoque::resolverChoqueDispersores(Tejo* pTejo,Escenario* escen
 		found = id.find("rec");
 		if (found != string::npos)
 		{
-			//todo choque con el 
-			cout<<"CHOCA CONTRA UN TRIANGULO"<<endl;
+			//TODO CHOQUE CON RECTANGULO....
 		}
-
 		it++;
 	}
 }

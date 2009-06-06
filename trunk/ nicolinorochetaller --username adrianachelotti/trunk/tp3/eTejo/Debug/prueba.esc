@@ -1,14 +1,30 @@
 <escenario>
-<General resolucion="800" texturaFig="id3" colorFondoFig="255000000" colorLinea="000255000" velox="500" veloy="500" >
+<General resolucion="1024" texturaFig="id3" colorFondoFig="255000000" colorLinea="000255000" velox="500" veloy="500" >
 	</General>
 	<ListadoDeElementos>
+		
 		<circulo id="tejo" colorFigura="100100100" radio="10">
-			<posicion x="110" y="320"/>
+			<posicion x="1" y="1"/>
 		</circulo>
 
-		<rectangulo id="pad 1" base="20" altura="100" colorFigura="100100100">
-			<posicion x="80" y="370"/>
+		<rectangulo id="pad1" base="20" altura="100" colorFigura="100100100">
+			<posicion x="1" y="1"/>
 		</rectangulo>	
+
+
+		<rectangulo id="pad2" base="20" altura="100" colorFigura="100100100">
+			<posicion x="1" y="1"/>
+		</rectangulo>	
+
+
+		<rectangulo id="arco1" base="10" altura="10" colorFigura="100100100">
+			<posicion x="1" y="1"/>
+		</rectangulo>
+
+		<rectangulo id="arco2" base="10" altura="10" colorFigura="100100100">
+			<posicion x="1" y="1"/>
+		</rectangulo>
+
 
 		<triangulo id="tri 1" colorFigura="255000255">
 			<ver1 x="300" y="100"/>
