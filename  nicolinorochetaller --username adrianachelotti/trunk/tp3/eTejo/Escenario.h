@@ -9,6 +9,7 @@
 #define RES_ERROR_CARGANDO_TEXTURA 1
 #define RES_OK 0
 #define RESOLUCION_DEFAULT 800
+#define TEJOS 7
 
 #include <iostream>
 #include <list>
@@ -26,6 +27,13 @@ private:
 	int resolucion;
 	int alto;
 	int ancho;
+
+	int tejos;
+	int puntajeDerecho;
+	int puntajeIzquierdo;
+	int golesDerecho;
+	int golesIzquierdo;
+
     string texturaEscenario;	
 	Uint32 colorFondoEscenario;
 	
@@ -153,6 +161,30 @@ public:
 	
 	/*Retorna la velocidad del nivel*/
 	long getVeloy();
+
+	/*Retorna los tejos que quedan en el nivel*/
+	int getTejosRestantes();
+
+	/*resta un tejo al nivel*/
+	void restarTejo();
+
+	/*Retorna el puntaje de jugadorDerecho*/
+	int getPuntajeDerecho();
+	
+	/*sete el puntaje de jugadorDerecho*/
+	void sumaPuntajeDerecho(int puntos);
+
+	/*Retorna el puntaje de jugadorDerecho*/
+	int getPuntajeIzquierdo();
+	
+	/*sete el puntaje de jugadorDerecho*/
+	void sumaPuntajeIzquierdo(int puntos);
+
+	int getGolesDerecho();
+	void sumarGolesDerecho();
+	int getGolesIzquierdo();
+	void sumarGolesIzquierdo();
+
 
 	/*Retorna la imagen del escenario ya cargada de memoria y resizeada*/
 	SDL_Surface* getImagenEscenario();

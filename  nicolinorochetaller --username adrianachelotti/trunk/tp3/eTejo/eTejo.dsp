@@ -86,6 +86,10 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=.\Arco.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Circulo.cpp
 # End Source File
 # Begin Source File
@@ -164,6 +168,10 @@ SOURCE=.\Triangulo.cpp
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\Arco.h
+# End Source File
 # Begin Source File
 
 SOURCE=.\Circulo.h

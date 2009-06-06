@@ -5,7 +5,7 @@
 #if !defined CONTROLADORDECHOQUE_H
 #define CONTROLADORDECHOQUE_H
 
-
+#include "Arco.h"
 #include "Figura.h"
 #include "Segmento.h"
 #include "Tejo.h"
@@ -49,6 +49,9 @@ public:
 
 	/*llama a los detetectores de cada dispersor*/
 	void resolverChoqueDispersores(Tejo* pTejo,Escenario* escenario, int lastTime);
+
+	/*detecta si hay un choque entre el tejo y un triangulo y resulve la nueva velocidad*/
+	bool hayChoqueConArco(Tejo* pTejo, Arco* arco);
 };
 
 #endif 

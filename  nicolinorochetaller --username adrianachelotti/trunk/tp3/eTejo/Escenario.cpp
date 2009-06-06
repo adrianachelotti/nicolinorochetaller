@@ -16,7 +16,11 @@ Escenario::Escenario()
 {
 	this->imagenEscenario= NULL;
 	this->setResolucion(RESOLUCION_DEFAULT);
-	
+	this->tejos = TEJOS;
+	this->puntajeDerecho = 0;
+	this->puntajeIzquierdo = 0;
+	this->golesDerecho = 0;
+	this->golesIzquierdo = 0;
 }
 
 Escenario::~Escenario()
@@ -431,6 +435,60 @@ void Escenario::setAlto(int alto)
 {
 	this->alto = alto;
 }
+
+
+int Escenario::getTejosRestantes()
+{
+	return (this->tejos);
+}
+
+void Escenario::restarTejo()
+{
+	this->tejos -= 1;
+}
+
+
+int Escenario::getPuntajeDerecho() 
+{
+	return(this->puntajeDerecho);
+}
+	
+void Escenario::sumaPuntajeDerecho(int puntos)
+{
+	this->puntajeDerecho += puntos; 
+}
+
+int Escenario::getPuntajeIzquierdo()
+{
+	return(this->puntajeIzquierdo);
+}
+
+void Escenario::sumaPuntajeIzquierdo(int puntos)
+{
+	this->puntajeIzquierdo += puntos; 
+}
+
+
+int Escenario::getGolesDerecho()
+{
+	return(this->golesDerecho);
+}
+
+void Escenario::sumarGolesDerecho()
+{
+	this->golesDerecho +=1;
+}
+
+int Escenario::getGolesIzquierdo()
+{
+	return(this->golesIzquierdo);
+}
+
+void Escenario::sumarGolesIzquierdo()
+{
+	this->golesIzquierdo +=1;
+}
+
 
 int Escenario::getResoCompo(int reso1) 
 {

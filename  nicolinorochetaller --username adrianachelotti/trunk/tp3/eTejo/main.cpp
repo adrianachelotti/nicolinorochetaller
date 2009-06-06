@@ -22,6 +22,7 @@ IMPRIME RECTANGULO
 #include "Textura.h"
 #include "Parser.h" 
 #include "ControladorDeChoque.h"
+#include "Arco.h"
 
 
 #define SCREEN_WIDTH 320
@@ -35,6 +36,36 @@ IMPRIME RECTANGULO
 * Dado un evento que arroja la SDL cambia la posicion y de la paleta
 *                
 **************************************************************************/
+//obtiene la otra componente... podria estar en escenario...
+int getResoCompo(int reso1) {
+	int res2;
+	switch (reso1)
+	{
+		case 640:
+				res2 = 480;
+				break;
+		case 800:
+				res2 = 600;
+				break;
+		case 1024:
+				res2 = 768;
+				break;
+		case 1280:
+				res2 = 768;
+				break;
+	}
+	return res2;
+}
+
+void calcularPosTejo(Tejo* pTejo, Pad* pad)
+{
+	Punto pos;
+	pos.y = (pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().y) - (pad->getRepresentacionGrafica()->getAltura()/2);
+	pos.x = (pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x) + (pad->getRepresentacionGrafica()->getBase()) + (pTejo->getRepresentacionGrafica()->getRadio()+1);
+	Circulo* cir = pTejo->getRepresentacionGrafica();
+	cir->setCentro(pos);
+	pTejo->setRepresentacionGrafica(cir);
+}
 
 void crearTejo(Tejo* pTejo,Pad* pad )
 {
@@ -44,10 +75,6 @@ void crearTejo(Tejo* pTejo,Pad* pad )
 	Figura* figuraActual;
 	size_t found;
     it = listaFiguras.begin();
-
-	Punto centroTejo ;
-	centroTejo.x = pad->getPosicion().x + pad->getRepresentacionGrafica()->getBase() + 10;
-	centroTejo.y = pad->getPosicion().y - pad->getRepresentacionGrafica()->getAltura()/2;
 	
 	Velocidad velocidadTejo; 
 	velocidadTejo.x = escenario->getVelox();
@@ -68,24 +95,43 @@ void crearTejo(Tejo* pTejo,Pad* pad )
 		{
 			Circulo* cir = (Circulo*) figuraActual;
 			pTejo->setRepresentacionGrafica(cir);
+			calcularPosTejo(pTejo,pad);
 			tejoBien = true;
 		}
 		it++;
 	}
+	//TODO VERI QUE SE CREE IGUAL
+}	
+
+void posiPaleta(Pad* pad)
+{
+	Punto pos;
+	Escenario* escenario = Escenario::obtenerInstancia();
+	int alto = getResoCompo(escenario->getResolucion()); 
+	int reso = escenario->getResolucion();
+	Rectangulo* rec= pad->getRepresentacionGrafica();
 	
-	if (tejoBien == false) 
+	int parte = (alto-rec->getAltura())/2;
+	string id = rec->getId();
+	size_t found;
+
+	pos.y = parte + (rec->getAltura());
+	
+	found = id.find("pad1");	
+	if (found != string::npos)
 	{
-		Circulo* tejo = new Circulo("tejo", 10,centroTejo);
-		tejo->setColorFondo(0x0000FF);
-		tejo->setColorLinea(0xFFFFFF);
-		tejo->setColorPropio(true);
-		tejo->dibujar();
-		pTejo->setRepresentacionGrafica(tejo);
-		pTejo->setVelocidad(velocidadTejo);
+		pos.x = rec->getBase() * 4;
 	}
+	else 
+	{
+		pos.x = reso - (rec->getBase() * 4) - rec->getBase();
+	}
+	rec->setPosicionVerticeInferiorIzquierdo(pos);
+	pad->setRepresentacionGrafica(rec);
 }
 
-void crearPaleta(Pad* pad)
+
+void crearPaletas(Pad* pad,Pad* pad1)
 {
 
 	Escenario* escenario = Escenario::obtenerInstancia();
@@ -94,39 +140,108 @@ void crearPaleta(Pad* pad)
 	Figura* figuraActual;
 	size_t found;
     it = listaFiguras.begin();
-	bool padBien = false;
+	bool pad1Bien = false;
+	bool pad2Bien = false;
 
 	while( it != listaFiguras.end()) 
 	{
 		figuraActual = *it;
 		string id = figuraActual->getId();
+
 		//si encontramos tri en el id es un pad...
-		found = id.find("pad");
+		found = id.find("pad1");
 		
 		if (found != string::npos)
 		{
 			Rectangulo* rec = (Rectangulo*) figuraActual;
 			pad->setRepresentacionGrafica(rec);
-			padBien = true;
+			posiPaleta(pad);
+			pad1Bien = true;
+		}
+
+		found = id.find("pad2");
+		if (found != string::npos)
+		{
+			Rectangulo* rec1 = (Rectangulo*) figuraActual;
+			pad1->setRepresentacionGrafica(rec1);
+			posiPaleta(pad1);
+			pad2Bien = true;
 		}
 		it++;
 	} 
 	
-	if (padBien == false) 
+	//TODO VERI QUE SE CREE IGUAL
+}
+
+void calcularLadoPosArco(Arco* arco) 
+{
+	size_t found;
+	Punto pos;
+	Escenario* escenario = Escenario::obtenerInstancia();
+	int reso = getResoCompo(escenario->getResolucion()); 
+	Rectangulo* rec = (Rectangulo*)arco->getRepresentacionGrafica();
+	string id = rec->getId();
+	
+	//es igual para los dos
+	rec->setAltura(reso/2);
+	pos.y = ((reso - rec->getAltura()) / 2) + rec->getAltura();
+
+	found = id.find("arco1");
+	if (found != string::npos)
 	{
-		Punto posicion;
-		posicion.x = 80;
-		posicion.y = 370;
-		Uint32 colorNormal = 0xFFFF00;
-		Rectangulo* rectangulo = new Rectangulo("pad1", 20,100, posicion);
-		rectangulo->setColorFondo(colorNormal);
-		rectangulo->setColorLinea(0x00FF00);
-		rectangulo->setColorPropio(true);
-		rectangulo->setPosicionVerticeInferiorIzquierdo(posicion);
-		pad->setRepresentacionGrafica(rectangulo);
+		pos.x = rec->getBase();
+		rec->setPosicionVerticeInferiorIzquierdo(pos);
+		arco->setRepresentacionGrafica(rec);
+	}
+	else 
+	{
+		pos.x = (escenario->getResolucion()) - (2*rec->getBase());
+		rec->setPosicionVerticeInferiorIzquierdo(pos);
+		arco->setRepresentacionGrafica(rec);
+	}
+}
+
+void crearArcos(Arco* arco,Arco* arco1)
+{
+
+	Escenario* escenario = Escenario::obtenerInstancia();
+	list<Figura*> listaFiguras = escenario->listadoDeFiguras;
+	list<Figura*>::iterator it;
+	Figura* figuraActual;
+	size_t found;
+    it = listaFiguras.begin();
+	bool arcoBien = false;
+
+	while( it != listaFiguras.end()) 
+	{
+		figuraActual = *it;
+		string id = figuraActual->getId();
+
+		//si encontramos tri en el id es un pad...
+		found = id.find("arco1");
+		if (found != string::npos)
+		{
+			Rectangulo* rec = (Rectangulo*) figuraActual;
+			arco->setRepresentacionGrafica(rec);
+			calcularLadoPosArco(arco);
+			arcoBien = true;
+		}
+
+		found = id.find("arco2");
+		if (found != string::npos)
+		{
+			Rectangulo* rec1 = (Rectangulo*) figuraActual;
+			arco1->setRepresentacionGrafica(rec1);
+			calcularLadoPosArco(arco1);
+			arcoBien = true;
+		}
+		it++;
 	} 
+	
+	//TODO VERI QUE SE CREEN LOS DOS ARCOA...
 
 }
+
 void handle_input(SDL_Event event, Punto *sqre, int altura, int screen_height,float deltaTime)
 {
     //si el evento fue que se presiono una tecla
@@ -167,26 +282,7 @@ void addError(string linea,FILE* archivoErrores,string err)
 *                
 **************************************************************************/
 
-//obtiene la otra componente... podria estar en escenario...
-int getResoCompo(int reso1) {
-	int res2;
-	switch (reso1)
-	{
-		case 640:
-				res2 = 480;
-				break;
-		case 800:
-				res2 = 600;
-				break;
-		case 1024:
-				res2 = 768;
-				break;
-		case 1280:
-				res2 = 768;
-				break;
-	}
-	return res2;
-}
+
 
 void sacaEnter(char *cadena) {
 	char* p;
@@ -280,9 +376,7 @@ int main(int argc, char *argv[]) {
 	SDL_Event event;
     int quit;
     quit = 0;
-    Punto posicion;
-    posicion.x = 80;
-    posicion.y = 370;
+   
 	int altoPantalla= escenario->getAlto();
 	bool esPaletaMovida = false;
 	bool tejoLanzado = false;
@@ -295,14 +389,20 @@ int main(int argc, char *argv[]) {
 
 
 	Pad* pad = new Pad();
-	Tejo* pTejo = new Tejo();
-	Punto centroTejo ;
+	Pad* pad1 = new Pad();
+	crearPaletas(pad,pad1);
+	Punto posicion = pad->getPosicion();
+	Punto posicion1 = pad1->getPosicion();
 
-	crearPaleta(pad);
-	pad->getRepresentacionGrafica()->dibujar();
+	Tejo* pTejo = new Tejo();
 	crearTejo(pTejo,pad);
-	pTejo->getRepresentacionGrafica()->dibujar();
-	
+
+	Arco* arco = new Arco();
+	Arco* arco1 = new Arco();
+	crearArcos(arco,arco1);
+	arco->getRepresentacionGrafica()->dibujar();
+	arco1->getRepresentacionGrafica()->dibujar();
+
 
 	SDL_Flip(screen);
 
@@ -313,10 +413,12 @@ int main(int argc, char *argv[]) {
 	SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
 	SDL_EventState(SDL_MOUSEBUTTONDOWN, SDL_IGNORE);
 	SDL_EventState(SDL_MOUSEBUTTONUP, SDL_IGNORE);
-
 	SDL_EnableKeyRepeat(1,1);
-     while(quit == 0)
-	 {
+    
+
+
+	while ((quit == 0) && (escenario->getTejosRestantes() != 0))
+	{
 		thisTime = SDL_GetTicks();
         deltaTime = (float)((thisTime - lastTime)/(float)1000 );
         lastTime = thisTime; 
@@ -328,8 +430,11 @@ int main(int argc, char *argv[]) {
 				temp = colorNormal;
 			else
 				temp = colorBlink;
+
 			pad->getRepresentacionGrafica()->setColorFondo(temp);
 			pad->getRepresentacionGrafica()->dibujar();
+			pad1->getRepresentacionGrafica()->dibujar();
+			pTejo->getRepresentacionGrafica()->dibujar();
 			SDL_Flip(screen);
 		}
 
@@ -338,6 +443,9 @@ int main(int argc, char *argv[]) {
 		if(event.type==SDL_KEYDOWN)
 		{
 		    handle_input(event, &posicion, pad->getRepresentacionGrafica()->getAltura(), altoPantalla,deltaTime);
+			
+			//se mueve con el mismo boton que el pad
+			handle_input(event, &posicion1, pad1->getRepresentacionGrafica()->getAltura(), altoPantalla,deltaTime);
 
             if( event.key.keysym.sym == SDLK_ESCAPE )
 			{
@@ -348,8 +456,10 @@ int main(int argc, char *argv[]) {
 				esPaletaMovida = true;
 				//actualizo y dibujo la paleta
 				pad->getRepresentacionGrafica()->setPosicionVerticeInferiorIzquierdo(posicion);
+				pad1->getRepresentacionGrafica()->setPosicionVerticeInferiorIzquierdo(posicion1);
 				pad->getRepresentacionGrafica()->setColorFondo(colorNormal);
 				pad->getRepresentacionGrafica()->dibujar();
+				pad1->getRepresentacionGrafica()->dibujar();
 			}
 			if( event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE )
 			{
@@ -357,33 +467,69 @@ int main(int argc, char *argv[]) {
 			}
 
 		}
-			if(esPaletaMovida)
+		if(esPaletaMovida)
+		{
+			escenario->dibujar();
+			
+			if(tejoLanzado)
 			{
-				escenario->dibujar();
+				bool gol = controlador->hayChoqueConArco(pTejo,arco);
 				
-				if(tejoLanzado)
+				if (gol == true) 
 				{
-					controlador->resolverChoqueConParedes(pTejo);
-					controlador->resolverChoqueConPaleta(pTejo,pad);
-					controlador->resolverChoqueDispersores(pTejo,escenario,lastTime);
-					pTejo->moverTejo(deltaTime);
+					escenario->restarTejo();
+					escenario->sumaPuntajeDerecho(70);
+					escenario->sumarGolesDerecho();
+					tejoLanzado=false;
 				}
-				else 
+				else
 				{
-					centroTejo.x = pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x + pad->getRepresentacionGrafica()->getBase()+ pTejo->getRepresentacionGrafica()->getRadio();
-					centroTejo.y = pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().y - (pad->getRepresentacionGrafica()->getAltura()/2);
-					pTejo->getRepresentacionGrafica()->setCentro(centroTejo);
+					bool gol1 = controlador->hayChoqueConArco(pTejo,arco1);
+					if (gol1 == true) 
+					{
+						escenario->restarTejo();
+						escenario->sumaPuntajeIzquierdo(70);
+						escenario->sumarGolesIzquierdo();
+						tejoLanzado=false;
+					}	
+					else
+					{
+						controlador->resolverChoqueConParedes(pTejo);
+						controlador->resolverChoqueConPaleta(pTejo,pad);
+						controlador->resolverChoqueConPaleta(pTejo,pad1);
+						controlador->resolverChoqueDispersores(pTejo,escenario,lastTime);
+						pTejo->moverTejo(deltaTime);
+					}
 				}
+			}
+			else 
+			{
+				Punto centroTejo;
+				centroTejo.x = pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x + pad->getRepresentacionGrafica()->getBase()+ pTejo->getRepresentacionGrafica()->getRadio();
+				centroTejo.y = pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().y - (pad->getRepresentacionGrafica()->getAltura()/2);
+				pTejo->getRepresentacionGrafica()->setCentro(centroTejo);
+			}
 				
-				pad->getRepresentacionGrafica()->dibujar();	
-				pTejo->getRepresentacionGrafica()->dibujar();
+			pad->getRepresentacionGrafica()->dibujar();	
+			pad1->getRepresentacionGrafica()->dibujar();	
+			pTejo->getRepresentacionGrafica()->dibujar();
 				
-				SDL_Delay(10);
-				SDL_Flip(screen);
+			SDL_Delay(10);
+			SDL_Flip(screen);
 		}   
-		 	if(blinkTimer>100) blinkTimer =0;
-			blinkTimer ++;    
+		if(blinkTimer>100) blinkTimer =0;
+		blinkTimer ++;    
      }
+
+	 if (escenario->getTejosRestantes() == 0) 
+	 {
+		cout<<"Se acabaron los tejos"<<endl;
+		cout<<"PUNTAJE JUGADOR DERCHO: "<< escenario->getPuntajeDerecho() <<endl;
+		cout<<"PUNTAJE JUGADOR IZQUIERDO: "<< escenario->getPuntajeIzquierdo() <<endl;
+		cout<<"GOLES DERECHO: "<< escenario->getGolesDerecho() <<endl;
+		cout<<"GOLES IZQUIERDO: "<<  escenario->getGolesIzquierdo() <<endl;
+	 }
+
 
 
 	/****************************************************************/
