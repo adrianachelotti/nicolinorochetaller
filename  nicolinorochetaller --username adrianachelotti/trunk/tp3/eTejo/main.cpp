@@ -32,6 +32,90 @@ IMPRIME RECTANGULO
 #define DELTA_T 3
 
 
+
+
+/*****************************************************************
+	  Animacion Gol
+*****************************************************************/
+
+
+void dibujarAnimacion(int w , int h, SDL_Surface* screen)
+{
+	Punto posicionG , posicionO, posicionL, posicionFondo, posicionWin;
+	posicionG.x = w/2 -150;
+	posicionG.y = h/2;
+	posicionO.x = w/2 -50;
+	posicionO.y = h/2;
+	posicionL.x = w/2 +50;
+	posicionL.y = h/2;
+	posicionFondo.x = 0;
+	posicionFondo.y = h;
+	posicionWin.x = w-346;
+	posicionWin.y=h;
+    
+
+	Cuadrado* g = new Cuadrado("g",100,posicionG);
+	g->setIdTextura("letraG");
+	
+	Cuadrado* o = new Cuadrado("o",100,posicionO);
+	o->setIdTextura("letraO");
+	
+	Cuadrado* l = new Cuadrado("l",100,posicionL);
+	l->setIdTextura("letraL");
+
+	Rectangulo* imagen = new Rectangulo("win",346,312,posicionWin);
+	imagen->setIdTextura("win");
+	
+	Rectangulo* fondo = new Rectangulo("fondo",w,h,posicionFondo);
+	fondo->setColorFondo(0x000000);
+	fondo->setColorPropio(true);
+
+	
+		SDL_Flip(screen);
+		SDL_Delay(100);
+ 
+	int cont = 0;
+	int offset =0;
+	while (cont<8)
+	{
+		if((cont%2)==0)
+			offset=2;
+		else offset=0;
+      
+		posicionG.x = w/2 -150;
+		posicionG.y = h/2 +offset;
+		posicionO.x = w/2 -50;
+		posicionO.y = h/2-offset;
+		posicionL.x = w/2 +50;
+		posicionL.y = h/2+offset;
+	
+		g->setPosicionVerticeInferiorIzquierdo(posicionG);
+		o->setPosicionVerticeInferiorIzquierdo(posicionO);
+		l->setPosicionVerticeInferiorIzquierdo(posicionL);
+
+	printf("cont %d" , cont);
+		fondo->dibujar();
+		g->dibujar();
+		o->dibujar();
+		l->dibujar();
+		imagen->dibujar();
+
+
+		cont++;
+		SDL_Flip(screen);
+		SDL_Delay(100);
+	}
+
+
+	delete fondo;
+	delete g;
+	delete o;
+	delete l;
+	delete imagen;
+
+
+}
+
 /*************************************************************************
 * Dado un evento que arroja la SDL cambia la posicion y de la paleta
 *                
@@ -367,7 +451,6 @@ int main(int argc, char *argv[]) {
 	//seteo la pantalla del escenario
 	Escenario::screen=screen;
 	Graficador* graficador = Graficador::obtenerInstancia();
-	escenario->dibujar();
 	
 	/*****************************************************************/
 	/*                  ENTRADA TECLADO							     */
@@ -414,8 +497,10 @@ int main(int argc, char *argv[]) {
 	SDL_EventState(SDL_MOUSEBUTTONDOWN, SDL_IGNORE);
 	SDL_EventState(SDL_MOUSEBUTTONUP, SDL_IGNORE);
 	SDL_EnableKeyRepeat(1,1);
-    
-
+	    
+	escenario->dibujar();
+	bool gol = false;
+	bool gol1 =  false;
 
 	while ((quit == 0) && (escenario->getTejosRestantes() != 0))
 	{
@@ -473,27 +558,34 @@ int main(int argc, char *argv[]) {
 			
 			if(tejoLanzado)
 			{
-				bool gol = controlador->hayChoqueConArco(pTejo,arco);
+				gol = controlador->hayChoqueConArco(pTejo,arco);
 				
 				if (gol == true) 
-				{
-					escenario->restarTejo();
+				{	escenario->restarTejo();
 					escenario->sumaPuntajeDerecho(70);
 					escenario->sumarGolesDerecho();
 					tejoLanzado=false;
+					dibujarAnimacion(escenario->getAncho(),escenario->getAlto(),screen);
+					
+					
+									
 				}
 				else
 				{
-					bool gol1 = controlador->hayChoqueConArco(pTejo,arco1);
+					gol1 = controlador->hayChoqueConArco(pTejo,arco1);
 					if (gol1 == true) 
 					{
 						escenario->restarTejo();
 						escenario->sumaPuntajeIzquierdo(70);
 						escenario->sumarGolesIzquierdo();
 						tejoLanzado=false;
+						dibujarAnimacion(escenario->getAncho(),escenario->getAlto(),screen);			
+						
+						
 					}	
 					else
 					{
+						
 						controlador->resolverChoqueConParedes(pTejo);
 						controlador->resolverChoqueConPaleta(pTejo,pad);
 						controlador->resolverChoqueConPaleta(pTejo,pad1);
@@ -501,6 +593,7 @@ int main(int argc, char *argv[]) {
 						pTejo->moverTejo(deltaTime);
 					}
 				}
+				
 			}
 			else 
 			{
@@ -508,11 +601,11 @@ int main(int argc, char *argv[]) {
 				centroTejo.x = pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x + pad->getRepresentacionGrafica()->getBase()+ pTejo->getRepresentacionGrafica()->getRadio();
 				centroTejo.y = pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().y - (pad->getRepresentacionGrafica()->getAltura()/2);
 				pTejo->getRepresentacionGrafica()->setCentro(centroTejo);
-			}
 				
-			pad->getRepresentacionGrafica()->dibujar();	
-			pad1->getRepresentacionGrafica()->dibujar();	
-			pTejo->getRepresentacionGrafica()->dibujar();
+			}
+			// pad->getRepresentacionGrafica()->dibujar();	
+			//pad1->getRepresentacionGrafica()->dibujar();	
+			//pTejo->getRepresentacionGrafica()->dibujar();
 				
 			SDL_Delay(10);
 			SDL_Flip(screen);
@@ -542,3 +635,4 @@ int main(int argc, char *argv[]) {
 
 	return 0;
 }
+ 
