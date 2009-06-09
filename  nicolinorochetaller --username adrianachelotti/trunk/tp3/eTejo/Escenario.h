@@ -27,6 +27,11 @@ private:
 	int resolucion;
 	int alto;
 	int ancho;
+	int radioInicial;
+	int longInicial;
+	
+	//0->izq 1->der
+	int ultimoTocado;
 
 	int tejos;
 	int puntajeDerecho;
@@ -183,6 +188,14 @@ public:
 	int getGolesIzquierdo();
 	void sumarGolesIzquierdo();
 
+	int getRadioInicial();
+	void setRadioInicial(int r);
+
+	int getUltimoTocado();
+	void setUtlimoTocado(int u);
+
+	int getLongInicial();
+	void setLongInicial(int l);
 
 	/*Retorna la imagen del escenario ya cargada de memoria y resizeada*/
 	SDL_Surface* getImagenEscenario();

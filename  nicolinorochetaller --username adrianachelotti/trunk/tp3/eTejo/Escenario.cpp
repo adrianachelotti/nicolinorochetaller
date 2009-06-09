@@ -21,6 +21,7 @@ Escenario::Escenario()
 	this->puntajeIzquierdo = 0;
 	this->golesDerecho = 0;
 	this->golesIzquierdo = 0;
+	this->ultimoTocado = 0;
 }
 
 Escenario::~Escenario()
@@ -489,6 +490,36 @@ void Escenario::sumarGolesIzquierdo()
 	this->golesIzquierdo +=1;
 }
 
+
+int Escenario::getRadioInicial() 
+{
+	return(this->radioInicial);
+}
+
+void Escenario::setRadioInicial(int r) 
+{
+	this->radioInicial = r;
+}
+
+int Escenario::getUltimoTocado()
+{
+	return(this->ultimoTocado);
+}
+
+void Escenario::setUtlimoTocado(int u)
+{
+	this->ultimoTocado = u;
+}
+
+int Escenario::getLongInicial()
+{
+	return(this->longInicial);
+}
+
+void Escenario::setLongInicial(int l)
+{
+	this->longInicial = l;
+}
 
 int Escenario::getResoCompo(int reso1) 
 {

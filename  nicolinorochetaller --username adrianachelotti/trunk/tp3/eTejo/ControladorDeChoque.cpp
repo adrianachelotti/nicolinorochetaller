@@ -46,7 +46,7 @@ void ControladorDeChoque::resolverChoqueConParedes(Tejo* pTejo)
 
 
 
-void ControladorDeChoque::resolverChoqueConPaleta(Tejo* pTejo, Pad* pad)
+bool ControladorDeChoque::resolverChoqueConPaleta(Tejo* pTejo, Pad* pad)
 {
 	
 
@@ -136,7 +136,7 @@ void ControladorDeChoque::resolverChoqueConPaleta(Tejo* pTejo, Pad* pad)
 		velocidadTejo.y=velocidadTejo.y;
 		
 		pTejo->setVelocidad( velocidadTejo);
-		return;
+		return(true);
 	}
  
 
@@ -149,7 +149,7 @@ void ControladorDeChoque::resolverChoqueConPaleta(Tejo* pTejo, Pad* pad)
 		velocidadTejo.y=1*velocidadTejo.y;
 		
 		pTejo->setVelocidad( velocidadTejo);
-		return;
+		return(true);
 	}
 	
 	if ((hayChoqueConSegmento(pTejo,segmentoCB) || hayChoqueConSegmento(pTejo,segmentoCBExt) || hayChoqueConSegmento(pTejo,segmentoCBExt2)) && velocidadTejo.y>0)
@@ -160,7 +160,7 @@ void ControladorDeChoque::resolverChoqueConPaleta(Tejo* pTejo, Pad* pad)
 		velocidadTejo.y=-1*velocidadTejo.y;
 		
 		pTejo->setVelocidad( velocidadTejo);
-		return;
+		return(true);
 	}
 	
 	
@@ -171,10 +171,10 @@ void ControladorDeChoque::resolverChoqueConPaleta(Tejo* pTejo, Pad* pad)
 		velocidadTejo.y=-1*velocidadTejo.y;
 		
 		pTejo->setVelocidad( velocidadTejo);
-		return;
+		return(true);
 	}
 
-
+	return(false);
 }
 
 /*
@@ -460,39 +460,7 @@ bool ControladorDeChoque::hayChoqueConVertices(Tejo* pTejo, Triangulo*  triangul
 }
 
 
-/*bool ControladorDeChoque::hayChoqueConVertices(Tejo* pTejo, Triangulo*  triangulo,int lastTime)
-{
-	Punto* vertices;
-	vertices = triangulo->getVertices();
-	int radio = pTejo->getRepresentacionGrafica()->getRadio();
-	Punto v1 = vertices[0];
-	Punto v2 = vertices[1];
-	Punto v3 = vertices[2];
-	
-
-	Punto c1 = Formula::restarPuntos(v1,pTejo->getPosicion());
-	Punto c2 = Formula::restarPuntos(v2,pTejo->getPosicion());
-	Punto c3 = Formula::restarPuntos(v3,pTejo->getPosicion());
-
-	if (Formula::norma(c1) <= radio)
-	{
-		cout<<"HAY CHOQUE CON EL VERTICE 1"<<endl;
-		return true;
-	} 
-	if (Formula::norma(c2) <= radio) 
-	{
-		cout<<"HAY CHOQUE CON EL VERTICE 2"<<endl;
-		return true;
-	}
-	if (Formula::norma(c3) <= radio) 
-	{
-		cout<<"HAY CHOQUE CON EL VERTICE 3"<<endl;
-		return true;
-	}
-	return false;
-}*/
-
-void ControladorDeChoque::hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo,int lastTime)
+bool ControladorDeChoque::hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo,int lastTime)
 {	
 	Punto* vertices;
 	vertices = triangulo->getVertices();
@@ -500,10 +468,6 @@ void ControladorDeChoque::hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangu
 	
 	int thisTime = SDL_GetTicks();
     float deltaTime = (float)((thisTime - lastTime)/(float)1000 );
-
-	//if (deltaTime == 0) {
-	//	deltaTime = 0.01;
-	//}
 
 	Punto v1 = vertices[0];
 	Punto v2 = vertices[1];
@@ -519,6 +483,7 @@ void ControladorDeChoque::hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangu
 		while (choque == true) {
 			pTejo->moverTejo(deltaTime);
 			choque = hayChoqueConSegmento(pTejo,segmento1);
+			return(true);
 		}
 		
 	}
@@ -532,6 +497,7 @@ void ControladorDeChoque::hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangu
 		while (choque == true) {
 			pTejo->moverTejo(deltaTime);
 			choque = hayChoqueConSegmento(pTejo,segmento2);
+			return(true);
 		}
 	}
 
@@ -544,13 +510,19 @@ void ControladorDeChoque::hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangu
 		while (choque == true) {
 			pTejo->moverTejo(deltaTime);
 			choque = hayChoqueConSegmento(pTejo,segmento3);
+			return(true);
 		}
+	}
+
+	if (hayChoqueConVertices(pTejo, triangulo) == true)
+	{
+		return(true);
 	}
 
 	delete(segmento1);
 	delete(segmento2);
 	delete(segmento3);
-
+	return(false);
 }
 
 bool ControladorDeChoque::hayChoqueConArco(Tejo* pTejo, Arco* arco) 
@@ -608,8 +580,9 @@ bool ControladorDeChoque::hayChoqueConArco(Tejo* pTejo, Arco* arco)
 }
 
 /*Le pasamos el escenario y se encarga de llamar a la resolucion de los choques segun la figura*/
-void ControladorDeChoque::resolverChoqueDispersores(Tejo* pTejo,Escenario* escenario, int lastTime)
+void ControladorDeChoque::resolverChoqueDispersores(Pad* pad,Pad* pad1,Tejo* pTejo,Escenario* escenario, int lastTime)
 {
+	ControladorDeBonus* contraladorBonus = new ControladorDeBonus();
 	list<Figura*> listaFiguras = escenario->listadoDeFiguras;
 	list<Figura*>::iterator it;
 	Figura* figuraActual;
@@ -626,14 +599,22 @@ void ControladorDeChoque::resolverChoqueDispersores(Tejo* pTejo,Escenario* escen
 		if (found != string::npos)
 		{
 			Triangulo* triangulo = (Triangulo*) figuraActual;
-			hayChoqueConTriangulo(pTejo,triangulo, lastTime);			
+			if (hayChoqueConTriangulo(pTejo,triangulo, lastTime) == true)
+			{
+				//aca se puede poner lo del bonus... 0 es para el que no toco el dispersor... 1 para el que lo toco
+				contraladorBonus->menosPad(pad,pad1,1);
+			}
 		}
 	
 		found = id.find("cir");
 		if (found != string::npos)
 		{
 			Circulo* circulo = (Circulo*) figuraActual;
-			resolverChoqueConCirculo(pTejo,circulo);
+			if (hayChoqueConCirculo(pTejo,circulo))
+			{
+				//aca se puede poner lo del bonues
+				resolverChoqueConCirculo(pTejo,circulo);
+			}
 		}
 
 		found = id.find("rec");
@@ -643,4 +624,5 @@ void ControladorDeChoque::resolverChoqueDispersores(Tejo* pTejo,Escenario* escen
 		}
 		it++;
 	}
+	delete(contraladorBonus);
 }
