@@ -53,7 +53,7 @@ void dibujarAnimacion(int w , int h, SDL_Surface* screen)
 	posicionWin.x = w-346;
 	posicionWin.y=h;
     
-
+	SDL_EventState(SDL_KEYDOWN ,SDL_IGNORE);
 	Cuadrado* g = new Cuadrado("g",100,posicionG);
 	g->setIdTextura("letraG");
 	
@@ -106,7 +106,7 @@ void dibujarAnimacion(int w , int h, SDL_Surface* screen)
 		SDL_Delay(100);
 	}
 
-
+	SDL_EventState(SDL_KEYDOWN ,SDL_ENABLE);
 	delete fondo;
 	delete g;
 	delete o;
@@ -548,6 +548,7 @@ int main(int argc, char *argv[]) {
 			}
 			if( event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE )
 			{
+
 				tejoLanzado = true;
 			}
 
@@ -567,6 +568,13 @@ int main(int argc, char *argv[]) {
 					tejoLanzado=false;
 					dibujarAnimacion(escenario->getAncho(),escenario->getAlto(),screen);
 					
+					posiPaleta(pad);
+					posicion= pad->getPosicion();
+					posiPaleta(pad1);
+					posicion1= pad1->getPosicion();
+					calcularPosTejo(pTejo,pad);
+
+			
 					
 									
 				}
@@ -580,7 +588,14 @@ int main(int argc, char *argv[]) {
 						escenario->sumarGolesIzquierdo();
 						tejoLanzado=false;
 						dibujarAnimacion(escenario->getAncho(),escenario->getAlto(),screen);			
-						
+
+						posiPaleta(pad);
+						posicion= pad->getPosicion();
+						posiPaleta(pad1);
+						posicion1= pad1->getPosicion();
+						calcularPosTejo(pTejo,pad);
+					
+
 						
 					}	
 					else

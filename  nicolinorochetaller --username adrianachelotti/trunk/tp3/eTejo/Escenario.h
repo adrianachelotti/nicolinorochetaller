@@ -9,7 +9,7 @@
 #define RES_ERROR_CARGANDO_TEXTURA 1
 #define RES_OK 0
 #define RESOLUCION_DEFAULT 800
-#define TEJOS 7
+#define TEJOS 15
 
 #include <iostream>
 #include <list>
@@ -45,8 +45,6 @@ private:
 	Escenario();
 	static Escenario* instancia;
 
-
-	
 	/* Setea el ancho del escenario*/
 	void setAncho(int ancho);
 
