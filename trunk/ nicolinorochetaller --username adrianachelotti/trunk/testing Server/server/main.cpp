@@ -31,7 +31,7 @@ esto tendria que llamar a algoque procese los datos tipo "cliente uno arriba"
 *****************************************************************************/
 
 string getDataProcessed(string dataSinPro){
-	return "string procesado";
+	return dataSinPro.append(" procesado");
 }
 
 
@@ -53,8 +53,9 @@ DWORD WINAPI readFunction(LPVOID param)
 			pConexion->len = 0;
 
 		printf("Datos cliente 1: %s\n" , datos);
-		myq.push("info del cliente 1");
-
+		string tmp ((char*)datos);
+		myq.push(tmp);
+		
 		
 
 	}
@@ -82,7 +83,9 @@ DWORD WINAPI readFunction2(LPVOID param)
 			pConexion->len = 0;
 		
 		printf("Datos cliente 2: %s\n" , datos);
-		myq.push("info del cliente 2");	
+		string tmp ((char*)datos);
+		myq.push(tmp);
+		
 
 	}
 
@@ -183,7 +186,7 @@ DWORD WINAPI iAmProcessing(LPVOID param){
 		// mientras que haya conexion con ambos clientes
 		if(myq.items() > 0){ // si hay algo para procesar
 			dataSinPro = myq.pop(); // obtengo la data no procesada
-			cout << dataSinPro << endl; // borrame
+			cout << "iamprocessing: saco de la cola: " << dataSinPro << endl; // borrame
 			dataYaPro = getDataProcessed(dataSinPro); // obtengo la data procesada
 			cout << dataYaPro << endl; // borrame
 
@@ -234,13 +237,12 @@ int main(int argc, char* argv[]){
 		
 
 		WaitForSingleObject(processing,INFINITE);
-		//WaitForSingleObject(threadReader2, INFINITE);
-		CloseHandle(threadReader);
-		//CloseHandle(threadWriter);
 		
+		CloseHandle(threadReader);		
 		CloseHandle(threadReader2);
 		CloseHandle(processing);
-
+		
+		
 				
 		trCerrarConexion(pConexion);
 		trCerrarConexion(pConexion2);
