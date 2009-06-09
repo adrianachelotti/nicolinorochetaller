@@ -59,7 +59,7 @@ int trEnviar(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, const vo
 /*            Si todo sale bien devuelve RES_OK de lo contrario  */
 /*            devuelve un codigo de error.                       */
 /*****************************************************************/ 
-int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void *datos);
+int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void **datos);
 
 /*****************************************************************/
 /* trCerrarConexion: cierra una conexion previamente abierta.    */

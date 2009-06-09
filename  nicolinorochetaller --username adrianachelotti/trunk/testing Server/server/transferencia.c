@@ -134,8 +134,9 @@ int trEnviar(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, const vo
 
 
 
-int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void *datos)
+int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void **datos)
 {
+	
 	
 	if(tipo == td_command)
 	{
@@ -190,9 +191,9 @@ int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void *d
 		}
 		else
 			{
-				datos= desSerializarDatos(tipo,cantItems,buffer);	
+				*datos= desSerializarDatos(tipo,cantItems,buffer);	
 								
-				printf("\nRecibido:  %s\n" , (char*)datos);
+				//printf("\nRecibido:  %s\n" , (char*)datos);
 				printf("Enviar: ");
 				return RES_OK;			
 			}

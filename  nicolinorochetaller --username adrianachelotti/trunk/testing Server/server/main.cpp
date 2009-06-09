@@ -42,15 +42,17 @@ string getDataProcessed(string dataSinPro){
 
 DWORD WINAPI readFunction(LPVOID param) 
 {
-		
+	void* datos;
 	while(pConexion->len > 0)
 	{
 		int cantItems = 1;
 		enum tr_tipo_dato tipo = td_command;		
 
-		if(trRecibir(pConexion,tipo,cantItems,NULL) != RES_OK)
+		if(trRecibir(pConexion,tipo,cantItems,&datos) != RES_OK)
+
 			pConexion->len = 0;
 
+		printf("Datos cliente 1: %s\n" , datos);
 		myq.push("info del cliente 1");
 
 		
@@ -69,15 +71,17 @@ DWORD WINAPI readFunction(LPVOID param)
 DWORD WINAPI readFunction2(LPVOID param) 
 {
 	
+	void* datos;
 	while(pConexion->len > 0)
 	{
 		int cantItems = 1;
 		enum tr_tipo_dato tipo = td_command;		
 		
 
-		if(trRecibir(pConexion2,tipo,cantItems, NULL) != RES_OK)
+		if(trRecibir(pConexion2,tipo,cantItems, &datos) != RES_OK)
 			pConexion->len = 0;
 		
+		printf("Datos cliente 2: %s\n" , datos);
 		myq.push("info del cliente 2");	
 
 	}
