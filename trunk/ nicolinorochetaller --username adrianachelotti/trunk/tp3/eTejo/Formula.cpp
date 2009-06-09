@@ -54,8 +54,8 @@ double Formula::normaAlCuadrado(Punto punto)
 
 double Formula::productoInterno(Punto punto1, Punto punto2)
 {
-		double producto  = (punto1.x*punto2.x ) +  (punto1.y*punto2.y ) ;
-		return producto;
+	double producto  = (punto1.x*punto2.x ) +  (punto1.y*punto2.y ) ;
+	return producto;
 }
 
 Punto Formula::getNormal(Punto punto)

@@ -13,6 +13,7 @@
 #include "Escenario.h"
 #include "Pad.h"
 #include "Triangulo.h"
+#include "ControladorDeBonus.h"
 #include <iostream>
 #include <string>
 
@@ -27,7 +28,7 @@ public:
 	void resolverChoqueConParedes(Tejo* tejo);
 
 	/*Resuelve el choque entre la paleta y el tejo*/
-	void resolverChoqueConPaleta(Tejo* tejo, Pad* paleta);
+	bool resolverChoqueConPaleta(Tejo* tejo, Pad* paleta);
 
 	/*Resuelve el choque entre un circulo y el tejo*/
 	void resolverChoqueConCirculo(Tejo* tejo, Circulo* circulo);
@@ -42,13 +43,13 @@ public:
 	void calculoVelocidadReflejada(Punto inicio, Punto fin, Tejo* pTejo); 
 
 	/*detecta si hay un choque entre el tejo y un triangulo y resulve la nueva velocidad*/
-	void hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo,int lastTime);
+	bool hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo,int lastTime);
 
 	/*detecta choque de tejo con los vertices*/
 	bool hayChoqueConVertices(Tejo* pTejo, Triangulo*  triangulo);
 
 	/*llama a los detetectores de cada dispersor*/
-	void resolverChoqueDispersores(Tejo* pTejo,Escenario* escenario, int lastTime);
+	void resolverChoqueDispersores(Pad* pad, Pad* pad1, Tejo* pTejo,Escenario* escenario, int lastTime);
 
 	/*detecta si hay un choque entre el tejo y un triangulo y resulve la nueva velocidad*/
 	bool hayChoqueConArco(Tejo* pTejo, Arco* arco);

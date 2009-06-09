@@ -102,6 +102,10 @@ SOURCE=.\Constantes.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\ControladorDeBonus.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ControladorDeChoque.cpp
 # End Source File
 # Begin Source File
@@ -183,6 +187,10 @@ SOURCE=.\Cliente.h
 # Begin Source File
 
 SOURCE=.\Constantes.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ControladorDeBonus.h
 # End Source File
 # Begin Source File
 

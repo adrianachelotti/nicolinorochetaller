@@ -1,8 +1,7 @@
 <escenario>
-<General resolucion="1024" texturaFig="id3" colorFondoFig="255000000" colorLinea="000255000" velox="500" veloy="500" >
+<General resolucion="800" texturaFig="id1" texturaEsc="id1" velox="300" veloy="300" colorFondoFig="255255255" colorLinea="000000000" >
 	</General>
 	<ListadoDeElementos>
-		
 		<circulo id="tejo" colorFigura="100100100" radio="10">
 			<posicion x="1" y="1"/>
 		</circulo>
@@ -26,29 +25,44 @@
 		</rectangulo>
 
 
-		<triangulo id="tri 1" colorFigura="255000255">
-			<ver1 x="300" y="100"/>
-			<ver2 x="500" y="100"/>
-			<ver3 x="500" y="200"/>
-		</triangulo>
-
-		<circulo id="cir 1" colorFigura="255000000" radio="80">
-			<posicion x="400" y="400">
-		<circulo/>
-
-	</ListadoDeElementos>
+		<circulo id="cir1" colorFigura="255233000"   idTextura="id2" radio="60" >
+			<posicion x="400" y="320"/>
+		</circulo> 		
+		<triangulo id="tri1" idTextura="id6" >
+			<ver1 x="370" y="230"/>
+			<ver2 x="430" y="230"/>
+			<ver3 x="400" y="180"/>
+		</triangulo> 		
+		<triangulo id="tri2"  idTextura="id3">
+			<ver1 x="370" y="410"/>
+			<ver2 x="430" y="410"/>
+			<ver3 x="400" y="460"/>
+		</triangulo> 		
+		<triangulo id="tri3"  idTextura="id4">
+			<ver1 x="310" y="290"/>
+			<ver2 x="310" y="350"/>
+			<ver3 x="260" y="320"/>
+		</triangulo> 		
+		
+		<triangulo id="tri4"  idTextura="id5">
+			<ver1 x="490" y="50"/>
+			<ver2 x="490" y="350"/>
+			<ver3 x="540" y="320"/>
+		</triangulo> 		
+		
+		</ListadoDeElementos>
 	<ListadoDeTexturas>
-		<textura id="id1" path="imagenes/Anochecer.bmp">
+		<textura id="id1" path="Debug/imagenes/TheSimpsons.bmp">
 		</textura>
-		<textura id="id2" path="imagenes/paisajesX.bmp">
+		<textura id="id2" path="Debug/imagenes/dona.bmp">
 		</textura>
-		<textura id="id3" path="Debug/imagenes/ferrari.bmp">
+		<textura id="id3" path="Debug/imagenes/arrow1.bmp">
 		</textura>
-		<textura id="id4" path="imagenes/flores.bmp">
+		<textura id="id4" path="Debug/imagenes/arrow2.bmp">
 		</textura>
-		<textura id="id5" path="imagenes/maspalomas1.bmp">
+		<textura id="id5" path="Debug/imagenes/arrow3.bmp">
 		</textura>
-		<textura id="id6" path="Debug/imagenes/montanas.bmp">
+		<textura id="id6" path="Debug/imagenes/arrow4.bmp">
 		</textura>
 	</ListadoDeTexturas>
 	

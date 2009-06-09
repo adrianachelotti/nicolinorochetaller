@@ -22,6 +22,7 @@ IMPRIME RECTANGULO
 #include "Textura.h"
 #include "Parser.h" 
 #include "ControladorDeChoque.h"
+#include "ControladorDeBonus.h"
 #include "Arco.h"
 
 
@@ -180,6 +181,7 @@ void crearTejo(Tejo* pTejo,Pad* pad )
 			Circulo* cir = (Circulo*) figuraActual;
 			pTejo->setRepresentacionGrafica(cir);
 			calcularPosTejo(pTejo,pad);
+			escenario->setRadioInicial(cir->getRadio());
 			tejoBien = true;
 		}
 		it++;
@@ -239,6 +241,7 @@ void crearPaletas(Pad* pad,Pad* pad1)
 		{
 			Rectangulo* rec = (Rectangulo*) figuraActual;
 			pad->setRepresentacionGrafica(rec);
+			escenario->setLongInicial(rec->getAltura());
 			posiPaleta(pad);
 			pad1Bien = true;
 		}
@@ -456,6 +459,8 @@ int main(int argc, char *argv[]) {
 	/*                  ENTRADA TECLADO							     */
 	/*****************************************************************/
 	ControladorDeChoque*  controlador = new ControladorDeChoque();
+
+
 	SDL_Event event;
     int quit;
     quit = 0;
@@ -548,7 +553,6 @@ int main(int argc, char *argv[]) {
 			}
 			if( event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE )
 			{
-
 				tejoLanzado = true;
 			}
 
@@ -568,14 +572,13 @@ int main(int argc, char *argv[]) {
 					tejoLanzado=false;
 					dibujarAnimacion(escenario->getAncho(),escenario->getAlto(),screen);
 					
+					pad->getRepresentacionGrafica()->setAltura(escenario->getLongInicial());
 					posiPaleta(pad);
 					posicion= pad->getPosicion();
+					pad1->getRepresentacionGrafica()->setAltura(escenario->getLongInicial());
 					posiPaleta(pad1);
 					posicion1= pad1->getPosicion();
-					calcularPosTejo(pTejo,pad);
-
-			
-					
+					calcularPosTejo(pTejo,pad);	
 									
 				}
 				else
@@ -588,23 +591,26 @@ int main(int argc, char *argv[]) {
 						escenario->sumarGolesIzquierdo();
 						tejoLanzado=false;
 						dibujarAnimacion(escenario->getAncho(),escenario->getAlto(),screen);			
-
+						pad->getRepresentacionGrafica()->setAltura(escenario->getLongInicial());
 						posiPaleta(pad);
 						posicion= pad->getPosicion();
+						pad1->getRepresentacionGrafica()->setAltura(escenario->getLongInicial());
 						posiPaleta(pad1);
 						posicion1= pad1->getPosicion();
 						calcularPosTejo(pTejo,pad);
-					
-
-						
 					}	
 					else
 					{
-						
 						controlador->resolverChoqueConParedes(pTejo);
-						controlador->resolverChoqueConPaleta(pTejo,pad);
-						controlador->resolverChoqueConPaleta(pTejo,pad1);
-						controlador->resolverChoqueDispersores(pTejo,escenario,lastTime);
+						if (controlador->resolverChoqueConPaleta(pTejo,pad) == true)
+						{
+							escenario->setUtlimoTocado(0);
+						}
+						if (controlador->resolverChoqueConPaleta(pTejo,pad1) == true)
+						{
+							escenario->setUtlimoTocado(1);
+						}
+						controlador->resolverChoqueDispersores(pad,pad1,pTejo,escenario,lastTime);
 						pTejo->moverTejo(deltaTime);
 					}
 				}
@@ -618,10 +624,6 @@ int main(int argc, char *argv[]) {
 				pTejo->getRepresentacionGrafica()->setCentro(centroTejo);
 				
 			}
-			// pad->getRepresentacionGrafica()->dibujar();	
-			//pad1->getRepresentacionGrafica()->dibujar();	
-			//pTejo->getRepresentacionGrafica()->dibujar();
-				
 			SDL_Delay(10);
 			SDL_Flip(screen);
 		}   
