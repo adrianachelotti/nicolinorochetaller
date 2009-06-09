@@ -60,6 +60,8 @@ void ControladorDeChoque::resolverChoqueConPaleta(Tejo* pTejo, Pad* pad)
 	int topeYInferior = paleta->getPosicionVerticeInferiorIzquierdo().y;
 	int topeYSuperior = paleta->getPosicionVerticeInferiorIzquierdo().y - paleta->getAltura();
 	Punto puntoA , puntoB, puntoC, puntoD;
+	Punto puntoAExt , puntoBExt, puntoCExt, puntoDExt;
+	Punto puntoAExt2 , puntoBExt2, puntoCExt2, puntoDExt2;
 	/*
 			   C __________  B
 				|          |
@@ -88,12 +90,45 @@ void ControladorDeChoque::resolverChoqueConPaleta(Tejo* pTejo, Pad* pad)
 	puntoD.y = paleta->getPosicionVerticeInferiorIzquierdo().y ;
 
 
+	puntoAExt.x = puntoA.x + 2;
+	puntoAExt.y = puntoA.y + 2;
+	puntoBExt.x = puntoB.x + 2;
+	puntoBExt.y = puntoB.y - 2;
+	puntoCExt.x = puntoC.x - 2;
+	puntoCExt.y = puntoC.y - 2;
+	puntoDExt.x = puntoD.x - 2;
+	puntoDExt.y = puntoD.y + 2;
 
-	Segmento* segmentoAB= new Segmento("AB",puntoA,puntoB);
-	Segmento* segmentoCB= new Segmento("CB",puntoC,puntoB);
+	puntoAExt2.x = puntoA.x + 4;
+	puntoAExt2.y = puntoA.y + 4;
+	puntoBExt2.x = puntoB.x + 4;
+	puntoBExt2.y = puntoB.y - 4;
+	puntoCExt2.x = puntoC.x - 4;
+	puntoCExt2.y = puntoC.y - 4;
+	puntoDExt2.x = puntoD.x - 4;
+	puntoDExt2.y = puntoD.y + 4;
+
+
+
+	Segmento* segmentoAB = new Segmento("AB",puntoA,puntoB);
+	Segmento* segmentoCB = new Segmento("CB",puntoC,puntoB);
 	Segmento* segmentoCD = new Segmento("CD",puntoC, puntoD);
 	Segmento* segmentoDA = new Segmento("DA",puntoD, puntoA);
-    if (hayChoqueConSegmento(pTejo,segmentoAB)&&velocidadTejo.x<0)
+
+
+	Segmento* segmentoABExt = new Segmento("ABExt",puntoAExt,puntoBExt);
+	Segmento* segmentoCBExt = new Segmento("CBExt",puntoCExt,puntoBExt);
+	Segmento* segmentoCDExt = new Segmento("CDExt",puntoCExt, puntoDExt);
+	Segmento* segmentoDAExt = new Segmento("DAExt",puntoDExt, puntoAExt);
+
+
+	Segmento* segmentoABExt2 = new Segmento("ABExt2",puntoAExt2,puntoBExt2);
+	Segmento* segmentoCBExt2 = new Segmento("CBExt2",puntoCExt2,puntoBExt2);
+	Segmento* segmentoCDExt2 = new Segmento("CDExt2",puntoCExt2, puntoDExt2);
+	Segmento* segmentoDAExt2 = new Segmento("DAExt2",puntoDExt2, puntoAExt2);
+
+
+    if ( (hayChoqueConSegmento(pTejo,segmentoAB) || hayChoqueConSegmento(pTejo,segmentoABExt) || hayChoqueConSegmento(pTejo,segmentoABExt2)) && velocidadTejo.x<0)
 	{
 
 		
@@ -106,7 +141,7 @@ void ControladorDeChoque::resolverChoqueConPaleta(Tejo* pTejo, Pad* pad)
  
 
 
-	if (hayChoqueConSegmento(pTejo,segmentoCD)&&velocidadTejo.x>0)
+	if ((hayChoqueConSegmento(pTejo,segmentoCD) || hayChoqueConSegmento(pTejo,segmentoCDExt) || hayChoqueConSegmento(pTejo,segmentoCDExt2)) &&velocidadTejo.x>0)
 	{
 		
 		
@@ -117,7 +152,7 @@ void ControladorDeChoque::resolverChoqueConPaleta(Tejo* pTejo, Pad* pad)
 		return;
 	}
 	
-	if (hayChoqueConSegmento(pTejo,segmentoCB)&&velocidadTejo.y>0)
+	if ((hayChoqueConSegmento(pTejo,segmentoCB) || hayChoqueConSegmento(pTejo,segmentoCBExt) || hayChoqueConSegmento(pTejo,segmentoCBExt2)) && velocidadTejo.y>0)
 	{
 		
 		
@@ -129,17 +164,17 @@ void ControladorDeChoque::resolverChoqueConPaleta(Tejo* pTejo, Pad* pad)
 	}
 	
 	
-	if (hayChoqueConSegmento(pTejo,segmentoDA)&&velocidadTejo.y<0)
+	if ((hayChoqueConSegmento(pTejo,segmentoDA) || hayChoqueConSegmento(pTejo,segmentoDAExt) || hayChoqueConSegmento(pTejo,segmentoDAExt2)) && velocidadTejo.y<0)
 	{
-		
-		
+				
 		velocidadTejo.x=1*velocidadTejo.x;
 		velocidadTejo.y=-1*velocidadTejo.y;
 		
 		pTejo->setVelocidad( velocidadTejo);
 		return;
 	}
-	
+
+
 }
 
 /*
@@ -220,7 +255,6 @@ void  ControladorDeChoque::resolverChoqueConCirculo(Tejo* tejo, Circulo* circulo
 		velocidad.x = tejo->getVelocidad().x;
 		velocidad.y = tejo->getVelocidad().y;
 		double normalizador = Formula::norma(velocidad);		
-		Velocidad velocidadFinal = tejo->getVelocidad();
 		Punto puntoFinal ;
 		int sumaDeRadios = tejo->getRepresentacionGrafica()->getRadio()+circulo->getRadio()+1;
 		puntoFinal.x  = (circulo->getCentro().x )+ (sumaDeRadios*distancia.x/(double)normalizadorDistancia);
@@ -383,9 +417,50 @@ void ControladorDeChoque::calculoVelocidadReflejada(Punto inicio,Punto fin,Tejo*
 	pTejo->setVelocidad(velocidadNueva);
 }
 
+bool ControladorDeChoque::hayChoqueConVertices(Tejo* pTejo, Triangulo*  triangulo)
+{
+	Punto* vertices;
+	vertices = triangulo->getVertices();
+	int radioAuxiliar = 3;
+	Punto v1 = vertices[0];
+	Punto v2 = vertices[1];
+	Punto v3 = vertices[2];
+
+	Circulo* auxiliar = new Circulo("12",radioAuxiliar,v3);
+	if(hayChoqueConCirculo(pTejo,auxiliar)==false)
+	{
+		auxiliar->setCentro(v2);
+		if(hayChoqueConCirculo(pTejo,auxiliar)==false)
+		{
+			auxiliar->setCentro(v1);
+			if(hayChoqueConCirculo(pTejo,auxiliar)==true)
+			{
+				resolverChoqueConCirculo(pTejo,auxiliar);
+				return true;
+			}
+			
+
+		}else
+		{
+			resolverChoqueConCirculo(pTejo,auxiliar);
+			return true;
+
+		}
+	}else
+	{
+ 		resolverChoqueConCirculo(pTejo,auxiliar);
+		return true;
+
+	}
+	delete(auxiliar);
+	return false;
 
 
-bool ControladorDeChoque::hayChoqueConVertices(Tejo* pTejo, Triangulo*  triangulo,int lastTime)
+
+}
+
+
+/*bool ControladorDeChoque::hayChoqueConVertices(Tejo* pTejo, Triangulo*  triangulo,int lastTime)
 {
 	Punto* vertices;
 	vertices = triangulo->getVertices();
@@ -415,7 +490,7 @@ bool ControladorDeChoque::hayChoqueConVertices(Tejo* pTejo, Triangulo*  triangul
 		return true;
 	}
 	return false;
-}
+}*/
 
 void ControladorDeChoque::hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo,int lastTime)
 {	
@@ -551,12 +626,7 @@ void ControladorDeChoque::resolverChoqueDispersores(Tejo* pTejo,Escenario* escen
 		if (found != string::npos)
 		{
 			Triangulo* triangulo = (Triangulo*) figuraActual;
-			
-			if (this->hayChoqueConVertices(pTejo,triangulo,lastTime) == false) 
-			{
-				this->hayChoqueConTriangulo(pTejo,triangulo,lastTime);
-			}
-			
+			hayChoqueConTriangulo(pTejo,triangulo, lastTime);			
 		}
 	
 		found = id.find("cir");

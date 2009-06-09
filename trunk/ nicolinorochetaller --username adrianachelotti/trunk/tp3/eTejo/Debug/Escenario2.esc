@@ -8,13 +8,13 @@
 		<rectangulo id="pad2" base="20" altura="100" colorFigura="255255000" colorLinea="000000000">
 			<posicion x="80" y="370"/>
 		</rectangulo> 
-		<rectangulo id="arco1" base="8" altura="300" colorFigura="255000000" colorLinea="000000000">
+		<rectangulo id="arco1" base="18" altura="300" colorFigura="255000000" colorLinea="000000000">
 			<posicion x="20" y="470"/>
 		</rectangulo> 
-		<rectangulo id="arco2" base="8" altura="300" colorFigura="255000000" colorLinea="000000000">
+		<rectangulo id="arco2" base="18" altura="300" colorFigura="255000000" colorLinea="000000000">
 			<posicion x="760" y="470"/>
 		</rectangulo> 
-		<circulo id="tejo" colorFigura="255233000" radio="20" >
+		<circulo id="tejo" colorFigura="255233000" radio="10" >
 			<posicion x="400" y="320"/>
 		</circulo> 		
 		
