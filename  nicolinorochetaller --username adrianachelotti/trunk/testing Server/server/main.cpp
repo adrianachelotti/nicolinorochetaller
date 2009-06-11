@@ -11,7 +11,9 @@ extern "C"{
 
 
 #include <string>
+#include <cstring>
 #include "syncQueue.h"
+#include "toSendPackage.h"
 
 #define TAMBUFFER 1024
 #define PORT_MAX 65535
@@ -31,7 +33,7 @@ esto tendria que llamar a algoque procese los datos tipo "cliente uno arriba"
 *****************************************************************************/
 
 string getDataProcessed(string dataSinPro){
-	return dataSinPro.append(" procesado");
+	return "string procesado";
 }
 
 
@@ -103,11 +105,14 @@ DWORD WINAPI readFunction2(LPVOID param)
 DWORD WINAPI writeFunction(LPVOID param) 
 {
 	int err = 0;
-	printf("Enviar: ");
-	while(pConexion->len > 0) 
+	toSendPackage* tsp = static_cast<toSendPackage*>(param);
+	string stringToSend = tsp->getData();
+	CONEXION* pCon = tsp->getConexion();
+	if(pCon->len > 0) 
 	{
 	
-		char * datosEntrada = readLine();		
+		char * datosEntrada = (char*) malloc(sizeof(char*)*40);
+		strcpy(datosEntrada, stringToSend.c_str());
 		int cantidadDeItems = 0;
 		char* datos = NULL; // contenido posterior al comando
 		int resultadoValidacion = validar(datosEntrada,&cantidadDeItems, &datos);
@@ -126,8 +131,8 @@ DWORD WINAPI writeFunction(LPVOID param)
 			if (strcmp(comando,"QUIT") == 0)
 			{
 						
-				pConexion->Puerto = 0;
-				pConexion->len = 0;
+				pCon->Puerto = 0;
+				pCon->len = 0;
 				printf("Servidor desconectandose... \n");
 				exit(0);
 				
@@ -138,12 +143,9 @@ DWORD WINAPI writeFunction(LPVOID param)
 				comandoYCantidad = obtenerCadenaComandoYCantidad(comando,cantidadDeItems);	
 				datosSerializados = serializarDatos(tipo,cantidadDeItems,datos);
 				
-				err = trEnviar(pConexion, td_command, 1, comandoYCantidad);								
-				if (err==RES_OK) err = trEnviar(pConexion,tipo,cantidadDeItems,datosSerializados);
+				err = trEnviar(pCon, td_command, 1, comandoYCantidad);								
+				if (err==RES_OK) err = trEnviar(pCon,tipo,cantidadDeItems,datosSerializados);				
 				
-				// lo mismo para el cliente 2
-				err = trEnviar(pConexion2, td_command, 1, comandoYCantidad);
-				if (err==RES_OK) err = trEnviar(pConexion2,tipo,cantidadDeItems,datosSerializados);
 			}
 			
 			if (err == RES_NOT_OK) 	printf("No se ha podido enviar el mensaje. Reintente nuevamente\n");
@@ -179,9 +181,10 @@ DWORD WINAPI iAmProcessing(LPVOID param){
 	saca de esa cola, manda a procesar los datos, y los envia simultaneamente
 	a los dos clientes una vez procesados */
 	
-	
+	toSendPackage tsp, tsp2;
 	string dataSinPro;
 	string dataYaPro;
+	HANDLE enviar[2];
 	while(pConexion->len > 0 && pConexion2->len > 0){
 		// mientras que haya conexion con ambos clientes
 		if(myq.items() > 0){ // si hay algo para procesar
@@ -189,6 +192,22 @@ DWORD WINAPI iAmProcessing(LPVOID param){
 			cout << "iamprocessing: saco de la cola: " << dataSinPro << endl; // borrame
 			dataYaPro = getDataProcessed(dataSinPro); // obtengo la data procesada
 			cout << dataYaPro << endl; // borrame
+			tsp.setData(dataYaPro);
+			tsp2.setData(dataYaPro);
+			
+			tsp.setConexion(pConexion);
+
+			enviar[0] = CreateThread(NULL, 0, writeFunction, &tsp, 0, NULL);
+			
+			tsp2.setConexion(pConexion2);
+			
+			enviar[1] = CreateThread(NULL, 0, writeFunction, &tsp2, 0, NULL);
+			
+
+			WaitForMultipleObjects(2, enviar, TRUE, INFINITE);
+			cout << endl << "termina la espera" << endl; // borrame
+			CloseHandle(enviar[0]);
+			CloseHandle(enviar[1]);
 
 		}else{ // en caso de que no haya nada para procesar, aguantamos la mecha viteh fiera
 			Sleep(10); // igual son solo 10 milisegundos
@@ -231,12 +250,16 @@ int main(int argc, char* argv[]){
 		printf("Cliente 2 conectado......\n");
 		
 
-		threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);		
+		threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);	
+		Sleep(1);
 		threadReader2 = CreateThread(NULL,0,readFunction2,NULL,0,NULL);
+		Sleep(1);
 		processing = CreateThread(NULL, 0, iAmProcessing, NULL, 0, NULL);
+		Sleep(10);
 		
-
-		WaitForSingleObject(processing,INFINITE);
+		WaitForSingleObject(readFunction, INFINITE);
+		WaitForSingleObject(readFunction2, INFINITE);
+		WaitForSingleObject(processing, INFINITE);
 		
 		CloseHandle(threadReader);		
 		CloseHandle(threadReader2);
