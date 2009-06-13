@@ -210,6 +210,7 @@ int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void **
 int trCerrarConexion(CONEXION *pConexion)
 {
 	closesocket(pConexion->socketListen);
+	closesocket(pConexion->socketAccept);
 	printf("Conexion finalizada\n");
 	return RES_OK;
 }

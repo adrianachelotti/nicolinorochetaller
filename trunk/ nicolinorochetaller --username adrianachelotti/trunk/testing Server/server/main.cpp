@@ -45,7 +45,7 @@ string getDataProcessed(string dataSinPro){
 DWORD WINAPI readFunction(LPVOID param) 
 {
 	void* datos;
-	while(pConexion->len > 0)
+	while(pConexion2->len > 0 && pConexion->len > 0)
 	{
 		int cantItems = 1;
 		enum tr_tipo_dato tipo = td_command;		
@@ -61,8 +61,7 @@ DWORD WINAPI readFunction(LPVOID param)
 		
 
 	}
-
-	
+	pConexion2->len = 0;
 	return 0;
 }
 
@@ -75,8 +74,8 @@ DWORD WINAPI readFunction2(LPVOID param)
 {
 	
 	void* datos;
-	while(pConexion->len > 0)
-	{
+	while(pConexion2->len > 0 && pConexion->len > 0) // para seguir recibiendo datos del
+	{												// cliente 2 el cliente 1 debe seguir online
 		int cantItems = 1;
 		enum tr_tipo_dato tipo = td_command;		
 		
@@ -90,8 +89,7 @@ DWORD WINAPI readFunction2(LPVOID param)
 		
 
 	}
-
-	
+	pConexion->len = 0;
 	return 0;
 }
  
@@ -164,6 +162,7 @@ DWORD WINAPI writeFunction(LPVOID param)
 			printf("El mensaje que ha querido enviar posee un formato invalido. Reintente nuevamente. \n");
 
 		}		
+		free(datosEntrada);
 		printf("Enviar: ");		
 	}
 	return 0;
@@ -213,6 +212,8 @@ DWORD WINAPI iAmProcessing(LPVOID param){
 			Sleep(10); // igual son solo 10 milisegundos
 		}
 	}
+	
+	
 	return TRUE;
 
 }
@@ -241,21 +242,23 @@ int main(int argc, char* argv[]){
 	
 	pConexion->Puerto = pConexion2->Puerto = puerto;
 
-	while(pConexion->Puerto != 0 && pConexion2->Puerto != 0)
+	printf("Servidor escuchando ...\n");
+	trEscuchar(puerto,pConexion);	
+	printf("Cliente conectado...... servidor esperando al segundo cliente\n");
+	trEscuchar(puerto + 1, pConexion2);
+	printf("Cliente 2 conectado......\n");
+		
+
+	if(pConexion->len != 0 && pConexion2->len != 0)
 	{
-		printf("Servidor escuchando ...\n");
-		trEscuchar(puerto,pConexion);	
-		printf("Cliente conectado...... servidor esperando al segundo cliente\n");
-		trEscuchar(puerto + 1, pConexion2);
-		printf("Cliente 2 conectado......\n");
 		
 
 		threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);	
-		Sleep(1);
+		
 		threadReader2 = CreateThread(NULL,0,readFunction2,NULL,0,NULL);
-		Sleep(1);
+		
 		processing = CreateThread(NULL, 0, iAmProcessing, NULL, 0, NULL);
-		Sleep(10);
+		
 		
 		WaitForSingleObject(readFunction, INFINITE);
 		WaitForSingleObject(readFunction2, INFINITE);
@@ -264,14 +267,17 @@ int main(int argc, char* argv[]){
 		CloseHandle(threadReader);		
 		CloseHandle(threadReader2);
 		CloseHandle(processing);
-		
-		
-				
+
 		trCerrarConexion(pConexion);
 		trCerrarConexion(pConexion2);
+		
+
+		free(pConexion);
+		free(pConexion2);
+		
 	}
-	getchar();
-	printf("Presione una tecla para finalizar \n");
+	cout << "Se ha desconectado al menos un cliente del servidor, el juego se cerrara" << endl;
+	system("PAUSE");
 	return 0;
 }
 
