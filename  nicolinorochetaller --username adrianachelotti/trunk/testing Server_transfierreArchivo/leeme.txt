@@ -1,0 +1,50 @@
+Titulo: ¿Que carajo hizo este pibe?
+
+Como ver que carajo hice en simples pasos...
+
+Aclaraciones:
+
+I) el cliente de prueba es un cleinte de prueba como dice el nombre de la carpeta,
+es decir, solo simula lo que haria el cliente de verdad.
+
+II) son casi las 5 de la mañana y a las 9 voy a llegar a la oficina de muy mal humor
+por no haber dormido un carajo, asi que te pido por favor tanete que hasta las
+1030 no me hables...
+
+PASOS
+
+1) inicio->ejecutar, escriben "cmd" luego ENTER
+2) repita el paso 1
+3) pararse en el directorio ..\..\clientedeprueba\testClient\debug
+4) repetir el paso 3 para la otra ventana de linea de comando
+5) abrir la carpeta "server" y con VisualC++ abrir el workspace
+6) ejecutar el servidor CTRL+F5 o haciendo click en el signo de exclamacion
+como les guste, en caso de que les pida compilar, compilen
+6 bis) ATENCION! a no desesperarse, luego del paso 7 y 8
+van a ver que no pueden escribir nada y que aparecen carteles por todos lados, 
+lo unico que deben hacer, es ver un rato el funcionamiento, los clientes estan
+programados para enviar "string hola" cada 5 segundos. 
+Cuando los quieran matar, lo unico que tienen que hacer es apretar CTRL+C en cada uno
+y listo no hace falta apretar CTRL+ALT+DEL ni reiniciar la maquina, 
+ni tirar la maquina por la ventana.
+7) una vez abierto el server, van a una ventana de la linea de comandos que abrieron
+en el paso 1, y escriben "cliente04.exe localhost 5000"
+8) van a la otra venta y escriben "cliente04.exe localhost 5001"
+9) FUNCIONAMIENTO
+
+cada cliente envia un mensaje cada 5 segundos, el server con sus hilos 
+threadReader y threadReader2, reciben el mensaje y en una cola ponen
+"info del cleinte 1" y 2 respectivamente,
+mientras tanto otro hilo corre mientras haya DOBLE conexion, y si encuentra algo
+en la cola de informacion que viene de los clientes, la manda a procesar,
+una vez obteniedo el dato procesado (que no esmas que un string hardcodeado que dice
+"procesado") termina... si bueno termina, mañana voy a ver si puedo mandar parametros
+a los hilos para que le mande el dato procesado a los clientes (ambos) al mismo tiempo
+
+Sin mas, los saluda ATTE
+
+Jonathan M. Perrotta Cacetti.
+
+PD: mañana seguire en el laburo, y a la noche nos veremos, a ver si podemos ver 
+como agarrar la cadena que viene del cliente, pq la verdad qe yo estuve horas y
+no me salio, pero bueno, yo soy bastante limitadito. Saludosssssssssss
