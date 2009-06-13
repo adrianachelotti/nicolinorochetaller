@@ -444,6 +444,11 @@ int Escenario::getTejosRestantes()
 	return (this->tejos);
 }
 
+void Escenario::setTejosRestantes(int tejos)
+{
+	this->tejos = tejos;
+}
+
 void Escenario::restarTejo()
 {
 	this->tejos -= 1;
@@ -656,4 +661,14 @@ SDL_Surface* Escenario::getImagenEscenario()
 {
 
 	return this->imagenEscenario;
+}
+
+void Escenario::clearEscenario()
+{
+	this->listadoDeFiguras.clear();
+	this->listadoDeTexturas.clear();
+	this->golesDerecho = 0;
+	this->golesIzquierdo = 0;
+	this->tejos = TEJOS;
+	this->imagenEscenario = NULL;
 }
