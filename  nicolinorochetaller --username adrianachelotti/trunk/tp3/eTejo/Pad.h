@@ -12,6 +12,7 @@ class Pad
 private:
 	Rectangulo* representacionGrafica;
 	Punto posicion;
+	bool pegamento;
 public:
 	
 	/*Constructor sin parametros*/
@@ -29,6 +30,8 @@ public:
 	/*Devuelve la posicion del vertice inferior izquierdo de la paleta*/	
 	 Punto getPosicion();
 
+	 bool getPegamento();
+	 void setPegamento(bool pega);
 	 
 
 };

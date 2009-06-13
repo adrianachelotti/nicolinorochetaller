@@ -55,6 +55,8 @@ public:
 	bool hayChoqueConArco(Tejo* pTejo, Arco* arco);
 
 	bool hayBolaEnRectangulo(Tejo* pTejo,Pad* pad);
+
+	bool resolverChoqueConRectangulo(Tejo* pTejo, Rectangulo* rec);
 };
 
 #endif 

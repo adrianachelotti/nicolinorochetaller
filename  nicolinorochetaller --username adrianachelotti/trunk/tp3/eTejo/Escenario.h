@@ -9,12 +9,15 @@
 #define RES_ERROR_CARGANDO_TEXTURA 1
 #define RES_OK 0
 #define RESOLUCION_DEFAULT 800
-#define TEJOS 15
+#define TEJOS 7
 
 #include <iostream>
 #include <list>
 #include "Figura.h"
 #include "Textura.h"
+#include <ctime> 
+#include <cstdlib>
+#include <string>
 
 using namespace std;
 
@@ -29,7 +32,8 @@ private:
 	int ancho;
 	int radioInicial;
 	int longInicial;
-	
+	int ultimoGol;
+
 	//0->izq 1->der
 	int ultimoTocado;
 
@@ -197,6 +201,14 @@ public:
 	int getLongInicial();
 	void setLongInicial(int l);
 
+	void selectorDeDispersor(list<Figura*> figuras);
+
+	bool getTienePegamento();
+	void setTienePegamento(bool tiene);
+
+	int getUltimoGol();
+	void setUltimoGol(int gol);
+	void sacarBonus(list<Figura*> listaFiguras);
 	/*Retorna la imagen del escenario ya cargada de memoria y resizeada*/
 	SDL_Surface* getImagenEscenario();
 
