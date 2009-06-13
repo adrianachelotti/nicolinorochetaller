@@ -9,7 +9,7 @@
 #define RES_ERROR_CARGANDO_TEXTURA 1
 #define RES_OK 0
 #define RESOLUCION_DEFAULT 800
-#define TEJOS 7
+#define TEJOS 5
 
 #include <iostream>
 #include <list>
@@ -172,6 +172,9 @@ public:
 	/*Retorna los tejos que quedan en el nivel*/
 	int getTejosRestantes();
 
+	/*Retorna los tejos que quedan en el nivel*/
+	void setTejosRestantes(int tejos);
+
 	/*resta un tejo al nivel*/
 	void restarTejo();
 
@@ -211,6 +214,7 @@ public:
 	void sacarBonus(list<Figura*> listaFiguras);
 	/*Retorna la imagen del escenario ya cargada de memoria y resizeada*/
 	SDL_Surface* getImagenEscenario();
+	void clearEscenario();
 
 	/**/
 	Figura* getTejo();
