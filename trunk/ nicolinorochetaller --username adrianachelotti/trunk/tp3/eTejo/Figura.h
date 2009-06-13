@@ -33,6 +33,7 @@ private:
 	Uint32 colorFondo;
 	bool colorPropio;
 	SDL_Surface* imagenFigura;
+	int bonus;
 public:
 	
 	/*Constructor */
@@ -90,6 +91,10 @@ public:
 
 	/*Metodo encargado de resolver el choque */
 	virtual void resolverChoque()=0;
+
+	int getBonus();
+
+	void setBonus(int b);
 };
 
 #endif 

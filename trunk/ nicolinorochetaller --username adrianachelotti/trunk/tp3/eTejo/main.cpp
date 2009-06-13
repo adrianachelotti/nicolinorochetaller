@@ -354,7 +354,6 @@ void handle_input(SDL_Event event, Punto *sqre, int altura, int screen_height,fl
 
 }
 
-
 void addError(string linea,FILE* archivoErrores,string err)
 {
 	fprintf(archivoErrores,"Programa principal: ");
@@ -509,7 +508,7 @@ int main(int argc, char *argv[]) {
 
 	while ((quit == 0) && (escenario->getTejosRestantes() != 0))
 	{
-		thisTime = SDL_GetTicks();
+ 		thisTime = SDL_GetTicks();
         deltaTime = (float)((thisTime - lastTime)/(float)1000 );
         lastTime = thisTime; 
 
@@ -550,6 +549,7 @@ int main(int argc, char *argv[]) {
 				pad->getRepresentacionGrafica()->setColorFondo(colorNormal);
 				pad->getRepresentacionGrafica()->dibujar();
 				pad1->getRepresentacionGrafica()->dibujar();
+			
 			}
 			if( event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE )
 			{
@@ -566,20 +566,26 @@ int main(int argc, char *argv[]) {
 				gol = controlador->hayChoqueConArco(pTejo,arco);
 				
 				if (gol == true) 
-				{	escenario->restarTejo();
+				{	
+					escenario->restarTejo();
 					escenario->sumaPuntajeDerecho(70);
+					escenario->setUltimoGol(1);
 					escenario->sumarGolesDerecho();
 					tejoLanzado=false;
 					dibujarAnimacion(escenario->getAncho(),escenario->getAlto(),screen);
 					
+					pad->setPegamento(false);
 					pad->getRepresentacionGrafica()->setAltura(escenario->getLongInicial());
 					posiPaleta(pad);
 					posicion= pad->getPosicion();
+					pad1->setPegamento(false);
 					pad1->getRepresentacionGrafica()->setAltura(escenario->getLongInicial());
 					posiPaleta(pad1);
 					posicion1= pad1->getPosicion();
+					pTejo->getRepresentacionGrafica()->setRadio(escenario->getRadioInicial());
 					calcularPosTejo(pTejo,pad);	
-									
+					escenario->sacarBonus(escenario->getListadoDeFiguras());		
+					escenario->selectorDeDispersor(escenario->getListadoDeFiguras());
 				}
 				else
 				{
@@ -588,30 +594,59 @@ int main(int argc, char *argv[]) {
 					{
 						escenario->restarTejo();
 						escenario->sumaPuntajeIzquierdo(70);
+						escenario->setUltimoGol(0);
 						escenario->sumarGolesIzquierdo();
 						tejoLanzado=false;
 						dibujarAnimacion(escenario->getAncho(),escenario->getAlto(),screen);			
+						
 						pad->getRepresentacionGrafica()->setAltura(escenario->getLongInicial());
+						pad->setPegamento(false);
 						posiPaleta(pad);
-						posicion= pad->getPosicion();
+						posicion= pad->getPosicion();	
 						pad1->getRepresentacionGrafica()->setAltura(escenario->getLongInicial());
+						pad1->setPegamento(false);
 						posiPaleta(pad1);
 						posicion1= pad1->getPosicion();
+						pTejo->getRepresentacionGrafica()->setRadio(escenario->getRadioInicial());
 						calcularPosTejo(pTejo,pad);
+						escenario->sacarBonus(escenario->getListadoDeFiguras());
+						escenario->selectorDeDispersor(escenario->getListadoDeFiguras());
 					}	
 					else
 					{
 						controlador->resolverChoqueConParedes(pTejo);
+						
 						if (controlador->resolverChoqueConPaleta(pTejo,pad) == true)
 						{
 							escenario->setUtlimoTocado(0);
+							if (pad->getPegamento() == true) 
+							{
+								cout<<"TEJO LANZADO FALSE POR PARTE DE LA IZQUIERDA"<<endl;
+								tejoLanzado = false;
+							}
+							else 
+							{
+								tejoLanzado = true;
+							}
 						}
+					
 						if (controlador->resolverChoqueConPaleta(pTejo,pad1) == true)
 						{
 							escenario->setUtlimoTocado(1);
+							if (pad1->getPegamento() == true) 
+							{
+								cout<<"TEJO LANZADO FALSE POR PARTE DE LA DERECHA"<<endl;
+								tejoLanzado = false;
+							}
+							else
+							{
+								tejoLanzado = true;
+							}
 						}
+
+
 						controlador->resolverChoqueDispersores(pad,pad1,pTejo,escenario,lastTime);
-						pTejo->moverTejo(deltaTime);
+						if (tejoLanzado) pTejo->moverTejo(deltaTime);
 					}
 				}
 				
@@ -619,9 +654,37 @@ int main(int argc, char *argv[]) {
 			else 
 			{
 				Punto centroTejo;
-				centroTejo.x = pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x + pad->getRepresentacionGrafica()->getBase()+ pTejo->getRepresentacionGrafica()->getRadio();
-				centroTejo.y = pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().y - (pad->getRepresentacionGrafica()->getAltura()/2);
-				pTejo->getRepresentacionGrafica()->setCentro(centroTejo);
+				if ((gol==true)||(gol1==true)||(escenario->getGolesDerecho() == 0 && escenario->getGolesIzquierdo() == 0))
+				{
+					if (escenario->getUltimoGol() == 1)
+					{	
+						centroTejo.x = pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x + pad->getRepresentacionGrafica()->getBase()+ pTejo->getRepresentacionGrafica()->getRadio();
+						centroTejo.y = pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().y - (pad->getRepresentacionGrafica()->getAltura()/2);
+						pTejo->getRepresentacionGrafica()->setCentro(centroTejo);
+					} 
+					else
+					{
+						centroTejo.x = pad1->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x - pad1->getRepresentacionGrafica()->getBase()+ pTejo->getRepresentacionGrafica()->getRadio();
+						centroTejo.y = pad1->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().y - (pad1->getRepresentacionGrafica()->getAltura()/2);
+						pTejo->getRepresentacionGrafica()->setCentro(centroTejo);
+					}
+
+				}
+				else
+				{
+					if (pad->getPegamento() == true)
+					{
+						centroTejo.x = pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x + pad->getRepresentacionGrafica()->getBase()+ pTejo->getRepresentacionGrafica()->getRadio();
+						centroTejo.y = pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().y - (pad->getRepresentacionGrafica()->getAltura()/2);
+						pTejo->getRepresentacionGrafica()->setCentro(centroTejo);
+					}
+					if (pad1->getPegamento() == true)
+					{
+ 						centroTejo.x = pad1->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x - pad1->getRepresentacionGrafica()->getBase()+ pTejo->getRepresentacionGrafica()->getRadio();
+						centroTejo.y = pad1->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().y - (pad1->getRepresentacionGrafica()->getAltura()/2);
+						pTejo->getRepresentacionGrafica()->setCentro(centroTejo);
+					}
+				}
 				
 			}
 			SDL_Delay(10);

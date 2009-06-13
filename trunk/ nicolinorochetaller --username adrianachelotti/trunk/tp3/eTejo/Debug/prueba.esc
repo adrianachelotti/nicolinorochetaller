@@ -24,32 +24,24 @@
 			<posicion x="1" y="1"/>
 		</rectangulo>
 
-
-		<circulo id="cir1" colorFigura="255233000"   idTextura="id2" radio="60" >
-			<posicion x="400" y="320"/>
-		</circulo> 		
-		<triangulo id="tri1" idTextura="id6" >
-			<ver1 x="370" y="230"/>
-			<ver2 x="430" y="230"/>
-			<ver3 x="400" y="180"/>
-		</triangulo> 		
-		<triangulo id="tri2"  idTextura="id3">
+		
+			<circulo id="cir2" colorFigura="255233000" radio="60" >
+			<posicion x="200" y="100"/>
+		</circulo> 	
+		<circulo id="cir3" colorFigura="255233000" radio="60" >
+			<posicion x="600" y="120"/>
+		</circulo> 
+				
+		<triangulo id="tri2"  colorFigura="000000255">
 			<ver1 x="370" y="410"/>
 			<ver2 x="430" y="410"/>
 			<ver3 x="400" y="460"/>
 		</triangulo> 		
-		<triangulo id="tri3"  idTextura="id4">
+		<triangulo id="tri3"  colorFigura="000000255">
 			<ver1 x="310" y="290"/>
 			<ver2 x="310" y="350"/>
 			<ver3 x="260" y="320"/>
 		</triangulo> 		
-		
-		<triangulo id="tri4"  idTextura="id5">
-			<ver1 x="490" y="50"/>
-			<ver2 x="490" y="350"/>
-			<ver3 x="540" y="320"/>
-		</triangulo> 		
-		
 		</ListadoDeElementos>
 	<ListadoDeTexturas>
 		<textura id="id1" path="Debug/imagenes/TheSimpsons.bmp">
@@ -64,6 +56,27 @@
 		</textura>
 		<textura id="id6" path="Debug/imagenes/arrow4.bmp">
 		</textura>
+		<textura id="bonus" path="Debug/imagenes/bonus.bmp">
+		</textura>
+		<textura id="bonus1" path="Debug/imagenes/bonus1.bmp">
+		</textura>
+		<textura id="bonus2" path="Debug/imagenes/bonus2.bmp">
+		</textura>
+		<textura id="bonus3" path="Debug/imagenes/bonus3.bmp">
+		</textura>
+		<textura id="bonus4" path="Debug/imagenes/bonus4.bmp">
+		</textura>
+		<textura id="bonus5" path="Debug/imagenes/bonus5.bmp">
+		</textura>
+		<textura id="bonus6" path="Debug/imagenes/bonus6.bmp">
+		</textura>
+		<textura id="bonus7" path="Debug/imagenes/bonus7.bmp">
+		</textura>
+		<textura id="bonus8" path="Debug/imagenes/bonus8.bmp">
+		</textura>
+		<textura id="bonus9" path="Debug/imagenes/bonus9.bmp">
+		</textura>
+
 	</ListadoDeTexturas>
 	
 </escenario>

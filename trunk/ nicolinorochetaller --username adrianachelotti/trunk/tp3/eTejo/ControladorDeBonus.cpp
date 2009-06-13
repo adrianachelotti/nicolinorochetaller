@@ -270,3 +270,69 @@ void ControladorDeBonus::menosPad(Pad* pad,Pad* pad1,int paraQuien)
 		}
 	}
 }
+
+void ControladorDeBonus::pegamento(Pad* pad,Pad* pad1,Tejo* pTejo)
+{
+	Escenario* esce = Escenario::obtenerInstancia();
+	if (esce->getUltimoTocado() == 0)
+	{
+		cout<<"LE COLOQUE PEGAMENTO AL DE LA DERECHA"<<endl;
+		pad->setPegamento(true);
+	}
+	else
+	{
+		cout<<"LE COLOQUE PEGAMENTO AL DE LA IZQUIERDA"<<endl;
+		pad1->setPegamento(true);
+	}
+	esce->sacarBonus(esce->getListadoDeFiguras());
+}
+
+
+void ControladorDeBonus::aplicarBonus(Pad* pad,Pad* pad1,Tejo* pTejo,int bonus)
+{
+	if (bonus == 1)
+	{
+		cout<<"MAS VELOCIDAD"<<endl;
+		incrementoVelocidad(pTejo);
+	}
+	if (bonus == 2)
+	{	
+		cout<<"FRENOOOOOO"<<endl;
+		freno(pTejo);
+	}
+	if (bonus == 3)
+	{
+		cout<<"MAS PAD PROPIO"<<endl;
+		masPad(pad,pad1,1);
+	}
+	if (bonus == 4)
+	{
+		cout<<"MENOS PAD PROPIO"<<endl;
+		menosPad(pad,pad1,1);
+	}
+	if (bonus == 5)
+	{
+		cout<<"MAS PAD VERSUS"<<endl;
+		masPad(pad,pad1,0);
+	}
+	if (bonus == 6)
+	{
+		cout<<"MENOS PAD VERSUS"<<endl;
+		menosPad(pad,pad1,0);
+	}
+	if (bonus == 7)
+	{
+		cout<<"MAS TEJO"<<endl;
+		masTejo(pTejo);
+	}
+	if (bonus == 8)
+	{
+		cout<<"MENOS TEJO"<<endl;
+		menosTejo(pTejo);
+	}
+	if (bonus == 9)
+	{
+		cout<<"PEGAMENTO"<<endl;
+		pegamento(pad,pad1,pTejo);
+	}
+}

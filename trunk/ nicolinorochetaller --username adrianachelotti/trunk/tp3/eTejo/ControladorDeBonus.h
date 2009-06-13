@@ -17,6 +17,8 @@
 #include <iostream>
 #include <string>
 
+
+
 class ControladorDeBonus 
 {
 
@@ -29,6 +31,8 @@ public:
 	void menosTejo(Tejo* pTejo);
 	void masPad(Pad* pad,Pad* pad1,int paraQuien);
 	void menosPad(Pad* pad,Pad* pad1,int paraQuien);
+	void pegamento(Pad* pad,Pad* pad1,Tejo* pTejo);
+	void aplicarBonus(Pad* pad,Pad* pad1,Tejo* pTejo,int bonus);
 	
 };
 

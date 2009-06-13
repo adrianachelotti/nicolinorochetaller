@@ -22,6 +22,7 @@ Escenario::Escenario()
 	this->golesDerecho = 0;
 	this->golesIzquierdo = 0;
 	this->ultimoTocado = 0;
+	this->ultimoGol = 1;
 }
 
 Escenario::~Escenario()
@@ -511,6 +512,16 @@ void Escenario::setUtlimoTocado(int u)
 	this->ultimoTocado = u;
 }
 
+int Escenario::getUltimoGol()
+{
+	return(this->ultimoGol);
+}
+
+void Escenario::setUltimoGol(int gol)
+{
+	this->ultimoGol = gol;
+}
+
 int Escenario::getLongInicial()
 {
 	return(this->longInicial);
@@ -519,6 +530,105 @@ int Escenario::getLongInicial()
 void Escenario::setLongInicial(int l)
 {
 	this->longInicial = l;
+}
+
+string nombreBonus(int bonus)
+{
+	if (bonus == 1)
+	{
+		return("bonus1");
+	}
+	if (bonus == 2)
+	{
+		return("bonus2");
+	}
+	if (bonus == 3)
+	{
+		return("bonus3");
+	}
+	if (bonus == 4)
+	{
+		return("bonus4");
+	}
+	if (bonus == 5)
+	{
+		return("bonus5");
+	}
+	if (bonus == 6)
+	{
+		return("bonus6");
+	}
+	if (bonus == 7)
+	{
+		return("bonus7");
+	}
+	if (bonus == 8)
+	{
+		return("bonus8");
+	}
+	if (bonus == 9)
+	{
+		return("bonus9");
+	}
+}
+
+void Escenario::selectorDeDispersor(list<Figura*> figuras)
+{
+	//srand((unsigned)time(0)); 
+    int ranBonus;
+	int ranDisper;
+    int lowestBonus=1, highestBonus=9;
+	int lowestDisper = 1, highestDisper = figuras.size()-5;
+
+    int rangeBonus = (highestBonus-lowestBonus)+1;
+	int rangeDisper = (highestDisper-lowestDisper)+1;
+ 
+
+    ranBonus = lowestBonus+int(rangeBonus*rand()/(RAND_MAX + 1.0));
+	ranDisper = lowestDisper+int(rangeDisper*rand()/(RAND_MAX + 1.0));
+	
+	list<Figura*>::iterator it;
+	Figura* figuraActual;
+	it = figuras.begin();
+	int contador = 0;
+	while( it != figuras.end())
+	{
+	  contador++;
+      figuraActual = *it;
+	  if ((contador - 5) == ranDisper) 
+	  {
+		  if (figuraActual->getBonus != 0)
+		  {
+			  //solo para probar
+				cout<<"FIGURA QUE SE LE ASIGNA BONUS: "<<figuraActual->getId()<<endl;
+				cout<<"BONUS ASIGANADO "<<ranBonus<<endl;
+				figuraActual->setBonus(ranBonus);
+				figuraActual->setIdTextura(nombreBonus(ranBonus));
+				figuraActual->setImagenFigura(NULL);
+		  }
+	  }
+	  it++;
+    }
+}
+
+void Escenario::sacarBonus(list<Figura*> listaFiguras)
+{
+	list<Figura*>::iterator it;
+	Figura* figuraActual;
+	it = listaFiguras.begin();
+	int contador=0;
+	while( it != listaFiguras.end())
+	{
+	  contador++;
+	  if (contador>4)
+	  {
+		figuraActual = *it;
+		figuraActual->setBonus(0);
+		figuraActual->setIdTextura("ninguna");
+	  }
+	  it++;
+    }
+
 }
 
 int Escenario::getResoCompo(int reso1) 

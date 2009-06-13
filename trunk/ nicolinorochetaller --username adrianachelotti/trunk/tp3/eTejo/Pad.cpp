@@ -2,7 +2,7 @@
 
 Pad::Pad()
 {
-
+	this->pegamento=false;
 }
 
 Pad::~Pad()
@@ -23,4 +23,14 @@ void Pad::setRepresentacionGrafica(Rectangulo* representacion)
 Punto Pad::getPosicion()
 {
 	return this->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo();
+}
+
+bool Pad::getPegamento()
+{
+	return this->pegamento;
+}
+
+void Pad::setPegamento(bool pega)
+{
+	this->pegamento = pega;
 }
