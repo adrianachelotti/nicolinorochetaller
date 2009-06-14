@@ -124,6 +124,8 @@ DWORD WINAPI readFunction2(LPVOID param)
 	
 	return 0;
 }
+
+
  
 int block_sending(unsigned int &sock, const char *path) 
 { 
@@ -158,6 +160,41 @@ int block_sending(unsigned int &sock, const char *path)
 
 return nbytes; 
 } 
+
+DWORD WINAPI sendFunction(LPVOID param) 
+{
+	int err = 0;
+	toSendPackage* tsp = static_cast<toSendPackage*>(param);
+	string stringToSend = tsp->getData();
+	
+	CONEXION* pCon = tsp->getConexion();
+	if(pCon->len > 0) 
+	{
+	 
+		block_sending(pCon->socketAccept,stringToSend.c_str());
+
+	}		
+		printf("Archivo Enviado: ");		
+
+	return 0;
+}
+DWORD WINAPI sendFunction2(LPVOID param) 
+{
+	int err = 0;
+	toSendPackage* tsp = static_cast<toSendPackage*>(param);
+	string stringToSend = tsp->getData();
+	
+	CONEXION* pCon = tsp->getConexion();
+	if(pCon->len > 0) 
+	{
+	 
+		block_sending(pCon->socketAccept,stringToSend.c_str());
+
+	}		
+		printf("Archivo Enviado: ");		
+
+	return 0;
+}
 
 
 /*****************************************************************/
@@ -292,7 +329,7 @@ void transferirArchivos(CONEXION* conexionCliente1,CONEXION* conexionCliente2)
 
 	//TODO logica para leer todos los archivos
 	block_sending(conexionCliente1->socketAccept,"g.bmp\0");
-	block_sending(conexionCliente2->socketAccept,"o.bmp\0");
+	block_sending(conexionCliente2->socketAccept,"TheSimpsons.bmp\0");
 //	block_sending(conexionCliente2->socketAccept,"TheSimpsons.bmp\0");
 
 }
@@ -306,6 +343,11 @@ int main(int argc, char* argv[]){
 	HANDLE threadReader;
 	HANDLE threadReader2;
 	HANDLE processing;
+	HANDLE threadInit1;
+	HANDLE threadInit2;
+	toSendPackage initPackage, initPackage2;
+	initPackage.setData("g.bmp");
+	initPackage2.setData("TheSimpsons.bmp");
 
 	pConexion = (CONEXION*)malloc(sizeof(CONEXION));
 	pConexion2 = (CONEXION*)malloc(sizeof(CONEXION));
@@ -332,14 +374,24 @@ int main(int argc, char* argv[]){
 		trEscuchar(puerto + 1, pConexion2);
 		printf("Cliente 2 conectado......\n");
 		
-		if(!archivosYaTransferidos)
+	/*	if(!archivosYaTransferidos)
 		{
 			transferirArchivos(pConexion,pConexion2);
 			archivosYaTransferidos=true; 
 		
-		}
+		}*/
+		printf("Comienza la transferencias...........\n");
+		initPackage.setConexion(pConexion);
+		initPackage2.setConexion(pConexion2);
+		threadInit1= CreateThread(NULL,0,sendFunction,&initPackage,0,NULL);
+		threadInit2= CreateThread(NULL,0,sendFunction2,&initPackage2,0,NULL);
 
-
+		WaitForSingleObject(sendFunction, INFINITE);
+		WaitForSingleObject(sendFunction2, INFINITE);
+				
+		CloseHandle(threadInit1);		
+		CloseHandle(threadInit2);
+		printf("Finalizando...........\n");
 		threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);	
 		Sleep(1);
 		threadReader2 = CreateThread(NULL,0,readFunction2,NULL,0,NULL);
