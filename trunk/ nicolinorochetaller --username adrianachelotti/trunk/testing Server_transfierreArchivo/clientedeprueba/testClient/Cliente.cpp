@@ -146,15 +146,7 @@ int block_recv(unsigned int &sock)
 
     recv(sock, path, 20, 0); 
 
-
-	//SOLO POR PRUEBA LOCAL
-	char pathCompleto[40];
-	strcpy(pathCompleto,"clientedeprueba2/imagenesTransferidas/");
-    strcat(pathCompleto,path);
-	cout<<pathCompleto<<endl;
-
-	std::ofstream os(pathCompleto, std::ios::binary); 
-	
+	std::ofstream os(path, std::ios::binary); 
 
     recv(sock, reinterpret_cast<char*>(&size), sizeof size, 0); 
 
