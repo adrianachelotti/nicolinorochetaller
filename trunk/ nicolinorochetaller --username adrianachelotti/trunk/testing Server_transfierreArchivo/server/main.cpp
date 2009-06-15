@@ -345,33 +345,31 @@ DWORD WINAPI iAmProcessing(LPVOID param){
 	saca de esa cola, manda a procesar los datos, y los envia simultaneamente
 	a los dos clientes una vez procesados */
 	
-	toSendPackage* tsp, tsp2;
+	toSendPackage tsp, tsp2;
 	char* dataSinPro;
 	char* dataYaPro;
 	HANDLE enviar[2];
 	while(pConexion->len > 0 && pConexion2->len > 0)
 	{
-		toSendPackage* tsp = new toSendPackage();
-		toSendPackage* tsp2 = new  toSendPackage();
 		// mientras que haya conexion con ambos clientes
 		if(myq.items() > 0)
 		{ // si hay algo para procesar
-			dataYaPro=(char*)malloc(32);
+			dataYaPro=(char*)malloc(320);
 			strcpy(dataYaPro,"");
 			strcpy(dataYaPro , myq.pop().c_str()); // obtengo la data no procesada
 		//	cout << "iamprocessing: saco de la cola: " << dataSinPro << endl; // borrame
 		//	dataYaPro = getDataProcessed(dataSinPro); // obtengo la data procesada
 			
-			tsp->setData(dataYaPro);
-			tsp2->setData(dataYaPro);
+			tsp.setData(dataYaPro);
+			tsp2.setData(dataYaPro);
 			
-			tsp->setConexion(pConexion);
+			tsp.setConexion(pConexion);
 
-			enviar[0] = CreateThread(NULL, 0, writeFunction, tsp, 0, NULL);
+			enviar[0] = CreateThread(NULL, 0, writeFunction, &tsp, 0, NULL);
 			
-			tsp2->setConexion(pConexion2);
+			tsp2.setConexion(pConexion2);
 			
-			enviar[1] = CreateThread(NULL, 0, writeFunction, tsp2, 0, NULL);
+			enviar[1] = CreateThread(NULL, 0, writeFunction, &tsp2, 0, NULL);
 			
 
 			WaitForMultipleObjects(2, enviar, TRUE, INFINITE);
@@ -380,7 +378,7 @@ DWORD WINAPI iAmProcessing(LPVOID param){
 			CloseHandle(enviar[1]);
 
 		}else{ // en caso de que no haya nada para procesar, aguantamos la mecha viteh fiera
-			Sleep(100); // igual son solo 10 milisegundos
+			Sleep(10); // igual son solo 10 milisegundos
 		}
 	}
 	
@@ -450,9 +448,9 @@ int main(int argc, char* argv[]){
 		processing = CreateThread(NULL, 0, iAmProcessing, NULL, 0, NULL);
 		Sleep(10);
 		
-		WaitForSingleObject(readFunction, INFINITE);
-		WaitForSingleObject(readFunction2, INFINITE);
-		WaitForSingleObject(iAmProcessing, INFINITE);
+		WaitForSingleObject(threadReader, INFINITE);
+		WaitForSingleObject(threadReader2, INFINITE);
+		WaitForSingleObject(processing, INFINITE);
 		
 		CloseHandle(threadReader);		
 		CloseHandle(threadReader2);
