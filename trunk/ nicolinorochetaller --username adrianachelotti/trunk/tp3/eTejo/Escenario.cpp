@@ -591,7 +591,7 @@ void Escenario::selectorDeDispersor(list<Figura*> figuras)
 
     ranBonus = lowestBonus+int(rangeBonus*rand()/(RAND_MAX + 1.0));
 	ranDisper = lowestDisper+int(rangeDisper*rand()/(RAND_MAX + 1.0));
-	
+
 	list<Figura*>::iterator it;
 	Figura* figuraActual;
 	it = figuras.begin();
@@ -669,6 +669,7 @@ void Escenario::clearEscenario()
 	this->listadoDeTexturas.clear();
 	this->golesDerecho = 0;
 	this->golesIzquierdo = 0;
+	this->ultimoTocado = 0;
 	this->tejos = TEJOS;
 	this->imagenEscenario = NULL;
 }

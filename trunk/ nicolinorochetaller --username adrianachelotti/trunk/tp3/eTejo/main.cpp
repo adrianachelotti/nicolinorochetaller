@@ -789,6 +789,7 @@ while (contador < 3)
 					escenario->restarTejo();
 					escenario->sumaPuntajeDerecho(10);
 					escenario->setUltimoGol(1);
+					escenario->setUtlimoTocado(0);
 					escenario->sumarGolesDerecho();
 					tejoLanzado=false;
 					dibujarAnimacion(escenario->getAncho(),escenario->getAlto(),screen);
@@ -814,6 +815,7 @@ while (contador < 3)
 						escenario->restarTejo();
 						escenario->sumaPuntajeIzquierdo(10);
 						escenario->setUltimoGol(0);
+						escenario->setUtlimoTocado(1);
 						escenario->sumarGolesIzquierdo();
 						tejoLanzado=false;
 						dibujarAnimacion(escenario->getAncho(),escenario->getAlto(),screen);
