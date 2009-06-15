@@ -162,7 +162,13 @@ int block_sending(unsigned int &sock, const char *path)
 	char pbuf[TAMBUFFER]; 
 
     std::ifstream is; 
-    is.open (path, std::ios::in|std::ios::binary ); 
+
+	 char* datadirec =(char* )malloc(43);
+	 strcpy(datadirec,"");
+	 strcpy(datadirec,".\\imagenesATransferir\\");
+	 strcat (datadirec,path);
+	 //printf("path completo %s",datadirec);
+	 is.open (path, std::ios::in|std::ios::binary ); 
 
     is.seekg (0, std::ios::end); 
     size = is.tellg(); 
@@ -207,7 +213,7 @@ DWORD WINAPI sendFunction(LPVOID param)
 
 	while(it != archivos.end())
 	{
-      archivoActual = *it;
+	  archivoActual = *it;
 	  cout<<"sendFunction envia:"<<archivoActual<<endl;
 	  if(pCon->len > 0) 
 	  {
@@ -347,16 +353,17 @@ DWORD WINAPI iAmProcessing(LPVOID param){
 	
 	toSendPackage tsp, tsp2;
 	char* dataSinPro;
-	char* dataYaPro;
+	string dataYaPro;
 	HANDLE enviar[2];
 	while(pConexion->len > 0 && pConexion2->len > 0)
 	{
 		// mientras que haya conexion con ambos clientes
 		if(myq.items() > 0)
 		{ // si hay algo para procesar
-			dataYaPro=(char*)malloc(320);
-			strcpy(dataYaPro,"");
-			strcpy(dataYaPro , myq.pop().c_str()); // obtengo la data no procesada
+			dataYaPro=myq.pop();
+				//(char*)malloc(320);
+		//	strcpy(dataYaPro,"");
+		//	strcpy(dataYaPro , myq.pop().c_str()); // obtengo la data no procesada
 		//	cout << "iamprocessing: saco de la cola: " << dataSinPro << endl; // borrame
 		//	dataYaPro = getDataProcessed(dataSinPro); // obtengo la data procesada
 			
@@ -431,11 +438,11 @@ int main(int argc, char* argv[]){
 		threadInit[0]= CreateThread(NULL,0,sendFunction,&initPackage,0,NULL);
 		
 		
-		WaitForSingleObjectEx(threadInit[0],10000,true);
+		WaitForSingleObjectEx(threadInit[0],INFINITE,true);
 		
 		threadInit[1]= CreateThread(NULL,0,sendFunction2,&initPackage2,0,NULL);
 		
-		WaitForSingleObjectEx(threadInit[1],10000,true);
+		WaitForSingleObjectEx(threadInit[1],INFINITE,true);
 
 
 		CloseHandle(threadInit[0]);		
