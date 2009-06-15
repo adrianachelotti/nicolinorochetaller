@@ -357,9 +357,6 @@ int main(int argc, char* argv[])
 		i++;
 	
 	}
-	Sleep(10000);
-
-
 
 	threadWriter = CreateThread(NULL,0,writeFunction,NULL,0,NULL);	
 	threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);
