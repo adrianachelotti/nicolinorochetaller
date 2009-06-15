@@ -30,6 +30,7 @@ void toSendPackage::setConexion(CONEXION* con){
 
 
 void toSendPackage::setData(string data){
+	this->data="";
 	this->data = data;
 }
 

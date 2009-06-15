@@ -155,7 +155,7 @@ void listarArchivos(list<string> archivos)
 
 
  
-int block_sending(unsigned int &sock, const char *path) 
+int block_sending(unsigned int &sock, const char *path,const char* directorio) 
 { 
 
 	int size, ofs, nbytes = 0, block =TAMBUFFER; 
@@ -165,7 +165,7 @@ int block_sending(unsigned int &sock, const char *path)
 
 	 char* datadirec =(char* )malloc(43);
 	 strcpy(datadirec,"");
-	 strcpy(datadirec,".\\imagenesATransferir\\");
+	 strcpy(datadirec,directorio);
 	 strcat (datadirec,path);
 	 //printf("path completo %s",datadirec);
 	 is.open (path, std::ios::in|std::ios::binary ); 
@@ -173,7 +173,8 @@ int block_sending(unsigned int &sock, const char *path)
     is.seekg (0, std::ios::end); 
     size = is.tellg(); 
     is.seekg (0, std::ios::beg); 
-
+	
+	printf("tamaño de archivo: %s   %d",datadirec,size);
 	
 	send(sock, path, strlen(path)+1, 0); 
     
@@ -218,7 +219,7 @@ DWORD WINAPI sendFunction(LPVOID param)
 	  if(pCon->len > 0) 
 	  {
 	 
-		block_sending(pCon->socketAccept,archivoActual.c_str());
+		block_sending(pCon->socketAccept,archivoActual.c_str(),".\\imagenesATransferir\\");
 
 	  }		
 	  it++;
@@ -253,7 +254,7 @@ DWORD WINAPI sendFunction2(LPVOID param)
 	  if(pCon->len > 0) 
 	  {
 	 
-		block_sending(pCon->socketAccept,archivoActual.c_str());
+		block_sending(pCon->socketAccept,archivoActual.c_str(),".\\imagenesATransferir2\\");
 
 	  }		
 	  it++;
@@ -281,7 +282,9 @@ DWORD WINAPI writeFunction(LPVOID param)
 	{
 	
 		char * datosEntrada = (char*) malloc(sizeof(char*)*40);
+		strcpy(datosEntrada,"");
 		strcpy(datosEntrada, stringToSend.c_str());
+		
 
 		int cantidadDeItems = 0;
 		char* datos = NULL; // contenido posterior al comando
@@ -360,6 +363,7 @@ DWORD WINAPI iAmProcessing(LPVOID param){
 		// mientras que haya conexion con ambos clientes
 		if(myq.items() > 0)
 		{ // si hay algo para procesar
+			dataYaPro="";
 			dataYaPro=myq.pop();
 				//(char*)malloc(320);
 		//	strcpy(dataYaPro,"");
@@ -434,19 +438,20 @@ int main(int argc, char* argv[]){
 		printf("Comienza la transferencias...........\n");
 		initPackage.setConexion(pConexion);
 		initPackage2.setConexion(pConexion2);
-		
+	/*	
 		threadInit[0]= CreateThread(NULL,0,sendFunction,&initPackage,0,NULL);
 		
 		
-		WaitForSingleObjectEx(threadInit[0],INFINITE,true);
+		WaitForSingleObject(threadInit[0],INFINITE);
 		
 		threadInit[1]= CreateThread(NULL,0,sendFunction2,&initPackage2,0,NULL);
 		
-		WaitForSingleObjectEx(threadInit[1],INFINITE,true);
+		WaitForSingleObject(threadInit[1],INFINITE);
 
 
 		CloseHandle(threadInit[0]);		
 		CloseHandle(threadInit[1]);		
+		*/
 		
 		printf("Finalizando...........\n");
 		threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);	
