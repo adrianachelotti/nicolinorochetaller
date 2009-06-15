@@ -302,8 +302,10 @@ DWORD WINAPI writeFunction(LPVOID param)
 	while(pConexion->len > 0) 
 	{
 		//SDL_PollEvent(&event);
+		//Sleep(200);
 		SDL_WaitEvent(&event);
-		Sleep(100);
+		SDL_Delay(200);
+		Sleep(200);
 		if(event.key.keysym.sym==SDLK_ESCAPE)
 		{
 			SDL_Quit();
