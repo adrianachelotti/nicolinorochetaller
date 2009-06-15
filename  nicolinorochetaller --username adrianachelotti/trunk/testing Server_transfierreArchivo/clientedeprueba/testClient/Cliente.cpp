@@ -145,8 +145,19 @@ int block_recv(unsigned int &sock)
 	strcpy(path,"");
 
     recv(sock, path, 20, 0); 
+<<<<<<< .mine
+	
+	char pathCompleto[40];
+	strcpy(pathCompleto,"");
+	strcpy(pathCompleto,"clientedeprueba\\imagenesTransferidas\\");
+    strcat(pathCompleto,path);
+	//cout<<pathCompleto<<endl;
+=======
+>>>>>>> .r188
 
-	std::ofstream os(path, std::ios::binary); 
+	std::ofstream os(pathCompleto, std::ios::binary); 
+
+
 
     recv(sock, reinterpret_cast<char*>(&size), sizeof size, 0); 
 
@@ -197,6 +208,7 @@ DWORD WINAPI readFunction(LPVOID param)
 		enum tr_tipo_dato tipo = td_command;		
 		if(trRecibir(pConexion,tipo,cantItems,&datos) != RES_OK)
 			pConexion->len = 0;
+		if(pConexion->len != 0)
 		printf("\nRecibiendo del servidor: %s \n" , datos);
 		
 		
@@ -205,10 +217,11 @@ DWORD WINAPI readFunction(LPVOID param)
 	return 0;
 }
 
-char*  handle_input(SDL_Event event)
+void handle_input(SDL_Event event,char* auxiliar)
 {
     //si el evento fue que se presiono una tecla
-	char*  auxiliar = (char*)malloc(32);
+	 auxiliar = (char*)malloc(32);
+	 strcpy(auxiliar,"");
 
 	if( event.type == SDL_KEYDOWN )
     {
@@ -216,27 +229,51 @@ char*  handle_input(SDL_Event event)
         {
 			// si se presiono la flecha down
 			case SDLK_DOWN:
-				strcpy(auxiliar,"STRING ABAJO\0");
-				return auxiliar;
+				strcpy(auxiliar,"STRING ABAJO\n");
+			
 			
 				break;
 			// si se presiono la flecha down
 			case SDLK_UP:
-				 strcpy(auxiliar,"STRING ARRIBA\0");
-				 return auxiliar;
+				 strcpy(auxiliar,"STRING ARRIBA\n");
+			
 				 break;
          
 			case SDLK_SPACE:
-				strcpy(auxiliar, "STRING BARRA\0");
-				return auxiliar;
+				strcpy(auxiliar, "STRING BARRA\n");
+			
 				 break;
         }
 
     }
-	
-	return NULL;
+	strcpy(auxiliar, "STRING NADA\n");
+
 
 }
+
+
+int FilterEvents(const SDL_Event *event) {
+    static int boycott = 1;
+
+    /* This quit event signals the closing of the window */
+    if ( (event->type == SDL_QUIT) && boycott ) {
+        printf("Quit event filtered out -- try again.\n");
+        boycott = 0;
+        return(1);
+    }
+    if ( event->type == SDL_MOUSEMOTION ) {
+        printf("Mouse moved to (%d,%d)\n",
+                event->motion.x, event->motion.y);
+        return(1);    /* Drop it, we've handled it */
+    }
+	if ( event->type == SDL_KEYDOWN ) {
+        printf("Mouse moved to (%d,%d)\n",
+                event->motion.x, event->motion.y);
+        return(0);    /* Drop it, we've handled it */
+    }
+    return(1);
+}
+
 /*****************************************************************/
 /* writeFunction: Función encargada de enviar al servidor lo     */
 /* ingresado por consola. Si lo ingresado no corresponde con el  */
@@ -246,11 +283,28 @@ DWORD WINAPI writeFunction(LPVOID param)
 {
 	int err = 0;
 	printf("Enviar: ");
+	SDL_Surface* screen;
+    //crearPantalla(screen);
+	//SDL_Event event;
+
+
 
 	while(pConexion->len > 0) 
 	{
+	//	SDL_SetEventFilter(FilterEvents);
 		char * datosEntrada = readLine();
-		printf("Evento que quiero enviar %s" , datosEntrada);
+	//	SDL_PollEvent(&event);
+	//	char * datosEntrada = (char* )malloc (50);
+	//	strcpy(datosEntrada,"");
+
+	//	const char* arriba = "STRING NADA \n";
+	/*	if( event.type == SDL_KEYDOWN )
+		{
+		    arriba = "STRING ARRIBA \n";
+		}
+	
+		memccpy(datosEntrada,arriba,0,20);
+		printf("Evento que quiero enviar %s" , datosEntrada);*/
 
 		int cantidadDeItems = 0;
 		char* datos = NULL; // contenido posterior al comando
@@ -303,6 +357,8 @@ DWORD WINAPI writeFunction(LPVOID param)
 
 		}		
 		printf("Enviar: ");
+		SDL_Delay(2000);
+		Sleep(2000);
 	}
 	
 
@@ -344,13 +400,13 @@ int main(int argc, char* argv[])
 	printf("Conexion establecida....\n ");
 
 	
-	bool archivosYaTransferidos = false;
+	//TODO
+	int i=0;
 
-	if(!archivosYaTransferidos)
+	while(i<3)
 	{
 		block_recv(pConexion->socketAccept);		
-		archivosYaTransferidos = true;
-	
+		i++;
 	}
 	Sleep(10000);
 
