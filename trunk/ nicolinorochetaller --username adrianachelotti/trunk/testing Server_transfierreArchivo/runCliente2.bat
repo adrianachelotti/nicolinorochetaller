@@ -1,3 +1,3 @@
 set Y = %CD%
 cd %Y%
-call .\clientedeprueba\testClient\Debug\Cliente04.exe localhost 5001
+call .\clientedeprueba2\testClient\Debug\Cliente04.exe localhost 5001
