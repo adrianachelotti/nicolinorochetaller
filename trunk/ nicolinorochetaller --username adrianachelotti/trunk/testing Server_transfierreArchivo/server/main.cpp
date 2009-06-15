@@ -14,6 +14,7 @@ extern "C"{
 #include <cstring>
 #include "syncQueue.h"
 #include "toSendPackage.h"
+#include "lectorDirectorios.h"
 
 #define TAMBUFFER 1024
 #define PORT_MAX 65535
@@ -45,19 +46,21 @@ char* getDataProcessed(char* dataSinPro){
 	
 	if(strcmp(cadena,"STRING ARRIBA")==0)
 	{
-		return "STRING Se mueve para arriba";
+		return "STRING Se mueve para arriba\n";
 		
 	}
 	if (strcmp(cadena,"STRING ABAJO")==0)
 	{
-		return  "STRING Se mueve para abajo";
+		return  "STRING Se mueve para abajo\n";
 	
 	}
 	if (strcmp(cadena,"STRING BARRA")==0)
 	{
-		return  "STRING Se lanza la bola";
+		return  "STRING Se lanza la bola\n";
 	
 	}
+
+
 
 	return dataSinPro;
 
@@ -80,13 +83,15 @@ DWORD WINAPI readFunction(LPVOID param)
 		if(trRecibir(pConexion,tipo,cantItems,&datos) != RES_OK)
 
 			pConexion->len = 0;
+		if(pConexion->len > 0)
+		{
+			printf("Datos cliente 1: %s\n" , datos);
 
-		printf("Datos cliente 1: %s\n" , datos);
-
-		char* tempo = (char*)datos;
+	//	char* tempo = (char*)datos;
 		
 		//string tmp ((char*)datos);
-		myq.push((char*)datos);
+			myq.push((char*)datos);
+		}
 		
 		
 
@@ -113,16 +118,39 @@ DWORD WINAPI readFunction2(LPVOID param)
 
 		if(trRecibir(pConexion2,tipo,cantItems, &datos) != RES_OK)
 			pConexion->len = 0;
-		
-		printf("Datos cliente 2: %s\n" , datos);
-	//	string tmp ((char*)datos);
-		myq.push((char*)datos);
+
+		if(pConexion->len > 0)
+		{
+			printf("Datos cliente 2: %s\n" , datos);
+	
+			myq.push((char*)datos);
+		}
 		
 
 	}
 
 	
 	return 0;
+}
+
+
+void listarArchivos(list<string> archivos)
+{
+	list<string>::iterator it;
+ 
+    it = archivos.begin();
+    
+	string archivoActual;
+
+	while(it != archivos.end())
+	{
+      archivoActual = *it;
+      cout<<archivoActual<<endl;
+	
+      it++;
+	
+    }	
+
 }
 
 
@@ -134,7 +162,7 @@ int block_sending(unsigned int &sock, const char *path)
 	char pbuf[TAMBUFFER]; 
 
     std::ifstream is; 
-    is.open (path, std::ios::binary ); 
+    is.open (path, std::ios::in|std::ios::binary ); 
 
     is.seekg (0, std::ios::end); 
     size = is.tellg(); 
@@ -168,15 +196,31 @@ DWORD WINAPI sendFunction(LPVOID param)
 	string stringToSend = tsp->getData();
 	
 	CONEXION* pCon = tsp->getConexion();
-	if(pCon->len > 0) 
-	{
-	 
-		block_sending(pCon->socketAccept,stringToSend.c_str());
+	lectorDirectorios* lector = new lectorDirectorios();
+	list<string> archivos = lector->getFilesList(stringToSend);
 
-	}		
-		printf("Archivo Enviado: ");		
+	list<string>::iterator it;
+ 
+    it = archivos.begin();
+    
+	string archivoActual;
+
+	while(it != archivos.end())
+	{
+      archivoActual = *it;
+	  cout<<"sendFunction envia:"<<archivoActual<<endl;
+	  if(pCon->len > 0) 
+	  {
+	 
+		block_sending(pCon->socketAccept,archivoActual.c_str());
+
+	  }		
+	  it++;
+	
+    }
 
 	return 0;
+
 }
 DWORD WINAPI sendFunction2(LPVOID param) 
 {
@@ -185,13 +229,30 @@ DWORD WINAPI sendFunction2(LPVOID param)
 	string stringToSend = tsp->getData();
 	
 	CONEXION* pCon = tsp->getConexion();
-	if(pCon->len > 0) 
-	{
-	 
-		block_sending(pCon->socketAccept,stringToSend.c_str());
+	
+	
+	lectorDirectorios* lector = new lectorDirectorios();
+	list<string> archivos = lector->getFilesList(stringToSend);
 
-	}		
-		printf("Archivo Enviado: ");		
+	list<string>::iterator it;
+ 
+    it = archivos.begin();
+    
+	string archivoActual;
+
+	while(it != archivos.end())
+	{
+      archivoActual = *it;
+	  cout<<"sendFunction2 envia:"<<archivoActual<<endl;
+	  if(pCon->len > 0) 
+	  {
+	 
+		block_sending(pCon->socketAccept,archivoActual.c_str());
+
+	  }		
+	  it++;
+	
+    }
 
 	return 0;
 }
@@ -284,29 +345,33 @@ DWORD WINAPI iAmProcessing(LPVOID param){
 	saca de esa cola, manda a procesar los datos, y los envia simultaneamente
 	a los dos clientes una vez procesados */
 	
-	toSendPackage tsp, tsp2;
+	toSendPackage* tsp, tsp2;
 	char* dataSinPro;
 	char* dataYaPro;
 	HANDLE enviar[2];
 	while(pConexion->len > 0 && pConexion2->len > 0)
 	{
+		toSendPackage* tsp = new toSendPackage();
+		toSendPackage* tsp2 = new  toSendPackage();
 		// mientras que haya conexion con ambos clientes
 		if(myq.items() > 0)
 		{ // si hay algo para procesar
-			dataSinPro = myq.pop(); // obtengo la data no procesada
-			cout << "iamprocessing: saco de la cola: " << dataSinPro << endl; // borrame
-			dataYaPro = getDataProcessed(dataSinPro); // obtengo la data procesada
+			dataYaPro=(char*)malloc(32);
+			strcpy(dataYaPro,"");
+			strcpy(dataYaPro , myq.pop().c_str()); // obtengo la data no procesada
+		//	cout << "iamprocessing: saco de la cola: " << dataSinPro << endl; // borrame
+		//	dataYaPro = getDataProcessed(dataSinPro); // obtengo la data procesada
 			
-			tsp.setData(dataYaPro);
-			tsp2.setData(dataYaPro);
+			tsp->setData(dataYaPro);
+			tsp2->setData(dataYaPro);
 			
-			tsp.setConexion(pConexion);
+			tsp->setConexion(pConexion);
 
-			enviar[0] = CreateThread(NULL, 0, writeFunction, &tsp, 0, NULL);
+			enviar[0] = CreateThread(NULL, 0, writeFunction, tsp, 0, NULL);
 			
-			tsp2.setConexion(pConexion2);
+			tsp2->setConexion(pConexion2);
 			
-			enviar[1] = CreateThread(NULL, 0, writeFunction, &tsp2, 0, NULL);
+			enviar[1] = CreateThread(NULL, 0, writeFunction, tsp2, 0, NULL);
 			
 
 			WaitForMultipleObjects(2, enviar, TRUE, INFINITE);
@@ -315,22 +380,11 @@ DWORD WINAPI iAmProcessing(LPVOID param){
 			CloseHandle(enviar[1]);
 
 		}else{ // en caso de que no haya nada para procesar, aguantamos la mecha viteh fiera
-			Sleep(10); // igual son solo 10 milisegundos
+			Sleep(100); // igual son solo 10 milisegundos
 		}
 	}
 	
 	return TRUE;
-
-}
-
-
-void transferirArchivos(CONEXION* conexionCliente1,CONEXION* conexionCliente2)
-{
-
-	//TODO logica para leer todos los archivos
-	block_sending(conexionCliente1->socketAccept,"g.bmp\0");
-	block_sending(conexionCliente2->socketAccept,"TheSimpsons.bmp\0");
-//	block_sending(conexionCliente2->socketAccept,"TheSimpsons.bmp\0");
 
 }
 
@@ -343,12 +397,10 @@ int main(int argc, char* argv[]){
 	HANDLE threadReader;
 	HANDLE threadReader2;
 	HANDLE processing;
-	HANDLE threadInit1;
-	HANDLE threadInit2;
+	HANDLE threadInit[2];
 	toSendPackage initPackage, initPackage2;
-	initPackage.setData("g.bmp");
-	initPackage2.setData("TheSimpsons.bmp");
-
+	initPackage.setData(".\\imagenesATransferir\\");
+	initPackage2.setData(".\\imagenesATransferir2\\");
 	pConexion = (CONEXION*)malloc(sizeof(CONEXION));
 	pConexion2 = (CONEXION*)malloc(sizeof(CONEXION));
 
@@ -373,27 +425,26 @@ int main(int argc, char* argv[]){
 		printf("Cliente conectado...... servidor esperando al segundo cliente\n");
 		trEscuchar(puerto + 1, pConexion2);
 		printf("Cliente 2 conectado......\n");
-		
-	/*	if(!archivosYaTransferidos)
-		{
-			transferirArchivos(pConexion,pConexion2);
-			archivosYaTransferidos=true; 
-		
-		}*/
+	
 		printf("Comienza la transferencias...........\n");
 		initPackage.setConexion(pConexion);
 		initPackage2.setConexion(pConexion2);
-		threadInit1= CreateThread(NULL,0,sendFunction,&initPackage,0,NULL);
-		threadInit2= CreateThread(NULL,0,sendFunction2,&initPackage2,0,NULL);
+		
+		threadInit[0]= CreateThread(NULL,0,sendFunction,&initPackage,0,NULL);
+		
+		
+		WaitForSingleObject(threadInit[0],10000);
+		
+		threadInit[1]= CreateThread(NULL,0,sendFunction2,&initPackage2,0,NULL);
+		
+		WaitForSingleObject(threadInit[1],10000);
 
-		WaitForSingleObject(sendFunction, INFINITE);
-		WaitForSingleObject(sendFunction2, INFINITE);
-				
-		CloseHandle(threadInit1);		
-		CloseHandle(threadInit2);
+
+		CloseHandle(threadInit[0]);		
+		CloseHandle(threadInit[1]);		
 		printf("Finalizando...........\n");
 		threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);	
-		Sleep(1);
+		Sleep(10);
 		threadReader2 = CreateThread(NULL,0,readFunction2,NULL,0,NULL);
 		Sleep(10);
 		processing = CreateThread(NULL, 0, iAmProcessing, NULL, 0, NULL);
@@ -401,7 +452,7 @@ int main(int argc, char* argv[]){
 		
 		WaitForSingleObject(readFunction, INFINITE);
 		WaitForSingleObject(readFunction2, INFINITE);
-		WaitForSingleObject(processing, INFINITE);
+		WaitForSingleObject(iAmProcessing, INFINITE);
 		
 		CloseHandle(threadReader);		
 		CloseHandle(threadReader2);

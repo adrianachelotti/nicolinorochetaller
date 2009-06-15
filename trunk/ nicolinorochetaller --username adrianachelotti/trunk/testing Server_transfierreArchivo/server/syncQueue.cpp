@@ -26,9 +26,9 @@ syncQueue::~syncQueue()
 
 
 ///////////////////////////////////////////////////////////////////////
-char* syncQueue::pop(){
+string syncQueue::pop(){
 
-	char* ret;
+	string ret;
 	
 	DWORD dwWaitResult; 
     
@@ -132,7 +132,7 @@ int syncQueue::items(){
 ///////////////////////////////////////////////////////////////////////
 
 
-void syncQueue::push(char* x){
+void syncQueue::push(string x){
 
 	
 	DWORD dwWaitResult; 
