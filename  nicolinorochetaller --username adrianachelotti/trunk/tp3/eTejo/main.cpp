@@ -497,7 +497,6 @@ void calcularLadoPosArco(Arco* arco)
 
 void crearArcos(Arco* arco,Arco* arco1)
 {
-
 	Escenario* escenario = Escenario::obtenerInstancia();
 	list<Figura*> listaFiguras = escenario->listadoDeFiguras;
 	list<Figura*>::iterator it;
@@ -531,9 +530,7 @@ void crearArcos(Arco* arco,Arco* arco1)
 		}
 		it++;
 	} 
-	
 	//TODO VERI QUE SE CREEN LOS DOS ARCOA...
-
 }
 
 void handle_input(SDL_Event event, Punto *sqre, int altura, int screen_height,float deltaTime)
@@ -555,6 +552,31 @@ void handle_input(SDL_Event event, Punto *sqre, int altura, int screen_height,fl
 				 break;
          
 			case SDLK_SPACE:
+				 break;
+        }
+    }
+
+}
+
+void handle_input1(SDL_Event event, Punto *sqre, int altura, int screen_height,float deltaTime)
+{
+    //si el evento fue que se presiono una tecla
+    if( event.type == SDL_KEYDOWN )
+    {
+        switch( event.key.keysym.sym )
+        {
+			// si se presiono la flecha down
+			case SDLK_z:
+				if(sqre->y  <screen_height)
+				sqre->y+=DELTA_Y*deltaTime;
+				break;
+			// si se presiono la flecha down
+			case SDLK_a:
+				 if(sqre->y >altura)
+				 sqre->y-=DELTA_Y*deltaTime;
+				 break;
+         
+			case SDLK_x:
 				 break;
         }
     }
@@ -688,8 +710,6 @@ while (contador < 3)
 	Uint32 colorNormal = 0xFFFF00;
 	Uint32 temp = colorNormal;
 
-
-
 	Pad* pad = new Pad();
 	Pad* pad1 = new Pad();
 	crearPaletas(pad,pad1);
@@ -751,10 +771,10 @@ while (contador < 3)
 
 		if(event.type==SDL_KEYDOWN)
 		{
-		    handle_input(event, &posicion, pad->getRepresentacionGrafica()->getAltura(), altoPantalla,deltaTime);
-			
-			//se mueve con el mismo boton que el pad
-			handle_input(event, &posicion1, pad1->getRepresentacionGrafica()->getAltura(), altoPantalla,deltaTime);
+			//se mueve con arriba y abajo
+		    handle_input(event, &posicion, pad->getRepresentacionGrafica()->getAltura(), altoPantalla,deltaTime);	
+			//se mueve con a y z
+			handle_input1(event, &posicion1, pad1->getRepresentacionGrafica()->getAltura(), altoPantalla,deltaTime);
 
             if( event.key.keysym.sym == SDLK_ESCAPE )
 			{
