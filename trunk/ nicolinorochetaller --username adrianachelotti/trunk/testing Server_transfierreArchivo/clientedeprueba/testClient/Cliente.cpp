@@ -205,6 +205,11 @@ DWORD WINAPI readFunction(LPVOID param)
 		enum tr_tipo_dato tipo = td_command;		
 		if(trRecibir(pConexion,tipo,cantItems,&datos) != RES_OK)
 			pConexion->len = 0;
+		if(pConexion->len>0)
+		{
+			
+			printf("Cliente 1 recibiendo del servidor: %s",datos);
+		}
 	}
 	return 0;
 }
