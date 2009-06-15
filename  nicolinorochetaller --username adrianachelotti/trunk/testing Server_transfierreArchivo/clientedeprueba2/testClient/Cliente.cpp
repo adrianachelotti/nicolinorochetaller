@@ -352,8 +352,6 @@ DWORD WINAPI writeFunction(LPVOID param)
 
 		}		
 		printf("Enviar: ");
-		SDL_Delay(2000);
-		Sleep(2000);
 	}
 	
 
