@@ -149,7 +149,7 @@ int block_recv(unsigned int &sock)
 	//SOLO POR PRUEBA LOCAL
 	char pathCompleto[40];
 	strcpy(pathCompleto,"");
-	strcpy(pathCompleto,"clientedeprueba2\\imagenesTransferidas\\");
+	strcpy(pathCompleto,"clientedeprueba\\imagenesTransferidas\\");
     strcat(pathCompleto,path);
 	//cout<<pathCompleto<<endl;
 
