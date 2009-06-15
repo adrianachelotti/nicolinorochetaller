@@ -63,8 +63,6 @@ void dibjuarPasoNive(int w, int h, SDL_Surface* screen)
 		SDL_Delay(100);
 		cont++;
 	}
-	
-	SDL_EventState(SDL_KEYDOWN ,SDL_ENABLE);
 	delete(fondo);
 	delete(nivel);
 }
@@ -89,8 +87,6 @@ void dibujarFinal(int w, int h, SDL_Surface* screen)
 
 	posD.x = w/2 - 200;
 	posD.y = h/2 + 100;
-
-	SDL_EventState(SDL_KEYDOWN ,SDL_IGNORE);
 
 	Rectangulo* ganador = new Rectangulo("gm",500,100,posG);
 	if (es->getPuntajeDerecho() > es->getPuntajeIzquierdo())
@@ -221,8 +217,6 @@ void dibujarFinal(int w, int h, SDL_Surface* screen)
 		SDL_Flip(screen);
 		SDL_Delay(100);
 	}
-
-	SDL_EventState(SDL_KEYDOWN ,SDL_ENABLE);
 	delete(fondo);
 	delete(recD);
 	delete(recI);
@@ -249,7 +243,6 @@ void dibujarAnimacion(int w , int h, SDL_Surface* screen)
 	posicionPuntajeDerecha.y = h/2 - 200;
 	posicionPuntajeDerecha.x = w/2 + 200;
 
-	SDL_EventState(SDL_KEYDOWN ,SDL_IGNORE);
 	Cuadrado* g = new Cuadrado("g",100,posicionG);
 	g->setIdTextura("letraG");
 	
@@ -282,8 +275,8 @@ void dibujarAnimacion(int w , int h, SDL_Surface* screen)
 	fondo->setColorPropio(true);
 
 	
-		SDL_Flip(screen);
-		SDL_Delay(100);
+	SDL_Flip(screen);
+	SDL_Delay(100);
  
 	int cont = 0;
 	int offset =0;
@@ -304,7 +297,7 @@ void dibujarAnimacion(int w , int h, SDL_Surface* screen)
 		o->setPosicionVerticeInferiorIzquierdo(posicionO);
 		l->setPosicionVerticeInferiorIzquierdo(posicionL);
 
-	printf("cont %d" , cont);
+		printf("cont %d" , cont);
 		fondo->dibujar();
 		g->dibujar();
 		o->dibujar();
@@ -319,7 +312,7 @@ void dibujarAnimacion(int w , int h, SDL_Surface* screen)
 		SDL_Delay(100);
 	}
 
-	SDL_EventState(SDL_KEYDOWN ,SDL_ENABLE);
+
 	delete fondo;
 	delete g;
 	delete o;
@@ -717,14 +710,19 @@ while (contador < 3)
 
     int blinkTimer = 0;
 
-    
+   
 	SDL_EventState(SDL_ACTIVEEVENT, SDL_IGNORE);
 	SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
 	SDL_EventState(SDL_MOUSEBUTTONDOWN, SDL_IGNORE);
 	SDL_EventState(SDL_MOUSEBUTTONUP, SDL_IGNORE);
 	SDL_EnableKeyRepeat(1,1);
 	    
-	escenario->dibujar();
+
+	if (quit==0)
+	{
+		escenario->dibujar();
+	}
+
 	bool gol = false;
 	bool gol1 =  false;
 
@@ -771,7 +769,6 @@ while (contador < 3)
 				pad->getRepresentacionGrafica()->setColorFondo(colorNormal);
 				pad->getRepresentacionGrafica()->dibujar();
 				pad1->getRepresentacionGrafica()->dibujar();
-			
 			}
 			if( event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE )
 			{
@@ -795,7 +792,7 @@ while (contador < 3)
 					escenario->sumarGolesDerecho();
 					tejoLanzado=false;
 					dibujarAnimacion(escenario->getAncho(),escenario->getAlto(),screen);
-					
+
 					pad->setPegamento(false);
 					pad->getRepresentacionGrafica()->setAltura(escenario->getLongInicial());
 					posiPaleta(pad);
@@ -819,7 +816,7 @@ while (contador < 3)
 						escenario->setUltimoGol(0);
 						escenario->sumarGolesIzquierdo();
 						tejoLanzado=false;
-						dibujarAnimacion(escenario->getAncho(),escenario->getAlto(),screen);			
+						dibujarAnimacion(escenario->getAncho(),escenario->getAlto(),screen);
 						
 						pad->getRepresentacionGrafica()->setAltura(escenario->getLongInicial());
 						pad->setPegamento(false);
@@ -837,13 +834,11 @@ while (contador < 3)
 					else
 					{
 						controlador->resolverChoqueConParedes(pTejo);
-						
 						if (controlador->resolverChoqueConPaleta(pTejo,pad) == true)
 						{
 							escenario->setUtlimoTocado(0);
 							if (pad->getPegamento() == true) 
 							{
-								cout<<"TEJO LANZADO FALSE POR PARTE DE LA IZQUIERDA"<<endl;
 								tejoLanzado = false;
 							}
 							else 
@@ -857,7 +852,6 @@ while (contador < 3)
 							escenario->setUtlimoTocado(1);
 							if (pad1->getPegamento() == true) 
 							{
-								cout<<"TEJO LANZADO FALSE POR PARTE DE LA DERECHA"<<endl;
 								tejoLanzado = false;
 							}
 							else
@@ -865,8 +859,6 @@ while (contador < 3)
 								tejoLanzado = true;
 							}
 						}
-
-
 						controlador->resolverChoqueDispersores(pad,pad1,pTejo,escenario,lastTime);
 						if (tejoLanzado) pTejo->moverTejo(deltaTime);
 					}
@@ -880,13 +872,13 @@ while (contador < 3)
 				{
 					if (escenario->getUltimoGol() == 1)
 					{	
-						centroTejo.x = pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x + pad->getRepresentacionGrafica()->getBase()+ pTejo->getRepresentacionGrafica()->getRadio();
+						centroTejo.x = pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x + pad->getRepresentacionGrafica()->getBase() + pTejo->getRepresentacionGrafica()->getRadio();
 						centroTejo.y = pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().y - (pad->getRepresentacionGrafica()->getAltura()/2);
 						pTejo->getRepresentacionGrafica()->setCentro(centroTejo);
 					} 
 					else
 					{
-						centroTejo.x = pad1->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x - pad1->getRepresentacionGrafica()->getBase()+ pTejo->getRepresentacionGrafica()->getRadio();
+						centroTejo.x = pad1->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x - pad1->getRepresentacionGrafica()->getBase() + pTejo->getRepresentacionGrafica()->getRadio();
 						centroTejo.y = pad1->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().y - (pad1->getRepresentacionGrafica()->getAltura()/2);
 						pTejo->getRepresentacionGrafica()->setCentro(centroTejo);
 					}
@@ -902,7 +894,7 @@ while (contador < 3)
 					}
 					if (pad1->getPegamento() == true)
 					{
- 						centroTejo.x = pad1->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x - pad1->getRepresentacionGrafica()->getBase()+ pTejo->getRepresentacionGrafica()->getRadio();
+ 						centroTejo.x = pad1->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x - pad1->getRepresentacionGrafica()->getBase() + pTejo->getRepresentacionGrafica()->getRadio();
 						centroTejo.y = pad1->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().y - (pad1->getRepresentacionGrafica()->getAltura()/2);
 						pTejo->getRepresentacionGrafica()->setCentro(centroTejo);
 					}
@@ -926,11 +918,6 @@ while (contador < 3)
 		{
 			escenario->sumaPuntajeIzquierdo(70);
 		}
-		cout<<"Se acabaron los tejos"<<endl;
-		cout<<"PUNTAJE JUGADOR DERCHO: "<< escenario->getPuntajeDerecho() <<endl;
-		cout<<"PUNTAJE JUGADOR IZQUIERDO: "<< escenario->getPuntajeIzquierdo() <<endl;
-		cout<<"GOLES DERECHO: "<< escenario->getGolesDerecho() <<endl;
-		cout<<"GOLES IZQUIERDO: "<<  escenario->getGolesIzquierdo() <<endl;
 	 }
 
 	delete(pad);
@@ -940,14 +927,12 @@ while (contador < 3)
 	delete(arco1);
 
 	//solo porque hay dos niveles
-	if (contador == 1) 
+	if ((contador == 1) && (quit==0))
 	{
 		dibjuarPasoNive(escenario->getAncho(),escenario->getAlto(),escenario->screen);
 		escenario->clearEscenario();
 	}
-	contador++;
-
-				
+	contador++;	
 	fclose(archivo);
 	fclose(archivoErrores);
 	SDL_Flip(screen);
