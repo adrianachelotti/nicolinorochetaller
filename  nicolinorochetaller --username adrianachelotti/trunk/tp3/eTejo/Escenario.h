@@ -9,7 +9,7 @@
 #define RES_ERROR_CARGANDO_TEXTURA 1
 #define RES_OK 0
 #define RESOLUCION_DEFAULT 800
-#define TEJOS 5
+#define TEJOS 7
 
 #include <iostream>
 #include <list>
