@@ -233,9 +233,8 @@ char*  handle_input(SDL_Event event)
 
 	if( event.type == SDL_KEYDOWN )
     {
-        {
-			// si se presiono la flecha down
         switch( event.key.keysym.sym )
+		{
 			case SDLK_DOWN:
 				strcpy(auxiliar,"STRING ABAJO\n");
 				return auxiliar;
