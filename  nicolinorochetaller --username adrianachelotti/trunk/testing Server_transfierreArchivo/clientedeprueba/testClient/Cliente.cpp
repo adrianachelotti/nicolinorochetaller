@@ -157,6 +157,8 @@ int block_recv(unsigned int &sock)
 
     recv(sock, reinterpret_cast<char*>(&size), sizeof size, 0); 
 
+	cout<<"Tamanio archivo: "<<pathCompleto<<"-"<<size<<endl;
+
     for(ofs = 0; block == TAMBUFFER; ofs += TAMBUFFER) 
     { 
 		block = TAMBUFFER;
@@ -256,11 +258,12 @@ char*  handle_input(SDL_Event event)
 				strcpy(auxiliar, "STRING BARRA\n");
 				return auxiliar;
 				 break;
+			
         }
 
     }
-	strcpy(auxiliar, "STRING NADA\n");
-	return auxiliar;
+	//strcpy(auxiliar, "STRING NADA\n");
+	return NULL;
 	
 
 }
@@ -300,62 +303,73 @@ DWORD WINAPI writeFunction(LPVOID param)
 	{
 		//SDL_PollEvent(&event);
 		SDL_WaitEvent(&event);
-		char * datosEntrada =handle_input(event);
-		printf("Evento que quiero enviar %s" , datosEntrada);
-
-		int cantidadDeItems = 0;
-		char* datos = NULL; // contenido posterior al comando
-		int resultadoValidacion = validar(datosEntrada,&cantidadDeItems, &datos);
-
-
-			
-		if ( resultadoValidacion == VALIDACION_OK )
+		Sleep(100);
+		if(event.key.keysym.sym==SDLK_ESCAPE)
 		{
-			void* datosSerializados;
-			char* comando = strtok(datosEntrada," ");
-			char* comandoYCantidad ;
-			enum tr_tipo_dato tipo;
-			
-			minAmayu(comando);	
-			
-			
-			if (strcmp(comando,"QUIT") == 0)
-			{
-						
-				pConexion->Puerto = 0;
-				pConexion->len = 0;
-				printf("Cliente desconectandose... \n");
-			}
-			else
-			{ 
-				tipo = getTipo(comando);
-				comandoYCantidad = obtenerCadenaComandoYCantidad(comando,cantidadDeItems);	
-				datosSerializados = serializarDatos(tipo,cantidadDeItems,datos);
-				
-				err = trEnviar(pConexion,td_command,1,comandoYCantidad);
-				
-				if (err==RES_OK) err = trEnviar(pConexion,tipo,cantidadDeItems,datosSerializados);
-			}
-			
-			if (err == RES_NOT_OK) 	printf("No se ha podido enviar el mensaje. Reintente nuevamente\n");
-			if (err == RES_NOT_TOTAL_DATA) 	printf("No se ha podido enviar el mensaje completo. Reintente nuevamente\n");
-		
-
+			SDL_Quit();
+			return 0;
 		}
-		else 
-		{
-		
-			
-			if (err == RES_NOT_OK) 	printf("No se ha podido enviar el mensaje. Reintente nuevamente\n");
-			if (err == RES_NOT_TOTAL_DATA) 	printf("No se ha podido enviar el mensaje completo. Reintente nuevamente\n");
-			
-			
-			printf("El mensaje que ha querido enviar posee un formato invalido. Reintente nuevamente. \n");
 
-		}		
-		printf("Enviar: ");
+		char * datosEntrada =handle_input(event);
+		
+		if(datosEntrada!=NULL)
+		{
+			printf("Evento que quiero enviar %s" , datosEntrada);
+
+			int cantidadDeItems = 0;
+			char* datos = NULL; // contenido posterior al comando
+			int resultadoValidacion = validar(datosEntrada,&cantidadDeItems, &datos);
+
+
+				
+			if ( resultadoValidacion == VALIDACION_OK )
+			{
+				void* datosSerializados;
+				char* comando = strtok(datosEntrada," ");
+				char* comandoYCantidad ;
+				enum tr_tipo_dato tipo;
+				
+				minAmayu(comando);	
+				
+				
+				if (strcmp(comando,"QUIT") == 0)
+				{
+							
+					pConexion->Puerto = 0;
+					pConexion->len = 0;
+					printf("Cliente desconectandose... \n");
+				}
+				else
+				{ 
+					tipo = getTipo(comando);
+					comandoYCantidad = obtenerCadenaComandoYCantidad(comando,cantidadDeItems);	
+					datosSerializados = serializarDatos(tipo,cantidadDeItems,datos);
+					
+					err = trEnviar(pConexion,td_command,1,comandoYCantidad);
+					
+					if (err==RES_OK) err = trEnviar(pConexion,tipo,cantidadDeItems,datosSerializados);
+				}
+				
+				if (err == RES_NOT_OK) 	printf("No se ha podido enviar el mensaje. Reintente nuevamente\n");
+				if (err == RES_NOT_TOTAL_DATA) 	printf("No se ha podido enviar el mensaje completo. Reintente nuevamente\n");
+			
+
+			}
+			else 
+			{
+			
+				
+				if (err == RES_NOT_OK) 	printf("No se ha podido enviar el mensaje. Reintente nuevamente\n");
+				if (err == RES_NOT_TOTAL_DATA) 	printf("No se ha podido enviar el mensaje completo. Reintente nuevamente\n");
+				
+				
+				printf("El mensaje que ha querido enviar posee un formato invalido. Reintente nuevamente. \n");
+
+			}		
+			printf("Enviar: ");
+		}
 	}
-	
+		
 
 	return 0;
 }
@@ -394,10 +408,12 @@ int main(int argc, char* argv[])
 
 	printf("Conexion establecida....\n ");
 
+	/*
 	threadInit = CreateThread(NULL,0,initFunction,NULL,0,NULL);	
 	
 	WaitForSingleObject(threadInit,INFINITE);		
 	CloseHandle(threadInit);
+	*/
 
 	threadWriter = CreateThread(NULL,0,writeFunction,NULL,0,NULL);	
 	threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);
