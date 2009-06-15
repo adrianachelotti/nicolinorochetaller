@@ -431,15 +431,16 @@ int main(int argc, char* argv[]){
 		threadInit[0]= CreateThread(NULL,0,sendFunction,&initPackage,0,NULL);
 		
 		
-		WaitForSingleObject(threadInit[0],10000);
+		WaitForSingleObjectEx(threadInit[0],10000,true);
 		
 		threadInit[1]= CreateThread(NULL,0,sendFunction2,&initPackage2,0,NULL);
 		
-		WaitForSingleObject(threadInit[1],10000);
+		WaitForSingleObjectEx(threadInit[1],10000,true);
 
 
 		CloseHandle(threadInit[0]);		
 		CloseHandle(threadInit[1]);		
+		
 		printf("Finalizando...........\n");
 		threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);	
 		Sleep(10);
@@ -448,8 +449,8 @@ int main(int argc, char* argv[]){
 		processing = CreateThread(NULL, 0, iAmProcessing, NULL, 0, NULL);
 		Sleep(10);
 		
-		WaitForSingleObject(threadReader, INFINITE);
-		WaitForSingleObject(threadReader2, INFINITE);
+		WaitForSingleObject(readFunction, INFINITE);
+		WaitForSingleObject(readFunction2, INFINITE);
 		WaitForSingleObject(processing, INFINITE);
 		
 		CloseHandle(threadReader);		
