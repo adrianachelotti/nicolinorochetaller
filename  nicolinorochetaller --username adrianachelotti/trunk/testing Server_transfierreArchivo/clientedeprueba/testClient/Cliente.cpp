@@ -214,36 +214,54 @@ DWORD WINAPI readFunction(LPVOID param)
 	return 0;
 }
 
+
+
+DWORD WINAPI initFunction(LPVOID param) 
+{
+	int i = 0;
+	while(i<3)
+	{
+		block_recv(pConexion->socketAccept);		
+		i++;
+	
+	}
+
+	return 0;
+}
+
+
+
 char*  handle_input(SDL_Event event)
 {
     //si el evento fue que se presiono una tecla
 	char*  auxiliar = (char*)malloc(32);
-
+	strcpy(auxiliar,"");
 	if( event.type == SDL_KEYDOWN )
     {
         switch( event.key.keysym.sym )
         {
 			// si se presiono la flecha down
 			case SDLK_DOWN:
-				strcpy(auxiliar,"STRING ABAJO\0");
+				strcpy(auxiliar,"STRING ABAJO\n");
 				return auxiliar;
 			
 				break;
 			// si se presiono la flecha down
 			case SDLK_UP:
-				 strcpy(auxiliar,"STRING ARRIBA\0");
+				 strcpy(auxiliar,"STRING ARRIBA\n");
 				 return auxiliar;
 				 break;
          
 			case SDLK_SPACE:
-				strcpy(auxiliar, "STRING BARRA\0");
+				strcpy(auxiliar, "STRING BARRA\n");
 				return auxiliar;
 				 break;
         }
 
     }
+	strcpy(auxiliar, "STRING NADA\n");
+	return auxiliar;
 	
-	return NULL;
 
 }
 /*****************************************************************/
@@ -255,10 +273,34 @@ DWORD WINAPI writeFunction(LPVOID param)
 {
 	int err = 0;
 	printf("Enviar: ");
+	SDL_Surface* screen ;
+	crearPantalla(screen);
+	SDL_Event event;
+		// Eventos considerados:
+	SDL_EventState(SDL_KEYDOWN,SDL_ENABLE);
+	SDL_EventState(SDL_QUIT ,SDL_ENABLE);
+
+	// Eventos ignorados:
+	SDL_EventState(SDL_ACTIVEEVENT,SDL_IGNORE);
+	SDL_EventState(SDL_KEYUP,SDL_IGNORE);
+	SDL_EventState(SDL_MOUSEMOTION,SDL_IGNORE);
+	SDL_EventState(SDL_MOUSEBUTTONDOWN,SDL_IGNORE);
+	SDL_EventState(SDL_MOUSEBUTTONUP,SDL_IGNORE);
+	SDL_EventState(SDL_JOYAXISMOTION,SDL_IGNORE);
+	SDL_EventState(SDL_JOYBALLMOTION,SDL_IGNORE);
+	SDL_EventState(SDL_JOYHATMOTION,SDL_IGNORE);
+	SDL_EventState(SDL_JOYBUTTONDOWN,SDL_IGNORE);
+	SDL_EventState(SDL_JOYBUTTONUP,SDL_IGNORE);
+	SDL_EventState(SDL_SYSWMEVENT,SDL_IGNORE);
+	SDL_EventState(SDL_VIDEORESIZE,SDL_IGNORE);
+	SDL_EventState(SDL_USEREVENT,SDL_IGNORE);
+
 
 	while(pConexion->len > 0) 
 	{
-		char * datosEntrada = readLine();
+		//SDL_PollEvent(&event);
+		SDL_WaitEvent(&event);
+		char * datosEntrada =handle_input(event);
 		printf("Evento que quiero enviar %s" , datosEntrada);
 
 		int cantidadDeItems = 0;
@@ -325,8 +367,8 @@ int main(int argc, char* argv[])
 {
 	int puerto;
 
-	HANDLE threadReader,threadWriter;
-
+	HANDLE threadReader,threadWriter, threadInit;
+	
 	pConexion =(CONEXION*) malloc(sizeof(CONEXION));
 
 	if(argc < 3)
@@ -352,16 +394,10 @@ int main(int argc, char* argv[])
 
 	printf("Conexion establecida....\n ");
 
+	threadInit = CreateThread(NULL,0,initFunction,NULL,0,NULL);	
 	
-	bool archivosYaTransferidos = false;
-
-	int i = 0;
-	while(i<3)
-	{
-		block_recv(pConexion->socketAccept);		
-		i++;
-	
-	}
+	WaitForSingleObject(threadInit,INFINITE);		
+	CloseHandle(threadInit);
 
 	threadWriter = CreateThread(NULL,0,writeFunction,NULL,0,NULL);	
 	threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);

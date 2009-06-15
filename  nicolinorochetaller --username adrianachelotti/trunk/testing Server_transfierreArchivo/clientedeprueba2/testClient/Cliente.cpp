@@ -213,6 +213,18 @@ DWORD WINAPI readFunction(LPVOID param)
 	}
 	return 0;
 }
+DWORD WINAPI initFunction(LPVOID param) 
+{
+	int i = 0;
+	while(i<3)
+	{
+		block_recv(pConexion->socketAccept);		
+		i++;
+	
+	}
+
+	return 0;
+}
 
 char*  handle_input(SDL_Event event)
 {
@@ -221,22 +233,22 @@ char*  handle_input(SDL_Event event)
 
 	if( event.type == SDL_KEYDOWN )
     {
-        switch( event.key.keysym.sym )
         {
 			// si se presiono la flecha down
+        switch( event.key.keysym.sym )
 			case SDLK_DOWN:
-				strcpy(auxiliar,"STRING ABAJO\0");
+				strcpy(auxiliar,"STRING ABAJO\n");
 				return auxiliar;
 			
 				break;
 			// si se presiono la flecha down
 			case SDLK_UP:
-				 strcpy(auxiliar,"STRING ARRIBA\0");
+				 strcpy(auxiliar,"STRING ARRIBA\n");
 				 return auxiliar;
 				 break;
          
 			case SDLK_SPACE:
-				strcpy(auxiliar, "STRING BARRA\0");
+				strcpy(auxiliar, "STRING BARRA\n");
 				return auxiliar;
 				 break;
         }
@@ -325,7 +337,7 @@ int main(int argc, char* argv[])
 {
 	int puerto;
 
-	HANDLE threadReader,threadWriter;
+	HANDLE threadReader,threadWriter, threadInit;
 
 	pConexion =(CONEXION*) malloc(sizeof(CONEXION));
 
@@ -352,19 +364,11 @@ int main(int argc, char* argv[])
 
 	printf("Conexion establecida....\n ");
 
+	threadInit = CreateThread(NULL,0,initFunction,NULL,0,NULL);	
 	
-	bool archivosYaTransferidos = false;
-
-	int i = 0;
-	while(i<3)
-	{
-		block_recv(pConexion->socketAccept);		
-		i++;
+	WaitForSingleObject(threadInit,INFINITE);		
+	CloseHandle(threadInit);
 	
-	}
-//	Sleep(10000);
-
-
 
 	threadWriter = CreateThread(NULL,0,writeFunction,NULL,0,NULL);	
 	threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);
