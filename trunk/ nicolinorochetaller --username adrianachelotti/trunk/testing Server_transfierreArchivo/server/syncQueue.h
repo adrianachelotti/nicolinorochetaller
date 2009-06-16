@@ -22,14 +22,14 @@ public:
 	syncQueue();
 	virtual ~syncQueue();
 	// push se encarga de agregar un elemento al final de la cola
-	void push(string x);
+	void push(char* x);
 	// pop se encarga de sacar un elemento del principio y eliminarlo al devolverlo
-	string pop();
+	char* pop();
 	// items cuenta la cantidad de elementos en la cola
 	int items();
 
 private:
-	list<string> q;
+	list<char*> q;
 	HANDLE semaforo;
 
 };

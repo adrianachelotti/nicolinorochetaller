@@ -9,23 +9,35 @@
 //////////////////////////////////////////////////////////////////////
 
 syncQueue::syncQueue()
-{
+{/*
 	this->semaforo = CreateSemaphore(NULL, 1, 20, NULL);
-	cout << "se crea el semaforo dentro de la cola" << endl;
+	cout << "se crea el semaforo dentro de la cola" << endl;*/
 }
 
 //////////////////////////////////////////////////////////////////////
 
 syncQueue::~syncQueue()
-{
+{/*
 	CloseHandle(this->semaforo);
-	cout << "se destruye el semaforo dentro de la cola" << endl;
+	cout << "se destruye el semaforo dentro de la cola" << endl;*/
 }
 
 
-
-
 ///////////////////////////////////////////////////////////////////////
+char* syncQueue::pop(){
+
+	char* ret;
+
+	ret = this->q.front();
+
+	this->q.pop_front();
+
+	return ret;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+/*
 string syncQueue::pop(){
 
 	string ret;
@@ -74,9 +86,16 @@ string syncQueue::pop(){
     return ret;
 }
 
+*/
+///////////////////////////////////////////////////////////////////////
+int syncQueue::items(){
+
+	return this->q.size();
+
+}
 
 ///////////////////////////////////////////////////////////////////////
-
+/*
 int syncQueue::items(){
 
 	int ret;
@@ -126,12 +145,22 @@ int syncQueue::items(){
 }
 
 	
-	
+*/	
 
 
 ///////////////////////////////////////////////////////////////////////
 
+void syncQueue::push(char* x){
 
+	this->q.push_back(x);
+
+	return;
+
+}
+
+
+///////////////////////////////////////////////////////////////////////
+/*
 void syncQueue::push(string x){
 
 	
@@ -178,3 +207,6 @@ void syncQueue::push(string x){
     return;
 	
 }
+
+*/
+
