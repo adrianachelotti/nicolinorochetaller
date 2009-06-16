@@ -427,18 +427,20 @@ int main(int argc, char* argv[]){
 
 	bool archivosYaTransferidos = false;
 
+	printf("Servidor escuchando ...\n");
+	trEscuchar(puerto,pConexion);	
+	printf("Cliente conectado...... servidor esperando al segundo cliente\n");
+	trEscuchar(puerto + 1, pConexion2);
+	printf("Cliente 2 conectado......\n");
+
 	if(pConexion->len != 0 && pConexion2->len != 0)
 	{
-		printf("Servidor escuchando ...\n");
-		trEscuchar(puerto,pConexion);	
-		printf("Cliente conectado...... servidor esperando al segundo cliente\n");
-		trEscuchar(puerto + 1, pConexion2);
-		printf("Cliente 2 conectado......\n");
+	/*	
 	
 		printf("Comienza la transferencias...........\n");
 		initPackage.setConexion(pConexion);
 		initPackage2.setConexion(pConexion2);
-	/*	
+		
 		threadInit[0]= CreateThread(NULL,0,sendFunction,&initPackage,0,NULL);
 		
 		
@@ -451,15 +453,16 @@ int main(int argc, char* argv[]){
 
 		CloseHandle(threadInit[0]);		
 		CloseHandle(threadInit[1]);		
-		*/
+	
 		
 		printf("Finalizando...........\n");
+	*/
 		threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);	
-		Sleep(10);
+
 		threadReader2 = CreateThread(NULL,0,readFunction2,NULL,0,NULL);
-		Sleep(10);
+
 		processing = CreateThread(NULL, 0, iAmProcessing, NULL, 0, NULL);
-		Sleep(10);
+
 		
 		WaitForSingleObject(readFunction, INFINITE);
 		WaitForSingleObject(readFunction2, INFINITE);
@@ -473,9 +476,11 @@ int main(int argc, char* argv[]){
 				
 		trCerrarConexion(pConexion);
 		trCerrarConexion(pConexion2);
+
+		free(pConexion);
+		free(pConexion2);
 	}
-	getchar();
-	printf("Presione una tecla para finalizar \n");
+	system("pause");
 	return 0;
 }
 
