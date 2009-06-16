@@ -16,6 +16,7 @@
 #include "Figura.h"
 #include "Textura.h"
 #include "Parser.h"
+#include "Circulo.h"
 
 using namespace std;
 

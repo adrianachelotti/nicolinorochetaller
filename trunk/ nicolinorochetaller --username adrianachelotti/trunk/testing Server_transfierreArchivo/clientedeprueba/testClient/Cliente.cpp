@@ -254,18 +254,40 @@ DWORD WINAPI writeFunction(LPVOID param)
 	
 	while(pConexion->len > 0) 
 	{
-		char * datosEntrada =NULL;
+		Sleep(800);
+		bool isOK= false;
+		char* datosEntrada = (char*)malloc(24);
+
+		
+		printf("envio:");
+	
 		if(!listaDeEventos.empty())
 		{
+			isOK= true;
 			toSendPackage* tsp = (toSendPackage*)(listaDeEventos.front());
 			listaDeEventos.pop_front();
 			string stringToSend = tsp->getData();
 			strcpy(datosEntrada,"");
 			strcpy(datosEntrada,stringToSend.c_str());
+			printf("desapilo %s", datosEntrada);
 		}
-	
+		/*else
 		
-		if(datosEntrada!=NULL)
+	/*		
+		SDL_Event event;
+		SDL_PollEvent(&event);
+		
+        if( event.key.keysym.sym ==SDLK_DOWN)
+		{
+			printf("STRING ABAJO\n");
+		}
+		//	printf("lista vacia");
+		
+	*/
+		/*strcpy(datosEntrada,"");
+		strcpy(datosEntrada,"STRING ARRIBA\n");*/
+		
+		if(isOK)
 		{
 			printf("Evento que quiero enviar %s" , datosEntrada);
 
@@ -278,11 +300,11 @@ DWORD WINAPI writeFunction(LPVOID param)
 			if ( resultadoValidacion == VALIDACION_OK )
 			{
 				void* datosSerializados;
-				char* comando = strtok(datosEntrada," ");
+				char* comando = "STRING";
 				char* comandoYCantidad ;
 				enum tr_tipo_dato tipo;
 				
-				minAmayu(comando);	
+			//	minAmayu(comando);	
 				
 				
 				if (strcmp(comando,"QUIT") == 0)
@@ -321,6 +343,7 @@ DWORD WINAPI writeFunction(LPVOID param)
 			}		
 			printf("Enviar: ");
 		}
+		free(datosEntrada);
 	}
 		
 
@@ -331,34 +354,38 @@ DWORD WINAPI writeFunction(LPVOID param)
 void  handle_input(SDL_Event event)
 {
     //si el evento fue que se presiono una tecla
-	char*  auxiliar = (char*)malloc(32);
+	char*  auxiliar= (char*) malloc(43);;
+	bool isOK = false;
 	toSendPackage* dataToSend = new toSendPackage() ;
 	strcpy(auxiliar,"");
-	
+
 	if( event.type == SDL_KEYDOWN )
     {
         switch( event.key.keysym.sym )
         {
 			// si se presiono la flecha down
 			case SDLK_DOWN:
-				strcpy(auxiliar,"STRING ABAJO\n");				
+				strcpy(auxiliar,"STRING ABAJO \n");	
+				isOK= true;
 				break;
 			// si se presiono la flecha down
 			case SDLK_UP:
-				 strcpy(auxiliar,"STRING ARRIBA\n");
-				
+				 strcpy(auxiliar,"STRING ARRIBA \n");
+				 isOK= true;
 				 break;
          
 			case SDLK_SPACE:
-				strcpy(auxiliar, "STRING BARRA\n");
-				
+				strcpy(auxiliar, "STRING BARRA \n");
+				isOK= true;
 				 break;
 			
         }
 		
     }
-	if(strcmp(auxiliar,"")!=0)
+	
+	if(isOK)
 	{
+		printf("apilo %s ",auxiliar);
 		dataToSend->setData(auxiliar);
 		listaDeEventos.push_back(dataToSend);
 		
@@ -392,6 +419,7 @@ DWORD WINAPI gameFunction(LPVOID param)
 	SDL_EventState(SDL_SYSWMEVENT,SDL_IGNORE);
 	SDL_EventState(SDL_VIDEORESIZE,SDL_IGNORE);
 	SDL_EventState(SDL_USEREVENT,SDL_IGNORE);
+	SDL_EnableKeyRepeat(2000, 2000);
 
 
 	crearPantalla();
@@ -406,6 +434,7 @@ DWORD WINAPI gameFunction(LPVOID param)
 		//SDL_Delay(5000);
 		SDL_Event event;
 		SDL_PollEvent(&event);
+		SDL_Delay(500);
 		handle_input(event);
 
 		Escenario* escenario = Escenario::obtenerInstancia();
@@ -416,7 +445,7 @@ DWORD WINAPI gameFunction(LPVOID param)
 		
 		tejo->setCentro(posicion);
 		Escenario::obtenerInstancia()->dibujar();
-		SDL_Delay(100);
+		SDL_Delay(10);
 		SDL_Flip(Escenario::screen);
 		i++; 	
 	}
@@ -470,7 +499,7 @@ int main(int argc, char* argv[])
 	threadWriter = CreateThread(NULL,0,writeFunction,NULL,0,NULL);	
 	threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);
 	
-//	WaitForSingleObject(threadGame,INFINITE);		
+	WaitForSingleObject(threadGame,INFINITE);		
 	WaitForSingleObject(threadWriter,INFINITE);	
 
 	CloseHandle(threadGame);
