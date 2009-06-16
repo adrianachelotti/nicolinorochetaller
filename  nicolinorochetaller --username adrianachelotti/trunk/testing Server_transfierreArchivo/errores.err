@@ -46,14 +46,11 @@ ADVERTENCIA: - El elemento no tiene textura asignada -
 Linea 15 - <posicion x="760" y="470"/>
 ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
 
-Linea 17 - <circulo id="tejo" colorFigura="255233000" radio="10" >
+Linea 17 - <circulo id="tejo" colorFigura="111000000" radio="20" colorLinea="111000000">
 ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
 
-Linea 17 - <circulo id="tejo" colorFigura="255233000" radio="10" >
+Linea 17 - <circulo id="tejo" colorFigura="111000000" radio="20" colorLinea="111000000">
 ADVERTENCIA: - El elemento no tiene textura asignada -
-
-Linea 17 - <circulo id="tejo" colorFigura="255233000" radio="10" >
-ADVERTENCIA: - No se encontro el color de Linea del elemento -
 
 Linea 18 - <posicion x="400" y="320"/>
 ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
@@ -86,4 +83,1138 @@ Linea 28 - <triangulo id="tri2"  idTextura="id3">
 ADVERTENCIA: - No se encontro el color de Fondo del elemento -
 
 Linea 28 - <triangulo id="tri2"  idTextura="id3">
-ADVERT
+ADVERTENCIA: - No se encontro el color de Linea del elemento -
+
+Linea 29 - <ver1 x="370" y="410"/>
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 30 - <ver2 x="430" y="410"/>
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 31 - <ver3 x="400" y="460"/>
+ADVERTENCIA: - Se encontro texto invalido dentro de la etiqueta -
+
+Linea 50 - </textura
+		<textura id="letraL" path="Debug/imagenes/L.bmp">
+ADVERTENCIA: - No se encontro el cierre de la textura -
+
+Linea 50 - </textura
+		<textura id="letraL" path="Debug/imagenes/L.bmp">
+ADVERTENCIA: - Se repite la etiqueta textura -
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Escenario
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: circ
+ADVERTENCA: - No pudo cargarse la textura con identificador: id2 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id6 - 
+
+Dibujando: Figura con identificador: tri1
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id3 - 
+
+Dibujando: Figura con identificador: tri2
+ADVERTENCA: - No pudo cargarse la textura con identificador: id1 - 
+
