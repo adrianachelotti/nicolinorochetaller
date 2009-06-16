@@ -132,6 +132,9 @@ int crearPantalla(SDL_Surface *screen)
 	//Graficador* graficador = Graficador::obtenerInstancia();
 	return 1;
 }
+
+
+/*Metodo encargado de recibir los archivos enviados por el servidor*/
 int block_recv(unsigned int &sock) 
 { 
 
@@ -213,6 +216,8 @@ DWORD WINAPI readFunction(LPVOID param)
 	}
 	return 0;
 }
+
+
 DWORD WINAPI initFunction(LPVOID param) 
 {
 	int i = 0;
@@ -225,6 +230,8 @@ DWORD WINAPI initFunction(LPVOID param)
 
 	return 0;
 }
+
+
 
 char*  handle_input(SDL_Event event)
 {
@@ -257,6 +264,9 @@ char*  handle_input(SDL_Event event)
 	return NULL;
 
 }
+
+
+
 /*****************************************************************/
 /* writeFunction: Función encargada de enviar al servidor lo     */
 /* ingresado por consola. Si lo ingresado no corresponde con el  */
@@ -363,11 +373,11 @@ int main(int argc, char* argv[])
 
 	printf("Conexion establecida....\n ");
 
-	threadInit = CreateThread(NULL,0,initFunction,NULL,0,NULL);	
+	/*threadInit = CreateThread(NULL,0,initFunction,NULL,0,NULL);	
 	
 	WaitForSingleObject(threadInit,INFINITE);		
 	CloseHandle(threadInit);
-	
+	*/
 
 	threadWriter = CreateThread(NULL,0,writeFunction,NULL,0,NULL);	
 	threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);

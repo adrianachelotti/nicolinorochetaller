@@ -22,6 +22,7 @@ Escenario::Escenario()
 	this->golesDerecho = 0;
 	this->golesIzquierdo = 0;
 	this->ultimoTocado = 0;
+	this->tejo = NULL;
 }
 
 Escenario::~Escenario()
@@ -273,9 +274,11 @@ Figura* Escenario::getFigura(string idFigura)
 	return NULL;
 }
 
-Figura* Escenario::getTejo()
+Circulo* Escenario::getTejo()
 {
 
+	if(this->tejo!=NULL) return this->tejo;
+	
 	bool encontrado = false;
 	string idFigura= "tejo";
 
@@ -301,9 +304,17 @@ Figura* Escenario::getTejo()
 	  }
     }
 	
-	if(encontrado) return figuraActual;
+	if(encontrado) return (Circulo*)figuraActual;
 	return NULL;
 }
+
+
+void Escenario::setTejo(Circulo* tejo)
+{
+	this->tejo = tejo;
+}
+
+
 
 
 void Escenario::imprimirError(string linea,FILE* archivoErrores,string err)

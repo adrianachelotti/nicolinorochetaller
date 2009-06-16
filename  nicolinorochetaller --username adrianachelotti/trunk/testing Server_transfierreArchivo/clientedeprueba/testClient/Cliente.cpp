@@ -19,6 +19,7 @@ extern "C"{
 #include "Pad.h"
 #include "Graficador.h"
 #include "Escenario.h"
+#include "Tejo.h"
 
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
@@ -64,9 +65,11 @@ void addError(string linea,FILE* archivoErrores,string err)
 }
 
 
-int crearPantalla(SDL_Surface *screen)
+/*Metodo encargado de crear el area de juego*/
+int crearPantalla()
 {
 	
+	SDL_Surface *screen;
 	Parser* parser = new Parser();
 
 	//Lectura de archivo y parser.
@@ -132,6 +135,9 @@ int crearPantalla(SDL_Surface *screen)
 	//Graficador* graficador = Graficador::obtenerInstancia();
 	return 1;
 }
+
+
+/*Metodo encargado de leer los archivos enviados por el servidor.*/
 int block_recv(unsigned int &sock) 
 { 
 
@@ -201,8 +207,32 @@ int block_recv(unsigned int &sock)
 DWORD WINAPI readFunction(LPVOID param) 
 {
 	void* datos;	
+	//crearPantalla();
+	//Escenario::obtenerInstancia()->dibujar();
+	crearPantalla();
+	Escenario::obtenerInstancia()->dibujar();
+	SDL_Flip(Escenario::screen);
+	Sleep(10000);
+	
 	while(pConexion->len > 0)
 	{
+		int i = 0;
+		while(i<200)
+		{
+			//SDL_Delay(5000);
+			cout<<i<<endl;
+			Escenario* escenario = Escenario::obtenerInstancia();
+			Circulo* tejo = escenario->getTejo();
+			Punto posicion = tejo->getCentro();
+			posicion.x+=1;
+			posicion.y+=1;
+			tejo->setCentro(posicion);
+			Escenario::obtenerInstancia()->dibujar();
+			SDL_Flip(Escenario::screen);
+			i++; 	
+		}
+		
+		
 		int cantItems = 1;
 		enum tr_tipo_dato tipo = td_command;		
 		if(trRecibir(pConexion,tipo,cantItems,&datos) != RES_OK)
@@ -211,6 +241,7 @@ DWORD WINAPI readFunction(LPVOID param)
 		{
 			
 			printf("Cliente 1 recibiendo del servidor: %s",datos);
+			SDL_Flip(Escenario::screen);
 		}
 	}
 	return 0;
@@ -276,10 +307,8 @@ DWORD WINAPI writeFunction(LPVOID param)
 {
 	int err = 0;
 	printf("Enviar: ");
-	SDL_Surface* screen ;
-	crearPantalla(screen);
 	SDL_Event event;
-		// Eventos considerados:
+	// Eventos considerados:
 	SDL_EventState(SDL_KEYDOWN,SDL_ENABLE);
 	SDL_EventState(SDL_QUIT ,SDL_ENABLE);
 
@@ -410,6 +439,7 @@ int main(int argc, char* argv[])
 
 	printf("Conexion establecida....\n ");
 
+	
 	/*
 	threadInit = CreateThread(NULL,0,initFunction,NULL,0,NULL);	
 	
