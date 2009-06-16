@@ -14,7 +14,7 @@
 		<rectangulo id="arco2" base="18" altura="300" colorFigura="255000000" colorLinea="000000000">
 			<posicion x="760" y="470"/>
 		</rectangulo> 
-		<circulo id="tejo" colorFigura="255233000" radio="10" >
+		<circulo id="tejo" colorFigura="111000000" radio="20" colorLinea="111000000">
 			<posicion x="400" y="320"/>
 		</circulo> 		
 		

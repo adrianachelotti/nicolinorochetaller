@@ -39,6 +39,8 @@ private:
 	int golesDerecho;
 	int golesIzquierdo;
 
+	Circulo* tejo;
+
     string texturaEscenario;	
 	Uint32 colorFondoEscenario;
 	
@@ -190,7 +192,11 @@ public:
 	SDL_Surface* getImagenEscenario();
 
 	/**/
-	Figura* getTejo();
+	Circulo* getTejo();
+
+	void setTejo(Circulo* tejo);
+
+
 };
 
 #endif 
