@@ -13,6 +13,7 @@ extern "C"{
 #include <windows.h> 
 #include <math.h>
 #include <SDL.h>
+#include <list>
 
 #include "Figura.h"
 #include "Arco.h"
@@ -20,6 +21,8 @@ extern "C"{
 #include "Graficador.h"
 #include "Escenario.h"
 #include "Tejo.h"
+#include "toSendPackage.h"
+
 
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
@@ -32,6 +35,8 @@ extern "C"{
 #define PORT_DEFAULT 5000
 
 CONEXION *pConexion;
+list<toSendPackage*> listaDeEventos ; 
+
 using namespace std;
 
 int getResoCompo(int reso1) {
@@ -199,7 +204,6 @@ int block_recv(unsigned int &sock)
 	return nbytes; 
 } 
 
-
 /*****************************************************************/
 /* readFunction: Función encargada de recibir lo que envia el    */
 /* servidor mientras la conexión se encuentre establecida        */
@@ -207,41 +211,17 @@ int block_recv(unsigned int &sock)
 DWORD WINAPI readFunction(LPVOID param) 
 {
 	void* datos;	
-	//crearPantalla();
-	//Escenario::obtenerInstancia()->dibujar();
-	crearPantalla();
-	Escenario::obtenerInstancia()->dibujar();
-	SDL_Flip(Escenario::screen);
-	Sleep(10000);
-	
 	while(pConexion->len > 0)
 	{
 		int i = 0;
-		while(i<200)
-		{
-			//SDL_Delay(5000);
-			cout<<i<<endl;
-			Escenario* escenario = Escenario::obtenerInstancia();
-			Circulo* tejo = escenario->getTejo();
-			Punto posicion = tejo->getCentro();
-			posicion.x+=1;
-			posicion.y+=1;
-			tejo->setCentro(posicion);
-			Escenario::obtenerInstancia()->dibujar();
-			SDL_Flip(Escenario::screen);
-			i++; 	
-		}
-		
-		
 		int cantItems = 1;
 		enum tr_tipo_dato tipo = td_command;		
 		if(trRecibir(pConexion,tipo,cantItems,&datos) != RES_OK)
 			pConexion->len = 0;
 		if(pConexion->len>0)
 		{
-			
 			printf("Cliente 1 recibiendo del servidor: %s",datos);
-			SDL_Flip(Escenario::screen);
+	
 		}
 	}
 	return 0;
@@ -262,42 +242,6 @@ DWORD WINAPI initFunction(LPVOID param)
 	return 0;
 }
 
-
-
-char*  handle_input(SDL_Event event)
-{
-    //si el evento fue que se presiono una tecla
-	char*  auxiliar = (char*)malloc(32);
-	strcpy(auxiliar,"");
-	if( event.type == SDL_KEYDOWN )
-    {
-        switch( event.key.keysym.sym )
-        {
-			// si se presiono la flecha down
-			case SDLK_DOWN:
-				strcpy(auxiliar,"STRING ABAJO\n");
-				return auxiliar;
-			
-				break;
-			// si se presiono la flecha down
-			case SDLK_UP:
-				 strcpy(auxiliar,"STRING ARRIBA\n");
-				 return auxiliar;
-				 break;
-         
-			case SDLK_SPACE:
-				strcpy(auxiliar, "STRING BARRA\n");
-				return auxiliar;
-				 break;
-			
-        }
-
-    }
-	//strcpy(auxiliar, "STRING NADA\n");
-	return NULL;
-	
-
-}
 /*****************************************************************/
 /* writeFunction: Función encargada de enviar al servidor lo     */
 /* ingresado por consola. Si lo ingresado no corresponde con el  */
@@ -306,42 +250,20 @@ char*  handle_input(SDL_Event event)
 DWORD WINAPI writeFunction(LPVOID param) 
 {
 	int err = 0;
-	printf("Enviar: ");
-	SDL_Event event;
-	// Eventos considerados:
-	SDL_EventState(SDL_KEYDOWN,SDL_ENABLE);
-	SDL_EventState(SDL_QUIT ,SDL_ENABLE);
-
-	// Eventos ignorados:
-	SDL_EventState(SDL_ACTIVEEVENT,SDL_IGNORE);
-	SDL_EventState(SDL_KEYUP,SDL_IGNORE);
-	SDL_EventState(SDL_MOUSEMOTION,SDL_IGNORE);
-	SDL_EventState(SDL_MOUSEBUTTONDOWN,SDL_IGNORE);
-	SDL_EventState(SDL_MOUSEBUTTONUP,SDL_IGNORE);
-	SDL_EventState(SDL_JOYAXISMOTION,SDL_IGNORE);
-	SDL_EventState(SDL_JOYBALLMOTION,SDL_IGNORE);
-	SDL_EventState(SDL_JOYHATMOTION,SDL_IGNORE);
-	SDL_EventState(SDL_JOYBUTTONDOWN,SDL_IGNORE);
-	SDL_EventState(SDL_JOYBUTTONUP,SDL_IGNORE);
-	SDL_EventState(SDL_SYSWMEVENT,SDL_IGNORE);
-	SDL_EventState(SDL_VIDEORESIZE,SDL_IGNORE);
-	SDL_EventState(SDL_USEREVENT,SDL_IGNORE);
-
-
+	printf("Se enviar Funcion: ");
+	
 	while(pConexion->len > 0) 
 	{
-		//SDL_PollEvent(&event);
-		//Sleep(200);
-		SDL_WaitEvent(&event);
-		SDL_Delay(200);
-		Sleep(200);
-		if(event.key.keysym.sym==SDLK_ESCAPE)
+		char * datosEntrada =NULL;
+		if(!listaDeEventos.empty())
 		{
-			SDL_Quit();
-			return 0;
+			toSendPackage* tsp = (toSendPackage*)(listaDeEventos.front());
+			listaDeEventos.pop_front();
+			string stringToSend = tsp->getData();
+			strcpy(datosEntrada,"");
+			strcpy(datosEntrada,stringToSend.c_str());
 		}
-
-		char * datosEntrada =handle_input(event);
+	
 		
 		if(datosEntrada!=NULL)
 		{
@@ -406,13 +328,111 @@ DWORD WINAPI writeFunction(LPVOID param)
 }
 
 
+void  handle_input(SDL_Event event)
+{
+    //si el evento fue que se presiono una tecla
+	char*  auxiliar = (char*)malloc(32);
+	toSendPackage* dataToSend = new toSendPackage() ;
+	strcpy(auxiliar,"");
+	
+	if( event.type == SDL_KEYDOWN )
+    {
+        switch( event.key.keysym.sym )
+        {
+			// si se presiono la flecha down
+			case SDLK_DOWN:
+				strcpy(auxiliar,"STRING ABAJO\n");				
+				break;
+			// si se presiono la flecha down
+			case SDLK_UP:
+				 strcpy(auxiliar,"STRING ARRIBA\n");
+				
+				 break;
+         
+			case SDLK_SPACE:
+				strcpy(auxiliar, "STRING BARRA\n");
+				
+				 break;
+			
+        }
+		
+    }
+	if(strcmp(auxiliar,"")!=0)
+	{
+		dataToSend->setData(auxiliar);
+		listaDeEventos.push_back(dataToSend);
+		
+	}
+	
+	
+
+}
+
+
+DWORD WINAPI gameFunction(LPVOID param) 
+{
+	//crearPantalla();
+	//Escenario::obtenerInstancia()->dibujar();
+	SDL_Event event;
+	// Eventos considerados:
+	SDL_EventState(SDL_KEYDOWN,SDL_ENABLE);
+	SDL_EventState(SDL_QUIT ,SDL_ENABLE);
+
+	// Eventos ignorados:
+	SDL_EventState(SDL_ACTIVEEVENT,SDL_IGNORE);
+	SDL_EventState(SDL_KEYUP,SDL_IGNORE);
+	SDL_EventState(SDL_MOUSEMOTION,SDL_IGNORE);
+	SDL_EventState(SDL_MOUSEBUTTONDOWN,SDL_IGNORE);
+	SDL_EventState(SDL_MOUSEBUTTONUP,SDL_IGNORE);
+	SDL_EventState(SDL_JOYAXISMOTION,SDL_IGNORE);
+	SDL_EventState(SDL_JOYBALLMOTION,SDL_IGNORE);
+	SDL_EventState(SDL_JOYHATMOTION,SDL_IGNORE);
+	SDL_EventState(SDL_JOYBUTTONDOWN,SDL_IGNORE);
+	SDL_EventState(SDL_JOYBUTTONUP,SDL_IGNORE);
+	SDL_EventState(SDL_SYSWMEVENT,SDL_IGNORE);
+	SDL_EventState(SDL_VIDEORESIZE,SDL_IGNORE);
+	SDL_EventState(SDL_USEREVENT,SDL_IGNORE);
+
+
+	crearPantalla();
+	Escenario::obtenerInstancia()->dibujar();
+	SDL_Flip(Escenario::screen);
+	//Sleep(10000);
+	
+	int i = 0;
+	int quit =0;
+	while(true)
+	{
+		//SDL_Delay(5000);
+		SDL_Event event;
+		SDL_PollEvent(&event);
+		handle_input(event);
+
+		Escenario* escenario = Escenario::obtenerInstancia();
+		Circulo* tejo = escenario->getTejo();
+		Punto posicion = tejo->getCentro();
+		posicion.x+=1;
+		posicion.y+=1;
+		
+		tejo->setCentro(posicion);
+		Escenario::obtenerInstancia()->dibujar();
+		SDL_Delay(100);
+		SDL_Flip(Escenario::screen);
+		i++; 	
+	}
+		
+
+	return 0;
+}
+
+
 
 
 int main(int argc, char* argv[])
 {
 	int puerto;
 
-	HANDLE threadReader,threadWriter, threadInit;
+	HANDLE threadReader,threadWriter, threadInit, threadGame;
 	
 	pConexion =(CONEXION*) malloc(sizeof(CONEXION));
 
@@ -446,12 +466,14 @@ int main(int argc, char* argv[])
 	WaitForSingleObject(threadInit,INFINITE);		
 	CloseHandle(threadInit);
 	*/
-
+	threadGame = CreateThread(NULL,0,gameFunction,NULL,0,NULL);	
 	threadWriter = CreateThread(NULL,0,writeFunction,NULL,0,NULL);	
 	threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);
 	
-	WaitForSingleObject(threadWriter,INFINITE);		
+//	WaitForSingleObject(threadGame,INFINITE);		
+	WaitForSingleObject(threadWriter,INFINITE);	
 
+	CloseHandle(threadGame);
 	CloseHandle(threadWriter);
 	CloseHandle(threadReader);
 

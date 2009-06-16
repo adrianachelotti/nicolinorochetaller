@@ -207,6 +207,14 @@ SOURCE=..\Textura.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\toSendPackage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\toSendPackage.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\transferencia.c
 # End Source File
 # Begin Source File
