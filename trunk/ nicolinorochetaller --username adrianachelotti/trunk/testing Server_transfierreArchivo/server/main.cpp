@@ -424,12 +424,12 @@ DWORD WINAPI iAmProcessing(LPVOID param){
 			tsp2.setConexion(pConexion2);
 			
 			enviar[0] = CreateThread(NULL, 0, writeFunction, &tsp, 0, NULL);
-		//	enviar[1] = CreateThread(NULL, 0, writeFunction, &tsp2, 0, NULL);
-			WaitForSingleObject(enviar[0],INFINITE);
-			//WaitForMultipleObjects(2, enviar, TRUE, INFINITE);
+			enviar[1] = CreateThread(NULL, 0, writeFunction, &tsp2, 0, NULL);
+		//	WaitForSingleObject(enviar[0],INFINITE);
+			WaitForMultipleObjects(2, enviar, TRUE, INFINITE);
 		//	cout << endl << "termina la espera" << endl; // borrame
 			CloseHandle(enviar[0]);
-		//	CloseHandle(enviar[1]);
+			CloseHandle(enviar[1]);
 
 		}
 		else
