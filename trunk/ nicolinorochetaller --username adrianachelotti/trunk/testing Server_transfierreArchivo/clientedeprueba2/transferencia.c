@@ -1,3 +1,4 @@
+
 #include <transferencia.h>
 #include <stdio.h>
 #include <winsock2.h> //la cabecera para usar las funciones de winsock
@@ -8,6 +9,8 @@
 #include <utilidades.h>
 
 #pragma comment(lib,"ws2_32.lib")
+
+
 
 
 int trEscuchar(int Puerto, CONEXION *pConexion)
@@ -70,7 +73,7 @@ int trConectar(const char *pDireccion, int Puerto, CONEXION *pConexion )
 	{
 		return RES_NOT_OK;
 	}
-
+	
 	//Definimos la dirección a conectar que hemos recibido desde el gethostbyname
 	direc.sin_family = AF_INET;
 	direc.sin_port = htons((unsigned short)Puerto);
@@ -82,7 +85,7 @@ int trConectar(const char *pDireccion, int Puerto, CONEXION *pConexion )
 	{
 		return RES_NOT_OK;
 	}
-
+	WSAAsyncSelect(pConexion->socketListen,0, 0, FD_READ|FD_WRITE);
 	pConexion->len = pConexion->socketListen;
 	pConexion->socketAccept = pConexion->socketListen;
 		
@@ -94,15 +97,20 @@ int trConectar(const char *pDireccion, int Puerto, CONEXION *pConexion )
 int trEnviar(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, const void *datos)
 {
 	
-	void *datosAEnviar;
+	char *datosAEnviar;
 	int bytesTotalesAEnviar;
 	int bytesEnviados;
 	int resultado = RES_OK;
+	int error =0;
 
 	if(tipo == td_command)
 	{
 		bytesTotalesAEnviar = strlen((char*)datos) ;
-		pConexion->len = send(pConexion->socketAccept,(char*)datos,bytesTotalesAEnviar,0);
+		error= send(pConexion->socketAccept,(char*)datos,1024,0);
+		if(error<=0)printf("Error %d",error);
+		if(error ==SOCKET_ERROR)
+			return RES_NOT_TOTAL_DATA;
+		if(error>0) pConexion->len = error;
 		bytesEnviados = pConexion->len;
 	}
 	else
@@ -111,22 +119,25 @@ int trEnviar(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, const vo
 		bytesTotalesAEnviar = (cantItems * getTamanioTipoDato(tipo));
 	
 		datosAEnviar = malloc (bytesTotalesAEnviar);
-
 		//Copio a un bloque de memoria los datos a enviar
 		memcpy(datosAEnviar,datos,bytesTotalesAEnviar);
 			
 
-		pConexion->len = send( pConexion->socketAccept,datosAEnviar,bytesTotalesAEnviar,0);
+		error= send( pConexion->socketAccept,datosAEnviar,bytesTotalesAEnviar,0);
+		if(error<=0)printf("Error %d",error);
+		if(error ==SOCKET_ERROR)
+		return RES_NOT_TOTAL_DATA;
+		if(error>0) pConexion->len = error;
 		bytesEnviados = pConexion->len;
 
 	}
 	
 	
 	
-	if ( bytesEnviados != bytesTotalesAEnviar ) 
+	/*if ( bytesEnviados != bytesTotalesAEnviar ) 
 	{  
 		resultado = RES_NOT_TOTAL_DATA;
-	}
+	}*/
 
 	return resultado;
 
@@ -137,7 +148,9 @@ int trEnviar(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, const vo
 int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void **datos)
 {
 	
-	
+	HANDLE    hIOMutex= CreateMutex (NULL, FALSE, NULL);
+	WaitForSingleObject( hIOMutex, INFINITE );
+
 	if(tipo == td_command)
 	{
 		char buffer[1024];
@@ -147,7 +160,7 @@ int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void **
 		
 		
 		pConexion->len=recv(pConexion->socketAccept,buffer,1024,0); //recibimos los datos que envie
-
+		printf("Buffer %s \n",buffer);
 
         
 		if(pConexion->len == 0 || strcmp(buffer,"") == 0)
@@ -160,7 +173,7 @@ int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void **
 			obtenerComandoYCantidadDeItems(buffer,&tipo,&cantItems);
 			
 			err=trRecibir(pConexion,tipo,cantItems,datos);
-		
+			ReleaseMutex( hIOMutex);
 			return err;
 		}
 
@@ -171,10 +184,10 @@ int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void **
 		
 		void* buffer = malloc (tamanioBuffer); 
 		
-		char* auxBuffer = (char*)buffer;
-
+		char* auxBuffer = (char*)buffer; 
 		int tamRec = 0;
 		int enviados = 0;
+		strcpy(auxBuffer,"");
 
 		tamanioBuffer = tamanioBuffer - getTamanioTipoDato(tipo);
 		while (enviados < tamanioBuffer) {
@@ -191,16 +204,19 @@ int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void **
 		}
 		else
 			{
-				*datos= desSerializarDatos(tipo,cantItems,buffer);	
+			//	printf("\nRecibido:  %s\n" , (char*)auxBuffer);
+				*datos= desSerializarDatos(tipo,cantItems,auxBuffer);	
 								
 				//printf("\nRecibido:  %s\n" , (char*)datos);
+			ReleaseMutex( hIOMutex);
 				printf("Enviar: ");
 				return RES_OK;			
 			}
-	//	free(buffer);
+		free(buffer);
 	
 
 	}
+	ReleaseMutex( hIOMutex);
 	
 	return RES_OK;
 
