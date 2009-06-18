@@ -22,16 +22,15 @@ extern "C"{
 #define PORT_DEFAULT 5000
 
 /*****************************
-	VARIABLES GLOBALES     (esto no se haaaaaace....)
+	VARIABLES GLOBALES     
 *****************************/
 
 CONEXION *pConexion, *pConexion2;
-syncQueue myq;
+syncQueue myq1,myq2 ;
 const int estadoInicial =0 ;
 const int estadoTransferencia =1 ;
 int estadoActual = -1;
 
-HANDLE semaforo;
 
 
 /****************************************************************************
@@ -76,11 +75,6 @@ char* getDataProcessed(char* dataSinPro){
 DWORD WINAPI readFunction(LPVOID param) 
 {
 	void* datos;
-	
-	DWORD dwWaitResult; 
-    
-	BOOL bContinue=TRUE;
-
 	while(pConexion->len > 0)
 	{
 		int cantItems = 1;
@@ -93,47 +87,10 @@ DWORD WINAPI readFunction(LPVOID param)
 		{
 			printf("Datos cliente 1: %s\n" , datos);
 
-			//	char* tempo = (char*)datos;
+	//	char* tempo = (char*)datos;
 		
-			//string tmp ((char*)datos);
-			
-			while(bContinue)
-			{
-				// Try to enter the semaphore gate.
-
-				dwWaitResult = WaitForSingleObject( 
-					semaforo,   // handle to semaphore
-					0L);           // zero-second time-out interval
-
-				switch (dwWaitResult) 
-				{ 
-					// The semaphore object was signaled.
-					case WAIT_OBJECT_0: 
-					// el semaforo deja pasar
-					myq.push((char*)datos);
-					bContinue=FALSE;   
-
-					// Release the semaphore when task is finished
-
-					if (!ReleaseSemaphore( 
-							semaforo,  // handle to semaphore
-							1,            // increase count by one
-							NULL) )       // not interested in previous count
-					{
-						//printf("ReleaseSemaphore error: %d\n", GetLastError());
-					}
-					break; 
-
-					// The semaphore was nonsignaled, so a time-out occurred.
-					case WAIT_TIMEOUT: 
-						printf("Thread %d: wait timed out\n", GetCurrentThreadId());
-						Sleep(100);
-						break; 
-				}
-
-			}
-
-
+		//string tmp ((char*)datos);
+			myq1.push((char*)datos);
 		}
 		
 		
@@ -151,64 +108,24 @@ DWORD WINAPI readFunction(LPVOID param)
 
 DWORD WINAPI readFunction2(LPVOID param) 
 {
-
-	DWORD dwWaitResult; 
-    
-	BOOL bContinue=TRUE;
 	
 	void* datos;
-
 	while(pConexion2->len > 0)
 	{
 		int cantItems = 1;
 		enum tr_tipo_dato tipo = td_command;		
 		
+		HANDLE    hIOMutex= CreateMutex (NULL, FALSE, NULL);
+		WaitForSingleObject( hIOMutex, INFINITE );
 
 		if(trRecibir(pConexion2,tipo,cantItems, &datos) != RES_OK)
 			pConexion2->len = 0;
-
+		ReleaseMutex( hIOMutex);
 		if(pConexion2->len > 0)
 		{
 			printf("Datos cliente 2: %s\n" , datos);
-			
-
-			while(bContinue)
-			{
-				// Try to enter the semaphore gate.
-
-				dwWaitResult = WaitForSingleObject( 
-					semaforo,   // handle to semaphore
-					0L);           // zero-second time-out interval
-
-				switch (dwWaitResult) 
-				{ 
-					// The semaphore object was signaled.
-					case WAIT_OBJECT_0: 
-					// el semaforo deja pasar
-					myq.push((char*)datos);
-					
-					bContinue=FALSE;   
-
-					// Release the semaphore when task is finished
-
-					if (!ReleaseSemaphore( 
-							semaforo,  // handle to semaphore
-							1,            // increase count by one
-							NULL) )       // not interested in previous count
-					{
-						//printf("ReleaseSemaphore error: %d\n", GetLastError());
-					}
-					break; 
-
-					// The semaphore was nonsignaled, so a time-out occurred.
-					case WAIT_TIMEOUT: 
-						printf("Thread %d: wait timed out\n", GetCurrentThreadId());
-						Sleep(100);
-						break; 
-				}
-
-			}
-			
+	
+			myq2.push((char*)datos);
 		}
 		
 
@@ -314,6 +231,7 @@ DWORD WINAPI sendFunction(LPVOID param)
 	return 0;
 
 }
+
 DWORD WINAPI sendFunction2(LPVOID param) 
 {
 	int err = 0;
@@ -440,58 +358,59 @@ DWORD WINAPI iAmProcessing(LPVOID param){
 	a los dos clientes una vez procesados */
 	
 	toSendPackage tsp, tsp2;
-	DWORD dwWaitResult;     
-	BOOL bContinue=TRUE;
 	char* dataSinPro;
-	string dataYaPro;
+	char* dataYaPro;
 	HANDLE enviar[2];
+	bool lastPopQ1= false;
+	bool lastPopQ2= false;
+	
 	while(pConexion->len > 0 && pConexion2->len > 0)
 	{
-		
-		while(bContinue)
+		bool isVacia = false;
+		//si solo tiene la cola 1
+		if((myq1.items() > 0)&&(myq2.items()<=0))
 		{
-			// Try to enter the semaphore gate.
-
-			dwWaitResult = WaitForSingleObject( 
-				semaforo,   // handle to semaphore
-				0L);           // zero-second time-out interval
-
-			switch (dwWaitResult) 
-			{ 
-				// The semaphore object was signaled.
-				case WAIT_OBJECT_0: 
-				// el semaforo deja pasar
-				if(myq.items() > 0)
-				{ // si hay algo para procesar
-					dataYaPro="";
-					dataYaPro=myq.pop();
-				}
-							
-				
-				bContinue=FALSE;   
-
-				// Release the semaphore when task is finished
-
-				if (!ReleaseSemaphore( 
-						semaforo,  // handle to semaphore
-						1,            // increase count by one
-						NULL) )       // not interested in previous count
-				{
-					//printf("ReleaseSemaphore error: %d\n", GetLastError());
-				}
-				break; 
-
-				// The semaphore was nonsignaled, so a time-out occurred.
-				case WAIT_TIMEOUT: 
-					printf("Thread %d: wait timed out\n", GetCurrentThreadId());
-					Sleep(100);
-					break; 
+		   dataYaPro="";
+		   dataYaPro=myq1.pop();
+		   lastPopQ1= true;
+		   lastPopQ2= false;
+		}
+		else
+		if((myq2.items() > 0)&&(myq1.items()<=0))
+		{
+		   dataYaPro="";
+		   dataYaPro=myq2.pop();
+		   lastPopQ1= false;
+		   lastPopQ2= true;
+		}
+		else
+		if((myq2.items() > 0)&&(myq1.items()>0))
+		{
+		   dataYaPro="";
+		   if(lastPopQ1)
+		   {
+				dataYaPro=myq2.pop();
+				lastPopQ1= false;
+			    lastPopQ2= true;
 			}
+			else if(lastPopQ2)
+			{
+				dataYaPro=myq1.pop();
+				lastPopQ1= true;
+				lastPopQ2= false;
+			}
+		}
+		else
+		{
+			if((myq2.items() <= 0)&&(myq1.items()<=0))
+			{
+				isVacia= true;
+			}
+		}
 
-		}// SALE DEL SEMAFORO
-			
 		// mientras que haya conexion con ambos clientes
-		
+		if(!isVacia)
+		{ // si hay algo para proce
 				//(char*)malloc(320);
 		//	strcpy(dataYaPro,"");
 		//	strcpy(dataYaPro , myq.pop().c_str()); // obtengo la data no procesada
@@ -502,19 +421,21 @@ DWORD WINAPI iAmProcessing(LPVOID param){
 			tsp2.setData(dataYaPro);
 			
 			tsp.setConexion(pConexion);
-
-			enviar[0] = CreateThread(NULL, 0, writeFunction, &tsp, 0, NULL);
-			
 			tsp2.setConexion(pConexion2);
 			
-			enviar[1] = CreateThread(NULL, 0, writeFunction, &tsp2, 0, NULL);
-			
-
-			WaitForMultipleObjects(2, enviar, TRUE, INFINITE);
-			cout << endl << "termina la espera" << endl; // borrame
+			enviar[0] = CreateThread(NULL, 0, writeFunction, &tsp, 0, NULL);
+		//	enviar[1] = CreateThread(NULL, 0, writeFunction, &tsp2, 0, NULL);
+			WaitForSingleObject(enviar[0],INFINITE);
+			//WaitForMultipleObjects(2, enviar, TRUE, INFINITE);
+		//	cout << endl << "termina la espera" << endl; // borrame
 			CloseHandle(enviar[0]);
-			CloseHandle(enviar[1]);
+		//	CloseHandle(enviar[1]);
 
+		}
+		else
+		{ // en caso de que no haya nada para procesar, aguantamos la mecha viteh fiera
+			Sleep(10); // igual son solo 10 milisegundos
+		}
 	}
 	
 	return TRUE;
@@ -532,7 +453,6 @@ int main(int argc, char* argv[]){
 	HANDLE processing;
 	HANDLE threadInit[2];
 	toSendPackage initPackage, initPackage2;
-	semaforo = CreateSemaphore(NULL, 1, 20, NULL);
 	initPackage.setData(".\\imagenesATransferir\\");
 	initPackage2.setData(".\\imagenesATransferir2\\");
 	pConexion = (CONEXION*)malloc(sizeof(CONEXION));
@@ -550,6 +470,10 @@ int main(int argc, char* argv[]){
 	
 	pConexion->Puerto = pConexion2->Puerto = puerto;
 
+
+	pConexion->len = 0;
+	pConexion2->len= 0;
+
 	bool archivosYaTransferidos = false;
 
 	printf("Servidor escuchando ...\n");
@@ -557,37 +481,26 @@ int main(int argc, char* argv[]){
 	printf("Cliente conectado...... servidor esperando al segundo cliente\n");
 	trEscuchar(puerto + 1, pConexion2);
 	printf("Cliente 2 conectado......\n");
+	
 
 	if(pConexion->len != 0 && pConexion2->len != 0)
 	{
-	/*	
-	
-		printf("Comienza la transferencias...........\n");
-		initPackage.setConexion(pConexion);
-		initPackage2.setConexion(pConexion2);
 		
-		threadInit[0]= CreateThread(NULL,0,sendFunction,&initPackage,0,NULL);
-		
-		
-		WaitForSingleObject(threadInit[0],INFINITE);
-		
-		threadInit[1]= CreateThread(NULL,0,sendFunction2,&initPackage2,0,NULL);
-		
-		WaitForSingleObject(threadInit[1],INFINITE);
+		char cadenaInicio[10];
+		strcpy(cadenaInicio,"INICIAR\0");
+
+		cout<<"Se inicia el juego"<<endl;
+		send(pConexion->socketAccept, cadenaInicio, 8, 0); 
+		send(pConexion2->socketAccept, cadenaInicio, 8, 0); 
+		Sleep(200);
 
 
-		CloseHandle(threadInit[0]);		
-		CloseHandle(threadInit[1]);		
-	
-		
-		printf("Finalizando...........\n");
-	*/
 		threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);	
-
+		Sleep(10);
 		threadReader2 = CreateThread(NULL,0,readFunction2,NULL,0,NULL);
-
+		Sleep(10);
 		processing = CreateThread(NULL, 0, iAmProcessing, NULL, 0, NULL);
-
+		Sleep(10);
 		
 		WaitForSingleObject(readFunction, INFINITE);
 		WaitForSingleObject(readFunction2, INFINITE);
@@ -596,17 +509,14 @@ int main(int argc, char* argv[]){
 		CloseHandle(threadReader);		
 		CloseHandle(threadReader2);
 		CloseHandle(processing);
-		CloseHandle(semaforo);
 		
 		
 				
 		trCerrarConexion(pConexion);
 		trCerrarConexion(pConexion2);
-
-		free(pConexion);
-		free(pConexion2);
 	}
-	system("pause");
+	getchar();
+	printf("Presione una tecla para finalizar \n");
 	return 0;
 }
 
