@@ -378,7 +378,13 @@ int main(int argc, char* argv[])
 	WaitForSingleObject(threadInit,INFINITE);		
 	CloseHandle(threadInit);
 	*/
-
+	bool iniciar = false;
+	char cadena[10];
+	while(!iniciar)
+	{
+		recv(pConexion->socketAccept,cadena,8,0);
+		if(strcmp(cadena,"INICIAR\0")==0) iniciar= true;
+	}
 	threadWriter = CreateThread(NULL,0,writeFunction,NULL,0,NULL);	
 	threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);
 	
