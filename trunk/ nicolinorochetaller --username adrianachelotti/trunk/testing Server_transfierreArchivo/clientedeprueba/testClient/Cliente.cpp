@@ -214,6 +214,8 @@ DWORD WINAPI readFunction(LPVOID param)
 	while(pConexion->len > 0)
 	{
 		int i = 0;
+		char* aux =(char*)malloc(34);
+		strcpy(aux,"");
 		int cantItems = 1;
 		enum tr_tipo_dato tipo = td_command;		
 		if(trRecibir(pConexion,tipo,cantItems,&datos) != RES_OK)
@@ -221,7 +223,7 @@ DWORD WINAPI readFunction(LPVOID param)
 		if(pConexion->len>0)
 		{
 			printf("Cliente 1 recibiendo del servidor: %s",datos);
-	
+			
 		}
 	}
 	return 0;
@@ -254,11 +256,10 @@ DWORD WINAPI writeFunction(LPVOID param)
 	
 	while(pConexion->len > 0) 
 	{
-		Sleep(800);
+		Sleep(1000);
 		bool isOK= false;
 		char* datosEntrada = (char*)malloc(24);
 
-		
 		printf("envio:");
 	
 		if(!listaDeEventos.empty())
@@ -269,24 +270,9 @@ DWORD WINAPI writeFunction(LPVOID param)
 			string stringToSend = tsp->getData();
 			strcpy(datosEntrada,"");
 			strcpy(datosEntrada,stringToSend.c_str());
-			printf("desapilo %s", datosEntrada);
+		//	printf("desapilo %s", datosEntrada);
 		}
-		/*else
-		
-	/*		
-		SDL_Event event;
-		SDL_PollEvent(&event);
-		
-        if( event.key.keysym.sym ==SDLK_DOWN)
-		{
-			printf("STRING ABAJO\n");
-		}
-		//	printf("lista vacia");
-		
-	*/
-		/*strcpy(datosEntrada,"");
-		strcpy(datosEntrada,"STRING ARRIBA\n");*/
-		
+				
 		if(isOK)
 		{
 			printf("Evento que quiero enviar %s" , datosEntrada);
@@ -300,8 +286,8 @@ DWORD WINAPI writeFunction(LPVOID param)
 			if ( resultadoValidacion == VALIDACION_OK )
 			{
 				void* datosSerializados;
-				char* comando = "STRING";
-				char* comandoYCantidad ;
+				char* comando = "STRING\0";
+				char* comandoYCantidad =NULL;
 				enum tr_tipo_dato tipo;
 				
 			//	minAmayu(comando);	
@@ -365,17 +351,17 @@ void  handle_input(SDL_Event event)
         {
 			// si se presiono la flecha down
 			case SDLK_DOWN:
-				strcpy(auxiliar,"STRING ABAJO \n");	
+				strcpy(auxiliar,"STRING ABAJO\0");	
 				isOK= true;
 				break;
 			// si se presiono la flecha down
 			case SDLK_UP:
-				 strcpy(auxiliar,"STRING ARRIBA \n");
+				 strcpy(auxiliar,"STRING ARRIBA\0");
 				 isOK= true;
 				 break;
          
 			case SDLK_SPACE:
-				strcpy(auxiliar, "STRING BARRA \n");
+				strcpy(auxiliar, "STRING BARRA\0");
 				isOK= true;
 				 break;
 			
@@ -385,10 +371,15 @@ void  handle_input(SDL_Event event)
 	
 	if(isOK)
 	{
-		printf("apilo %s ",auxiliar);
+	//	printf("apilo %s ",auxiliar);
 		dataToSend->setData(auxiliar);
 		listaDeEventos.push_back(dataToSend);
 		
+	}else
+	{
+		 strcpy(auxiliar,"STRING NAFA\0");
+		dataToSend->setData(auxiliar);
+	listaDeEventos.push_back(dataToSend);
 	}
 	
 	
@@ -419,7 +410,7 @@ DWORD WINAPI gameFunction(LPVOID param)
 	SDL_EventState(SDL_SYSWMEVENT,SDL_IGNORE);
 	SDL_EventState(SDL_VIDEORESIZE,SDL_IGNORE);
 	SDL_EventState(SDL_USEREVENT,SDL_IGNORE);
-	SDL_EnableKeyRepeat(2000, 2000);
+	//SDL_EnableKeyRepeat(2000, 2000);
 
 
 	crearPantalla();
@@ -431,10 +422,10 @@ DWORD WINAPI gameFunction(LPVOID param)
 	int quit =0;
 	while(true)
 	{
-		//SDL_Delay(5000);
+		//SDL_Delay(500);
 		SDL_Event event;
 		SDL_PollEvent(&event);
-		SDL_Delay(500);
+	//	SDL_Delay(500);
 		handle_input(event);
 
 		Escenario* escenario = Escenario::obtenerInstancia();
@@ -488,7 +479,13 @@ int main(int argc, char* argv[])
 
 	printf("Conexion establecida....\n ");
 
-	
+	bool iniciar = false;
+	char cadena[10];
+	while(!iniciar)
+	{
+		recv(pConexion->socketAccept,cadena,8,0);
+		if(strcmp(cadena,"INICIAR\0")==0) iniciar= true;
+	}
 	/*
 	threadInit = CreateThread(NULL,0,initFunction,NULL,0,NULL);	
 	
@@ -498,7 +495,8 @@ int main(int argc, char* argv[])
 	threadGame = CreateThread(NULL,0,gameFunction,NULL,0,NULL);	
 	threadWriter = CreateThread(NULL,0,writeFunction,NULL,0,NULL);	
 	threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);
-	
+
+	WaitForSingleObject(readFunction,INFINITE);			
 	WaitForSingleObject(threadGame,INFINITE);		
 	WaitForSingleObject(threadWriter,INFINITE);	
 
