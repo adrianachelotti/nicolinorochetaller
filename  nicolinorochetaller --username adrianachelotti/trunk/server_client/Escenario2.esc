@@ -1,0 +1,58 @@
+<escenario>
+<General resolucion="800" texturaFig="id1" texturaEsc="id1" colorFondoFig="255255255" colorLinea="000000000" >
+	</General>
+	<ListadoDeElementos>
+		<rectangulo id="pad1" base="20" altura="100" colorFigura="255255000" colorLinea="000000000">
+			<posicion x="700" y="370"/>
+		</rectangulo> 
+		<rectangulo id="pad2" base="20" altura="100" colorFigura="255255000" colorLinea="000000000">
+			<posicion x="80" y="370"/>
+		</rectangulo> 
+		<rectangulo id="arco1" base="18" altura="300" colorFigura="255000000" colorLinea="000000000">
+			<posicion x="20" y="470"/>
+		</rectangulo> 
+		<rectangulo id="arco2" base="18" altura="300" colorFigura="255000000" colorLinea="000000000">
+			<posicion x="760" y="470"/>
+		</rectangulo> 
+		<circulo id="tejo" colorFigura="111000000" radio="20" colorLinea="111000000">
+			<posicion x="400" y="320"/>
+		</circulo> 		
+		
+		<circulo id="circ" colorFigura="255233000"   idTextura="id2" radio="60" >
+			<posicion x="400" y="320"/>
+		</circulo> 		
+		<triangulo id="tri1" idTextura="id6" >
+			<ver1 x="370" y="230"/>
+			<ver2 x="430" y="230"/>
+			<ver3 x="400" y="180"/>
+		</triangulo> 		
+		<triangulo id="tri2"  idTextura="id3">
+			<ver1 x="370" y="410"/>
+			<ver2 x="430" y="410"/>
+			<ver3 x="400" y="460"/>
+		</triangulo> 		
+			
+		</ListadoDeElementos>
+	<ListadoDeTexturas>
+		<textura id="id1" path="Debug/imagenes/TheSimpsons.bmp">
+		</textura>
+		<textura id="id2" path="Debug/imagenes/dona.bmp">
+		</textura>
+		<textura id="id3" path="Debug/imagenes/arrow1.bmp">
+		</textura>
+		<textura id="id4" path="Debug/imagenes/arrow2.bmp">
+		</textura>
+		<textura id="id5" path="Debug/imagenes/arrow3.bmp">
+		</textura>
+		<textura id="id6" path="Debug/imagenes/arrow4.bmp">
+		</textura>
+		<textura id="letraG" path="Debug/imagenes/g.bmp">
+		</textura>
+		<textura id="letraO" path="Debug/imagenes/o.bmp">
+		</textura
+		<textura id="letraL" path="Debug/imagenes/L.bmp">
+		</textura>
+		<textura id="win" path="Debug/imagenes/win.bmp">
+		</textura>
+	</ListadoDeTexturas>	
+</escenario>
