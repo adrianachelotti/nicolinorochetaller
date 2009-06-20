@@ -283,7 +283,7 @@ DWORD WINAPI readFunction(LPVOID param)
 				Punto posicionNueva;
 				posicionNueva.x = posicionTejoX;
 				posicionNueva.y = posicionTejoY;
-			//	tejo->setCentro(posicionNueva);
+				tejo->setCentro(posicionNueva);
 			}
 		}
 	
@@ -385,24 +385,14 @@ DWORD WINAPI gameFunction(LPVOID param)
 	int quit =0;
 	while(true)
 	{
-		//SDL_Delay(500);
 		SDL_Event event;
 		SDL_PollEvent(&event);
-	//	SDL_Delay(500);
 		handle_input(event);
 
 		Escenario* escenario = Escenario::obtenerInstancia();
-		Circulo* tejo = escenario->getTejo();
-		Punto posicion = tejo->getCentro();
-		posicion.x+=1;
-		posicion.y+=1;
-		
-		tejo->setCentro(posicion);
 		Escenario::obtenerInstancia()->dibujar();
 		SDL_Delay(10);
 		SDL_Flip(Escenario::screen);
-		i++; 	
-
 	}
 		
 

@@ -286,7 +286,7 @@ DWORD WINAPI readFunction(LPVOID param)
 				Punto posicionNueva;
 				posicionNueva.x = posicionTejoX;
 				posicionNueva.y = posicionTejoY;
-			//	tejo->setCentro(posicionNueva);
+				tejo->setCentro(posicionNueva);
 				
 			}
 			else
