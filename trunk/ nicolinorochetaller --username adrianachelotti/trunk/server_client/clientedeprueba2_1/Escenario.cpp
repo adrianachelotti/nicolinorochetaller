@@ -274,7 +274,7 @@ Figura* Escenario::getFigura(string idFigura)
 	return NULL;
 }
 
-Circulo* Escenario::getTejo()
+/*Circulo* Escenario::getTejo()
 {
 
 	if(this->tejo!=NULL) return this->tejo;
@@ -306,10 +306,15 @@ Circulo* Escenario::getTejo()
 	
 	if(encontrado) return (Circulo*)figuraActual;
 	return NULL;
+}*/
+
+Tejo* Escenario::getTejo()
+{
+	return(this->tejo);
 }
 
 
-void Escenario::setTejo(Circulo* tejo)
+void Escenario::setTejo(Tejo* tejo)
 {
 	this->tejo = tejo;
 }

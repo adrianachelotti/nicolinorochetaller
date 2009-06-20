@@ -498,11 +498,11 @@ DWORD WINAPI readFunction(LPVOID param)
 				escenario->setPad1(pad1);
 				escenario->setPad2(pad2);
 
-				Circulo* tejo = escenario->getTejo();
+				Tejo* tejo = escenario->getTejo();
 				Punto posicionNueva;
 				posicionNueva.x = posicionTejoX;
 				posicionNueva.y = posicionTejoY;
-				tejo->setCentro(posicionNueva);
+				tejo->setPosicion(posicionNueva);
 
 				escenario->setTejo(tejo);
 			}

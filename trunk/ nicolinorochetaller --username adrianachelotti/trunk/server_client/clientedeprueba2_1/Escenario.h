@@ -20,7 +20,7 @@
 #include "Figura.h"
 #include "Textura.h"
 #include "Parser.h"
-#include "Circulo.h"
+#include "Tejo.h"
 #include "Pad.h"
 
 
@@ -40,7 +40,7 @@ private:
 	int longInicial;
 	int ultimoGol;
 
-	Circulo* tejo;
+	Tejo* tejo;
 	Pad* pad1;
 	Pad* pad2;
 
@@ -226,13 +226,14 @@ public:
 	SDL_Surface* getImagenEscenario();
 	void clearEscenario();
 
-	Circulo* getTejo();
+
 	void setPad1(Pad* pad1);
 	Pad* getPad1();
 	void setPad2(Pad* pad2);
 	Pad* getPad2();
 
-	void setTejo(Circulo* tejo);
+	Tejo* getTejo();
+	void setTejo(Tejo* tejo);
 };
 
 #endif 
