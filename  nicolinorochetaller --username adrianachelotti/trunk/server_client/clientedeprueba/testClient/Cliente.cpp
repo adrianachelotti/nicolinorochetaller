@@ -226,6 +226,7 @@ DWORD WINAPI readFunction(LPVOID param)
 		bool iniciarComunicacion=false;
 		bool iniciarGraficacion = false;
 		int comando = COMMAND_INVALID;
+		
 		while(!iniciarComunicacion && !iniciarGraficacion)
 		{
 			//TODO ver si se recibe todo
@@ -265,9 +266,33 @@ DWORD WINAPI readFunction(LPVOID param)
 		if(iniciarGraficacion)
 		{
 			char posiciones[16];
-			int error= recv(pConexion->socketAccept,posiciones,16,0);
-			if(error==-1) printf("No se recibio bien");
-			printf("recibir posiciones y dibujar");
+			int error = recv(pConexion->socketAccept,posiciones,16,0);
+			if(error>0)
+			{
+				pConexion->len = error;
+
+				int posicionYPadOne = *(int*)posiciones;
+				int posicionYPadTwo = *(int*)(posiciones+4);
+				int posicionTejoX = *(int*)(posiciones+8);
+				int posicionTejoY = *(int*)(posiciones+12);
+
+				cout<<"Posicion pad One: "<<posicionYPadOne<<endl;
+				cout<<"Posicion pad Two: "<<posicionYPadTwo<<endl;
+				cout<<"Posicion tejo X: "<<posicionTejoX<<endl;
+				cout<<"Posicion tejo Y: "<<posicionTejoY<<endl;
+
+				Escenario* escenario = Escenario::obtenerInstancia();
+				Circulo* tejo = escenario->getTejo();
+				Punto posicionNueva;
+				posicionNueva.x = posicionTejoX;
+				posicionNueva.y = posicionTejoY;
+			//	tejo->setCentro(posicionNueva);
+				
+			}
+			else
+			{
+				printf("Error en el envio del evento, intentar de nuevo");
+			}
 		}
 	
 	}
@@ -374,17 +399,10 @@ DWORD WINAPI gameFunction(LPVOID param)
 	//	SDL_Delay(500);
 		handle_input(event);
 
-		Escenario* escenario = Escenario::obtenerInstancia();
-		Circulo* tejo = escenario->getTejo();
-		Punto posicion = tejo->getCentro();
-		posicion.x+=1;
-		posicion.y+=1;
-		
-		tejo->setCentro(posicion);
 		Escenario::obtenerInstancia()->dibujar();
 		SDL_Delay(10);
 		SDL_Flip(Escenario::screen);
-		i++; 	
+		
 	}
 		
 

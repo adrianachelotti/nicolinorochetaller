@@ -16,6 +16,7 @@ extern "C"{
 #include "toSendPackage.h"
 #include "lectorDirectorios.h"
 
+
 #define TAMBUFFER 1024
 #define PORT_MAX 65535
 #define PORT_MIN 1023
@@ -472,7 +473,8 @@ int main(int argc, char* argv[])
 			CloseHandle(threadReader2);
 		    //proceso los datos
 			
-			void* posiciones =getDataProcessed();
+			void* posiciones = getDataProcessed();
+			
 			packageClientOne.setCommand(LISTEN_COMMAND);
 			packageClientOne.setPositions(posiciones);
 			packageClientOne.setConexion(pConexion);
