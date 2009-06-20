@@ -20,17 +20,7 @@
 		
 		<circulo id="circ" colorFigura="255233000"   idTextura="id2" radio="60" >
 			<posicion x="400" y="320"/>
-		</circulo> 		
-		<triangulo id="tri1" idTextura="id6" >
-			<ver1 x="370" y="230"/>
-			<ver2 x="430" y="230"/>
-			<ver3 x="400" y="180"/>
-		</triangulo> 		
-		<triangulo id="tri2"  idTextura="id3">
-			<ver1 x="370" y="410"/>
-			<ver2 x="430" y="410"/>
-			<ver3 x="400" y="460"/>
-		</triangulo> 		
+		</circulo> 				
 			
 		</ListadoDeElementos>
 	<ListadoDeTexturas>

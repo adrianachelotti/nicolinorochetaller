@@ -22,6 +22,7 @@ Escenario::Escenario()
 	this->golesDerecho = 0;
 	this->golesIzquierdo = 0;
 	this->ultimoTocado = 0;
+	this->ultimoGol = 1;
 	this->tejo = NULL;
 }
 
@@ -503,6 +504,16 @@ int Escenario::getUltimoTocado()
 	return(this->ultimoTocado);
 }
 
+int Escenario::getUltimoGol()
+{
+	return(this->ultimoGol);	
+}
+
+void Escenario::setUltimoGol(int gol)
+{
+	this->ultimoGol = gol;
+}
+
 void Escenario::setUtlimoTocado(int u)
 {
 	this->ultimoTocado = u;
@@ -556,6 +567,23 @@ void Escenario::setPad2(Pad* pad2)
 Pad* Escenario::getPad2()
 {
 	return (this->pad2);
+}
+
+void Escenario::setArco1(Arco* arco1)
+{
+	this->arco1 = arco1;
+}
+Arco* Escenario::getArco1()
+{
+	return(this->arco1);
+}
+void Escenario::setArco2(Arco* arco2)
+{
+	this->arco2 = arco2;
+}
+Arco* Escenario::getArco2()
+{	
+	return(this->arco2);
 }
 
 

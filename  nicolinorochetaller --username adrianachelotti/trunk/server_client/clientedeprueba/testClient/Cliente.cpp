@@ -625,7 +625,7 @@ DWORD WINAPI gameFunction(LPVOID param)
 		handle_input(event);
 		Sleep(75);
 		Escenario::obtenerInstancia()->dibujar();
-//		SDL_Delay(10);
+		//SDL_Delay(10);
 		SDL_Flip(Escenario::screen);
 		
 	}

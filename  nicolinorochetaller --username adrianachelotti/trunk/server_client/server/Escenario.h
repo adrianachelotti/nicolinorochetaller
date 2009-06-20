@@ -20,6 +20,7 @@
 #include <string>
 #include "Tejo.h"
 #include "Pad.h"
+#include "Arco.h"
 
 
 using namespace std;
@@ -40,6 +41,8 @@ private:
 	Tejo* tejo;
 	Pad* pad1;
 	Pad* pad2;
+	Arco* arco1;
+	Arco* arco2;
 
 	//0->izq 1->der
 	int ultimoTocado;
@@ -228,6 +231,12 @@ public:
 	Pad* getPad1();
 	void setPad2(Pad* pad2);
 	Pad* getPad2();
+
+	void setArco1(Arco* arco1);
+	Arco* getArco1();
+	void setArco2(Arco* arco2);
+	Arco* getArco2();
+
 
 	Tejo* getTejo();
 	void setTejo(Tejo* tejo);

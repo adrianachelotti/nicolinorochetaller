@@ -57,9 +57,236 @@ extern "C"{
 CONEXION *pConexion, *pConexion2;
 int command_Client_One =0;
 int command_Client_Two =0;
+bool tejoLanzado = false;
+
+
+/*** FUNCIONES DE ESCENARIO PARA SU CREACION ***///
+
+int getResoCompo(int reso1) {
+	int res2;
+	switch (reso1)
+	{
+		case 640:
+				res2 = 480;
+				break;
+		case 800:
+				res2 = 600;
+				break;
+		case 1024:
+				res2 = 768;
+				break;
+		case 1280:
+				res2 = 768;
+				break;
+	}
+	return res2;
+}
+
+void addError(string linea,FILE* archivoErrores,string err)
+{
+	fprintf(archivoErrores,"Programa principal: ");
+	if (!linea.empty()) fprintf(archivoErrores,linea.c_str());
+	fprintf(archivoErrores,"\n");
+	fprintf(archivoErrores,err.c_str());
+	fprintf(archivoErrores,"\n\n");
+}
+
+void calcularPosTejo(Tejo* pTejo, Pad* pad)
+{
+	Punto pos;
+	pos.y = (pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().y) - (pad->getRepresentacionGrafica()->getAltura()/2);
+	pos.x = (pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x) + (pad->getRepresentacionGrafica()->getBase()) + (pTejo->getRepresentacionGrafica()->getRadio()+1);
+	Circulo* cir = pTejo->getRepresentacionGrafica();
+	cir->setCentro(pos);
+	pTejo->setRepresentacionGrafica(cir);
+}
+
+void crearTejo(Tejo* pTejo,Pad* pad )
+{
+	Escenario* escenario = Escenario::obtenerInstancia();
+	list<Figura*> listaFiguras = escenario->listadoDeFiguras;
+	list<Figura*>::iterator it;
+	Figura* figuraActual;
+	size_t found;
+    it = listaFiguras.begin();
+	
+	Velocidad velocidadTejo; 
+	velocidadTejo.x = escenario->getVelox();
+	velocidadTejo.y = escenario->getVeloy();
+
+	pTejo->setVelocidad(velocidadTejo);
+
+	bool tejoBien = false;
+
+	while( it != listaFiguras.end()) 
+	{
+		figuraActual = *it;
+		string id = figuraActual->getId();
+		//si encontramos tri en el id es un tejo...
+		found = id.find("tejo");
+		
+		if (found != string::npos)
+		{
+			Circulo* cir = (Circulo*) figuraActual;
+			pTejo->setRepresentacionGrafica(cir);
+			calcularPosTejo(pTejo,pad);
+			escenario->setRadioInicial(cir->getRadio());
+			tejoBien = true;
+		}
+		it++;
+	}
+
+	escenario->setTejo(pTejo);
+	//TODO VERI QUE SE CREE IGUAL
+}	
+
+void posiPaleta(Pad* pad)
+{
+	Punto pos;
+	Escenario* escenario = Escenario::obtenerInstancia();
+	int alto = getResoCompo(escenario->getResolucion()); 
+	int reso = escenario->getResolucion();
+	Rectangulo* rec= pad->getRepresentacionGrafica();
+	
+	int parte = (alto-rec->getAltura())/2;
+	string id = rec->getId();
+	size_t found;
+
+	pos.y = parte + (rec->getAltura());
+	
+	found = id.find("pad1");	
+	if (found != string::npos)
+	{
+		pos.x = rec->getBase() * 4;
+	}
+	else 
+	{
+		pos.x = reso - (rec->getBase() * 4) - rec->getBase();
+	}
+	rec->setPosicionVerticeInferiorIzquierdo(pos);
+	pad->setRepresentacionGrafica(rec);
+}
 
 
 
+void crearPaletas(Pad* pad,Pad* pad1)
+{
+
+	Escenario* escenario = Escenario::obtenerInstancia();
+	list<Figura*> listaFiguras = escenario->listadoDeFiguras;
+	list<Figura*>::iterator it;
+	Figura* figuraActual;
+	size_t found;
+    it = listaFiguras.begin();
+	bool pad1Bien = false;
+	bool pad2Bien = false;
+
+	while( it != listaFiguras.end()) 
+	{
+		figuraActual = *it;
+		string id = figuraActual->getId();
+
+		//si encontramos tri en el id es un pad...
+		found = id.find("pad1");
+		
+		if (found != string::npos)
+		{
+			Rectangulo* rec = (Rectangulo*) figuraActual;
+			pad->setRepresentacionGrafica(rec);
+			escenario->setLongInicial(rec->getAltura());
+			posiPaleta(pad);
+			pad1Bien = true;
+		}
+
+		found = id.find("pad2");
+		if (found != string::npos)
+		{
+			Rectangulo* rec1 = (Rectangulo*) figuraActual;
+			pad1->setRepresentacionGrafica(rec1);
+			posiPaleta(pad1);
+			pad2Bien = true;
+		}
+		it++;
+	}
+	
+	escenario->setPad1(pad);
+	escenario->setPad2(pad1);
+
+	
+	//TODO VERI QUE SE CREE IGUAL
+}
+
+void calcularLadoPosArco(Arco* arco) 
+{
+	size_t found;
+	Punto pos;
+	Escenario* escenario = Escenario::obtenerInstancia();
+	int reso = getResoCompo(escenario->getResolucion()); 
+	Rectangulo* rec = (Rectangulo*)arco->getRepresentacionGrafica();
+	string id = rec->getId();
+	
+	//es igual para los dos
+	rec->setAltura(reso/2);
+	pos.y = ((reso - rec->getAltura()) / 2) + rec->getAltura();
+
+	found = id.find("arco1");
+	if (found != string::npos)
+	{
+		pos.x = rec->getBase();
+		rec->setPosicionVerticeInferiorIzquierdo(pos);
+		arco->setRepresentacionGrafica(rec);
+	}
+	else 
+	{
+		pos.x = (escenario->getResolucion()) - (2*rec->getBase());
+		rec->setPosicionVerticeInferiorIzquierdo(pos);
+		arco->setRepresentacionGrafica(rec);
+	}
+}
+
+void crearArcos(Arco* arco,Arco* arco1)
+{
+
+	Escenario* escenario = Escenario::obtenerInstancia();
+	list<Figura*> listaFiguras = escenario->listadoDeFiguras;
+	list<Figura*>::iterator it;
+	Figura* figuraActual;
+	size_t found;
+    it = listaFiguras.begin();
+	bool arcoBien = false;
+
+	while( it != listaFiguras.end()) 
+	{
+		figuraActual = *it;
+		string id = figuraActual->getId();
+
+		//si encontramos tri en el id es un pad...
+		found = id.find("arco1");
+		if (found != string::npos)
+		{
+			Rectangulo* rec = (Rectangulo*) figuraActual;
+			arco->setRepresentacionGrafica(rec);
+			calcularLadoPosArco(arco);
+			arcoBien = true;
+		}
+
+		found = id.find("arco2");
+		if (found != string::npos)
+		{
+			Rectangulo* rec1 = (Rectangulo*) figuraActual;
+			arco1->setRepresentacionGrafica(rec1);
+			calcularLadoPosArco(arco1);
+			arcoBien = true;
+		}
+		it++;
+	} 
+
+	escenario->setArco1(arco);
+	escenario->setArco2(arco1);
+	
+	//TODO VERI QUE SE CREEN LOS DOS ARCOA...
+
+}
 
 void imprimirComandos(int comando)
 {
@@ -116,9 +343,15 @@ void* getDataProcessed(float deltaTime,int lastTime)
 	int posicionPadY1 = pos1.y;
 	int posicionPadY2 = pos2.y;
 
+	
 	Tejo* tejo = escenario->getTejo();
 	int posicionTejoX = tejo->getPosicion().x;
 	int posicionTejoY = tejo->getPosicion().y;
+	
+	Arco* arco1 = escenario->getArco1();
+	Arco* arco2 = escenario->getArco2();
+	bool gol = false;
+	bool gol1 =  false;
 
 
 	if(command_Client_One==COMMAND_UP)
@@ -165,15 +398,125 @@ void* getDataProcessed(float deltaTime,int lastTime)
 			posicionPadY2 = pos2.y;
 		}
 	}
-	controlador->resolverChoqueConParedes(tejo);
-	controlador->resolverChoqueConPaleta(tejo,pad1);
-	controlador->resolverChoqueConPaleta(tejo,pad2); 
-	controlador->resolverChoqueDispersores(pad1,pad2,tejo,escenario,lastTime);
 
+	if((command_Client_One==COMMAND_SPACE) || (command_Client_Two==COMMAND_SPACE))
+	{
+		tejoLanzado = true;
+	}
 
-	tejo->moverTejo(deltaTime/2);
-	posicionTejoX = tejo->getPosicion().x;
-	posicionTejoY = tejo->getPosicion().y;
+	if (tejoLanzado == true)
+	{
+		//verifico gol en el arco de la izquierda
+		gol = controlador->hayChoqueConArco(tejo,arco1);
+		if (gol == true)
+		{
+			escenario->restarTejo();
+			escenario->sumaPuntajeDerecho(10);
+			escenario->setUltimoGol(1);
+			escenario->setUtlimoTocado(0);
+			escenario->sumarGolesDerecho();
+			tejoLanzado=false;
+
+			pad1->setPegamento(false);
+			pad1->getRepresentacionGrafica()->setAltura(escenario->getLongInicial());
+			posiPaleta(pad1);
+			
+			pad2->setPegamento(false);
+			pad2->getRepresentacionGrafica()->setAltura(escenario->getLongInicial());
+			posiPaleta(pad2);
+			
+			tejo->getRepresentacionGrafica()->setRadio(escenario->getRadioInicial());
+			calcularPosTejo(tejo,pad1);	
+			//escenario->sacarBonus(escenario->getListadoDeFiguras());		
+			//escenario->selectorDeDispersor(escenario->getListadoDeFiguras());
+
+			escenario->setPad1(pad1);
+			escenario->setPad2(pad2);
+			escenario->setTejo(tejo);
+
+			posicionPadY1 = pad1->getPosicion().y;
+			posicionPadY2 = pad2->getPosicion().y;
+			posicionTejoX = tejo->getPosicion().x;
+			posicionTejoY = tejo->getPosicion().y;
+		}
+		else
+		{
+			//verifico gol el el arco de la derecha
+			gol1 = controlador->hayChoqueConArco(tejo,arco2);
+			if (gol1 == true)
+			{
+				escenario->restarTejo();
+				escenario->sumaPuntajeIzquierdo(10);
+				escenario->setUltimoGol(0);
+				escenario->setUtlimoTocado(1);
+				escenario->sumarGolesIzquierdo();
+				tejoLanzado=false;
+
+				pad1->setPegamento(false);
+				pad1->getRepresentacionGrafica()->setAltura(escenario->getLongInicial());
+				posiPaleta(pad1);
+			
+				pad2->setPegamento(false);
+				pad2->getRepresentacionGrafica()->setAltura(escenario->getLongInicial());
+				posiPaleta(pad2);
+			
+				tejo->getRepresentacionGrafica()->setRadio(escenario->getRadioInicial());
+				calcularPosTejo(tejo,pad1);	
+				//escenario->sacarBonus(escenario->getListadoDeFiguras());		
+				//escenario->selectorDeDispersor(escenario->getListadoDeFiguras());
+
+				escenario->setPad1(pad1);
+				escenario->setPad2(pad2);
+				escenario->setTejo(tejo);
+
+				posicionPadY1 = pad1->getPosicion().y;
+				posicionPadY2 = pad2->getPosicion().y;
+				posicionTejoX = tejo->getPosicion().x;
+				posicionTejoY = tejo->getPosicion().y;
+			}
+			else
+			{
+				//verifico el resto de las cosas si no hay gol en ninguno de los dos arcos.
+				controlador->resolverChoqueConParedes(tejo);
+				if (controlador->resolverChoqueConPaleta(tejo,pad1) == true)
+				{
+					escenario->setUtlimoTocado(0);
+				}
+				if (controlador->resolverChoqueConPaleta(tejo,pad2) == true)
+				{
+					escenario->setUtlimoTocado(1);
+				}
+				controlador->resolverChoqueDispersores(pad1,pad2,tejo,escenario,lastTime);
+
+				tejo->moverTejo(deltaTime/5);
+				posicionTejoX = tejo->getPosicion().x;
+				posicionTejoY = tejo->getPosicion().y;
+
+			}
+		}
+	} 
+	else
+	{
+		Punto centroTejo;
+		if (escenario->getUltimoGol() == 1)
+		{	
+			posicionTejoX = pad1->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x + pad1->getRepresentacionGrafica()->getBase() + tejo->getRepresentacionGrafica()->getRadio();
+			posicionTejoY = pad1->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().y - (pad1->getRepresentacionGrafica()->getAltura()/2);
+			centroTejo.x = posicionTejoX;
+			centroTejo.y = posicionTejoY;
+			tejo->getRepresentacionGrafica()->setCentro(centroTejo);
+			escenario->setTejo(tejo); 
+		} 
+		else
+		{
+			posicionTejoX = pad2->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x - tejo->getRepresentacionGrafica()->getRadio();
+			posicionTejoY = pad2->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().y - (pad2->getRepresentacionGrafica()->getAltura()/2);
+			centroTejo.x = posicionTejoX;
+			centroTejo.y = posicionTejoY;
+			tejo->getRepresentacionGrafica()->setCentro(centroTejo);
+			escenario->setTejo(tejo); 
+		}
+	}
 	
 	//serializar posiciones
 	void*	resultado = malloc(4*sizeof(int));
@@ -458,230 +801,7 @@ DWORD WINAPI writeFunctionClient(LPVOID param)
 }
 
 
-/*** FUNCIONES DE ESCENARIO PARA SU CREACION ***///
 
-int getResoCompo(int reso1) {
-	int res2;
-	switch (reso1)
-	{
-		case 640:
-				res2 = 480;
-				break;
-		case 800:
-				res2 = 600;
-				break;
-		case 1024:
-				res2 = 768;
-				break;
-		case 1280:
-				res2 = 768;
-				break;
-	}
-	return res2;
-}
-
-void addError(string linea,FILE* archivoErrores,string err)
-{
-	fprintf(archivoErrores,"Programa principal: ");
-	if (!linea.empty()) fprintf(archivoErrores,linea.c_str());
-	fprintf(archivoErrores,"\n");
-	fprintf(archivoErrores,err.c_str());
-	fprintf(archivoErrores,"\n\n");
-}
-
-void calcularPosTejo(Tejo* pTejo, Pad* pad)
-{
-	Punto pos;
-	pos.y = (pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().y) - (pad->getRepresentacionGrafica()->getAltura()/2);
-	pos.x = (pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x) + (pad->getRepresentacionGrafica()->getBase()) + (pTejo->getRepresentacionGrafica()->getRadio()+1);
-	Circulo* cir = pTejo->getRepresentacionGrafica();
-	cir->setCentro(pos);
-	pTejo->setRepresentacionGrafica(cir);
-}
-
-void crearTejo(Tejo* pTejo,Pad* pad )
-{
-	Escenario* escenario = Escenario::obtenerInstancia();
-	list<Figura*> listaFiguras = escenario->listadoDeFiguras;
-	list<Figura*>::iterator it;
-	Figura* figuraActual;
-	size_t found;
-    it = listaFiguras.begin();
-	
-	Velocidad velocidadTejo; 
-	velocidadTejo.x = escenario->getVelox();
-	velocidadTejo.y = escenario->getVeloy();
-
-	pTejo->setVelocidad(velocidadTejo);
-
-	bool tejoBien = false;
-
-	while( it != listaFiguras.end()) 
-	{
-		figuraActual = *it;
-		string id = figuraActual->getId();
-		//si encontramos tri en el id es un tejo...
-		found = id.find("tejo");
-		
-		if (found != string::npos)
-		{
-			Circulo* cir = (Circulo*) figuraActual;
-			pTejo->setRepresentacionGrafica(cir);
-			calcularPosTejo(pTejo,pad);
-			escenario->setRadioInicial(cir->getRadio());
-			tejoBien = true;
-		}
-		it++;
-	}
-
-	escenario->setTejo(pTejo);
-	//TODO VERI QUE SE CREE IGUAL
-}	
-
-void posiPaleta(Pad* pad)
-{
-	Punto pos;
-	Escenario* escenario = Escenario::obtenerInstancia();
-	int alto = getResoCompo(escenario->getResolucion()); 
-	int reso = escenario->getResolucion();
-	Rectangulo* rec= pad->getRepresentacionGrafica();
-	
-	int parte = (alto-rec->getAltura())/2;
-	string id = rec->getId();
-	size_t found;
-
-	pos.y = parte + (rec->getAltura());
-	
-	found = id.find("pad1");	
-	if (found != string::npos)
-	{
-		pos.x = rec->getBase() * 4;
-	}
-	else 
-	{
-		pos.x = reso - (rec->getBase() * 4) - rec->getBase();
-	}
-	rec->setPosicionVerticeInferiorIzquierdo(pos);
-	pad->setRepresentacionGrafica(rec);
-}
-
-
-
-void crearPaletas(Pad* pad,Pad* pad1)
-{
-
-	Escenario* escenario = Escenario::obtenerInstancia();
-	list<Figura*> listaFiguras = escenario->listadoDeFiguras;
-	list<Figura*>::iterator it;
-	Figura* figuraActual;
-	size_t found;
-    it = listaFiguras.begin();
-	bool pad1Bien = false;
-	bool pad2Bien = false;
-
-	while( it != listaFiguras.end()) 
-	{
-		figuraActual = *it;
-		string id = figuraActual->getId();
-
-		//si encontramos tri en el id es un pad...
-		found = id.find("pad1");
-		
-		if (found != string::npos)
-		{
-			Rectangulo* rec = (Rectangulo*) figuraActual;
-			pad->setRepresentacionGrafica(rec);
-			escenario->setLongInicial(rec->getAltura());
-			posiPaleta(pad);
-			pad1Bien = true;
-		}
-
-		found = id.find("pad2");
-		if (found != string::npos)
-		{
-			Rectangulo* rec1 = (Rectangulo*) figuraActual;
-			pad1->setRepresentacionGrafica(rec1);
-			posiPaleta(pad1);
-			pad2Bien = true;
-		}
-		it++;
-	}
-	
-	escenario->setPad1(pad);
-	escenario->setPad2(pad1);
-
-	
-	//TODO VERI QUE SE CREE IGUAL
-}
-
-void calcularLadoPosArco(Arco* arco) 
-{
-	size_t found;
-	Punto pos;
-	Escenario* escenario = Escenario::obtenerInstancia();
-	int reso = getResoCompo(escenario->getResolucion()); 
-	Rectangulo* rec = (Rectangulo*)arco->getRepresentacionGrafica();
-	string id = rec->getId();
-	
-	//es igual para los dos
-	rec->setAltura(reso/2);
-	pos.y = ((reso - rec->getAltura()) / 2) + rec->getAltura();
-
-	found = id.find("arco1");
-	if (found != string::npos)
-	{
-		pos.x = rec->getBase();
-		rec->setPosicionVerticeInferiorIzquierdo(pos);
-		arco->setRepresentacionGrafica(rec);
-	}
-	else 
-	{
-		pos.x = (escenario->getResolucion()) - (2*rec->getBase());
-		rec->setPosicionVerticeInferiorIzquierdo(pos);
-		arco->setRepresentacionGrafica(rec);
-	}
-}
-
-void crearArcos(Arco* arco,Arco* arco1)
-{
-
-	Escenario* escenario = Escenario::obtenerInstancia();
-	list<Figura*> listaFiguras = escenario->listadoDeFiguras;
-	list<Figura*>::iterator it;
-	Figura* figuraActual;
-	size_t found;
-    it = listaFiguras.begin();
-	bool arcoBien = false;
-
-	while( it != listaFiguras.end()) 
-	{
-		figuraActual = *it;
-		string id = figuraActual->getId();
-
-		//si encontramos tri en el id es un pad...
-		found = id.find("arco1");
-		if (found != string::npos)
-		{
-			Rectangulo* rec = (Rectangulo*) figuraActual;
-			arco->setRepresentacionGrafica(rec);
-			calcularLadoPosArco(arco);
-			arcoBien = true;
-		}
-
-		found = id.find("arco2");
-		if (found != string::npos)
-		{
-			Rectangulo* rec1 = (Rectangulo*) figuraActual;
-			arco1->setRepresentacionGrafica(rec1);
-			calcularLadoPosArco(arco1);
-			arcoBien = true;
-		}
-		it++;
-	} 
-	
-	//TODO VERI QUE SE CREEN LOS DOS ARCOA...
-
-}
 
 int creacionEscenario()
 {
@@ -803,7 +923,7 @@ int main(int argc, char* argv[])
 		//ex ´procesing
 		while(pConexion->len > 0 && pConexion2->len > 0)
 		{
-			//Sleep(100);
+			Sleep(100);
 			thisTime = SDL_GetTicks();
 			deltaTime = (float)((thisTime - lastTime)/(float)1000 );
 			lastTime = thisTime; 
@@ -811,13 +931,13 @@ int main(int argc, char* argv[])
 			//threadReader = CreateThread(NULL,0,readFunctionClienteOne,NULL,0,NULL);	
 			readFunctionClienteOne(NULL);
 			//WaitForSingleObject(threadReader, INFINITE);
-			readFunctionClienteTwo(NULL);
 			//threadReader2 = CreateThread(NULL,0,readFunctionClienteTwo,NULL,0,NULL);
+			readFunctionClienteTwo(NULL);
 			//WaitForSingleObject(threadReader2, INFINITE);
 			// mientras que haya conexion con ambos clientes
 			
 
-			imprimirComandoClientes();
+		//	imprimirComandoClientes();
 			CloseHandle(threadReader);		
 			CloseHandle(threadReader2);
 		    //proceso los datos
