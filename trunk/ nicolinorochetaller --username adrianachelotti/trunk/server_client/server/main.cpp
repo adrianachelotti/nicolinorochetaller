@@ -57,10 +57,6 @@ extern "C"{
 CONEXION *pConexion, *pConexion2;
 int command_Client_One =0;
 int command_Client_Two =0;
-int posicionPadX1 = 40;
-int posicionPadY1 = 100;
-int posicionPadX2 = 560;
-int posicionPadY2 = 100;
 int posicionTejoX = 0;
 int posicionTejoY = 0;
 
@@ -116,52 +112,59 @@ void* getDataProcessed(float deltaTime)
 	Pad* pad1 = escenario->getPad1();
 	Pad* pad2 = escenario->getPad2();
 
+	Punto pos1 = pad1->getPosicion();
+	Punto pos2 = pad2->getPosicion();
+
+		
+	int posicionPadY1 = pos1.y;
+	int posicionPadY2 = pos2.y;
 
 	if(command_Client_One==COMMAND_UP)
 	{
-		if(pad1->getPosicion().y > pad1->getRepresentacionGrafica()->getAltura())
+		if(posicionPadY1 > pad1->getRepresentacionGrafica()->getAltura())
 		{
-			Punto pos1 = pad1->getPosicion();
 			pos1.y -= DELTA_Y*deltaTime;
 			pad1->getRepresentacionGrafica()->setPosicionVerticeInferiorIzquierdo(pos1);
 			escenario->setPad1(pad1);
+			posicionPadY1 = pos1.y;
 		}
 	}
 
 	if(command_Client_One==COMMAND_DOWN)
 	{
-		if (pad1->getPosicion().y < escenario->getAlto())
+		if (posicionPadY1 < escenario->getAlto())
 		{
-			Punto pos1 = pad1->getPosicion();
 			pos1.y += DELTA_Y * deltaTime;
 			pad1->getRepresentacionGrafica()->setPosicionVerticeInferiorIzquierdo(pos1);
 			escenario->setPad1(pad1);
+			posicionPadY1 = pos1.y;
 		}
 	}
 	
 	if(command_Client_Two==COMMAND_UP)
 	{
-		if(pad2->getPosicion().y > pad1->getRepresentacionGrafica()->getAltura())
+		if(posicionPadY2 > pad1->getRepresentacionGrafica()->getAltura())
 		{
-			Punto pos2 = pad2->getPosicion();
 			pos2.y -= DELTA_Y*deltaTime;
-			pad1->getRepresentacionGrafica()->setPosicionVerticeInferiorIzquierdo(pos2);
+			pad2->getRepresentacionGrafica()->setPosicionVerticeInferiorIzquierdo(pos2);
 			escenario->setPad2(pad2);
+			posicionPadY2 = pos2.y;
+
 		}
 	}
 
 	if(command_Client_Two==COMMAND_DOWN)
 	{
-		if (pad2->getPosicion().y < escenario->getAlto())
+		if (posicionPadY2 < escenario->getAlto())
 		{
-			Punto pos2 = pad2->getPosicion();
 			pos2.y += DELTA_Y * deltaTime;
 			pad2->getRepresentacionGrafica()->setPosicionVerticeInferiorIzquierdo(pos2);
 			escenario->setPad2(pad2);
+			posicionPadY2 = pos2.y;
 		}
 	}
-	posicionTejoX ++;
-	posicionTejoY ++;
+	posicionTejoX +=3;
+	posicionTejoY +=3;
 
 
 	//serializar posiciones
@@ -592,7 +595,11 @@ void crearPaletas(Pad* pad,Pad* pad1)
 			pad2Bien = true;
 		}
 		it++;
-	} 
+	}
+	
+	escenario->setPad1(pad);
+	escenario->setPad2(pad1);
+
 	
 	//TODO VERI QUE SE CREE IGUAL
 }
@@ -712,10 +719,7 @@ int creacionEscenario()
 	//free(nombre);
 	resultado = parser->validar(archivo,archivoErrores);	
 	delete(parser);
-}
 
-void crearElementosEscenario()
-{
 	Pad* pad = new Pad();
 	Pad* pad1 = new Pad();
 	crearPaletas(pad,pad1);
@@ -724,8 +728,8 @@ void crearElementosEscenario()
 	Arco* arco = new Arco();
 	Arco* arco1 = new Arco();
 	crearArcos(arco,arco1);
-}
 
+}
 
 
 int main(int argc, char* argv[])
@@ -735,7 +739,6 @@ int main(int argc, char* argv[])
    	int thisTime = 0;
    	int lastTime =  SDL_GetTicks();
 	int resultado = creacionEscenario();
-	crearElementosEscenario();
 
 
 	// Hilos que se usaran para la transferencia de datos a través del socket.
@@ -784,13 +787,13 @@ int main(int argc, char* argv[])
 		int inicioJuego = INIT_GAME;
 		send(pConexion->socketAccept, (char*)&inicioJuego, sizeof(int), 0); 
 		send(pConexion2->socketAccept, (char*)&inicioJuego, sizeof(int), 0); 
-		Sleep(200);
+		Sleep(2000);
 
 
 		//ex ´procesing
 		while(pConexion->len > 0 && pConexion2->len > 0)
 		{
-			Sleep(1000);
+			//Sleep(100);
 			thisTime = SDL_GetTicks();
 			deltaTime = (float)((thisTime - lastTime)/(float)1000 );
 			lastTime = thisTime; 
@@ -809,6 +812,7 @@ int main(int argc, char* argv[])
 		    //proceso los datos
 			
 			void* posiciones = getDataProcessed(deltaTime);
+			
 			packageClientOne.setCommand(LISTEN_COMMAND);
 			packageClientOne.setPositions(posiciones);
 			packageClientOne.setConexion(pConexion);

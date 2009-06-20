@@ -78,6 +78,194 @@ void addError(string linea,FILE* archivoErrores,string err)
 }
 
 
+void calcularPosTejo(Tejo* pTejo, Pad* pad)
+{
+	Punto pos;
+	pos.y = (pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().y) - (pad->getRepresentacionGrafica()->getAltura()/2);
+	pos.x = (pad->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x) + (pad->getRepresentacionGrafica()->getBase()) + (pTejo->getRepresentacionGrafica()->getRadio()+1);
+	Circulo* cir = pTejo->getRepresentacionGrafica();
+	cir->setCentro(pos);
+	pTejo->setRepresentacionGrafica(cir);
+}
+
+void crearTejo(Tejo* pTejo,Pad* pad )
+{
+	Escenario* escenario = Escenario::obtenerInstancia();
+	list<Figura*> listaFiguras = escenario->listadoDeFiguras;
+	list<Figura*>::iterator it;
+	Figura* figuraActual;
+	size_t found;
+    it = listaFiguras.begin();
+	
+	Velocidad velocidadTejo; 
+	velocidadTejo.x = escenario->getVelox();
+	velocidadTejo.y = escenario->getVeloy();
+
+	pTejo->setVelocidad(velocidadTejo);
+
+	bool tejoBien = false;
+
+	while( it != listaFiguras.end()) 
+	{
+		figuraActual = *it;
+		string id = figuraActual->getId();
+		//si encontramos tri en el id es un tejo...
+		found = id.find("tejo");
+		
+		if (found != string::npos)
+		{
+			Circulo* cir = (Circulo*) figuraActual;
+			pTejo->setRepresentacionGrafica(cir);
+			calcularPosTejo(pTejo,pad);
+			escenario->setRadioInicial(cir->getRadio());
+			tejoBien = true;
+		}
+		it++;
+	}
+	//TODO VERI QUE SE CREE IGUAL
+}	
+
+void posiPaleta(Pad* pad)
+{
+	Punto pos;
+	Escenario* escenario = Escenario::obtenerInstancia();
+	int alto = getResoCompo(escenario->getResolucion()); 
+	int reso = escenario->getResolucion();
+	Rectangulo* rec= pad->getRepresentacionGrafica();
+	
+	int parte = (alto-rec->getAltura())/2;
+	string id = rec->getId();
+	size_t found;
+
+	pos.y = parte + (rec->getAltura());
+	
+	found = id.find("pad1");	
+	if (found != string::npos)
+	{
+		pos.x = rec->getBase() * 4;
+	}
+	else 
+	{
+		pos.x = reso - (rec->getBase() * 4) - rec->getBase();
+	}
+	rec->setPosicionVerticeInferiorIzquierdo(pos);
+	pad->setRepresentacionGrafica(rec);
+}
+
+
+
+void crearPaletas(Pad* pad,Pad* pad1)
+{
+
+	Escenario* escenario = Escenario::obtenerInstancia();
+	list<Figura*> listaFiguras = escenario->listadoDeFiguras;
+	list<Figura*>::iterator it;
+	Figura* figuraActual;
+	size_t found;
+    it = listaFiguras.begin();
+	bool pad1Bien = false;
+	bool pad2Bien = false;
+
+	while( it != listaFiguras.end()) 
+	{
+		figuraActual = *it;
+		string id = figuraActual->getId();
+
+		//si encontramos tri en el id es un pad...
+		found = id.find("pad1");
+		
+		if (found != string::npos)
+		{
+			Rectangulo* rec = (Rectangulo*) figuraActual;
+			pad->setRepresentacionGrafica(rec);
+			escenario->setLongInicial(rec->getAltura());
+			posiPaleta(pad);
+			pad1Bien = true;
+		}
+
+		found = id.find("pad2");
+		if (found != string::npos)
+		{
+			Rectangulo* rec1 = (Rectangulo*) figuraActual;
+			pad1->setRepresentacionGrafica(rec1);
+			posiPaleta(pad1);
+			pad2Bien = true;
+		}
+		it++;
+	}
+	
+	//TODO VERI QUE SE CREE IGUAL
+}
+
+void calcularLadoPosArco(Arco* arco) 
+{
+	size_t found;
+	Punto pos;
+	Escenario* escenario = Escenario::obtenerInstancia();
+	int reso = getResoCompo(escenario->getResolucion()); 
+	Rectangulo* rec = (Rectangulo*)arco->getRepresentacionGrafica();
+	string id = rec->getId();
+	
+	//es igual para los dos
+	rec->setAltura(reso/2);
+	pos.y = ((reso - rec->getAltura()) / 2) + rec->getAltura();
+
+	found = id.find("arco1");
+	if (found != string::npos)
+	{
+		pos.x = rec->getBase();
+		rec->setPosicionVerticeInferiorIzquierdo(pos);
+		arco->setRepresentacionGrafica(rec);
+	}
+	else 
+	{
+		pos.x = (escenario->getResolucion()) - (2*rec->getBase());
+		rec->setPosicionVerticeInferiorIzquierdo(pos);
+		arco->setRepresentacionGrafica(rec);
+	}
+}
+
+void crearArcos(Arco* arco,Arco* arco1)
+{
+
+	Escenario* escenario = Escenario::obtenerInstancia();
+	list<Figura*> listaFiguras = escenario->listadoDeFiguras;
+	list<Figura*>::iterator it;
+	Figura* figuraActual;
+	size_t found;
+    it = listaFiguras.begin();
+	bool arcoBien = false;
+
+	while( it != listaFiguras.end()) 
+	{
+		figuraActual = *it;
+		string id = figuraActual->getId();
+
+		//si encontramos tri en el id es un pad...
+		found = id.find("arco1");
+		if (found != string::npos)
+		{
+			Rectangulo* rec = (Rectangulo*) figuraActual;
+			arco->setRepresentacionGrafica(rec);
+			calcularLadoPosArco(arco);
+			arcoBien = true;
+		}
+
+		found = id.find("arco2");
+		if (found != string::npos)
+		{
+			Rectangulo* rec1 = (Rectangulo*) figuraActual;
+			arco1->setRepresentacionGrafica(rec1);
+			calcularLadoPosArco(arco1);
+			arcoBien = true;
+		}
+		it++;
+	} 
+	
+	//TODO VERI QUE SE CREEN LOS DOS ARCOA...
+
+}
+
 /*Metodo encargado de crear el area de juego*/
 int crearPantalla()
 {
@@ -106,6 +294,7 @@ int crearPantalla()
 
 	archivo = fopen(nombre,"r");
 	Escenario* escenario = Escenario::obtenerInstancia();
+
 	if (archivo == NULL)
 	{
 		cout<<"No se pudo abrir el archivo: "<<nombre<<endl;
@@ -118,6 +307,20 @@ int crearPantalla()
 	
 	resultado = parser->validar(archivo,archivoErrores);	
 	
+	Pad* pad = new Pad();
+	Pad* pad1 = new Pad();
+	
+	crearPaletas(pad,pad1);
+	
+	escenario->setPad1(pad);
+	escenario->setPad2(pad1);
+
+
+	Tejo* pTejo = new Tejo();
+	crearTejo(pTejo,pad);
+	Arco* arco = new Arco();
+	Arco* arco1 = new Arco();
+	crearArcos(arco,arco1);
 
     escenario->setArchivoErrores(archivoErrores);
 
@@ -282,14 +485,34 @@ DWORD WINAPI readFunction(LPVOID param)
 				cout<<"Posicion tejo X: "<<posicionTejoX<<endl;
 				cout<<"Posicion tejo Y: "<<posicionTejoY<<endl;
 			*/
-
+								
+				
 				Escenario* escenario = Escenario::obtenerInstancia();
+				
+				Pad* pad1 = escenario->getPad1();
+				Pad* pad2 = escenario->getPad2();
+				
+				Punto posicionPad1 = pad1->getPosicion();
+				Punto posicionPad2 = pad2->getPosicion();
+
+				posicionPad1.y = posicionYPadOne;
+				posicionPad2.y = posicionYPadTwo;
+				
+				pad1->getRepresentacionGrafica()->setPosicionVerticeInferiorIzquierdo(posicionPad1);
+				pad2->getRepresentacionGrafica()->setPosicionVerticeInferiorIzquierdo(posicionPad2);
+
+				escenario->setPad1(pad1);
+				escenario->setPad2(pad2);
+
 				Circulo* tejo = escenario->getTejo();
 				Punto posicionNueva;
 				posicionNueva.x = posicionTejoX;
 				posicionNueva.y = posicionTejoY;
 				tejo->setCentro(posicionNueva);
+
+				escenario->setTejo(tejo);
 				
+			
 			}
 			else
 			{
