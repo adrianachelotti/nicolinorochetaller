@@ -504,11 +504,11 @@ DWORD WINAPI readFunction(LPVOID param)
 				escenario->setPad1(pad1);
 				escenario->setPad2(pad2);
 
-				Circulo* tejo = escenario->getTejo();
+				Tejo* tejo = escenario->getTejo();
 				Punto posicionNueva;
 				posicionNueva.x = posicionTejoX;
 				posicionNueva.y = posicionTejoY;
-				tejo->setCentro(posicionNueva);
+				tejo->setPosicion(posicionNueva);
 
 				escenario->setTejo(tejo);
 				
@@ -621,7 +621,7 @@ DWORD WINAPI gameFunction(LPVOID param)
 		SDL_Event event;
 		SDL_PollEvent(&event);
 		handle_input(event);
-
+		Sleep(75);
 		Escenario::obtenerInstancia()->dibujar();
 //		SDL_Delay(10);
 		SDL_Flip(Escenario::screen);

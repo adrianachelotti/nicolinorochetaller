@@ -46,7 +46,7 @@ extern "C"{
 #define LISTEN_COMMAND 15
 #define INIT_GAME 16
 
-#define DELTA_Y 700
+#define DELTA_Y 100
 #define DELTA_T 3
 
 
@@ -57,8 +57,6 @@ extern "C"{
 CONEXION *pConexion, *pConexion2;
 int command_Client_One =0;
 int command_Client_Two =0;
-int posicionTejoX = 0;
-int posicionTejoY = 0;
 
 
 
@@ -106,18 +104,22 @@ esto tendria que llamar a algoque procese los datos tipo "cliente uno arriba"
 char* mycstr = (char*) malloc(sizeof(char)*40);
 strcpy(mycstr, str.c_str() );
 **/
-void* getDataProcessed(float deltaTime)
+void* getDataProcessed(float deltaTime,int lastTime)
 {
 	Escenario* escenario = Escenario::obtenerInstancia(); 
+	ControladorDeChoque* controlador = new ControladorDeChoque();
+	
 	Pad* pad1 = escenario->getPad1();
 	Pad* pad2 = escenario->getPad2();
-
 	Punto pos1 = pad1->getPosicion();
 	Punto pos2 = pad2->getPosicion();
-
-		
 	int posicionPadY1 = pos1.y;
 	int posicionPadY2 = pos2.y;
+
+	Tejo* tejo = escenario->getTejo();
+	int posicionTejoX = tejo->getPosicion().x;
+	int posicionTejoY = tejo->getPosicion().y;
+
 
 	if(command_Client_One==COMMAND_UP)
 	{
@@ -163,10 +165,16 @@ void* getDataProcessed(float deltaTime)
 			posicionPadY2 = pos2.y;
 		}
 	}
-	posicionTejoX +=3;
-	posicionTejoY +=3;
+	controlador->resolverChoqueConParedes(tejo);
+	controlador->resolverChoqueConPaleta(tejo,pad1);
+	controlador->resolverChoqueConPaleta(tejo,pad2); 
+	controlador->resolverChoqueDispersores(pad1,pad2,tejo,escenario,lastTime);
 
 
+	tejo->moverTejo(deltaTime/2);
+	posicionTejoX = tejo->getPosicion().x;
+	posicionTejoY = tejo->getPosicion().y;
+	
 	//serializar posiciones
 	void*	resultado = malloc(4*sizeof(int));
 	memcpy(  (void*)((int)resultado) , &posicionPadY1, sizeof(int));
@@ -525,6 +533,8 @@ void crearTejo(Tejo* pTejo,Pad* pad )
 		}
 		it++;
 	}
+
+	escenario->setTejo(pTejo);
 	//TODO VERI QUE SE CREE IGUAL
 }	
 
@@ -798,11 +808,12 @@ int main(int argc, char* argv[])
 			deltaTime = (float)((thisTime - lastTime)/(float)1000 );
 			lastTime = thisTime; 
 	
-			threadReader = CreateThread(NULL,0,readFunctionClienteOne,NULL,0,NULL);	
-			WaitForSingleObject(threadReader, INFINITE);
-			
-			threadReader2 = CreateThread(NULL,0,readFunctionClienteTwo,NULL,0,NULL);
-			WaitForSingleObject(threadReader2, INFINITE);
+			//threadReader = CreateThread(NULL,0,readFunctionClienteOne,NULL,0,NULL);	
+			readFunctionClienteOne(NULL);
+			//WaitForSingleObject(threadReader, INFINITE);
+			readFunctionClienteTwo(NULL);
+			//threadReader2 = CreateThread(NULL,0,readFunctionClienteTwo,NULL,0,NULL);
+			//WaitForSingleObject(threadReader2, INFINITE);
 			// mientras que haya conexion con ambos clientes
 			
 
@@ -811,7 +822,7 @@ int main(int argc, char* argv[])
 			CloseHandle(threadReader2);
 		    //proceso los datos
 			
-			void* posiciones = getDataProcessed(deltaTime);
+			void* posiciones = getDataProcessed(deltaTime,lastTime);
 			
 			packageClientOne.setCommand(LISTEN_COMMAND);
 			packageClientOne.setPositions(posiciones);
