@@ -262,9 +262,29 @@ DWORD WINAPI readFunction(LPVOID param)
 		}
 		if(iniciarGraficacion)
 		{
-			printf("recibir posiciones y dibujar");
 			char posiciones[16];
-			int error= recv(pConexion->socketAccept,posiciones,16,0);
+			int error = recv(pConexion->socketAccept,posiciones,16,0);
+			if(error>0)
+			{
+				pConexion->len = error;
+
+				int posicionYPadOne = *(int*)posiciones;
+				int posicionYPadTwo = *(int*)(posiciones+4);
+				int posicionTejoX = *(int*)(posiciones+8);
+				int posicionTejoY = *(int*)(posiciones+12);
+
+				cout<<"Posicion pad One: "<<posicionYPadOne<<endl;
+				cout<<"Posicion pad Two: "<<posicionYPadTwo<<endl;
+				cout<<"Posicion tejo X: "<<posicionTejoX<<endl;
+				cout<<"Posicion tejo Y: "<<posicionTejoY<<endl;
+
+				Escenario* escenario = Escenario::obtenerInstancia();
+				Circulo* tejo = escenario->getTejo();
+				Punto posicionNueva;
+				posicionNueva.x = posicionTejoX;
+				posicionNueva.y = posicionTejoY;
+			//	tejo->setCentro(posicionNueva);
+			}
 		}
 	
 	}
