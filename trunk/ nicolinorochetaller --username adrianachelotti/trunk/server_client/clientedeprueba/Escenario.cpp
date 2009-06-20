@@ -513,6 +513,47 @@ void Escenario::setLongInicial(int l)
 	this->longInicial = l;
 }
 
+long Escenario::getVelox()
+{
+	return this->velox;
+}
+
+void Escenario::setVelox(long velox)
+{
+	this->velox = velox;
+}
+
+long Escenario::getVeloy()
+{
+	return this->veloy;
+}
+
+void Escenario::setVeloy(long veloy)
+{
+	this->veloy = veloy;
+}
+
+void Escenario::setPad1(Pad* pad1)
+{
+	this->pad1 = pad1;
+}	
+
+Pad* Escenario::getPad1()
+{
+	return (this->pad1);
+}
+
+void Escenario::setPad2(Pad* pad2)
+{
+	this->pad2 = pad2;
+}
+
+Pad* Escenario::getPad2()
+{
+	return (this->pad2);
+}
+
+
 int Escenario::getResoCompo(int reso1) 
 {
 	int res2;
@@ -538,4 +579,115 @@ SDL_Surface* Escenario::getImagenEscenario()
 {
 
 	return this->imagenEscenario;
+}
+
+string nombreBonus(int bonus)
+{
+	if (bonus == 1)
+	{
+		return("bonus1");
+	}
+	if (bonus == 2)
+	{
+		return("bonus2");
+	}
+	if (bonus == 3)
+	{
+		return("bonus3");
+	}
+	if (bonus == 4)
+	{
+		return("bonus4");
+	}
+	if (bonus == 5)
+	{
+		return("bonus5");
+	}
+	if (bonus == 6)
+	{
+		return("bonus6");
+	}
+	if (bonus == 7)
+	{
+		return("bonus7");
+	}
+	if (bonus == 8)
+	{
+		return("bonus8");
+	}
+	if (bonus == 9)
+	{
+		return("bonus9");
+	}
+}
+
+
+void Escenario::selectorDeDispersor(list<Figura*> figuras)
+{
+	//srand((unsigned)time(0)); 
+    int ranBonus;
+	int ranDisper;
+    int lowestBonus=1, highestBonus=9;
+	int lowestDisper = 1, highestDisper = figuras.size()-5;
+
+    int rangeBonus = (highestBonus-lowestBonus)+1;
+	int rangeDisper = (highestDisper-lowestDisper)+1;
+ 
+
+    ranBonus = lowestBonus+int(rangeBonus*rand()/(RAND_MAX + 1.0));
+	ranDisper = lowestDisper+int(rangeDisper*rand()/(RAND_MAX + 1.0));
+
+	list<Figura*>::iterator it;
+	Figura* figuraActual;
+	it = figuras.begin();
+	int contador = 0;
+	while( it != figuras.end())
+	{
+	  contador++;
+      figuraActual = *it;
+	  if ((contador - 5) == ranDisper) 
+	  {
+		  if (figuraActual->getBonus != 0)
+		  {
+			  //solo para probar
+				cout<<"FIGURA QUE SE LE ASIGNA BONUS: "<<figuraActual->getId()<<endl;
+				cout<<"BONUS ASIGANADO "<<ranBonus<<endl;
+				figuraActual->setBonus(ranBonus);
+				figuraActual->setIdTextura(nombreBonus(ranBonus));
+				figuraActual->setImagenFigura(NULL);
+		  }
+	  }
+	  it++;
+    }
+}
+
+void Escenario::sacarBonus(list<Figura*> listaFiguras)
+{
+	list<Figura*>::iterator it;
+	Figura* figuraActual;
+	it = listaFiguras.begin();
+	int contador=0;
+	while( it != listaFiguras.end())
+	{
+	  contador++;
+	  if (contador>4)
+	  {
+		figuraActual = *it;
+		figuraActual->setBonus(0);
+		figuraActual->setIdTextura("ninguna");
+	  }
+	  it++;
+    }
+
+}
+
+void Escenario::clearEscenario()
+{
+	this->listadoDeFiguras.clear();
+	this->listadoDeTexturas.clear();
+	this->golesDerecho = 0;
+	this->golesIzquierdo = 0;
+	this->ultimoTocado = 0;
+	this->tejos = TEJOS;
+	this->imagenEscenario = NULL;
 }
