@@ -46,6 +46,41 @@ int posicionTejoY = 0;
 
 
 
+void imprimirComandos(int comando)
+{
+	if(comando==COMMAND_UP)
+	{
+		printf("ARRIBA");
+	}
+
+	if(comando==COMMAND_DOWN)
+	{
+		printf("ABAJO");
+	}
+	
+	if(comando==COMMAND_SPACE)
+	{
+		printf("BARRA");
+	}
+	
+	if(comando==COMMAND_INVALID)
+	{
+		printf("NADA");
+	}
+
+
+}
+void imprimirComandoClientes()
+{
+	printf("Cliente 1: ");
+	imprimirComandos(command_Client_One);
+
+	printf("\nCliente 2: ");
+	imprimirComandos(command_Client_Two);
+	printf("\n ");
+
+}
+
 
 /****************************************************************************
 esto tendria que llamar a algoque procese los datos tipo "cliente uno arriba"
@@ -105,8 +140,11 @@ DWORD WINAPI readFunctionClienteOne(LPVOID param)
 	if(pConexion->len > 0)
 	{
 
-	    
 		int error = send(pConexion->socketAccept,(char*)&sendListen,sizeof( int),0);
+	    while(error==-1)
+		{
+			error = send(pConexion->socketAccept,(char*)&sendListen,sizeof( int),0);
+		}
 		if(error == SOCKET_ERROR)
 		{
 			printf("intertar enviar datos nuevamente");
@@ -149,6 +187,10 @@ DWORD WINAPI readFunctionClienteTwo(LPVOID param)
 	if(pConexion2->len > 0)
 	{
 		int error = send(pConexion2->socketAccept,(char*)&sendListen,sizeof(int),0);
+		while(error==-1)
+		{
+			error = send(pConexion2->socketAccept,(char*)&sendListen,sizeof( int),0);
+		}
 		if(error == SOCKET_ERROR)
 		{
 			printf("intertar enviar datos nuevamente");
@@ -323,18 +365,26 @@ DWORD WINAPI writeFunctionClient(LPVOID param)
 	if(conexion->len>0)
 	{
 		int error = send(conexion->socketAccept,(char*)&comando,sizeof(int),0);
+		while(error==-1)
+		{
+			error = send(conexion->socketAccept,(char*)&comando,sizeof( int),0);
+		}
 		if(error ==SOCKET_ERROR)
 		{
-			printf("No se a podido enviar el dato");
+			printf("No se a podido enviar el dato 1");
 		}
 		if(error>0)
 		{
 			pConexion->len = error;
 			const char* buffer = (const char* )package->getPositions();
 			error = send(conexion->socketAccept,buffer, 4*(sizeof(int)),0);
+			while(error==-1)
+			{
+				error = send(conexion->socketAccept,buffer, 4*(sizeof(int)),0);
+			}
 			if(error ==SOCKET_ERROR)
 			{
-				printf("No se a podido enviar el dato");
+				printf("No se a podido enviar el dato 2");
 			}
 			if(error>0)
 			{
@@ -350,7 +400,8 @@ DWORD WINAPI writeFunctionClient(LPVOID param)
 }
 
 
-int main(int argc, char* argv[]){
+int main(int argc, char* argv[])
+{
 
 	int puerto = 0;
 	
@@ -380,7 +431,6 @@ int main(int argc, char* argv[]){
 		puerto = PORT_DEFAULT;
 	}
 
-	
 	pConexion->Puerto = pConexion2->Puerto = puerto;
 
 
@@ -407,7 +457,7 @@ int main(int argc, char* argv[]){
 		//ex ´procesing
 		while(pConexion->len > 0 && pConexion2->len > 0)
 		{
-			
+			Sleep(1000);
 	
 			threadReader = CreateThread(NULL,0,readFunctionClienteOne,NULL,0,NULL);	
 			WaitForSingleObject(threadReader, INFINITE);
@@ -417,7 +467,7 @@ int main(int argc, char* argv[]){
 			// mientras que haya conexion con ambos clientes
 			
 
-			
+			imprimirComandoClientes();
 			CloseHandle(threadReader);		
 			CloseHandle(threadReader2);
 		    //proceso los datos
@@ -434,8 +484,9 @@ int main(int argc, char* argv[]){
 			enviar[0] = CreateThread(NULL, 0, writeFunctionClient, &packageClientOne, 0, NULL);
 			enviar[1] = CreateThread(NULL, 0, writeFunctionClient, &packageClientTwo, 0, NULL);
 			
-			WaitForMultipleObjects(2, enviar, TRUE, INFINITE);
-			
+			//WaitForMultipleObjects(2, enviar, TRUE, INFINITE);
+			WaitForSingleObject(enviar[0], INFINITE);
+			WaitForSingleObject(enviar[1], INFINITE);
 			
 			CloseHandle(enviar[0]);
 			CloseHandle(enviar[1]);
