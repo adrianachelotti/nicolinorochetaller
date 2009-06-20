@@ -122,6 +122,8 @@ void crearTejo(Tejo* pTejo,Pad* pad )
 		}
 		it++;
 	}
+
+	escenario->setTejo(pTejo);
 	//TODO VERI QUE SE CREE IGUAL
 }	
 
