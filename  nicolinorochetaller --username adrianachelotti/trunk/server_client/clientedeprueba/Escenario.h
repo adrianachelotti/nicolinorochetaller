@@ -9,14 +9,19 @@
 #define RES_ERROR_CARGANDO_TEXTURA 1
 #define RES_OK 0
 #define RESOLUCION_DEFAULT 800
-#define TEJOS 15
+#define TEJOS 7
 
 #include <iostream>
 #include <list>
+#include <ctime> 
+#include <cstdlib>
+#include <string>
 #include "Figura.h"
 #include "Textura.h"
 #include "Parser.h"
 #include "Circulo.h"
+#include "Pad.h"
+
 
 using namespace std;
 
@@ -24,13 +29,19 @@ using namespace std;
 class Escenario  
 {
 private:
-	
+	long velox;
+	long veloy;
 	int resolucion;
 	int alto;
 	int ancho;
 	int radioInicial;
 	int longInicial;
-	
+	int ultimoGol;
+
+	Circulo* tejo;
+	Pad* pad1;
+	Pad* pad2;
+
 	//0->izq 1->der
 	int ultimoTocado;
 
@@ -39,8 +50,6 @@ private:
 	int puntajeIzquierdo;
 	int golesDerecho;
 	int golesIzquierdo;
-
-	Circulo* tejo;
 
     string texturaEscenario;	
 	Uint32 colorFondoEscenario;
@@ -156,9 +165,23 @@ public:
 	/* Retorna el alto del escenario*/
 	int getAlto();
 
+	/*Setea la velocidad del nivel*/
+	void setVelox(long velx);
+	
+	/*Retorna la velocidad del nivel*/
+	long getVelox();
+
+	/*Setea la velocidad del nivel*/
+	void setVeloy(long vely);
+	
+	/*Retorna la velocidad del nivel*/
+	long getVeloy();
 
 	/*Retorna los tejos que quedan en el nivel*/
 	int getTejosRestantes();
+
+	/*Retorna los tejos que quedan en el nivel*/
+	void setTejosRestantes(int tejos);
 
 	/*resta un tejo al nivel*/
 	void restarTejo();
@@ -189,15 +212,25 @@ public:
 	int getLongInicial();
 	void setLongInicial(int l);
 
+	void selectorDeDispersor(list<Figura*> figuras);
+
+	bool getTienePegamento();
+	void setTienePegamento(bool tiene);
+
+	int getUltimoGol();
+	void setUltimoGol(int gol);
+	void sacarBonus(list<Figura*> listaFiguras);
 	/*Retorna la imagen del escenario ya cargada de memoria y resizeada*/
 	SDL_Surface* getImagenEscenario();
+	void clearEscenario();
 
-	/**/
 	Circulo* getTejo();
+	void setPad1(Pad* pad1);
+	Pad* getPad1();
+	void setPad2(Pad* pad2);
+	Pad* getPad2();
 
 	void setTejo(Circulo* tejo);
-
-
 };
 
 #endif 

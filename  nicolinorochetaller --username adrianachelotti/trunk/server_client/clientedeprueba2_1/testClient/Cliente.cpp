@@ -273,10 +273,12 @@ DWORD WINAPI readFunction(LPVOID param)
 				int posicionTejoX = *(int*)(posiciones+8);
 				int posicionTejoY = *(int*)(posiciones+12);
 
+			/*
 				cout<<"Posicion pad One: "<<posicionYPadOne<<endl;
 				cout<<"Posicion pad Two: "<<posicionYPadTwo<<endl;
 				cout<<"Posicion tejo X: "<<posicionTejoX<<endl;
 				cout<<"Posicion tejo Y: "<<posicionTejoY<<endl;
+			*/
 
 				Escenario* escenario = Escenario::obtenerInstancia();
 				Circulo* tejo = escenario->getTejo();
@@ -379,8 +381,7 @@ DWORD WINAPI gameFunction(LPVOID param)
 	crearPantalla();
 	Escenario::obtenerInstancia()->dibujar();
 	SDL_Flip(Escenario::screen);
-	//Sleep(10000);
-	
+		
 	int i = 0;
 	int quit =0;
 	while(true)
@@ -391,7 +392,7 @@ DWORD WINAPI gameFunction(LPVOID param)
 
 		Escenario* escenario = Escenario::obtenerInstancia();
 		Escenario::obtenerInstancia()->dibujar();
-		SDL_Delay(10);
+	//	SDL_Delay(10);
 		SDL_Flip(Escenario::screen);
 	}
 		
