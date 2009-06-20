@@ -239,11 +239,21 @@ DWORD WINAPI readFunction(LPVOID param)
 			}
 
 		}
-		int eventoActual = listaDeEventos.front();
-		listaDeEventos.pop_front();
 		if(iniciarComunicacion)
 		{
+			
+			int eventoActual = COMMAND_INVALID;
+			if(!listaDeEventos.empty())
+			{	
+				eventoActual = listaDeEventos.front();
+				listaDeEventos.pop_front();
+			}
 			int error = send(pConexion->socketAccept,(char*)&eventoActual,sizeof(int),0);
+			while(error==-1)
+			{
+				error = send(pConexion->socketAccept,(char*)&eventoActual,sizeof(int),0);	
+			}
+			
 			if(error>0)
 			{
 				pConexion->len = error;
@@ -254,6 +264,9 @@ DWORD WINAPI readFunction(LPVOID param)
 		}
 		if(iniciarGraficacion)
 		{
+			char posiciones[16];
+			int error= recv(pConexion->socketAccept,posiciones,16,0);
+			if(error==-1) printf("No se recibio bien");
 			printf("recibir posiciones y dibujar");
 		}
 	
