@@ -85,6 +85,42 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=.\Arco.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Circulo.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ControladorDeBonus.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ControladorDeChoque.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Cuadrado.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Escenario.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Figura.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Formula.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Graficador.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\lectorDirectorios.cpp
 # End Source File
 # Begin Source File
@@ -93,7 +129,35 @@ SOURCE=.\main.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pad.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Parser.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Partida.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Rectangulo.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Segmento.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\syncQueue.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Tejo.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Textura.cpp
 # End Source File
 # Begin Source File
 
@@ -102,6 +166,10 @@ SOURCE=.\toSendPackage.cpp
 # Begin Source File
 
 SOURCE=.\transferencia.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\Triangulo.cpp
 # End Source File
 # Begin Source File
 
@@ -117,11 +185,75 @@ SOURCE=.\validacion.c
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
+SOURCE=.\Arco.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Circulo.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ControladorDeBonus.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ControladorDeChoque.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Cuadrado.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Escenario.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Figura.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Formula.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Graficador.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\lectorDirectorios.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pad.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Parser.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Partida.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Rectangulo.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Segmento.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\syncQueue.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Tejo.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Textura.h
 # End Source File
 # Begin Source File
 
@@ -130,6 +262,10 @@ SOURCE=.\toSendPackage.h
 # Begin Source File
 
 SOURCE=.\transferencia.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Triangulo.h
 # End Source File
 # Begin Source File
 
