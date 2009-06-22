@@ -52,6 +52,7 @@ private:
 	int puntajeIzquierdo;
 	int golesDerecho;
 	int golesIzquierdo;
+	int nivel;
 
     string texturaEscenario;	
 	Uint32 colorFondoEscenario;
@@ -240,6 +241,9 @@ public:
 
 	Tejo* getTejo();
 	void setTejo(Tejo* tejo);
+
+	void setNivel(int n);
+	int getNivel();
 };
 
 #endif 

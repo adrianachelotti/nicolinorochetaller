@@ -678,6 +678,16 @@ void Escenario::sacarBonus(list<Figura*> listaFiguras)
 
 }
 
+void Escenario::setGolesDerecho(int goles)
+{
+	this->golesDerecho = goles;
+}
+
+void Escenario::setGolesIzquierdo(int goles)
+{
+	this->golesIzquierdo = goles;
+}
+
 void Escenario::clearEscenario()
 {
 	this->listadoDeFiguras.clear();
@@ -687,4 +697,23 @@ void Escenario::clearEscenario()
 	this->ultimoTocado = 0;
 	this->tejos = TEJOS;
 	this->imagenEscenario = NULL;
+}
+
+void Escenario::setPuntajeD(int p)
+{
+	this->puntajeDerecho = p;
+}
+void Escenario::setPuntajeI(int p)
+{
+	this->puntajeIzquierdo = p;
+}
+
+void Escenario::setNivel(int n)
+{
+	this->nivel = n;
+}
+
+int Escenario::getNivel()
+{
+	return(this->nivel);
 }

@@ -24,6 +24,7 @@ Escenario::Escenario()
 	this->ultimoTocado = 0;
 	this->ultimoGol = 1;
 	this->tejo = NULL;
+	this->nivel = 0;
 }
 
 Escenario::~Escenario()
@@ -721,6 +722,17 @@ void Escenario::clearEscenario()
 	this->golesDerecho = 0;
 	this->golesIzquierdo = 0;
 	this->ultimoTocado = 0;
+	this->ultimoGol = 1;
 	this->tejos = TEJOS;
 	this->imagenEscenario = NULL;
+}
+
+void Escenario::setNivel(int n)
+{
+	this->nivel= n;
+}
+
+int Escenario::getNivel()
+{
+	return(this->nivel);
 }
