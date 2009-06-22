@@ -45,7 +45,6 @@ extern "C"{
 #define LISTEN_CLIENT 14
 #define LISTEN_COMMAND 15
 #define INIT_GAME 16
-#define FALLA_GAME 17
 
 #define DELTA_Y 100
 #define DELTA_T 3
