@@ -666,8 +666,7 @@ int Escenario::selectorDeDispersor(list<Figura*> figuras)
     int rangeBonus = (highestBonus-lowestBonus)+1;
 	int rangeDisper = (highestDisper-lowestDisper)+1;
  
-	ranBonus = 9;
-    //ranBonus = lowestBonus+int(rangeBonus*rand()/(RAND_MAX + 1.0));
+    ranBonus = lowestBonus+int(rangeBonus*rand()/(RAND_MAX + 1.0));
 	ranDisper = lowestDisper+int(rangeDisper*rand()/(RAND_MAX + 1.0));
 
 	list<Figura*>::iterator it;
