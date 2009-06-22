@@ -41,6 +41,7 @@ extern "C"{
 #define LISTEN_CLIENT 14
 #define LISTEN_COMMAND 15
 #define INIT_GAME 16
+#define FALLA_GAME 17
 
 CONEXION *pConexion;
 list<int> listaDeEventos ; 
@@ -269,9 +270,9 @@ void crearArcos(Arco* arco,Arco* arco1)
 }
 
 /*Metodo encargado de crear el area de juego*/
-int crearPantalla()
+int crearPantalla(int nivel)
 {
-	
+	Escenario::obtenerInstancia()->clearEscenario();
 	SDL_Surface *screen;
 	Parser* parser = new Parser();
 
@@ -280,10 +281,20 @@ int crearPantalla()
 	FILE *archivoErrores;
 	int resultado;
 	string contexto = "main";
-
+	char* nombreEr = (char*) malloc (sizeof(char)*12);
+	char* nombre = (char*) malloc (sizeof(char)*14);
+	if (nivel == 1)
+	{
+		nombreEr = "errores1.err";
+		nombre = "Escenario1.esc";
+	}
+	if (nivel == 2)
+	{
+		nombreEr = "errores2.err";
+		nombre = "Escenario2.esc";
+	}
 	
-	char nombreEr[100] = "errores.err";
-	char nombre[100] = "Escenario2.esc";
+	
 	
 
 	archivoErrores = fopen(nombreEr,"w");
@@ -417,6 +428,134 @@ int block_recv(unsigned int &sock)
 	return nbytes; 
 } 
 
+void dibujarAnimacion(int w , int h, SDL_Surface* screen,int gD, int gI)
+{
+	Punto posicionG , posicionO, posicionL, posicionFondo, posicionWin,posicionPuntajeIzq, posicionPuntajeDerecha;
+	posicionG.x = w/2 -150;
+	posicionG.y = h/2;
+	posicionO.x = w/2 -50;
+	posicionO.y = h/2;
+	posicionL.x = w/2 +50;
+	posicionL.y = h/2;
+	posicionFondo.x = 0;
+	posicionFondo.y = h;
+	posicionWin.x = w-346;
+	posicionWin.y=h;
+    
+	posicionPuntajeIzq.y = h/2 - 200;
+	posicionPuntajeIzq.x = w/2 - 300;
+
+	posicionPuntajeDerecha.y = h/2 - 200;
+	posicionPuntajeDerecha.x = w/2 + 200;
+
+	Cuadrado* g = new Cuadrado("g",100,posicionG);
+	g->setIdTextura("letraG");
+	
+	Cuadrado* o = new Cuadrado("o",100,posicionO);
+	o->setIdTextura("letraO");
+	
+	Cuadrado* l = new Cuadrado("l",100,posicionL);
+	l->setIdTextura("letraL");
+
+	Cuadrado* i = new Cuadrado("i",100,posicionPuntajeIzq);
+	Cuadrado* d = new Cuadrado("d",100,posicionPuntajeDerecha);
+
+	char* golesI = (char*)malloc(sizeof(char)*2);
+	itoa(gI,golesI,10);
+	
+	char* golesD = (char*)malloc(sizeof(char)*2);
+	itoa(gD,golesD,10);
+	
+	i->setIdTextura(golesI);
+	d->setIdTextura(golesD);
+	
+	free(golesI);
+	free(golesD);
+
+	Rectangulo* imagen = new Rectangulo("win",346,312,posicionWin);
+	imagen->setIdTextura("win");
+	
+	Rectangulo* fondo = new Rectangulo("fondo",w,h,posicionFondo);
+	fondo->setColorFondo(0x000000);
+	fondo->setColorPropio(true);
+
+	
+	SDL_Flip(screen);
+	SDL_Delay(100);
+ 
+//	int cont = 0;
+	int offset =0;
+//	while (cont<8)
+//	{
+//		if((cont%2)==0)
+//			offset=2;
+//		else offset=0;
+      
+		posicionG.x = w/2 -150;
+		posicionG.y = h/2 +offset;
+		posicionO.x = w/2 -50;
+		posicionO.y = h/2-offset;
+		posicionL.x = w/2 +50;
+		posicionL.y = h/2+offset;
+	
+		g->setPosicionVerticeInferiorIzquierdo(posicionG);
+		o->setPosicionVerticeInferiorIzquierdo(posicionO);
+		l->setPosicionVerticeInferiorIzquierdo(posicionL);
+
+//		printf("cont %d" , cont);
+		fondo->dibujar();
+		g->dibujar();
+		o->dibujar();
+		l->dibujar();
+		i->dibujar();
+		d->dibujar();
+		imagen->dibujar();
+
+
+	//	cont++;
+		SDL_Flip(screen);
+		SDL_Delay(100);
+		Sleep(2000);
+//	}
+	delete fondo;
+	delete g;
+	delete o;
+	delete l;
+	delete i;
+	delete d;
+	delete imagen;
+}
+
+void dibjuarPasoNive(int w, int h, SDL_Surface* screen)
+{
+	Punto posi,posicionFondo;
+	posi.x = w/2-300;
+	posi.y = h/2+100;
+	posicionFondo.x = 0;
+	posicionFondo.y = h;
+
+	Rectangulo* fondo = new Rectangulo("fondo",w,h,posicionFondo);
+	fondo->setColorFondo(0x000000);
+	fondo->setColorPropio(true);
+
+	Rectangulo* nivel = new Rectangulo("ni",500,200,posi);
+	nivel->setIdTextura("pasoNivel");
+
+//	int cont = 0;
+//	while (cont<15)
+//	{
+		fondo->dibujar();
+		nivel->dibujar();
+		SDL_Flip(screen);
+		SDL_Delay(100);
+		Sleep(2000);
+//		cont++;
+//	}
+	delete(fondo);
+	delete(nivel);
+}
+
+
 /*****************************************************************/
 /* readFunction: Función encargada de recibir lo que envia el    */
 /* servidor mientras la conexión se encuentre establecida        */
@@ -440,6 +579,12 @@ DWORD WINAPI readFunction(LPVOID param)
 			{
 				pConexion->len = error;
 				comando =*(int*)cadena;
+				
+				if(comando==FALLA_GAME) 
+				{
+					cout<<"FALLA GAME MANDANDO"<<endl;
+					pConexion->len = 0;
+				}
 				if(comando==LISTEN_CLIENT) iniciarComunicacion= true;
 				else if(comando==LISTEN_COMMAND) iniciarGraficacion= true;
 			}
@@ -470,8 +615,8 @@ DWORD WINAPI readFunction(LPVOID param)
 		}
 		if(iniciarGraficacion)
 		{
-			char posiciones[40];
-			int error = recv(pConexion->socketAccept,posiciones,40,0);
+			char posiciones[60];
+			int error = recv(pConexion->socketAccept,posiciones,60,0);
 			if(error>0)
 			{
 				pConexion->len = error;
@@ -486,16 +631,34 @@ DWORD WINAPI readFunction(LPVOID param)
 				int largoPad2 = *(int*)(posiciones+28);
 				int radioTejo = *(int*)(posiciones+32);
 				int pegaDado = *(int*)(posiciones+36);
-			
-				/*cout<<"Posicion pad One: "<<posicionYPadOne<<endl;
-				cout<<"Posicion pad Two: "<<posicionYPadTwo<<endl;
-				cout<<"Posicion tejo X: "<<posicionTejoX<<endl;
-				cout<<"Posicion tejo Y: "<<posicionTejoY<<endl;
-				cout<<"BONUS: "<<bonus<<endl;
-				cout<<"DISPERSOR: "<<disper<<endl;
-				*/
+				int golD = *(int*)(posiciones+40);
+				int golI = *(int*)(posiciones+44);
+				int nivel = *(int*)(posiciones+48);
+				int pD = *(int*)(posiciones+52);
+				int pI = *(int*)(posiciones+56);
+	
 				Escenario* escenario = Escenario::obtenerInstancia();
 				
+				escenario->setGolesDerecho(golD);
+				escenario->setGolesIzquierdo(golI);
+				
+				escenario->setPuntajeD(pD);
+				escenario->setPuntajeI(pI);
+
+				if ((golD!=0)||(golI!=0))
+				{
+					dibujarAnimacion(escenario->getAncho(),escenario->getAlto(),escenario->screen,golD,golI);
+				}
+
+				escenario->setNivel(nivel);
+
+				//aca tendria que ir 7....
+				if((nivel == 1) && (golD+golI == 7))
+				{
+					dibjuarPasoNive(escenario->getAncho(),escenario->getAlto(),escenario->screen);
+				}
+
+
 				Pad* pad1 = escenario->getPad1();
 				Pad* pad2 = escenario->getPad2();
 				
@@ -529,6 +692,7 @@ DWORD WINAPI readFunction(LPVOID param)
 				{
 					escenario->sacarBonus(escenario->getListadoDeFiguras());
 				}
+				
 			}
 			else
 			{
@@ -598,11 +762,194 @@ void  handle_input(SDL_Event event)
 
 }
 
+void dibujarFinal(int w, int h, SDL_Surface* screen)
+{
+	Punto posD , posI, posicionFondo, posGO, posG, n11,n12,n13,n21,n22,n23;
+
+	Escenario* es = Escenario::obtenerInstancia();
+	
+	posGO.x = w/2 - 400;
+	posGO.y = 100;
+
+	posG.x = w/2 - 200;
+	posG.y = h-100;
+
+	posicionFondo.x = 0;
+	posicionFondo.y = h;
+
+	posI.x = w/2 - 200;
+	posI.y = h/2 - 100;
+
+	posD.x = w/2 - 200;
+	posD.y = h/2 + 100;
+
+	Rectangulo* ganador = new Rectangulo("gm",500,100,posG);
+	if (es->getPuntajeDerecho() > es->getPuntajeIzquierdo())
+	{
+		ganador->setIdTextura("gana2");
+	}
+	if (es->getPuntajeDerecho() < es->getPuntajeIzquierdo())
+	{
+		ganador->setIdTextura("gana1");
+	}
+	if (es->getPuntajeDerecho() == es->getPuntajeIzquierdo())
+	{
+		ganador->setIdTextura("empate");
+	}
+
+	Rectangulo* gm = new Rectangulo("gm",500,100,posGO);
+	gm->setIdTextura("gm");
+
+	Rectangulo* recI = new Rectangulo("pI",200,50,posI);
+	recI->setIdTextura("puntajeI");
+
+	Rectangulo* recD = new Rectangulo("pD",200,50,posD);
+	recD->setIdTextura("puntajeD");
+
+	Rectangulo* fondo = new Rectangulo("fondo",w,h,posicionFondo);
+	fondo->setColorFondo(0x000000);
+	fondo->setColorPropio(true);
+
+	int puntajeUno = es->getPuntajeIzquierdo();
+	int puntajeDos = es->getPuntajeDerecho();
+
+	n11.x = posI.x + 400;
+	n11.y = posI.y;
+	n12.x = posI.x + 300;
+	n12.y = posI.y;
+	n13.x = posI.x + 200;
+	n13.y = posI.y;
+
+	n21.x = posD.x + 400;
+	n21.y = posD.y;
+	n22.x = posD.x + 300;
+	n22.y = posD.y;
+	n23.x = posD.x + 200;
+	n23.y = posD.y;
+
+
+	Cuadrado* numero11 = new Cuadrado("1",100,n11);
+	Cuadrado* numero12 = new Cuadrado("2",100,n12);
+	Cuadrado* numero13 = new Cuadrado("3",100,n13);
+
+	Cuadrado* numero21 = new Cuadrado("4",100,n21);
+	Cuadrado* numero22 = new Cuadrado("5",100,n22);
+	Cuadrado* numero23 = new Cuadrado("6",100,n23);
+
+	char* nChar = (char*)malloc(sizeof(char)*1);
+	int n1 = puntajeUno % 10;
+	puntajeUno = puntajeUno / 10;
+	itoa(n1,nChar,10);
+	cout<<n1<<endl;
+	numero11->setIdTextura(nChar);
+	int cantidadDibujar1 = 1;
+	int cantidadDibujar2 = 1;
+
+	if (puntajeUno!=0)
+	{
+		cantidadDibujar1++;
+		int n2 = puntajeUno % 10;
+		cout<<n2<<endl;
+		puntajeUno = puntajeUno / 10;
+		itoa(n2,nChar,10);
+		numero12->setIdTextura(nChar);
+	}
+
+	if (puntajeUno!=0)
+	{
+		cantidadDibujar1++;
+		int n3 = puntajeUno % 10;
+		cout<<n3<<endl;
+		puntajeUno = puntajeUno / 10;
+		itoa(n3,nChar,10);
+		numero13->setIdTextura(nChar);
+	}
+
+	
+	int n4 = puntajeDos % 10;
+	puntajeDos = puntajeDos / 10;
+	itoa(n4,nChar,10);
+	cout<<n4<<endl;
+	numero21->setIdTextura(nChar);
+	
+	if (puntajeDos!=0)
+	{
+		cantidadDibujar2++;
+		int n5 = puntajeDos % 10;
+		cout<<n5<<endl;
+		puntajeDos = puntajeDos / 10;
+		itoa(n5,nChar,10);
+		numero22->setIdTextura(nChar);
+	}
+
+	if (puntajeDos!=0)
+	{
+		cantidadDibujar2++;
+		int n6 = puntajeDos % 10;
+		cout<<n6<<endl;
+		puntajeUno = puntajeDos / 10;
+		itoa(n6,nChar,10);
+		numero23->setIdTextura(nChar);
+	}
+
+	int cont = 0;
+	while (cont<30)
+	{
+		fondo->dibujar();
+		gm->dibujar();
+		ganador->dibujar();
+		recD->dibujar();
+		recI->dibujar();
+		numero11->dibujar();
+		if (cantidadDibujar1 > 1) numero12->dibujar();
+		if (cantidadDibujar1 > 2) numero13->dibujar();
+
+		numero21->dibujar();
+		if(cantidadDibujar2 > 1) numero22->dibujar();
+		if(cantidadDibujar2 > 2) numero23->dibujar();
+
+		cont++;
+		SDL_Flip(screen);
+		SDL_Delay(100);
+	}
+	delete(fondo);
+	delete(recD);
+	delete(recI);
+	delete(gm);
+}
+
+void dibujarFalla(int w, int h, SDL_Surface* screen)
+{
+	Escenario* esce = Escenario::obtenerInstancia();
+	Punto posicionFondo, posCartel;
+	posicionFondo.x = 0;
+	posicionFondo.y = h;
+	posCartel.x = (esce->getAncho())/2;
+	posCartel.y = (esce->getAlto())/2;
+
+	Rectangulo* fondo = new Rectangulo("fondo",w,h,posicionFondo);
+	fondo->setColorFondo(0x000000);
+	fondo->setColorPropio(true);
+
+	Rectangulo* fallo = new Rectangulo("cartel",200,50,posCartel);
+	fallo->setIdTextura("falla");
+
+	int cont = 0;
+	while (cont<30)
+	{
+		fondo->dibujar();
+		fallo->dibujar();
+		cont++;
+	}
+
+	delete(fondo);
+	delete(fallo);
+
+}
+
 
 DWORD WINAPI gameFunction(LPVOID param) 
 {
-	//crearPantalla();
-	//Escenario::obtenerInstancia()->dibujar();
 	SDL_Event event;
 	// Eventos considerados:
 	SDL_EventState(SDL_KEYDOWN,SDL_ENABLE);
@@ -623,28 +970,45 @@ DWORD WINAPI gameFunction(LPVOID param)
 	SDL_EventState(SDL_VIDEORESIZE,SDL_IGNORE);
 	SDL_EventState(SDL_USEREVENT,SDL_IGNORE);
 	//SDL_EnableKeyRepeat(2000, 2000);
-
-
-	crearPantalla();
-	Escenario::obtenerInstancia()->dibujar();
-	SDL_Flip(Escenario::screen);
-	//Sleep(10000);
 	
-	int i = 0;
-	int quit =0;
-	while(true)
-	{
-		SDL_Event event;
-		SDL_PollEvent(&event);
-		handle_input(event);
-		Sleep(75);
-		Escenario::obtenerInstancia()->dibujar();
-		//SDL_Delay(10);
-		SDL_Flip(Escenario::screen);
-		
-	}
-		
+	int nivel = 1;
 
+	while ((nivel < 3)&&(pConexion->len >0))
+	{
+		crearPantalla(nivel);
+		nivel++;
+		Escenario::obtenerInstancia()->dibujar();
+		SDL_Flip(Escenario::screen);
+		int i = 0;
+		int quit =0;
+		while ((true) && (pConexion->len > 0))
+		{
+			if ((Escenario::obtenerInstancia()->getGolesDerecho()!=0) || (Escenario::obtenerInstancia()->getGolesIzquierdo()!=0))
+			{
+				Sleep(1500);
+			}
+			if ((Escenario::obtenerInstancia()->getNivel()<3) && (Escenario::obtenerInstancia()->getGolesDerecho()+Escenario::obtenerInstancia()->getGolesIzquierdo() == 7))
+			{
+				Sleep(1500);
+				break;
+			}
+			SDL_Event event;
+			SDL_PollEvent(&event);
+			handle_input(event);
+			Sleep(75);
+			Escenario::obtenerInstancia()->dibujar();
+			SDL_Flip(Escenario::screen);		
+		}
+	}
+	cout<<pConexion->len<<endl;
+	if (pConexion->len < 1)
+	{
+		dibujarFalla(Escenario::obtenerInstancia()->getAncho(),Escenario::obtenerInstancia()->getAlto(),Escenario::screen);
+	}
+	else
+	{
+		dibujarFinal(Escenario::obtenerInstancia()->getAncho(),Escenario::obtenerInstancia()->getAlto(),Escenario::screen);
+	}
 	return 0;
 }
 

@@ -45,6 +45,7 @@ extern "C"{
 #define LISTEN_CLIENT 14
 #define LISTEN_COMMAND 15
 #define INIT_GAME 16
+#define FALLA_GAME 17
 
 #define DELTA_Y 100
 #define DELTA_T 3
@@ -358,7 +359,7 @@ int getNumeroDisConBonus()
 }
 
 
-void* getDataProcessed(float deltaTime,int lastTime)
+void* getDataProcessed(float deltaTime,int lastTime,int nivel)
 {
 	Escenario* escenario = Escenario::obtenerInstancia(); 
 	ControladorDeChoque* controlador = new ControladorDeChoque();
@@ -383,6 +384,11 @@ void* getDataProcessed(float deltaTime,int lastTime)
 	int bonus = 0;
 	int disper = 0;
 
+	int golD = 0;
+	int golI = 0;
+
+	int puntD = 0;
+	int puntI = 0;
 
 	if(command_Client_One==COMMAND_UP)
 	{
@@ -476,6 +482,8 @@ void* getDataProcessed(float deltaTime,int lastTime)
 			posicionTejoX = tejo->getPosicion().x;
 			posicionTejoY = tejo->getPosicion().y;
 
+			golD = escenario->getGolesDerecho();
+			golI = escenario->getGolesIzquierdo();
 		}
 		else
 		{
@@ -514,6 +522,10 @@ void* getDataProcessed(float deltaTime,int lastTime)
 				posicionPadY2 = pad2->getPosicion().y;
 				posicionTejoX = tejo->getPosicion().x;
 				posicionTejoY = tejo->getPosicion().y;
+
+				golD = escenario->getGolesDerecho();
+				golI = escenario->getGolesIzquierdo();
+			
 			}
 			else
 			{
@@ -547,10 +559,8 @@ void* getDataProcessed(float deltaTime,int lastTime)
 
 				}
 								
-				//para que se mueva la pelotita sin saltar tanto....
-				float deltaTimeNuevo = deltaTime/5;
-				controlador->resolverChoqueDispersores(pad1,pad2,tejo,escenario,deltaTimeNuevo);
-				tejo->moverTejo(deltaTimeNuevo);
+				controlador->resolverChoqueDispersores(pad1,pad2,tejo,escenario,deltaTime);
+				tejo->moverTejo(deltaTime);
 			
 				posicionTejoX = tejo->getPosicion().x;
 				posicionTejoY = tejo->getPosicion().y;
@@ -572,7 +582,8 @@ void* getDataProcessed(float deltaTime,int lastTime)
 			veloInicial.x = escenario->getVelox();
 			veloInicial.y = escenario->getVeloy();
 			tejo->setVelocidad(veloInicial);
-			escenario->setTejo(tejo); 
+			escenario->setTejo(tejo);
+			escenario->setUtlimoTocado(0);
 		} 
 		if ((escenario->getUltimoGol() == 0)||(pad2->getPegamento()==true))
 		{
@@ -585,6 +596,7 @@ void* getDataProcessed(float deltaTime,int lastTime)
 			veloInicial.y = escenario->getVeloy();
 			tejo->setVelocidad(veloInicial);
 			escenario->setTejo(tejo); 
+			escenario->setUtlimoTocado(1);
 		}
 	}
 
@@ -593,12 +605,30 @@ void* getDataProcessed(float deltaTime,int lastTime)
 	int largoPad2 = escenario->getPad2()->getRepresentacionGrafica()->getAltura();
 	int radio = escenario->getTejo()->getRepresentacionGrafica()->getRadio();
 	int pegamentoAsigando = 0;
+
+	if (escenario->getTejosRestantes() == 0)
+	{
+		if (escenario->getGolesDerecho() > escenario->getGolesIzquierdo())
+		{
+			escenario->sumaPuntajeDerecho(70);
+		}
+		else
+		{
+			escenario->sumaPuntajeIzquierdo(70);
+		}
+	}	
+
+	puntD = escenario->getPuntajeDerecho();
+	puntI = escenario->getPuntajeIzquierdo();
+
 	if ((pad1->getPegamento() == 1) || (pad2->getPegamento() == 1))
 	{
 		pegamentoAsigando = 1;
 	}
 
-	void*	resultado = malloc(10*sizeof(int));
+
+
+	void*	resultado = malloc(15*sizeof(int));
 	memcpy(  (void*)((int)resultado) , &posicionPadY1, sizeof(int));
 	memcpy(  (void*)((int)resultado + sizeof (int)), &posicionPadY2, sizeof(int));
 	memcpy(  (void*)((int)resultado + 2*(sizeof(int))), &posicionTejoX, sizeof(int));
@@ -609,6 +639,11 @@ void* getDataProcessed(float deltaTime,int lastTime)
 	memcpy(  (void*)((int)resultado + 7* (sizeof(int))), &largoPad2, sizeof(int));
 	memcpy(  (void*)((int)resultado + 8* (sizeof(int))), &radio, sizeof(int));
 	memcpy(  (void*)((int)resultado + 9* (sizeof(int))), &pegamentoAsigando, sizeof(int));
+	memcpy(  (void*)((int)resultado + 10* (sizeof(int))), &golD, sizeof(int));
+	memcpy(  (void*)((int)resultado + 11* (sizeof(int))), &golI, sizeof(int));
+	memcpy(  (void*)((int)resultado + 12* (sizeof(int))), &nivel, sizeof(int));
+	memcpy(  (void*)((int)resultado + 13* (sizeof(int))), &puntD, sizeof(int));
+	memcpy(  (void*)((int)resultado + 14* (sizeof(int))), &puntI, sizeof(int));
 
 	return resultado;
 }
@@ -864,10 +899,10 @@ DWORD WINAPI writeFunctionClient(LPVOID param)
 		{
 			pConexion->len = error;
 			const char* buffer = (const char* )package->getPositions();
-			error = send(conexion->socketAccept,buffer, 10*(sizeof(int)),0);
+			error = send(conexion->socketAccept,buffer, 15*(sizeof(int)),0);
 			while(error==-1)
 			{
-				error = send(conexion->socketAccept,buffer, 10*(sizeof(int)),0);
+				error = send(conexion->socketAccept,buffer, 15*(sizeof(int)),0);
 			}
 			if(error ==SOCKET_ERROR)
 			{
@@ -889,9 +924,9 @@ DWORD WINAPI writeFunctionClient(LPVOID param)
 
 
 
-int creacionEscenario()
+int creacionEscenario(int nivel)
 {
-	int contador = 1;
+	Escenario::obtenerInstancia()->clearEscenario();
 	Parser* parser = new Parser();
 	string contexto = "main";
 	//Lectura de archivo y parser.
@@ -900,16 +935,15 @@ int creacionEscenario()
 	int resultado;
 	char* nombreEr = (char*)malloc(sizeof(char)*100);
 	char* nombre = (char*)malloc(sizeof(char)*100);
-
-	if (contador == 1)
+	if (nivel == 1)
 	{
-		nombreEr = "Debug/errores/errores1.err";
-		nombre = "Debug/niveles/nivel1.esc";
+		nombreEr = "errores1.err";
+		nombre = "Escenario1.esc";
 	}
- 	if (contador == 2)
+ 	if (nivel == 2)
 	{
-		nombreEr = "Debug/errores/errores2.err";
-		nombre = "Debug/niveles/nivel2.esc";
+		nombreEr = "errores2.err";
+		nombre = "Escenario2.esc";
 	}
 		
 	archivoErrores = fopen(nombreEr,"w");
@@ -950,13 +984,8 @@ int creacionEscenario()
 
 int main(int argc, char* argv[])
 {	
+	
 	int puerto = 0;
-	float deltaTime = 0.0;
-   	int thisTime = 0;
-   	int lastTime =  SDL_GetTicks();
-	int resultado = creacionEscenario();
-
-
 	// Hilos que se usaran para la transferencia de datos a través del socket.
 	HANDLE threadReader;
 	HANDLE threadReader2;
@@ -964,13 +993,13 @@ int main(int argc, char* argv[])
 
 	toSendPackage packageClientOne,packageClientTwo;
 
-	/*
-	HANDLE threadInit[2];
+		/*
+		HANDLE threadInit[2];
 
-	toSendPackage initPackage, initPackage2, packageClientOne,packageClientTwo;
-	initPackage.setData(".\\imagenesATransferir\\");
-	initPackage2.setData(".\\imagenesATransferir2\\");
-	*/
+		toSendPackage initPackage, initPackage2, packageClientOne,packageClientTwo;
+		initPackage.setData(".\\imagenesATransferir\\");
+		initPackage2.setData(".\\imagenesATransferir2\\");
+		*/
 	pConexion = (CONEXION*)malloc(sizeof(CONEXION));
 	pConexion2 = (CONEXION*)malloc(sizeof(CONEXION));
 
@@ -988,7 +1017,6 @@ int main(int argc, char* argv[])
 
 	pConexion->len = 0;
 	pConexion2->len= 0;
-
 	
 	printf("Servidor escuchando ...\n");
 	trEscuchar(puerto,pConexion);	
@@ -999,59 +1027,74 @@ int main(int argc, char* argv[])
 
 	if(pConexion->len != 0 && pConexion2->len != 0)
 	{
-		cout<<"Se inicia el juego"<<endl;
-		int inicioJuego = INIT_GAME;
-		send(pConexion->socketAccept, (char*)&inicioJuego, sizeof(int), 0); 
-		send(pConexion2->socketAccept, (char*)&inicioJuego, sizeof(int), 0); 
-		Sleep(2000);
-
-
-		//ex ´procesing
-		while(pConexion->len > 0 && pConexion2->len > 0)
+		int niveles = 1;
+		while (niveles < 3)
 		{
-			Sleep(100);
-			thisTime = SDL_GetTicks();
-			deltaTime = (float)((thisTime - lastTime)/(float)1000 );
-			lastTime = thisTime; 
-	
-			//threadReader = CreateThread(NULL,0,readFunctionClienteOne,NULL,0,NULL);	
-			readFunctionClienteOne(NULL);
-			//WaitForSingleObject(threadReader, INFINITE);
-			//threadReader2 = CreateThread(NULL,0,readFunctionClienteTwo,NULL,0,NULL);
-			readFunctionClienteTwo(NULL);
-			//WaitForSingleObject(threadReader2, INFINITE);
-			// mientras que haya conexion con ambos clientes
-			
-
-		//	imprimirComandoClientes();
-			CloseHandle(threadReader);		
-			CloseHandle(threadReader2);
-		    //proceso los datos
-			
-			void* posiciones = getDataProcessed(deltaTime,lastTime);
-
-			packageClientOne.setCommand(LISTEN_COMMAND);
-			packageClientOne.setPositions(posiciones);
-			packageClientOne.setConexion(pConexion);
-			packageClientTwo.setCommand(LISTEN_COMMAND);
-			packageClientTwo.setPositions(posiciones);
-			packageClientTwo.setConexion(pConexion2);
-
-			
-			enviar[0] = CreateThread(NULL, 0, writeFunctionClient, &packageClientOne, 0, NULL);
-			enviar[1] = CreateThread(NULL, 0, writeFunctionClient, &packageClientTwo, 0, NULL);
-			
-			//WaitForMultipleObjects(2, enviar, TRUE, INFINITE);
-			WaitForSingleObject(enviar[0], INFINITE);
-			WaitForSingleObject(enviar[1], INFINITE);
-			
-			CloseHandle(enviar[0]);
-			CloseHandle(enviar[1]);
-		}
-
-	}
+			cout<<"PASO POR ACA"<<endl;
+			int resultado = creacionEscenario(niveles);
 		
+			float deltaTime = 0.0;
+			int thisTime = 0;
+		 	int lastTime =  SDL_GetTicks();
+			cout<<"Se inicia el juego"<<endl;
+			int inicioJuego = INIT_GAME;
+			send(pConexion->socketAccept, (char*)&inicioJuego, sizeof(int), 0); 
+			send(pConexion2->socketAccept, (char*)&inicioJuego, sizeof(int), 0); 
+			Sleep(2000);
+
+
+			//ex procesing
+			while(pConexion->len > 0 && pConexion2->len > 0)
+			{
+				Sleep(100);
+				thisTime = SDL_GetTicks();
+				deltaTime = (float)((thisTime - lastTime)/(float)1000 );
+				lastTime = thisTime; 
+	
+				//threadReader = CreateThread(NULL,0,readFunctionClienteOne,NULL,0,NULL);	
+				readFunctionClienteOne(NULL);
+				//WaitForSingleObject(threadReader, INFINITE);
+				//threadReader2 = CreateThread(NULL,0,readFunctionClienteTwo,NULL,0,NULL);
+				readFunctionClienteTwo(NULL);
+				//WaitForSingleObject(threadReader2, INFINITE);
+				// mientras que haya conexion con ambos clientes
 			
+
+				//	imprimirComandoClientes();
+				CloseHandle(threadReader);		
+				CloseHandle(threadReader2);
+			    //proceso los datos
+
+				void* posiciones = getDataProcessed(deltaTime,lastTime,niveles);
+
+				packageClientOne.setCommand(LISTEN_COMMAND);
+				packageClientOne.setPositions(posiciones);
+				packageClientOne.setConexion(pConexion);
+				packageClientTwo.setCommand(LISTEN_COMMAND);
+				packageClientTwo.setPositions(posiciones);
+				packageClientTwo.setConexion(pConexion2);
+
+			
+				enviar[0] = CreateThread(NULL, 0, writeFunctionClient, &packageClientOne, 0, NULL);
+				enviar[1] = CreateThread(NULL, 0, writeFunctionClient, &packageClientTwo, 0, NULL);
+			
+				//WaitForMultipleObjects(2, enviar, TRUE, INFINITE);
+				WaitForSingleObject(enviar[0], INFINITE);
+				WaitForSingleObject(enviar[1], INFINITE);
+			
+				CloseHandle(enviar[0]);
+				CloseHandle(enviar[1]);
+				if (Escenario::obtenerInstancia()->getTejosRestantes() == 0)
+				{
+					Escenario::obtenerInstancia()->clearEscenario();
+					niveles++;
+					break;
+				}
+			}
+
+		}
+	}
+
 	trCerrarConexion(pConexion);
 	trCerrarConexion(pConexion2);
 
