@@ -16,13 +16,11 @@
 #include <ctime> 
 #include <cstdlib>
 #include <string>
-
 #include "Figura.h"
 #include "Textura.h"
 #include "Parser.h"
 #include "Tejo.h"
 #include "Pad.h"
-
 
 
 using namespace std;
@@ -214,7 +212,7 @@ public:
 	int getLongInicial();
 	void setLongInicial(int l);
 
-	void selectorDeDispersor(list<Figura*> figuras);
+	void selectorDeDispersor(int bonus, int disper);
 
 	bool getTienePegamento();
 	void setTienePegamento(bool tiene);
@@ -226,7 +224,7 @@ public:
 	SDL_Surface* getImagenEscenario();
 	void clearEscenario();
 
-
+	
 	void setPad1(Pad* pad1);
 	Pad* getPad1();
 	void setPad2(Pad* pad2);

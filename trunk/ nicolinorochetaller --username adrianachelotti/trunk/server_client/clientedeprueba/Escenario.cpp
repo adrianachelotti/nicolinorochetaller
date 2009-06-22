@@ -627,42 +627,34 @@ string nombreBonus(int bonus)
 }
 
 
-void Escenario::selectorDeDispersor(list<Figura*> figuras)
+void Escenario::selectorDeDispersor(int bonus, int disper)
 {
-	//srand((unsigned)time(0)); 
-    int ranBonus;
-	int ranDisper;
-    int lowestBonus=1, highestBonus=9;
-	int lowestDisper = 1, highestDisper = figuras.size()-5;
-
-    int rangeBonus = (highestBonus-lowestBonus)+1;
-	int rangeDisper = (highestDisper-lowestDisper)+1;
- 
-
-    ranBonus = lowestBonus+int(rangeBonus*rand()/(RAND_MAX + 1.0));
-	ranDisper = lowestDisper+int(rangeDisper*rand()/(RAND_MAX + 1.0));
-
+	Escenario* esce = Escenario::obtenerInstancia();
+	list<Figura*> figuras = esce->getListadoDeFiguras();
 	list<Figura*>::iterator it;
 	Figura* figuraActual;
 	it = figuras.begin();
 	int contador = 0;
 	while( it != figuras.end())
-	{
-	  contador++;
-      figuraActual = *it;
-	  if ((contador - 5) == ranDisper) 
-	  {
-		  if (figuraActual->getBonus != 0)
-		  {
-			  //solo para probar
-				cout<<"FIGURA QUE SE LE ASIGNA BONUS: "<<figuraActual->getId()<<endl;
-				cout<<"BONUS ASIGANADO "<<ranBonus<<endl;
-				figuraActual->setBonus(ranBonus);
-				figuraActual->setIdTextura(nombreBonus(ranBonus));
-				figuraActual->setImagenFigura(NULL);
-		  }
-	  }
-	  it++;
+	{	
+		contador++;
+		cout<<"CONTADOR: "<<contador<<endl;
+		cout<<"FIN: "<<disper<<endl;
+		figuraActual = *it;
+		if (contador == disper)
+		{
+			cout<<"FIGURA QUE SE LE ASIGNA BONUS EN EL CLIENTE: "<<figuraActual->getId()<<endl;
+			cout<<"BONUS ASIGANADO EN EL CLIENTE"<<bonus<<endl;
+			figuraActual->setBonus(bonus);
+			figuraActual->setIdTextura(nombreBonus(bonus));
+			figuraActual->setImagenFigura(NULL);
+		}
+		else
+		{
+			figuraActual->setBonus(0);
+			figuraActual->setIdTextura("ninguna");
+		}
+		it++;
     }
 }
 

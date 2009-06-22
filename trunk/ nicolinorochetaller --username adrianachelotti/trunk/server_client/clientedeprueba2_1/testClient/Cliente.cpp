@@ -77,6 +77,7 @@ void addError(string linea,FILE* archivoErrores,string err)
 	fprintf(archivoErrores,"\n\n");
 }
 
+
 void calcularPosTejo(Tejo* pTejo, Pad* pad)
 {
 	Punto pos;
@@ -121,8 +122,8 @@ void crearTejo(Tejo* pTejo,Pad* pad )
 		}
 		it++;
 	}
-	escenario->setTejo(pTejo);
 
+	escenario->setTejo(pTejo);
 	//TODO VERI QUE SE CREE IGUAL
 }	
 
@@ -295,6 +296,7 @@ int crearPantalla()
 
 	archivo = fopen(nombre,"r");
 	Escenario* escenario = Escenario::obtenerInstancia();
+
 	if (archivo == NULL)
 	{
 		cout<<"No se pudo abrir el archivo: "<<nombre<<endl;
@@ -311,11 +313,11 @@ int crearPantalla()
 	Pad* pad1 = new Pad();
 	
 	crearPaletas(pad,pad1);
-
+	
 	escenario->setPad1(pad);
 	escenario->setPad2(pad1);
 
-	
+
 	Tejo* pTejo = new Tejo();
 	crearTejo(pTejo,pad);
 	Arco* arco = new Arco();
@@ -429,6 +431,7 @@ DWORD WINAPI readFunction(LPVOID param)
 		bool iniciarComunicacion=false;
 		bool iniciarGraficacion = false;
 		int comando = COMMAND_INVALID;
+		
 		while(!iniciarComunicacion && !iniciarGraficacion)
 		{
 			//TODO ver si se recibe todo
@@ -444,6 +447,7 @@ DWORD WINAPI readFunction(LPVOID param)
 		}
 		if(iniciarComunicacion)
 		{
+			
 			int eventoActual = COMMAND_INVALID;
 			if(!listaDeEventos.empty())
 			{	
@@ -453,8 +457,9 @@ DWORD WINAPI readFunction(LPVOID param)
 			int error = send(pConexion->socketAccept,(char*)&eventoActual,sizeof(int),0);
 			while(error==-1)
 			{
-				error = send(pConexion->socketAccept,(char*)&eventoActual,sizeof(int),0);
+				error = send(pConexion->socketAccept,(char*)&eventoActual,sizeof(int),0);	
 			}
+			
 			if(error>0)
 			{
 				pConexion->len = error;
@@ -465,8 +470,8 @@ DWORD WINAPI readFunction(LPVOID param)
 		}
 		if(iniciarGraficacion)
 		{
-			char posiciones[16];
-			int error = recv(pConexion->socketAccept,posiciones,16,0);
+			char posiciones[40];
+			int error = recv(pConexion->socketAccept,posiciones,40,0);
 			if(error>0)
 			{
 				pConexion->len = error;
@@ -475,14 +480,20 @@ DWORD WINAPI readFunction(LPVOID param)
 				int posicionYPadTwo = *(int*)(posiciones+4);
 				int posicionTejoX = *(int*)(posiciones+8);
 				int posicionTejoY = *(int*)(posiciones+12);
-
-			/*
-				cout<<"Posicion pad One: "<<posicionYPadOne<<endl;
+				int disper = *(int*)(posiciones+16);
+				int bonus = *(int*)(posiciones+20);
+				int largoPad1 = *(int*)(posiciones+24);
+				int largoPad2 = *(int*)(posiciones+28);
+				int radioTejo = *(int*)(posiciones+32);
+				int pegaDado = *(int*)(posiciones+36);
+			
+				/*cout<<"Posicion pad One: "<<posicionYPadOne<<endl;
 				cout<<"Posicion pad Two: "<<posicionYPadTwo<<endl;
 				cout<<"Posicion tejo X: "<<posicionTejoX<<endl;
 				cout<<"Posicion tejo Y: "<<posicionTejoY<<endl;
-			*/
-
+				cout<<"BONUS: "<<bonus<<endl;
+				cout<<"DISPERSOR: "<<disper<<endl;
+				*/
 				Escenario* escenario = Escenario::obtenerInstancia();
 				
 				Pad* pad1 = escenario->getPad1();
@@ -496,6 +507,8 @@ DWORD WINAPI readFunction(LPVOID param)
 				
 				pad1->getRepresentacionGrafica()->setPosicionVerticeInferiorIzquierdo(posicionPad1);
 				pad2->getRepresentacionGrafica()->setPosicionVerticeInferiorIzquierdo(posicionPad2);
+				pad1->getRepresentacionGrafica()->setAltura(largoPad1);
+				pad2->getRepresentacionGrafica()->setAltura(largoPad2);
 
 				escenario->setPad1(pad1);
 				escenario->setPad2(pad2);
@@ -505,8 +518,21 @@ DWORD WINAPI readFunction(LPVOID param)
 				posicionNueva.x = posicionTejoX;
 				posicionNueva.y = posicionTejoY;
 				tejo->setPosicion(posicionNueva);
-
+				tejo->getRepresentacionGrafica()->setRadio(radioTejo);
 				escenario->setTejo(tejo);
+
+				if ((bonus!=0) && (disper!=0))
+				{
+					escenario->selectorDeDispersor(bonus,disper);
+				}
+				if (pegaDado == 1)
+				{
+					escenario->sacarBonus(escenario->getListadoDeFiguras());
+				}
+			}
+			else
+			{
+				printf("Error en el envio del evento, intentar de nuevo");
 			}
 		}
 	
@@ -602,7 +628,8 @@ DWORD WINAPI gameFunction(LPVOID param)
 	crearPantalla();
 	Escenario::obtenerInstancia()->dibujar();
 	SDL_Flip(Escenario::screen);
-		
+	//Sleep(10000);
+	
 	int i = 0;
 	int quit =0;
 	while(true)
@@ -611,10 +638,10 @@ DWORD WINAPI gameFunction(LPVOID param)
 		SDL_PollEvent(&event);
 		handle_input(event);
 		Sleep(75);
-		Escenario* escenario = Escenario::obtenerInstancia();
 		Escenario::obtenerInstancia()->dibujar();
 		//SDL_Delay(10);
 		SDL_Flip(Escenario::screen);
+		
 	}
 		
 
@@ -671,7 +698,6 @@ int main(int argc, char* argv[])
 	CloseHandle(threadInit);
 	*/
 	threadGame = CreateThread(NULL,0,gameFunction,NULL,0,NULL);	
-	
 	threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);
 
 	WaitForSingleObject(readFunction,INFINITE);			

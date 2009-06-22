@@ -655,7 +655,7 @@ string nombreBonus(int bonus)
 }
 
 
-void Escenario::selectorDeDispersor(list<Figura*> figuras)
+int Escenario::selectorDeDispersor(list<Figura*> figuras)
 {
 	//srand((unsigned)time(0)); 
     int ranBonus;
@@ -666,8 +666,8 @@ void Escenario::selectorDeDispersor(list<Figura*> figuras)
     int rangeBonus = (highestBonus-lowestBonus)+1;
 	int rangeDisper = (highestDisper-lowestDisper)+1;
  
-
-    ranBonus = lowestBonus+int(rangeBonus*rand()/(RAND_MAX + 1.0));
+	ranBonus = 9;
+    //ranBonus = lowestBonus+int(rangeBonus*rand()/(RAND_MAX + 1.0));
 	ranDisper = lowestDisper+int(rangeDisper*rand()/(RAND_MAX + 1.0));
 
 	list<Figura*>::iterator it;
@@ -692,6 +692,7 @@ void Escenario::selectorDeDispersor(list<Figura*> figuras)
 	  }
 	  it++;
     }
+	return ranBonus;
 }
 
 void Escenario::sacarBonus(list<Figura*> listaFiguras)
