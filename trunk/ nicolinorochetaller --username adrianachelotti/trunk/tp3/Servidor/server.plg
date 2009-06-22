@@ -1,0 +1,61 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: server - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\Users\Dario\AppData\Local\Temp\RSP8ACF.tmp" with contents
+[
+/nologo /MD /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/server.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"C:\Users\Dario\Desktop\tp3\Servidor\main.cpp"
+]
+Creating command line "cl.exe @C:\Users\Dario\AppData\Local\Temp\RSP8ACF.tmp" 
+Creating temporary file "C:\Users\Dario\AppData\Local\Temp\RSP8AD0.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/server.pdb" /debug /machine:I386 /out:"Debug/server.exe" /pdbtype:sept 
+.\Debug\Arco.obj
+.\Debug\Circulo.obj
+.\Debug\ControladorDeBonus.obj
+.\Debug\ControladorDeChoque.obj
+.\Debug\Cuadrado.obj
+.\Debug\Escenario.obj
+.\Debug\Figura.obj
+.\Debug\Formula.obj
+.\Debug\Graficador.obj
+.\Debug\lectorDirectorios.obj
+.\Debug\main.obj
+.\Debug\Pad.obj
+.\Debug\Parser.obj
+.\Debug\Partida.obj
+.\Debug\Rectangulo.obj
+.\Debug\Segmento.obj
+.\Debug\syncQueue.obj
+.\Debug\Tejo.obj
+.\Debug\Textura.obj
+.\Debug\toSendPackage.obj
+.\Debug\transferencia.obj
+.\Debug\Triangulo.obj
+.\Debug\utilidades.obj
+.\Debug\validacion.obj
+]
+Creating command line "link.exe @C:\Users\Dario\AppData\Local\Temp\RSP8AD0.tmp"
+<h3>Output Window</h3>
+Compiling...
+main.cpp
+C:\Users\Dario\Desktop\tp3\Servidor\main.cpp(761) : warning C4786: 'std::reverse_bidirectional_iterator<std::list<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::allocator<std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >::iterator,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::basic_string<char,std::char_traits<char>,std::allocator<char> > &,std::basic_string<char,std::char_traits<char>,std::allocator<char> > *,int>' : identifier was truncated to '255' characters in the debug information
+C:\Users\Dario\Desktop\tp3\Servidor\main.cpp(761) : warning C4786: 'std::reverse_bidirectional_iterator<std::list<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::allocator<std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >::const_iterator,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::basic_string<char,std::char_traits<char>,std::allocator<char> > const &,std::basic_string<char,std::char_traits<char>,std::allocator<char> > const *,int>' : identifier was truncated to '255' characters in the debug information
+C:\Users\Dario\Desktop\tp3\Servidor\main.cpp(1000) : warning C4715: 'creacionEscenario' : not all control paths return a value
+C:\Users\Dario\Desktop\tp3\Servidor\main.cpp(1103) : warning C4700: local variable 'threadReader' used without having been initialized
+C:\Users\Dario\Desktop\tp3\Servidor\main.cpp(1104) : warning C4700: local variable 'threadReader2' used without having been initialized
+c:\program files\microsoft visual studio\vc98\include\list(153) : warning C4786: 'std::list<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::allocator<std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >::~list<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::allocator<std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >' : identifier was truncated to '255' characters in the debug information
+Linking...
+
+
+
+<h3>Results</h3>
+server.exe - 0 error(s), 6 warning(s)
+</pre>
+</body>
+</html>
