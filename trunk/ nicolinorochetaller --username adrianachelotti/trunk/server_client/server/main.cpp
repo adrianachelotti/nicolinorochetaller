@@ -429,7 +429,11 @@ void* getDataProcessed(float deltaTime,int lastTime)
 		}
 	}
 
-	if((command_Client_One==COMMAND_SPACE) || (command_Client_Two==COMMAND_SPACE))
+	if ((command_Client_One==COMMAND_SPACE) && (tejo->getPosicion().x < escenario->getAncho()/2))
+	{
+		tejoLanzado = true;
+	}
+	if ((command_Client_Two==COMMAND_SPACE) && (tejo->getPosicion().x > escenario->getAncho()/2))
 	{
 		tejoLanzado = true;
 	}
