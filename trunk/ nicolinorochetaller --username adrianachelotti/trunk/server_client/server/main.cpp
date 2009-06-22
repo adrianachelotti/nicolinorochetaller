@@ -542,6 +542,7 @@ void* getDataProcessed(float deltaTime,int lastTime)
 					else 
 					{
 						tejoLanzado = true;
+				
 					}
 
 				}
@@ -560,6 +561,7 @@ void* getDataProcessed(float deltaTime,int lastTime)
 	else
 	{
 		Punto centroTejo;
+		Velocidad veloInicial;
 		if ((escenario->getUltimoGol() == 1)||(pad1->getPegamento()==true))
 		{	
 			posicionTejoX = pad1->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x + pad1->getRepresentacionGrafica()->getBase() + tejo->getRepresentacionGrafica()->getRadio();
@@ -567,6 +569,9 @@ void* getDataProcessed(float deltaTime,int lastTime)
 			centroTejo.x = posicionTejoX;
 			centroTejo.y = posicionTejoY;
 			tejo->getRepresentacionGrafica()->setCentro(centroTejo);
+			veloInicial.x = escenario->getVelox();
+			veloInicial.y = escenario->getVeloy();
+			tejo->setVelocidad(veloInicial);
 			escenario->setTejo(tejo); 
 		} 
 		if ((escenario->getUltimoGol() == 0)||(pad2->getPegamento()==true))
@@ -576,6 +581,9 @@ void* getDataProcessed(float deltaTime,int lastTime)
 			centroTejo.x = posicionTejoX;
 			centroTejo.y = posicionTejoY;
 			tejo->getRepresentacionGrafica()->setCentro(centroTejo);
+			veloInicial.x = escenario->getVelox();
+			veloInicial.y = escenario->getVeloy();
+			tejo->setVelocidad(veloInicial);
 			escenario->setTejo(tejo); 
 		}
 	}
