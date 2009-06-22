@@ -214,7 +214,7 @@ public:
 	int getLongInicial();
 	void setLongInicial(int l);
 
-	void selectorDeDispersor(list<Figura*> figuras);
+	int selectorDeDispersor(list<Figura*> figuras);
 
 	bool getTienePegamento();
 	void setTienePegamento(bool tiene);

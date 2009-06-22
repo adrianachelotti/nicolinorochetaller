@@ -1,31 +1,45 @@
 <escenario>
-<General resolucion="800" texturaFig="id1" texturaEsc="id1" colorFondoFig="255255255" colorLinea="000000000" >
+<General resolucion="800" texturaFig="id1" texturaEsc="id1" velox="300" veloy="300" colorFondoFig="255255255" colorLinea="000000000" >
 	</General>
 	<ListadoDeElementos>
-		<rectangulo id="pad1" base="20" altura="100" colorFigura="255255000" colorLinea="000000000">
+		<circulo id="tejo" colorFigura="100100100" radio="10">
 			<posicion x="1" y="1"/>
-		</rectangulo> 
-		<rectangulo id="pad2" base="20" altura="100" colorFigura="255255000" colorLinea="000000000">
+		</circulo>
+		<rectangulo id="pad1" base="20" altura="100" colorFigura="100100100">
 			<posicion x="1" y="1"/>
-		</rectangulo> 
-		<rectangulo id="arco1" base="18" altura="300" colorFigura="255000000" colorLinea="000000000">
+		</rectangulo>	
+		<rectangulo id="pad2" base="20" altura="100" colorFigura="100100100">
 			<posicion x="1" y="1"/>
-		</rectangulo> 
-		<rectangulo id="arco2" base="18" altura="300" colorFigura="255000000" colorLinea="000000000">
+		</rectangulo>	
+		<rectangulo id="arco1" base="10" altura="10" colorFigura="100100100">
 			<posicion x="1" y="1"/>
-		</rectangulo> 
-		<circulo id="tejo" colorFigura="111000000" radio="10" colorLinea="111000000">
+		</rectangulo>
+		<rectangulo id="arco2" base="10" altura="10" colorFigura="100100100">
 			<posicion x="1" y="1"/>
-		</circulo> 		
+		</rectangulo>
+
 		
-		<circulo id="circ" colorFigura="255233000"   idTextura="id2" radio="60" >
-			<posicion x="400" y="320"/>
+		<circulo id="cir2" colorFigura="255233000" radio="60" >
+			<posicion x="200" y="100"/>
 		</circulo> 	
-			
+		<circulo id="cir3" colorFigura="255233000" radio="60" >
+			<posicion x="600" y="120"/>
+		</circulo> 
+		<triangulo id="tri2"  colorFigura="000000255">
+			<ver1 x="370" y="410"/>
+			<ver2 x="430" y="410"/>
+			<ver3 x="400" y="460"/>
+		</triangulo> 		
+		<triangulo id="tri3"  colorFigura="000000255">
+			<ver1 x="310" y="290"/>
+			<ver2 x="310" y="350"/>
+			<ver3 x="260" y="320"/>
+		</triangulo> 		
 		</ListadoDeElementos>
 	<ListadoDeTexturas>
-		<textura id="id1" path="Debug/imagenes/TheSimpsons.bmp">
+		<textura id="id1" path="Debug/imagenes/nivel1.bmp">
 		</textura>
+
 		<textura id="id2" path="Debug/imagenes/dona.bmp">
 		</textura>
 		<textura id="id3" path="Debug/imagenes/arrow1.bmp">
@@ -36,14 +50,56 @@
 		</textura>
 		<textura id="id6" path="Debug/imagenes/arrow4.bmp">
 		</textura>
+
+		<textura id="win" path="Debug/imagenes/win.bmp">
+		</textura>
 		<textura id="letraG" path="Debug/imagenes/g.bmp">
 		</textura>
 		<textura id="letraO" path="Debug/imagenes/o.bmp">
-		</textura
-		<textura id="letraL" path="Debug/imagenes/L.bmp">
 		</textura>
-		<textura id="win" path="Debug/imagenes/win.bmp">
+		<textura id="letraL" path="Debug/imagenes/l.bmp">
 		</textura>
-	</ListadoDeTexturas>	
+
+		<textura id="bonus1" path="Debug/imagenes/bonus1.bmp">
+		</textura>
+		<textura id="bonus2" path="Debug/imagenes/bonus2.bmp">
+		</textura>
+		<textura id="bonus3" path="Debug/imagenes/bonus3.bmp">
+		</textura>
+		<textura id="bonus4" path="Debug/imagenes/bonus4.bmp">
+		</textura>
+		<textura id="bonus5" path="Debug/imagenes/bonus5.bmp">
+		</textura>
+		<textura id="bonus6" path="Debug/imagenes/bonus6.bmp">
+		</textura>
+		<textura id="bonus7" path="Debug/imagenes/bonus7.bmp">
+		</textura>
+		<textura id="bonus8" path="Debug/imagenes/bonus8.bmp">
+		</textura>
+		<textura id="bonus9" path="Debug/imagenes/bonus9.bmp">
+		</textura>
+
+		<textura id="0" path="Debug/imagenes/0.bmp">
+		</textura>
+		<textura id="1" path="Debug/imagenes/1.bmp">
+		</textura>
+		<textura id="2" path="Debug/imagenes/2.bmp">
+		</textura>
+		<textura id="3" path="Debug/imagenes/3.bmp">
+		</textura>
+		<textura id="4" path="Debug/imagenes/4.bmp">
+		</textura>
+		<textura id="5" path="Debug/imagenes/5.bmp">
+		</textura>
+		<textura id="6" path="Debug/imagenes/6.bmp">
+		</textura>
+		<textura id="7" path="Debug/imagenes/7.bmp">
+		</textura>
+
+		<textura id="pasoNivel" path="Debug/imagenes/pasoNivel2.bmp">
+		</textura>
+
+	</ListadoDeTexturas>
+	
 </escenario>
 

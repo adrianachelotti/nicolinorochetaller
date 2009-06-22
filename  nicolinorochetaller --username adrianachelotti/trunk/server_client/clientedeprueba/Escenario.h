@@ -212,7 +212,7 @@ public:
 	int getLongInicial();
 	void setLongInicial(int l);
 
-	void selectorDeDispersor(list<Figura*> figuras);
+	void selectorDeDispersor(int bonus, int disper);
 
 	bool getTienePegamento();
 	void setTienePegamento(bool tiene);

@@ -331,6 +331,33 @@ esto tendria que llamar a algoque procese los datos tipo "cliente uno arriba"
 char* mycstr = (char*) malloc(sizeof(char)*40);
 strcpy(mycstr, str.c_str() );
 **/
+int getNumeroDisConBonus()
+{
+	Escenario* esce = Escenario::obtenerInstancia();
+	list<Figura*> figuras = esce->getListadoDeFiguras();
+	list<Figura*>::iterator it;
+	int contador = 1;
+	Figura* figuraActual;
+	it = figuras.begin();
+
+	while( it != figuras.end())
+	{
+      figuraActual = *it;
+	  if (figuraActual->getBonus() == 0)
+	  {
+		contador++;
+		it++;
+	  } 
+	  else 
+	  {
+		cout<<"DISPER ASIGANO POR MI FUNCION ----> "<<figuraActual->getId()<<endl;
+		it = figuras.end();	
+	  }
+    }
+	return contador;
+}
+
+
 void* getDataProcessed(float deltaTime,int lastTime)
 {
 	Escenario* escenario = Escenario::obtenerInstancia(); 
@@ -352,6 +379,9 @@ void* getDataProcessed(float deltaTime,int lastTime)
 	Arco* arco2 = escenario->getArco2();
 	bool gol = false;
 	bool gol1 =  false;
+	
+	int bonus = 0;
+	int disper = 0;
 
 
 	if(command_Client_One==COMMAND_UP)
@@ -427,8 +457,11 @@ void* getDataProcessed(float deltaTime,int lastTime)
 			
 			tejo->getRepresentacionGrafica()->setRadio(escenario->getRadioInicial());
 			calcularPosTejo(tejo,pad1);	
-			//escenario->sacarBonus(escenario->getListadoDeFiguras());		
-			//escenario->selectorDeDispersor(escenario->getListadoDeFiguras());
+			escenario->sacarBonus(escenario->getListadoDeFiguras());		
+			bonus = escenario->selectorDeDispersor(escenario->getListadoDeFiguras());
+			disper = getNumeroDisConBonus();
+			cout<<"DISPERSOR: "<<disper<<endl;
+			cout<<"BONUS: "<<bonus<<endl;
 
 			escenario->setPad1(pad1);
 			escenario->setPad2(pad2);
@@ -438,6 +471,7 @@ void* getDataProcessed(float deltaTime,int lastTime)
 			posicionPadY2 = pad2->getPosicion().y;
 			posicionTejoX = tejo->getPosicion().x;
 			posicionTejoY = tejo->getPosicion().y;
+
 		}
 		else
 		{
@@ -462,8 +496,11 @@ void* getDataProcessed(float deltaTime,int lastTime)
 			
 				tejo->getRepresentacionGrafica()->setRadio(escenario->getRadioInicial());
 				calcularPosTejo(tejo,pad1);	
-				//escenario->sacarBonus(escenario->getListadoDeFiguras());		
-				//escenario->selectorDeDispersor(escenario->getListadoDeFiguras());
+				escenario->sacarBonus(escenario->getListadoDeFiguras());		
+				bonus = escenario->selectorDeDispersor(escenario->getListadoDeFiguras());
+				disper = getNumeroDisConBonus();
+				cout<<"DISPERSOR: "<<disper<<endl;
+				cout<<"BONUS: "<<bonus<<endl;
 
 				escenario->setPad1(pad1);
 				escenario->setPad2(pad2);
@@ -481,14 +518,35 @@ void* getDataProcessed(float deltaTime,int lastTime)
 				if (controlador->resolverChoqueConPaleta(tejo,pad1) == true)
 				{
 					escenario->setUtlimoTocado(0);
+					if (pad1->getPegamento() == true) 
+					{
+						tejoLanzado = false;
+					}
+					else 
+					{
+						tejoLanzado = true;
+					}
+
 				}
 				if (controlador->resolverChoqueConPaleta(tejo,pad2) == true)
 				{
 					escenario->setUtlimoTocado(1);
-				}
-				controlador->resolverChoqueDispersores(pad1,pad2,tejo,escenario,lastTime);
+					if (pad2->getPegamento() == true) 
+					{
+						tejoLanzado = false;
+					}
+					else 
+					{
+						tejoLanzado = true;
+					}
 
-				tejo->moverTejo(deltaTime/5);
+				}
+								
+				//para que se mueva la pelotita sin saltar tanto....
+				float deltaTimeNuevo = deltaTime/5;
+				controlador->resolverChoqueDispersores(pad1,pad2,tejo,escenario,deltaTimeNuevo);
+				tejo->moverTejo(deltaTimeNuevo);
+			
 				posicionTejoX = tejo->getPosicion().x;
 				posicionTejoY = tejo->getPosicion().y;
 
@@ -498,7 +556,7 @@ void* getDataProcessed(float deltaTime,int lastTime)
 	else
 	{
 		Punto centroTejo;
-		if (escenario->getUltimoGol() == 1)
+		if ((escenario->getUltimoGol() == 1)||(pad1->getPegamento()==true))
 		{	
 			posicionTejoX = pad1->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x + pad1->getRepresentacionGrafica()->getBase() + tejo->getRepresentacionGrafica()->getRadio();
 			posicionTejoY = pad1->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().y - (pad1->getRepresentacionGrafica()->getAltura()/2);
@@ -507,7 +565,7 @@ void* getDataProcessed(float deltaTime,int lastTime)
 			tejo->getRepresentacionGrafica()->setCentro(centroTejo);
 			escenario->setTejo(tejo); 
 		} 
-		else
+		if ((escenario->getUltimoGol() == 0)||(pad2->getPegamento()==true))
 		{
 			posicionTejoX = pad2->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().x - tejo->getRepresentacionGrafica()->getRadio();
 			posicionTejoY = pad2->getRepresentacionGrafica()->getPosicionVerticeInferiorIzquierdo().y - (pad2->getRepresentacionGrafica()->getAltura()/2);
@@ -517,13 +575,29 @@ void* getDataProcessed(float deltaTime,int lastTime)
 			escenario->setTejo(tejo); 
 		}
 	}
-	
+
 	//serializar posiciones
-	void*	resultado = malloc(4*sizeof(int));
+	int largoPad1 = escenario->getPad1()->getRepresentacionGrafica()->getAltura();
+	int largoPad2 = escenario->getPad2()->getRepresentacionGrafica()->getAltura();
+	int radio = escenario->getTejo()->getRepresentacionGrafica()->getRadio();
+	int pegamentoAsigando = 0;
+	if ((pad1->getPegamento() == 1) || (pad2->getPegamento() == 1))
+	{
+		pegamentoAsigando = 1;
+	}
+
+	void*	resultado = malloc(10*sizeof(int));
 	memcpy(  (void*)((int)resultado) , &posicionPadY1, sizeof(int));
 	memcpy(  (void*)((int)resultado + sizeof (int)), &posicionPadY2, sizeof(int));
 	memcpy(  (void*)((int)resultado + 2*(sizeof(int))), &posicionTejoX, sizeof(int));
 	memcpy(  (void*)((int)resultado + 3* (sizeof(int))), &posicionTejoY, sizeof(int));
+	memcpy(  (void*)((int)resultado + 4* (sizeof(int))), &disper, sizeof(int));
+	memcpy(  (void*)((int)resultado + 5* (sizeof(int))), &bonus, sizeof(int));
+	memcpy(  (void*)((int)resultado + 6* (sizeof(int))), &largoPad1, sizeof(int));
+	memcpy(  (void*)((int)resultado + 7* (sizeof(int))), &largoPad2, sizeof(int));
+	memcpy(  (void*)((int)resultado + 8* (sizeof(int))), &radio, sizeof(int));
+	memcpy(  (void*)((int)resultado + 9* (sizeof(int))), &pegamentoAsigando, sizeof(int));
+
 	return resultado;
 }
 
@@ -778,10 +852,10 @@ DWORD WINAPI writeFunctionClient(LPVOID param)
 		{
 			pConexion->len = error;
 			const char* buffer = (const char* )package->getPositions();
-			error = send(conexion->socketAccept,buffer, 4*(sizeof(int)),0);
+			error = send(conexion->socketAccept,buffer, 10*(sizeof(int)),0);
 			while(error==-1)
 			{
-				error = send(conexion->socketAccept,buffer, 4*(sizeof(int)),0);
+				error = send(conexion->socketAccept,buffer, 10*(sizeof(int)),0);
 			}
 			if(error ==SOCKET_ERROR)
 			{
@@ -943,7 +1017,7 @@ int main(int argc, char* argv[])
 		    //proceso los datos
 			
 			void* posiciones = getDataProcessed(deltaTime,lastTime);
-			
+
 			packageClientOne.setCommand(LISTEN_COMMAND);
 			packageClientOne.setPositions(posiciones);
 			packageClientOne.setConexion(pConexion);
