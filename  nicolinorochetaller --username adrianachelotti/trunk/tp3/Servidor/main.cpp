@@ -662,7 +662,7 @@ DWORD WINAPI readFunctionClienteOne(LPVOID param)
 	command_Client_One=COMMAND_INVALID;
 	int comando = COMMAND_INVALID;
 	char cadenaComando[4];
-	if(pConexion->len > 0)
+	if((pConexion->len > 0) && (pConexion2->len > 0))
 	{
 
 		int error = send(pConexion->socketAccept,(char*)&sendListen,sizeof( int),0);
@@ -674,8 +674,10 @@ DWORD WINAPI readFunctionClienteOne(LPVOID param)
 		}
 		if(error == SOCKET_ERROR)
 		{
+			//onexion->len = 0;
+			printf("readFunctionClienteOne: intentar enviar datos nuevamente\n");
 			pConexion->len = 0;
-			printf("intentar enviar datos nuevamente");
+			pConexion2->len = 0;
 		}
 		if(error>0)
 		{
@@ -684,8 +686,9 @@ DWORD WINAPI readFunctionClienteOne(LPVOID param)
 			comando =  *((int*)cadenaComando);
 			if(error == SOCKET_ERROR)
 			{
-				printf("intentar leer datos nuevamente");
+				printf("readFunctionClienteOne: intentar leer datos nuevamente\n");
 				pConexion->len = 0;
+				pConexion2->len = 0;
 				command_Client_One=COMMAND_INVALID;
 			}
 			if(error>0)
@@ -713,7 +716,7 @@ DWORD WINAPI readFunctionClienteTwo(LPVOID param)
 	int comando = COMMAND_INVALID;
 	char cadenaComando[4];
 
-	if(pConexion2->len > 0)
+	if((pConexion2->len > 0) && (pConexion->len > 0))
 	{
 		int error = send(pConexion2->socketAccept,(char*)&sendListen,sizeof(int),0);
 		int count = 0;
@@ -724,18 +727,23 @@ DWORD WINAPI readFunctionClienteTwo(LPVOID param)
 		}
 		if(error == SOCKET_ERROR)
 		{
-			printf("intertar enviar datos nuevamente");
+			printf("readFunctionClienteTwo: intentar enviar datos nuevamente\n");
+			
 			pConexion->len = 0;
+			pConexion2->len = 0;
+			
 		}
 		if(error>0)
 		{
 			pConexion2->len = error;
+
 			error = recv(pConexion2->socketAccept,cadenaComando,sizeof(int),0);
 			comando =  *((int*)cadenaComando);
 			if(error == SOCKET_ERROR)
 			{
 				pConexion->len = 0;
-				printf("intertar leer datos nuevamente");
+				pConexion2->len = 0;
+				printf("readFunctionClienteTwo: intentar leer datos nuevamente\n");
 				command_Client_Two=COMMAND_INVALID;
 			}
 			if(error>0)
@@ -919,7 +927,7 @@ DWORD WINAPI writeFunctionClient(LPVOID param)
 		}
 		if(error ==SOCKET_ERROR)
 		{
-			printf("No se a podido enviar el dato 1");
+			printf("writeFunctionClient: No se a podido enviar el dato 1");
 		}
 		if(error>0)
 		{
@@ -932,7 +940,7 @@ DWORD WINAPI writeFunctionClient(LPVOID param)
 			}
 			if(error ==SOCKET_ERROR)
 			{
-				printf("No se a podido enviar el dato 2");
+				printf("writeFunctionClient: No se a podido enviar el dato 2");
 			}
 			if(error>0)
 			{
@@ -1099,18 +1107,16 @@ int main(int argc, char* argv[])
 				lastTime = thisTime; 
 	
 				threadReader = CreateThread(NULL,0,readFunctionClienteOne,NULL,0,NULL);	
-				//readFunctionClienteOne(NULL);
-				//WaitForSingleObject(threadReader, INFINITE);
+				WaitForSingleObject(threadReader, INFINITE);
+				
 				threadReader2 = CreateThread(NULL,0,readFunctionClienteTwo,NULL,0,NULL);
-				//readFunctionClienteTwo(NULL);
-				//WaitForSingleObject(threadReader2, INFINITE);
-				// mientras que haya conexion con ambos clientes
-			
+				WaitForSingleObject(threadReader2, INFINITE);
+							
 
-				//	imprimirComandoClientes();
 				CloseHandle(threadReader);		
 				CloseHandle(threadReader2);
-			    //proceso los datos
+			    
+				//proceso los datos
 
 				void* posiciones = getDataProcessed(deltaTime,niveles);
 
