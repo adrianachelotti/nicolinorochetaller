@@ -540,14 +540,11 @@ bool ControladorDeChoque::hayChoqueConVertices(Tejo* pTejo, Triangulo*  triangul
 }
 
 
-bool ControladorDeChoque::hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo,int lastTime)
+bool ControladorDeChoque::hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo,float deltaTime)
 {	
 	Punto* vertices;
 	vertices = triangulo->getVertices();
 	bool choque;
-	
-	int thisTime = SDL_GetTicks();
-    float deltaTime = (float)((thisTime - lastTime)/(float)1000 );
 
 	Punto v1 = vertices[0];
 	Punto v2 = vertices[1];
@@ -656,7 +653,7 @@ bool ControladorDeChoque::hayChoqueConArco(Tejo* pTejo, Arco* arco)
 }
 
 /*Le pasamos el escenario y se encarga de llamar a la resolucion de los choques segun la figura*/
-void ControladorDeChoque::resolverChoqueDispersores(Pad* pad,Pad* pad1,Tejo* pTejo,Escenario* escenario, int lastTime)
+void ControladorDeChoque::resolverChoqueDispersores(Pad* pad,Pad* pad1,Tejo* pTejo,Escenario* escenario, float deltaTime)
 {
 	ControladorDeBonus* controladorBonus = new ControladorDeBonus();
 	list<Figura*> listaFiguras = escenario->listadoDeFiguras;
@@ -675,7 +672,7 @@ void ControladorDeChoque::resolverChoqueDispersores(Pad* pad,Pad* pad1,Tejo* pTe
 		if (found != string::npos)
 		{
 			Triangulo* triangulo = (Triangulo*) figuraActual;
-			if (hayChoqueConTriangulo(pTejo,triangulo, lastTime) == true)
+			if (hayChoqueConTriangulo(pTejo,triangulo, deltaTime) == true)
 			{
 				if  (triangulo->getBonus() != 0)
 				{
