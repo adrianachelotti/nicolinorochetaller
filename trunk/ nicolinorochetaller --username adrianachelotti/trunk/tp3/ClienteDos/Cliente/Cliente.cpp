@@ -980,7 +980,7 @@ DWORD WINAPI gameFunction(LPVOID param)
 	SDL_EventState(SDL_SYSWMEVENT,SDL_IGNORE);
 	SDL_EventState(SDL_VIDEORESIZE,SDL_IGNORE);
 	SDL_EventState(SDL_USEREVENT,SDL_IGNORE);
-	//SDL_EnableKeyRepeat(2000, 2000);
+	SDL_EnableKeyRepeat(100, 100);
 	
 	int nivel = 1;
 
