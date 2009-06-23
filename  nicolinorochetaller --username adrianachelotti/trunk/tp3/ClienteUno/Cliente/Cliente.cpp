@@ -500,8 +500,19 @@ void dibjuarPasoNive(int w, int h, SDL_Surface* screen)
 DWORD WINAPI readFunction(LPVOID param) 
 {
 	void* datos;	
+		
+	struct timeval timeout;
+	fd_set readfds;
+
+	timeout.tv_sec = 2;
+	timeout.tv_usec = 500000 ;
+
+	FD_ZERO(&readfds);
+	FD_SET(pConexion->socketAccept,&readfds);
 	while(pConexion->len > 0)
 	{
+
+
 		
 		char cadena[4];
 		bool iniciarComunicacion=false;
@@ -511,7 +522,22 @@ DWORD WINAPI readFunction(LPVOID param)
 		while(!iniciarComunicacion && !iniciarGraficacion)
 		{
 			
-			int error =recv(pConexion->socketAccept,cadena,4,0);
+
+			select(0, &readfds, NULL, NULL, &timeout);
+
+			if (FD_ISSET(pConexion->socketAccept, &readfds ))
+			{
+				printf ("mysocket se comunicó\n");
+			}
+			else
+			{
+				printf(" Se Acabó el tiempo\n");  
+				
+				pConexion->len=0;
+				return 0;
+			}
+ 			int error =recv(pConexion->socketAccept,cadena,4,0);
+			
 			if(error>0)
 			{
 				pConexion->len = error;
@@ -519,6 +545,18 @@ DWORD WINAPI readFunction(LPVOID param)
 				
 				if(comando==LISTEN_CLIENT) iniciarComunicacion= true;
 				else if(comando==LISTEN_COMMAND) iniciarGraficacion= true;
+			}
+			else
+			{
+				if(error==SOCKET_ERROR)
+				{
+					if(WSAGetLastError()==WSAECONNABORTED)
+					{
+						pConexion->len=0;
+						return 0;
+					}
+					 printf("Error:  %d", WSAGetLastError());
+				}
 			}
 
 		}
@@ -628,6 +666,12 @@ DWORD WINAPI readFunction(LPVOID param)
 			}
 			else
 			{
+
+				if(WSAGetLastError()==WSAECONNABORTED)
+				{
+					pConexion->len=0;
+					return 0;
+				}
 				printf("Error en el envio del evento, intentar de nuevo");
 			}
 		}
@@ -952,6 +996,7 @@ void dibujarFalla(int w, int h, SDL_Surface* screen)
 		fallo->dibujar();
 		cont++;
 	}
+	SDL_Flip(screen);
 
 	delete(fondo);
 	delete(fallo);
@@ -1009,6 +1054,12 @@ DWORD WINAPI gameFunction(LPVOID param)
 			Sleep(75);
 			Escenario::obtenerInstancia()->dibujar();
 			SDL_Flip(Escenario::screen);		
+			if(WSAGetLastError()==WSAECONNABORTED)
+			{
+				pConexion->len=0;
+				return 0;
+			}
+
 		}
 	}
 	cout<<pConexion->len<<endl;
@@ -1020,6 +1071,7 @@ DWORD WINAPI gameFunction(LPVOID param)
 	{
 		dibujarFinal(Escenario::obtenerInstancia()->getAncho(),Escenario::obtenerInstancia()->getAlto(),Escenario::screen);
 	}
+	Sleep(2000);
 	return 0;
 }
 
