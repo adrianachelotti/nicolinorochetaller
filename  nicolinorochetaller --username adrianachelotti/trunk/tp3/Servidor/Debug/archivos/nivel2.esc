@@ -96,7 +96,8 @@
 		</textura>
 		<textura id="empate" path="archivos/empate.bmp">
 		</textura>
-
+		<textura id="falla" path="archivos/falla.bmp">
+		</textura>
 	</ListadoDeTexturas>	
 </escenario>
 
