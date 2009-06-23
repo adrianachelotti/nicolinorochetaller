@@ -666,13 +666,16 @@ DWORD WINAPI readFunctionClienteOne(LPVOID param)
 	{
 
 		int error = send(pConexion->socketAccept,(char*)&sendListen,sizeof( int),0);
-	    while(error==-1)
+		int count = 0;
+	    while((error==-1)&&(count<3))
 		{
 			error = send(pConexion->socketAccept,(char*)&sendListen,sizeof( int),0);
+			count++;
 		}
 		if(error == SOCKET_ERROR)
 		{
-			printf("intertar enviar datos nuevamente");
+			pConexion->len = 0;
+			printf("intentar enviar datos nuevamente");
 		}
 		if(error>0)
 		{
@@ -681,7 +684,8 @@ DWORD WINAPI readFunctionClienteOne(LPVOID param)
 			comando =  *((int*)cadenaComando);
 			if(error == SOCKET_ERROR)
 			{
-				printf("intertar leer datos nuevamente");
+				printf("intentar leer datos nuevamente");
+				pConexion->len = 0;
 				command_Client_One=COMMAND_INVALID;
 			}
 			if(error>0)
@@ -712,13 +716,16 @@ DWORD WINAPI readFunctionClienteTwo(LPVOID param)
 	if(pConexion2->len > 0)
 	{
 		int error = send(pConexion2->socketAccept,(char*)&sendListen,sizeof(int),0);
-		while(error==-1)
+		int count = 0;
+		while ((error==-1)&&(count<3))
 		{
 			error = send(pConexion2->socketAccept,(char*)&sendListen,sizeof( int),0);
+			count++;
 		}
 		if(error == SOCKET_ERROR)
 		{
 			printf("intertar enviar datos nuevamente");
+			pConexion->len = 0;
 		}
 		if(error>0)
 		{
@@ -727,6 +734,7 @@ DWORD WINAPI readFunctionClienteTwo(LPVOID param)
 			comando =  *((int*)cadenaComando);
 			if(error == SOCKET_ERROR)
 			{
+				pConexion->len = 0;
 				printf("intertar leer datos nuevamente");
 				command_Client_Two=COMMAND_INVALID;
 			}
@@ -1069,7 +1077,7 @@ int main(int argc, char* argv[])
 		CloseHandle(threadSendFiles);
 
 		int niveles = 1;
-		while (niveles < 3)
+		while ((niveles < 3)&&(pConexion->len > 0 && pConexion2->len > 0))
 		{
 			int resultado = creacionEscenario(niveles);
 		
@@ -1090,11 +1098,11 @@ int main(int argc, char* argv[])
 				deltaTime = (float)((thisTime - lastTime)/(float)1000 );
 				lastTime = thisTime; 
 	
-				//threadReader = CreateThread(NULL,0,readFunctionClienteOne,NULL,0,NULL);	
-				readFunctionClienteOne(NULL);
+				threadReader = CreateThread(NULL,0,readFunctionClienteOne,NULL,0,NULL);	
+				//readFunctionClienteOne(NULL);
 				//WaitForSingleObject(threadReader, INFINITE);
-				//threadReader2 = CreateThread(NULL,0,readFunctionClienteTwo,NULL,0,NULL);
-				readFunctionClienteTwo(NULL);
+				threadReader2 = CreateThread(NULL,0,readFunctionClienteTwo,NULL,0,NULL);
+				//readFunctionClienteTwo(NULL);
 				//WaitForSingleObject(threadReader2, INFINITE);
 				// mientras que haya conexion con ambos clientes
 			
@@ -1115,10 +1123,10 @@ int main(int argc, char* argv[])
 
 			
 				enviar[0] = CreateThread(NULL, 0, writeFunctionClient, &packageClientOne, 0, NULL);
-				WaitForSingleObject(enviar[0], INFINITE);
+				WaitForSingleObject(enviar[0], 300);
 			
 				enviar[1] = CreateThread(NULL, 0, writeFunctionClient, &packageClientTwo, 0, NULL);
-				WaitForSingleObject(enviar[1], INFINITE);
+				WaitForSingleObject(enviar[1], 300);
 			
 				CloseHandle(enviar[0]);
 				CloseHandle(enviar[1]);
