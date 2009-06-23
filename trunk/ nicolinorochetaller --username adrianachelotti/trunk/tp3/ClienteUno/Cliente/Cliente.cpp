@@ -550,7 +550,7 @@ DWORD WINAPI readFunction(LPVOID param)
 			{
 				if(error==SOCKET_ERROR)
 				{
-					if(WSAGetLastError()==WSAECONNABORTED)
+					if((WSAGetLastError()==WSAECONNRESET)||(WSAGetLastError()==WSAECONNABORTED))
 					{
 						pConexion->len=0;
 						return 0;
