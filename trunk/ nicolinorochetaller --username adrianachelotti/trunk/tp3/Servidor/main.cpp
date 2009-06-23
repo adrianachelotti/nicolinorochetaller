@@ -361,7 +361,7 @@ int getNumeroDisConBonus()
 }
 
 
-void* getDataProcessed(float deltaTime,int lastTime,int nivel)
+void* getDataProcessed(float deltaTime,int nivel)
 {
 	Escenario* escenario = Escenario::obtenerInstancia(); 
 	ControladorDeChoque* controlador = new ControladorDeChoque();
@@ -1112,7 +1112,7 @@ int main(int argc, char* argv[])
 				CloseHandle(threadReader2);
 			    //proceso los datos
 
-				void* posiciones = getDataProcessed(deltaTime,lastTime,niveles);
+				void* posiciones = getDataProcessed(deltaTime,niveles);
 
 				packageClientOne.setCommand(LISTEN_COMMAND);
 				packageClientOne.setPositions(posiciones);

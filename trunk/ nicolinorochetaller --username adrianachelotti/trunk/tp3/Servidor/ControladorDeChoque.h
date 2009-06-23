@@ -43,13 +43,13 @@ public:
 	void calculoVelocidadReflejada(Punto inicio, Punto fin, Tejo* pTejo); 
 
 	/*detecta si hay un choque entre el tejo y un triangulo y resulve la nueva velocidad*/
-	bool hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo,int lastTime);
+	bool hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo,float deltaTime);
 
 	/*detecta choque de tejo con los vertices*/
 	bool hayChoqueConVertices(Tejo* pTejo, Triangulo*  triangulo);
 
 	/*llama a los detetectores de cada dispersor*/
-	void resolverChoqueDispersores(Pad* pad, Pad* pad1, Tejo* pTejo,Escenario* escenario, int lastTime);
+	void resolverChoqueDispersores(Pad* pad, Pad* pad1, Tejo* pTejo,Escenario* escenario, float deltaTime);
 
 	/*detecta si hay un choque entre el tejo y un triangulo y resulve la nueva velocidad*/
 	bool hayChoqueConArco(Tejo* pTejo, Arco* arco);
