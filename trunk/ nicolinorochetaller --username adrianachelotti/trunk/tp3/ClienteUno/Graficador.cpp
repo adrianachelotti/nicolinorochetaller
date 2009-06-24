@@ -42,21 +42,17 @@ Graficador* Graficador::obtenerInstancia()
 	{
 		  if (-1 == SDL_LockSurface(screen))
 		  {
-			printf("Can't lock hardware surface\n");
 			exit(1);
 		  }
 	}
 
-    // dibujar(screen,x,y,1,1,color);
-	if ((x > 0 && x < screen->w) && (y > 0 && y < screen->h))
+    if ((x > 0 && x < screen->w) && (y > 0 && y < screen->h))
 	{
-	
-	 	  
+		 	  
 	  switch (screen->format->BytesPerPixel)
 	  { 
 	  case 1: 
 		  { 
-			  /* Assuming 8-bpp */ 
 			  Uint8 *pixel; 
 			  pixel = (Uint8 *)screen->pixels + y*screen->pitch + x; 
 			  *pixel = color; 
@@ -64,7 +60,6 @@ Graficador* Graficador::obtenerInstancia()
 		  break; 
 	  case 2: 
 		  { 
-			  /* Probably 15-bpp or 16-bpp */ 
 			  Uint16 *pixel; 
 			  pixel = (Uint16 *)screen->pixels + y*screen->pitch/2 + x; 
 			  *pixel = color; 
@@ -72,7 +67,6 @@ Graficador* Graficador::obtenerInstancia()
 		  break; 
 	  case 3: 
 		  { 
-			  /* Slow 24-bpp mode, usually not used */ 
 			  Uint8 *pixel; 
 			  pixel = (Uint8 *)screen->pixels + y*screen->pitch + x; 
 			  *(pixel+screen->format->Rshift/8) = (color >> 4) & 0xFF; 
@@ -82,7 +76,6 @@ Graficador* Graficador::obtenerInstancia()
 		  break; 
 	  case 4: 
 		  { 
-			  /* Probably 32-bpp */ 
 			  Uint32 *pixel; 
 			  pixel = (Uint32 *)screen->pixels + y*screen->pitch/4 + x; 
 			  *pixel = color; 
