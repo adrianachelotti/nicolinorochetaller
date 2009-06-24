@@ -1052,7 +1052,7 @@ DWORD WINAPI gameFunction(LPVOID param)
 	{
 		dibujarFinal(Escenario::obtenerInstancia()->getAncho(),Escenario::obtenerInstancia()->getAlto(),Escenario::screen);
 	}
-	Sleep(2000);
+	Sleep(5000);
 	return 0;
 }
 
@@ -1119,6 +1119,8 @@ int main(int argc, char* argv[])
 		if(inicioJuego==INIT_GAME) iniciar= true;
 	}
 
+	printf("Se inicia el juego.\n");
+
 	threadGame = CreateThread(NULL,0,gameFunction,NULL,0,NULL);	
 	threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);
 
@@ -1132,6 +1134,7 @@ int main(int argc, char* argv[])
    
 	trCerrarConexion(pConexion);
 
+	printf("Finaliza el juego.\n");
 	printf("Presione una tecla para finalizar.");
 	getchar();
 	return 0;
