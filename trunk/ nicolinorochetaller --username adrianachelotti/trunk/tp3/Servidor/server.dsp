@@ -137,10 +137,6 @@ SOURCE=.\Parser.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Partida.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\Rectangulo.cpp
 # End Source File
 # Begin Source File
@@ -230,10 +226,6 @@ SOURCE=.\Pad.h
 # Begin Source File
 
 SOURCE=.\Parser.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Partida.h
 # End Source File
 # Begin Source File
 
