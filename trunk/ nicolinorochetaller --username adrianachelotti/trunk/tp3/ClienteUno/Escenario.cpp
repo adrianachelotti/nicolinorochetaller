@@ -639,6 +639,8 @@ void Escenario::selectorDeDispersor(int bonus, int disper)
 	{	
 		contador++;
 		figuraActual = *it;
+		cout<<"DISPERSOR: "<<disper<<endl;
+		cout<<"BONUS: "<<bonus<<endl;
 		if (contador == disper)
 		{
 			figuraActual->setBonus(bonus);
@@ -647,8 +649,11 @@ void Escenario::selectorDeDispersor(int bonus, int disper)
 		}
 		else
 		{
-			figuraActual->setBonus(0);
-			figuraActual->setIdTextura("ninguna");
+			if (contador>5)
+			{
+				figuraActual->setBonus(0);
+				figuraActual->setIdTextura("ninguna");
+			}
 		}
 		it++;
     }

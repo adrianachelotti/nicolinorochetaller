@@ -662,7 +662,7 @@ int Escenario::selectorDeDispersor(list<Figura*> figuras)
     int ranBonus;
 	int ranDisper;
     int lowestBonus=1, highestBonus=9;
-	int lowestDisper = 1, highestDisper = figuras.size()-5;
+	int lowestDisper = 6, highestDisper = figuras.size();
 
     int rangeBonus = (highestBonus-lowestBonus)+1;
 	int rangeDisper = (highestDisper-lowestDisper)+1;
@@ -678,7 +678,7 @@ int Escenario::selectorDeDispersor(list<Figura*> figuras)
 	{
 	  contador++;
       figuraActual = *it;
-	  if ((contador - 5) == ranDisper) 
+	  if ((contador) == ranDisper) 
 	  {
 		  if (figuraActual->getBonus != 0)
 		  {
