@@ -361,18 +361,6 @@ bool ControladorDeChoque::hayChoqueConCirculo(Tejo* pTejo, Circulo* circulo)
 	int sumaDeRadios = circulo->getRadio() + tejo->getRadio();
 	int restaDeRadios = abs(circulo->getRadio() - tejo->getRadio());
 	
-/*	cout<<"Radio dispersor: "<<circulo->getRadio()<<" - "<<"Radio tejo: "<<tejo->getRadio()<<endl; 
-	cout<<"Suma de radios:"<<sumaDeRadios<<endl;
-	cout<<"Resta de radios:"<<restaDeRadios<<endl;
-	cout<<"Distancia entre radios: "<<u<<endl;
-*/
-	if(u==sumaDeRadios) printf("Los circulos se tocan en un punto.\n");
-	if(u<=restaDeRadios) printf("Un circulo dentro de otro.\n");
-	if((u>restaDeRadios)&&(u<sumaDeRadios)) printf("Los circulos se intersectan en dos puntos.\n");
-	
-	
-//TODO
-
 	if(u==sumaDeRadios) return true;
 	if(u<=restaDeRadios) return true;
 	if((u>restaDeRadios)&&(u<sumaDeRadios)) return true;
@@ -427,8 +415,6 @@ bool ControladorDeChoque::hayChoqueConSegmento(Tejo* pTejo, Segmento*  segmento 
 
 	centro = tejo->getCentro();
 
-
-	//printf("tejo x:%d y: %d con el segmento inicial x: %d y: %d  final x: %d  y: %d \n",centro.x, centro.y ,puntoA.x,puntoA.y,puntoB.x, puntoB.y );
 	direccion = Formula::restarPuntos(puntoB, puntoA);
 	delta = Formula::restarPuntos(puntoA,centro);
 
@@ -438,33 +424,16 @@ bool ControladorDeChoque::hayChoqueConSegmento(Tejo* pTejo, Segmento*  segmento 
 	diferencia2 = b2 - ac4;
 	diff = (int)diferencia<<16;
 	
-	/*
-	if(diff==0)
-	{
-		printf("Existe interseccion en un unico punto de la recta.\n");
-	}
-
-	if(diff<0)
-	{
-		printf("No hay punto de interseccion.\n");
-	}
-
-
-	if(diff>0)
-	{
-		printf("Existe interseccion en dos puntos de la recta.\n");
-	}*/
-
    //Ahora calculamos t1,t2 = [-2.direccion.delta +- raiz(diff)]/(2*|direccion|^2)
 	b = 2* Formula::productoInterno(direccion,delta);
 	a = Formula::normaAlCuadrado(direccion);
 	t1 = ( -b + sqrt((double)diferencia2))/(double)(a*2);
 	t2 = ( -b - sqrt((double)diferencia2))/(double)(a*2);
-	//printf("Valor raiz t1: %f\n" ,t1);
-	//printf("Valor raiz t2: %f\n" ,t2);
+
 	if ( (t1>=0)&&(t1<=1) ) return true;
 	if ( (t2>=0)&&(t2<=1) )return true;
-  return false;
+ 
+	return false;
 }
 
 void ControladorDeChoque::calculoVelocidadReflejada(Punto inicio,Punto fin,Tejo* pTejo) 

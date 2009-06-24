@@ -42,8 +42,7 @@ Graficador* Graficador::obtenerInstancia()
 	{
 		  if (-1 == SDL_LockSurface(screen))
 		  {
-			printf("Can't lock hardware surface\n");
-			exit(1);
+				exit(1);
 		  }
 	}
 
