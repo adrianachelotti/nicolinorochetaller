@@ -160,11 +160,11 @@ void posiPaleta(Pad* pad)
 	found = id.find("pad1");	
 	if (found != string::npos)
 	{
-		pos.x = rec->getBase() * 4;
+		pos.x = rec->getBase() * 3;
 	}
 	else 
 	{
-		pos.x = reso - (rec->getBase() * 4) - rec->getBase();
+		pos.x = reso - (rec->getBase() * 3) - rec->getBase();
 	}
 	rec->setPosicionVerticeInferiorIzquierdo(pos);
 	pad->setRepresentacionGrafica(rec);
@@ -235,13 +235,13 @@ void calcularLadoPosArco(Arco* arco)
 	found = id.find("arco1");
 	if (found != string::npos)
 	{
-		pos.x = rec->getBase();
+		pos.x = 1;
 		rec->setPosicionVerticeInferiorIzquierdo(pos);
 		arco->setRepresentacionGrafica(rec);
 	}
 	else 
 	{
-		pos.x = (escenario->getResolucion()) - (2*rec->getBase());
+		pos.x = (escenario->getResolucion()) - (rec->getBase());
 		rec->setPosicionVerticeInferiorIzquierdo(pos);
 		arco->setRepresentacionGrafica(rec);
 	}
@@ -562,6 +562,8 @@ void* getDataProcessed(float deltaTime,int nivel)
 
 	if (escenario->getTejosRestantes() == 0)
 	{
+		bonus = 0;
+		disper = 0;
 		if (escenario->getGolesDerecho() > escenario->getGolesIzquierdo())
 		{
 			escenario->sumaPuntajeDerecho(70);

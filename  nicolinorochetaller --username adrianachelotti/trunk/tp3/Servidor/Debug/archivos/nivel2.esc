@@ -18,7 +18,13 @@
 			<posicion x="1" y="1"/>
 		</rectangulo>
 
-		<rectangulo id="rec1" base="20" altura="200" colorFigura="100100100">
+		<circulo id="cir1" colorFigura="100100100" radio="50">
+			<posicion x="200" y="400"/>
+		</circulo>
+		<circulo id="cir2" colorFigura="100100100" radio="50">
+			<posicion x="400" y="500"/>
+		</circulo>
+		<rectangulo id="rec1" base="75" altura="200" colorFigura="100100100">
 			<posicion x="300" y="300"/>
 		</rectangulo>
 		<triangulo id="tri1" colorFigura="100100100">
