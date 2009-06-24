@@ -118,7 +118,6 @@ void crearTejo(Tejo* pTejo,Pad* pad )
 	velocidadTejo.y = escenario->getVeloy();
 
 	pTejo->setVelocidad(velocidadTejo);
-
 	bool tejoBien = false;
 
 	while( it != listaFiguras.end()) 
@@ -131,6 +130,7 @@ void crearTejo(Tejo* pTejo,Pad* pad )
 		if (found != string::npos)
 		{
 			Circulo* cir = (Circulo*) figuraActual;
+			cir->setBonus(0);
 			pTejo->setRepresentacionGrafica(cir);
 			calcularPosTejo(pTejo,pad);
 			escenario->setRadioInicial(cir->getRadio());
@@ -195,6 +195,7 @@ void crearPaletas(Pad* pad,Pad* pad1)
 		if (found != string::npos)
 		{
 			Rectangulo* rec = (Rectangulo*) figuraActual;
+			rec->setBonus(0);
 			pad->setRepresentacionGrafica(rec);
 			escenario->setLongInicial(rec->getAltura());
 			posiPaleta(pad);
@@ -205,6 +206,7 @@ void crearPaletas(Pad* pad,Pad* pad1)
 		if (found != string::npos)
 		{
 			Rectangulo* rec1 = (Rectangulo*) figuraActual;
+			rec1->setBonus(0);
 			pad1->setRepresentacionGrafica(rec1);
 			posiPaleta(pad1);
 			pad2Bien = true;
@@ -268,6 +270,7 @@ void crearArcos(Arco* arco,Arco* arco1)
 		if (found != string::npos)
 		{
 			Rectangulo* rec = (Rectangulo*) figuraActual;
+			rec->setBonus(0);
 			arco->setRepresentacionGrafica(rec);
 			calcularLadoPosArco(arco);
 			arcoBien = true;
@@ -277,6 +280,7 @@ void crearArcos(Arco* arco,Arco* arco1)
 		if (found != string::npos)
 		{
 			Rectangulo* rec1 = (Rectangulo*) figuraActual;
+			rec1->setBonus(0);
 			arco1->setRepresentacionGrafica(rec1);
 			calcularLadoPosArco(arco1);
 			arcoBien = true;
@@ -426,7 +430,7 @@ void* getDataProcessed(float deltaTime,int nivel)
 			tejo->getRepresentacionGrafica()->setRadio(escenario->getRadioInicial());
 			calcularPosTejo(tejo,pad1);	
 			escenario->sacarBonus(escenario->getListadoDeFiguras());		
-			bonus = escenario->selectorDeDispersor(escenario->getListadoDeFiguras());
+			bonus = escenario->selectorDeDispersor();
 			disper = getNumeroDisConBonus();
 
 			escenario->setPad1(pad1);
@@ -465,7 +469,7 @@ void* getDataProcessed(float deltaTime,int nivel)
 				tejo->getRepresentacionGrafica()->setRadio(escenario->getRadioInicial());
 				calcularPosTejo(tejo,pad1);	
 				escenario->sacarBonus(escenario->getListadoDeFiguras());		
-				bonus = escenario->selectorDeDispersor(escenario->getListadoDeFiguras());
+				bonus = escenario->selectorDeDispersor();
 				disper = getNumeroDisConBonus();
 				
 				escenario->setPad1(pad1);

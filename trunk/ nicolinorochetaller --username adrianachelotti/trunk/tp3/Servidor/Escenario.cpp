@@ -656,13 +656,12 @@ string nombreBonus(int bonus)
 }
 
 
-int Escenario::selectorDeDispersor(list<Figura*> figuras)
+int Escenario::selectorDeDispersor()
 {
-	//srand((unsigned)time(0)); 
     int ranBonus;
 	int ranDisper;
     int lowestBonus=1, highestBonus=9;
-	int lowestDisper = 6, highestDisper = figuras.size();
+	int lowestDisper = 6, highestDisper = this->listadoDeFiguras.size();
 
     int rangeBonus = (highestBonus-lowestBonus)+1;
 	int rangeDisper = (highestDisper-lowestDisper)+1;
@@ -672,20 +671,17 @@ int Escenario::selectorDeDispersor(list<Figura*> figuras)
 
 	list<Figura*>::iterator it;
 	Figura* figuraActual;
-	it = figuras.begin();
+	it = this->listadoDeFiguras.begin();
 	int contador = 0;
-	while( it != figuras.end())
+	while( it != this->listadoDeFiguras.end())
 	{
 	  contador++;
       figuraActual = *it;
 	  if ((contador) == ranDisper) 
 	  {
-		  if (figuraActual->getBonus != 0)
-		  {
-			  	figuraActual->setBonus(ranBonus);
-				figuraActual->setIdTextura(nombreBonus(ranBonus));
-				figuraActual->setImagenFigura(NULL);
-		  }
+	  	figuraActual->setBonus(ranBonus);
+		figuraActual->setIdTextura(nombreBonus(ranBonus));
+		figuraActual->setImagenFigura(NULL);
 	  }
 	  it++;
     }
@@ -701,7 +697,7 @@ void Escenario::sacarBonus(list<Figura*> listaFiguras)
 	while( it != listaFiguras.end())
 	{
 	  contador++;
-	  if (contador>4)
+	  if (contador>5)
 	  {
 		figuraActual = *it;
 		figuraActual->setBonus(0);
