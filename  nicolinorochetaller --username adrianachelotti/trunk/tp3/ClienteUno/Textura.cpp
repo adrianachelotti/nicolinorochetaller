@@ -19,7 +19,6 @@ Textura::Textura(string id,string path)
 {
 	this->id = id;
 	this->path = path;
-	//TODO
 	this->imagen =  NULL;
 	
 	

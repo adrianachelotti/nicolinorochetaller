@@ -420,40 +420,33 @@ void dibujarAnimacion(int w , int h, SDL_Surface* screen,int gD, int gI)
 	SDL_Flip(screen);
 	SDL_Delay(100);
  
-//	int cont = 0;
 	int offset =0;
-//	while (cont<8)
-//	{
-//		if((cont%2)==0)
-//			offset=2;
-//		else offset=0;
       
-		posicionG.x = w/2 -150;
-		posicionG.y = h/2 +offset;
-		posicionO.x = w/2 -50;
-		posicionO.y = h/2-offset;
-		posicionL.x = w/2 +50;
-		posicionL.y = h/2+offset;
+	posicionG.x = w/2 -150;
+	posicionG.y = h/2 +offset;
+	posicionO.x = w/2 -50;
+	posicionO.y = h/2-offset;
+	posicionL.x = w/2 +50;
+	posicionL.y = h/2+offset;
 	
-		g->setPosicionVerticeInferiorIzquierdo(posicionG);
-		o->setPosicionVerticeInferiorIzquierdo(posicionO);
-		l->setPosicionVerticeInferiorIzquierdo(posicionL);
+	g->setPosicionVerticeInferiorIzquierdo(posicionG);
+	o->setPosicionVerticeInferiorIzquierdo(posicionO);
+	l->setPosicionVerticeInferiorIzquierdo(posicionL);
 
-//		printf("cont %d" , cont);
-		fondo->dibujar();
-		g->dibujar();
-		o->dibujar();
-		l->dibujar();
-		i->dibujar();
-		d->dibujar();
-		imagen->dibujar();
+	fondo->dibujar();
+	g->dibujar();
+	o->dibujar();
+	l->dibujar();
+	i->dibujar();
+	d->dibujar();
+	imagen->dibujar();
 
 
-	//	cont++;
-		SDL_Flip(screen);
-		SDL_Delay(100);
-		Sleep(2000);
-//	}
+
+	SDL_Flip(screen);
+	SDL_Delay(100);
+	Sleep(2000);
+
 	delete fondo;
 	delete g;
 	delete o;
@@ -525,17 +518,12 @@ DWORD WINAPI readFunction(LPVOID param)
 
 			select(0, &readfds, NULL, NULL, &timeout);
 
-			if (FD_ISSET(pConexion->socketAccept, &readfds ))
+			if (!FD_ISSET(pConexion->socketAccept, &readfds ))
 			{
-				printf ("mysocket se comunicó\n");
-			}
-			else
-			{
-				printf(" Se Acabó el tiempo\n");  
-				
 				pConexion->len=0;
 				return 0;
 			}
+
  			int error =recv(pConexion->socketAccept,cadena,4,0);
 			
 			if(error>0)
@@ -555,7 +543,6 @@ DWORD WINAPI readFunction(LPVOID param)
 						pConexion->len=0;
 						return 0;
 					}
-					 printf("Error:  %d", WSAGetLastError());
 				}
 			}
 
@@ -578,9 +565,6 @@ DWORD WINAPI readFunction(LPVOID param)
 			if(error>0)
 			{
 				pConexion->len = error;
-			}else
-			{
-				printf("Error en el envio del evento, intentar de nuevo");
 			}
 		}
 		if(iniciarGraficacion)
@@ -672,7 +656,7 @@ DWORD WINAPI readFunction(LPVOID param)
 					pConexion->len=0;
 					return 0;
 				}
-				printf("Error en el envio del evento, intentar de nuevo");
+				
 			}
 		}
 	
@@ -895,7 +879,6 @@ void dibujarFinal(int w, int h, SDL_Surface* screen)
 	int n1 = puntajeUno % 10;
 	puntajeUno = puntajeUno / 10;
 	itoa(n1,nChar,10);
-	cout<<n1<<endl;
 	numero11->setIdTextura(nChar);
 	int cantidadDibujar1 = 1;
 	int cantidadDibujar2 = 1;
@@ -904,7 +887,6 @@ void dibujarFinal(int w, int h, SDL_Surface* screen)
 	{
 		cantidadDibujar1++;
 		int n2 = puntajeUno % 10;
-		cout<<n2<<endl;
 		puntajeUno = puntajeUno / 10;
 		itoa(n2,nChar,10);
 		numero12->setIdTextura(nChar);
@@ -914,7 +896,6 @@ void dibujarFinal(int w, int h, SDL_Surface* screen)
 	{
 		cantidadDibujar1++;
 		int n3 = puntajeUno % 10;
-		cout<<n3<<endl;
 		puntajeUno = puntajeUno / 10;
 		itoa(n3,nChar,10);
 		numero13->setIdTextura(nChar);
@@ -924,14 +905,12 @@ void dibujarFinal(int w, int h, SDL_Surface* screen)
 	int n4 = puntajeDos % 10;
 	puntajeDos = puntajeDos / 10;
 	itoa(n4,nChar,10);
-	cout<<n4<<endl;
 	numero21->setIdTextura(nChar);
 	
 	if (puntajeDos!=0)
 	{
 		cantidadDibujar2++;
 		int n5 = puntajeDos % 10;
-		cout<<n5<<endl;
 		puntajeDos = puntajeDos / 10;
 		itoa(n5,nChar,10);
 		numero22->setIdTextura(nChar);
@@ -941,7 +920,6 @@ void dibujarFinal(int w, int h, SDL_Surface* screen)
 	{
 		cantidadDibujar2++;
 		int n6 = puntajeDos % 10;
-		cout<<n6<<endl;
 		puntajeUno = puntajeDos / 10;
 		itoa(n6,nChar,10);
 		numero23->setIdTextura(nChar);
@@ -1065,7 +1043,7 @@ DWORD WINAPI gameFunction(LPVOID param)
 
 		}
 	}
-	cout<<pConexion->len<<endl;
+	
 	if (pConexion->len < 1)
 	{
 		dibujarFalla(Escenario::obtenerInstancia()->getAncho(),Escenario::obtenerInstancia()->getAlto(),Escenario::screen);
@@ -1122,11 +1100,14 @@ int main(int argc, char* argv[])
 		if (listenFiles==LISTEN_FILES) iniciarTransferencia = true;
 	}
 
+	printf("Se inicia la transferencia de archivos.\n");
+	printf("Transfiriendo archivos.....\n");
 	threadInit = CreateThread(NULL,0,recvFilesFunction,NULL,0,NULL);	
 	
 	WaitForSingleObject(threadInit,INFINITE);		
 	CloseHandle(threadInit);
 
+	printf("Finaliza la transferencia de archivos.\n");
 
 	bool iniciar = false;
 	char cadena[10];
