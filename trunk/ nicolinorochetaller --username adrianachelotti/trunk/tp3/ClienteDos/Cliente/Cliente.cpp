@@ -975,18 +975,21 @@ void dibujarFinal(int w, int h, SDL_Surface* screen)
 
 void dibujarFalla(int w, int h, SDL_Surface* screen)
 {
+	//tamanio de la imagen
+	int ancho = 434;
+	int alto = 314;
 	Escenario* esce = Escenario::obtenerInstancia();
 	Punto posicionFondo, posCartel;
 	posicionFondo.x = 0;
 	posicionFondo.y = h;
-	posCartel.x = (esce->getAncho())/2;
-	posCartel.y = (esce->getAlto())/2;
+	posCartel.x = (esce->getAncho())/2-(ancho/2);
+	posCartel.y = ((esce->getAlto())/2 )+(alto/2);
 
 	Rectangulo* fondo = new Rectangulo("fondo",w,h,posicionFondo);
 	fondo->setColorFondo(0x000000);
 	fondo->setColorPropio(true);
 
-	Rectangulo* fallo = new Rectangulo("cartel",200,50,posCartel);
+	Rectangulo* fallo = new Rectangulo("cartel",ancho,alto,posCartel);
 	fallo->setIdTextura("falla");
 
 	int cont = 0;
