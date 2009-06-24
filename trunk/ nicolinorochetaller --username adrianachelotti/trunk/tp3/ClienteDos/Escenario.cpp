@@ -638,13 +638,9 @@ void Escenario::selectorDeDispersor(int bonus, int disper)
 	while( it != figuras.end())
 	{	
 		contador++;
-		cout<<"CONTADOR: "<<contador<<endl;
-		cout<<"FIN: "<<disper<<endl;
 		figuraActual = *it;
 		if (contador == disper)
 		{
-			cout<<"FIGURA QUE SE LE ASIGNA BONUS EN EL CLIENTE: "<<figuraActual->getId()<<endl;
-			cout<<"BONUS ASIGANADO EN EL CLIENTE"<<bonus<<endl;
 			figuraActual->setBonus(bonus);
 			figuraActual->setIdTextura(nombreBonus(bonus));
 			figuraActual->setImagenFigura(NULL);
