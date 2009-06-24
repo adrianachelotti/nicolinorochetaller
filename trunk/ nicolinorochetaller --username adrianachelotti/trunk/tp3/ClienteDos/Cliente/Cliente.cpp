@@ -1129,10 +1129,10 @@ int main(int argc, char* argv[])
 	CloseHandle(threadGame);
 	CloseHandle(threadReader);
 
-   
+   	printf("Finaliza el juego.\n");
+
 	trCerrarConexion(pConexion);
 
-	printf("Finaliza el juego.\n");
 	printf("Presione una tecla para finalizar.");
 	getchar();
 	return 0;
