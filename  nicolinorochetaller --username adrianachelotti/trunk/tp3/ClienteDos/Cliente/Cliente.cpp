@@ -1096,12 +1096,16 @@ int main(int argc, char* argv[])
 	 	int listenFiles = *(int*) cadenaListenFiles;
 		if (listenFiles==LISTEN_FILES) iniciarTransferencia = true;
 	}
+	
+	printf("Se inicia la transferencia de archivos.\n");
+	printf("Transfiriendo archivos.....\n");
 
 	threadInit = CreateThread(NULL,0,recvFilesFunction,NULL,0,NULL);	
 	
 	WaitForSingleObject(threadInit,INFINITE);		
 	CloseHandle(threadInit);
 
+	printf("Finaliza la transferencia de archivos.\n");
 
 	bool iniciar = false;
 	char cadena[10];
@@ -1112,6 +1116,8 @@ int main(int argc, char* argv[])
 		int inicioJuego  = *(int*)cadena;
 		if(inicioJuego==INIT_GAME) iniciar= true;
 	}
+
+	printf("Se inicia el juego.\n");
 
 	threadGame = CreateThread(NULL,0,gameFunction,NULL,0,NULL);	
 	threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);
@@ -1126,6 +1132,7 @@ int main(int argc, char* argv[])
    
 	trCerrarConexion(pConexion);
 
+	printf("Finaliza el juego.\n");
 	printf("Presione una tecla para finalizar.");
 	getchar();
 	return 0;
