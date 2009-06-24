@@ -107,18 +107,6 @@ SOURCE=.\Cliente.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\cliente04.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\Constantes.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\Constantes.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\Cuadrado.cpp
 # End Source File
 # Begin Source File
@@ -151,10 +139,6 @@ SOURCE=..\Graficador.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\main.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\Pad.cpp
 # End Source File
 # Begin Source File
@@ -168,14 +152,6 @@ SOURCE=..\Parser.cpp
 # Begin Source File
 
 SOURCE=..\Parser.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\Partida.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\Partida.h
 # End Source File
 # Begin Source File
 
