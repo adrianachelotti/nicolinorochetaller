@@ -2,10 +2,10 @@
 <General resolucion="800" texturaFig="id1" texturaEsc="id1" velox="720" veloy="720" colorFondoFig="255255255" colorLinea="000000000" >
 	</General>
 	<ListadoDeElementos>
-		<circulo id="tejo" colorFigura="111100100" radio="15">
+		<circulo id="tejo" colorFigura="111100100" radio="15" idTextura="id2">
 			<posicion x="1" y="1"/>
 		</circulo>
-		<rectangulo id="pad1" base="20" altura="100" idTextura="id3" colorFigura="100100100">
+		<rectangulo id="pad1" base="20" altura="100" idTextura="id2" colorFigura="100100100">
 			<posicion x="1" y="1"/>
 		</rectangulo>	
 		<rectangulo id="pad2" base="20" altura="100" idTextura="id4" colorFigura="100100100">
