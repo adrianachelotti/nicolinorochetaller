@@ -379,10 +379,10 @@ void dibujarAnimacion(int w , int h, SDL_Surface* screen,int gD, int gI)
 	posicionWin.x = w-346;
 	posicionWin.y=h;
     
-	posicionPuntajeIzq.y = h/2 - 200;
+	posicionPuntajeIzq.y = h/2 - 150;
 	posicionPuntajeIzq.x = w/2 - 300;
 
-	posicionPuntajeDerecha.y = h/2 - 200;
+	posicionPuntajeDerecha.y = 	posicionPuntajeIzq.y ;
 	posicionPuntajeDerecha.x = w/2 + 200;
 
 	Cuadrado* g = new Cuadrado("g",100,posicionG);
