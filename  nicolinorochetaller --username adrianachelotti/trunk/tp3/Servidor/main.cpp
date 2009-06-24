@@ -997,7 +997,7 @@ int main(int argc, char* argv[])
 		CloseHandle(threadSendFiles);
 
 		printf("Finaliza la transferencia de archivos.\n");
-		printf("Inicia el juego.");
+		printf("Inicia el juego.\n");
 		
 		int niveles = 1;
 		while ((niveles < 3)&&(pConexion->len > 0 && pConexion2->len > 0))
@@ -1062,6 +1062,7 @@ int main(int argc, char* argv[])
 		}
 	}
 
+	printf("Finaliza el juego.\n");
 	trCerrarConexion(pConexion);
 	trCerrarConexion(pConexion2);
 
