@@ -47,7 +47,7 @@ extern "C"{
 #define INIT_GAME 16
 #define LISTEN_FILES 17
 
-#define DELTA_Y 100
+#define DELTA_Y 1000
 #define DELTA_T 3
 
 
@@ -291,49 +291,6 @@ void crearArcos(Arco* arco,Arco* arco1)
 
 }
 
-void imprimirComandos(int comando)
-{
-	if(comando==COMMAND_UP)
-	{
-		printf("ARRIBA");
-	}
-
-	if(comando==COMMAND_DOWN)
-	{
-		printf("ABAJO");
-	}
-	
-	if(comando==COMMAND_SPACE)
-	{
-		printf("BARRA");
-	}
-	
-	if(comando==COMMAND_INVALID)
-	{
-		printf("NADA");
-	}
-
-
-}
-void imprimirComandoClientes()
-{
-	printf("Cliente 1: ");
-	imprimirComandos(command_Client_One);
-
-	printf("\nCliente 2: ");
-	imprimirComandos(command_Client_Two);
-	printf("\n ");
-
-}
-
-
-/****************************************************************************
-esto tendria que llamar a algoque procese los datos tipo "cliente uno arriba"
-*****************************************************************************/
-/*
-char* mycstr = (char*) malloc(sizeof(char)*40);
-strcpy(mycstr, str.c_str() );
-**/
 int getNumeroDisConBonus()
 {
 	Escenario* esce = Escenario::obtenerInstancia();
@@ -353,7 +310,6 @@ int getNumeroDisConBonus()
 	  } 
 	  else 
 	  {
-		cout<<"DISPER ASIGANO POR MI FUNCION ----> "<<figuraActual->getId()<<endl;
 		it = figuras.end();	
 	  }
     }
@@ -472,8 +428,6 @@ void* getDataProcessed(float deltaTime,int nivel)
 			escenario->sacarBonus(escenario->getListadoDeFiguras());		
 			bonus = escenario->selectorDeDispersor(escenario->getListadoDeFiguras());
 			disper = getNumeroDisConBonus();
-			cout<<"DISPERSOR: "<<disper<<endl;
-			cout<<"BONUS: "<<bonus<<endl;
 
 			escenario->setPad1(pad1);
 			escenario->setPad2(pad2);
@@ -513,9 +467,7 @@ void* getDataProcessed(float deltaTime,int nivel)
 				escenario->sacarBonus(escenario->getListadoDeFiguras());		
 				bonus = escenario->selectorDeDispersor(escenario->getListadoDeFiguras());
 				disper = getNumeroDisConBonus();
-				cout<<"DISPERSOR: "<<disper<<endl;
-				cout<<"BONUS: "<<bonus<<endl;
-
+				
 				escenario->setPad1(pad1);
 				escenario->setPad2(pad2);
 				escenario->setTejo(tejo);
@@ -674,8 +626,6 @@ DWORD WINAPI readFunctionClienteOne(LPVOID param)
 		}
 		if(error == SOCKET_ERROR)
 		{
-			//onexion->len = 0;
-			printf("readFunctionClienteOne: intentar enviar datos nuevamente\n");
 			pConexion->len = 0;
 			pConexion2->len = 0;
 		}
@@ -686,7 +636,6 @@ DWORD WINAPI readFunctionClienteOne(LPVOID param)
 			comando =  *((int*)cadenaComando);
 			if(error == SOCKET_ERROR)
 			{
-				printf("readFunctionClienteOne: intentar leer datos nuevamente\n");
 				pConexion->len = 0;
 				pConexion2->len = 0;
 				command_Client_One=COMMAND_INVALID;
@@ -708,7 +657,6 @@ DWORD WINAPI readFunctionClienteOne(LPVOID param)
 /* cliente 2 mientras la conexión se encuentre establecida       */
 /*****************************************************************/ 
 
-
 DWORD WINAPI readFunctionClienteTwo(LPVOID param) 
 {
 	int sendListen = LISTEN_CLIENT;
@@ -727,8 +675,6 @@ DWORD WINAPI readFunctionClienteTwo(LPVOID param)
 		}
 		if(error == SOCKET_ERROR)
 		{
-			printf("readFunctionClienteTwo: intentar enviar datos nuevamente\n");
-			
 			pConexion->len = 0;
 			pConexion2->len = 0;
 			
@@ -743,7 +689,6 @@ DWORD WINAPI readFunctionClienteTwo(LPVOID param)
 			{
 				pConexion->len = 0;
 				pConexion2->len = 0;
-				printf("readFunctionClienteTwo: intentar leer datos nuevamente\n");
 				command_Client_Two=COMMAND_INVALID;
 			}
 			if(error>0)
@@ -755,25 +700,6 @@ DWORD WINAPI readFunctionClienteTwo(LPVOID param)
 
 	}	
 	return 0;
-}
-
-void listarArchivos(list<string> archivos)
-{
-	list<string>::iterator it;
- 
-    it = archivos.begin();
-    
-	string archivoActual;
-
-	while(it != archivos.end())
-	{
-      archivoActual = *it;
-      cout<<archivoActual<<endl;
-	
-      it++;
-	
-    }	
-
 }
 
 
@@ -800,7 +726,6 @@ int block_sending(unsigned int &sock,const char *fileName)
     is.seekg (0, std::ios::end); 
     size = is.tellg(); 
     is.seekg (0, std::ios::beg); 
-	
 	
 	char datosArchivoActual[8];
 	
@@ -906,12 +831,6 @@ DWORD WINAPI sendFilesFunction(LPVOID param)
 }
 
 
-/*****************************************************************/
-/* writeFunction: Función encargada de enviar al cliente lo    */
-/* ingresado por consola. Si lo ingresado no corresponde con el  */
-/* formato se mostrará un mensaje de error en la validación.     */
-/*****************************************************************/ 
-
 DWORD WINAPI writeFunctionClient(LPVOID param) 
 {
 	toSendPackage* package = static_cast<toSendPackage*>(param);
@@ -925,10 +844,6 @@ DWORD WINAPI writeFunctionClient(LPVOID param)
 		{
 			error = send(conexion->socketAccept,(char*)&comando,sizeof( int),0);
 		}
-		if(error ==SOCKET_ERROR)
-		{
-			printf("writeFunctionClient: No se a podido enviar el dato 1");
-		}
 		if(error>0)
 		{
 			pConexion->len = error;
@@ -938,19 +853,13 @@ DWORD WINAPI writeFunctionClient(LPVOID param)
 			{
 				error = send(conexion->socketAccept,buffer, 15*(sizeof(int)),0);
 			}
-			if(error ==SOCKET_ERROR)
-			{
-				printf("writeFunctionClient: No se a podido enviar el dato 2");
-			}
 			if(error>0)
 			{
 				pConexion->len = error;
 			}
 		}
 
-
 	}
-
 
 	return 0;	
 }
@@ -983,7 +892,7 @@ int creacionEscenario(int nivel)
 	archivoErrores = fopen(nombreEr,"w");
 	if (archivoErrores == NULL)
 	{
-		cout<<"No se pudo abrir el archivo de errores"<<endl;
+		printf("No se pudo abrir el archivo de errores.\n");
 		getchar();
 		return 0;
 	}
@@ -992,7 +901,7 @@ int creacionEscenario(int nivel)
 	Escenario* escenario = Escenario::obtenerInstancia();
 	if (archivo == NULL)
 	{
-		cout<<"No se pudo abrir el archivo prueba.esc"<<endl;
+		printf("No se pudo abrir el archivo del nivel.\n");
 		string error  = "No se pudo encontrar el archivo de datos";
 		addError(contexto,archivoErrores,error);
 		getchar();
@@ -1020,7 +929,7 @@ int main(int argc, char* argv[])
 {	
 	
 	int puerto = 0;
-	// Hilos que se usaran para la transferencia de datos a través del socket.
+	
 	HANDLE threadSendFiles;
 	HANDLE threadReader;
 	HANDLE threadReader2;
@@ -1064,6 +973,9 @@ int main(int argc, char* argv[])
 			send(pConexion->socketAccept, (char*)&listenFiles, sizeof(int), 0); 
 		}
 		
+		printf("Se inicia la transferencia de archivos.\n");
+		printf("Transfiriendo archivos.....\n");
+
 		packageClientOne.setConexion(pConexion);
 		
 		threadSendFiles = CreateThread(NULL,0,sendFilesFunction,&packageClientOne,0,NULL);	
@@ -1084,6 +996,9 @@ int main(int argc, char* argv[])
 		WaitForSingleObject(threadSendFiles, INFINITE);
 		CloseHandle(threadSendFiles);
 
+		printf("Finaliza la transferencia de archivos.\n");
+		printf("Inicia el juego.");
+		
 		int niveles = 1;
 		while ((niveles < 3)&&(pConexion->len > 0 && pConexion2->len > 0))
 		{
@@ -1091,19 +1006,18 @@ int main(int argc, char* argv[])
 		
 			float deltaTime = 0.0;
 			int thisTime = 0;
-			cout<<"Se inicia el juego"<<endl;
 			int inicioJuego = INIT_GAME;
 			send(pConexion->socketAccept, (char*)&inicioJuego, sizeof(int), 0); 
 			send(pConexion2->socketAccept, (char*)&inicioJuego, sizeof(int), 0); 
 			Sleep(2000);
 
 			int lastTime =  SDL_GetTicks();
-			//ex procesing
+		
 			while(pConexion->len > 0 && pConexion2->len > 0)
 			{
 				Sleep(100);
 				thisTime = SDL_GetTicks();
-				deltaTime = (float)((thisTime - lastTime)/(float)1000 );
+				deltaTime = (float)((thisTime - lastTime)/(float)10000 );
 				lastTime = thisTime; 
 	
 				threadReader = CreateThread(NULL,0,readFunctionClienteOne,NULL,0,NULL);	
@@ -1136,6 +1050,7 @@ int main(int argc, char* argv[])
 			
 				CloseHandle(enviar[0]);
 				CloseHandle(enviar[1]);
+		
 				if (Escenario::obtenerInstancia()->getTejosRestantes() == 0)
 				{
 					Escenario::obtenerInstancia()->clearEscenario();
@@ -1150,8 +1065,9 @@ int main(int argc, char* argv[])
 	trCerrarConexion(pConexion);
 	trCerrarConexion(pConexion2);
 
+	printf("Presione una tecla para finalizar. \n");
 	getchar();
-	printf("Presione una tecla para finalizar \n");
+	
 	return 0;
 }
 

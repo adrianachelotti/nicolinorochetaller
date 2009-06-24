@@ -682,10 +682,7 @@ int Escenario::selectorDeDispersor(list<Figura*> figuras)
 	  {
 		  if (figuraActual->getBonus != 0)
 		  {
-			  //solo para probar
-				cout<<"FIGURA QUE SE LE ASIGNA BONUS: "<<figuraActual->getId()<<endl;
-				cout<<"BONUS ASIGANADO "<<ranBonus<<endl;
-				figuraActual->setBonus(ranBonus);
+			  	figuraActual->setBonus(ranBonus);
 				figuraActual->setIdTextura(nombreBonus(ranBonus));
 				figuraActual->setImagenFigura(NULL);
 		  }

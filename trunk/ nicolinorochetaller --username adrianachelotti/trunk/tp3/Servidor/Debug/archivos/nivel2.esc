@@ -1,8 +1,8 @@
 <escenario>
-<General resolucion="800" colorFondoEsc="255000000" texturaEsc="id1" velox="100" veloy="100" colorFondoFig="255255255" colorLinea="000000000" >
+<General resolucion="800" colorFondoEsc="255000000" texturaEsc="id1" velox="720" veloy="720" colorFondoFig="255255255" colorLinea="000000000" >
 	</General>
 	<ListadoDeElementos>
-		<circulo id="tejo" colorFigura="100100100" radio="10">
+		<circulo id="tejo" colorFigura="100100100" radio="15">
 			<posicion x="1" y="1"/>
 		</circulo>
 		<rectangulo id="pad1" base="20" altura="100" colorFigura="100100100">

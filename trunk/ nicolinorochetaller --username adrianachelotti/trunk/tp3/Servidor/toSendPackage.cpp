@@ -46,10 +46,14 @@ int toSendPackage::getCommand(){
 	return this->command;
 }
 
+//////////////////////////////////////////////////////////////////////
+
 void* toSendPackage::getPositions()
 {
 	return this->positions;
 }
+
+//////////////////////////////////////////////////////////////////////
 
 void toSendPackage::setPositions(void* posiciones)
 {

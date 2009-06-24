@@ -107,9 +107,7 @@ int trEnviar(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, const vo
 	{
 		bytesTotalesAEnviar = strlen((char*)datos) ;
 		error= send(pConexion->socketAccept,(char*)datos,1024,0);
-		if(error<=0)printf("Error %d",error);
-		if(error ==SOCKET_ERROR)
-			return RES_NOT_TOTAL_DATA;
+		if(error ==SOCKET_ERROR) return RES_NOT_TOTAL_DATA;
 		if(error>0) pConexion->len = error;
 		bytesEnviados = pConexion->len;
 	}
@@ -124,21 +122,12 @@ int trEnviar(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, const vo
 			
 
 		error= send( pConexion->socketAccept,datosAEnviar,bytesTotalesAEnviar,0);
-		if(error<=0)printf("Error %d",error);
-		if(error ==SOCKET_ERROR)
-		return RES_NOT_TOTAL_DATA;
+		if(error ==SOCKET_ERROR) return RES_NOT_TOTAL_DATA;
 		if(error>0) pConexion->len = error;
 		bytesEnviados = pConexion->len;
 
 	}
 	
-	
-	
-	/*if ( bytesEnviados != bytesTotalesAEnviar ) 
-	{  
-		resultado = RES_NOT_TOTAL_DATA;
-	}*/
-
 	return resultado;
 
 }
@@ -148,9 +137,6 @@ int trEnviar(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, const vo
 int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void **datos)
 {
 	
-	HANDLE    hIOMutex= CreateMutex (NULL, FALSE, NULL);
-	WaitForSingleObject( hIOMutex, INFINITE );
-
 	if(tipo == td_command)
 	{
 		char buffer[1024];
@@ -160,9 +146,7 @@ int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void **
 		
 		
 		pConexion->len=recv(pConexion->socketAccept,buffer,1024,0); //recibimos los datos que envie
-		printf("Buffer %s \n",buffer);
-
-        
+		        
 		if(pConexion->len == 0 || strcmp(buffer,"") == 0)
 		{
 			return RES_NOT_OK;
@@ -171,9 +155,7 @@ int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void **
 		{
 			
 			obtenerComandoYCantidadDeItems(buffer,&tipo,&cantItems);
-			
 			err=trRecibir(pConexion,tipo,cantItems,datos);
-			ReleaseMutex( hIOMutex);
 			return err;
 		}
 
@@ -190,7 +172,8 @@ int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void **
 		strcpy(auxBuffer,"");
 
 		tamanioBuffer = tamanioBuffer - getTamanioTipoDato(tipo);
-		while (enviados < tamanioBuffer) {
+		while (enviados < tamanioBuffer)
+		{
 			auxBuffer = auxBuffer + enviados;
 			tamRec = tamanioBuffer - enviados;
 			pConexion->len=recv(pConexion->socketAccept,auxBuffer,tamRec,0); //recibimos los datos que envie
@@ -203,20 +186,12 @@ int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void **
 			return RES_NOT_OK;
 		}
 		else
-			{
-			//	printf("\nRecibido:  %s\n" , (char*)auxBuffer);
-				*datos= desSerializarDatos(tipo,cantItems,auxBuffer);	
-								
-				//printf("\nRecibido:  %s\n" , (char*)datos);
-			ReleaseMutex( hIOMutex);
-				printf("Enviar: ");
-				return RES_OK;			
-			}
+		{
+			*datos= desSerializarDatos(tipo,cantItems,auxBuffer);	
+			return RES_OK;			
+		}
 		free(buffer);
-	
-
 	}
-	ReleaseMutex( hIOMutex);
 	
 	return RES_OK;
 
@@ -226,7 +201,7 @@ int trRecibir(CONEXION *pConexion,enum tr_tipo_dato tipo, int cantItems, void **
 int trCerrarConexion(CONEXION *pConexion)
 {
 	closesocket(pConexion->socketListen);
-	printf("Conexion finalizada\n");
+	printf("Conexion finalizada.\n");
 	return RES_OK;
 }
 
