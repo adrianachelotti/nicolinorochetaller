@@ -760,16 +760,16 @@ DWORD WINAPI recvFilesFunction(LPVOID param)
 }
 
 
-void  handle_input(SDL_Event event)
+void  handle_input(SDL_Event* event)
 {
     //si el evento fue que se presiono una tecla
 	bool isOK = false;
 	int comando= COMMAND_INVALID;
 
 
-	if( event.type == SDL_KEYDOWN )
+	if( event->type == SDL_KEYDOWN )
     {
-        switch( event.key.keysym.sym )
+        switch( event->key.keysym.sym )
         {
 			// si se presiono la flecha down
 			case SDLK_DOWN:
@@ -785,7 +785,7 @@ void  handle_input(SDL_Event event)
 			case SDLK_SPACE:
 				comando = COMMAND_SPACE;
 				isOK= true;
-				 break;
+				break;
 			
         }
 		
@@ -1031,7 +1031,7 @@ DWORD WINAPI gameFunction(LPVOID param)
 			}
 			SDL_Event event;
 			SDL_PollEvent(&event);
-			handle_input(event);
+			handle_input(&event);
 			Sleep(75);
 			Escenario::obtenerInstancia()->dibujar();
 			SDL_Flip(Escenario::screen);		
@@ -1063,7 +1063,8 @@ int main(int argc, char* argv[])
 {
 	int puerto;
 
-	HANDLE threadReader,threadWriter, threadInit, threadGame;
+	
+	HANDLE	threadReader,threadWriter, threadInit, threadGame;
 	
 	pConexion =(CONEXION*) malloc(sizeof(CONEXION));
 
@@ -1124,7 +1125,7 @@ int main(int argc, char* argv[])
 	threadGame = CreateThread(NULL,0,gameFunction,NULL,0,NULL);	
 	threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);
 
-	WaitForSingleObject(readFunction,INFINITE);			
+	WaitForSingleObject(threadReader,INFINITE);			
 	WaitForSingleObject(threadGame,INFINITE);		
 
 
