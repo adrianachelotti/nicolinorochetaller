@@ -639,8 +639,6 @@ void Escenario::selectorDeDispersor(int bonus, int disper)
 	{	
 		contador++;
 		figuraActual = *it;
-		cout<<"DISPERSOR: "<<disper<<endl;
-		cout<<"BONUS: "<<bonus<<endl;
 		if (contador == disper)
 		{
 			figuraActual->setBonus(bonus);
