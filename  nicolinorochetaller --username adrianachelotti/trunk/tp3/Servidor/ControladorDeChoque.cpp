@@ -126,53 +126,72 @@ bool ControladorDeChoque::resolverChoqueConPaleta(Tejo* pTejo, Pad* pad)
 	Segmento* segmentoCBExt2 = new Segmento("CBExt2",puntoCExt2,puntoBExt2);
 	Segmento* segmentoCDExt2 = new Segmento("CDExt2",puntoCExt2, puntoDExt2);
 	Segmento* segmentoDAExt2 = new Segmento("DAExt2",puntoDExt2, puntoAExt2);
-
-
-    if ( (hayChoqueConSegmento(pTejo,segmentoAB) || hayChoqueConSegmento(pTejo,segmentoABExt) || hayChoqueConSegmento(pTejo,segmentoABExt2)) && velocidadTejo.x<0)
+    if ( (hayChoqueConSegmento(pTejo,segmentoAB) && velocidadTejo.x<0 ))// || hayChoqueConSegmento(pTejo,segmentoABExt) || hayChoqueConSegmento(pTejo,segmentoABExt2)) && velocidadTejo.x<0)
 	{
 
 		
 		velocidadTejo.x=-1*velocidadTejo.x;
 		velocidadTejo.y=velocidadTejo.y;
 		
-		pTejo->setVelocidad( velocidadTejo);
+		Punto nuevaPosicion;
+		nuevaPosicion.x = puntoA.x + tejo->getRadio()+1;
+		nuevaPosicion.y = tejo->getCentro().y;
+		pTejo->setPosicion(nuevaPosicion);
+		
+		pTejo->setVelocidad(velocidadTejo);
 		return(true);
 	}
  
 
 
-	if ((hayChoqueConSegmento(pTejo,segmentoCD) || hayChoqueConSegmento(pTejo,segmentoCDExt) || hayChoqueConSegmento(pTejo,segmentoCDExt2)) &&velocidadTejo.x>0)
+	if ((hayChoqueConSegmento(pTejo,segmentoCD) && velocidadTejo.x>0))//|| hayChoqueConSegmento(pTejo,segmentoCDExt) || hayChoqueConSegmento(pTejo,segmentoCDExt2)) &&velocidadTejo.x>0)
 	{
 		
 		
 		velocidadTejo.x=-1*velocidadTejo.x;
 		velocidadTejo.y=1*velocidadTejo.y;
+
+		Punto nuevaPosicion;
+		nuevaPosicion.x = puntoC.x - tejo->getRadio()-1;
+		nuevaPosicion.y = tejo->getCentro().y;
+		pTejo->setPosicion(nuevaPosicion);
 		
 		pTejo->setVelocidad( velocidadTejo);
 		return(true);
 	}
 	
-	if ((hayChoqueConSegmento(pTejo,segmentoCB) || hayChoqueConSegmento(pTejo,segmentoCBExt) || hayChoqueConSegmento(pTejo,segmentoCBExt2)) && velocidadTejo.y>0)
+	if ((hayChoqueConSegmento(pTejo,segmentoCB) && velocidadTejo.y>0))//|| hayChoqueConSegmento(pTejo,segmentoCBExt) || hayChoqueConSegmento(pTejo,segmentoCBExt2)) && velocidadTejo.y>0)
 	{
 		
 		
 		velocidadTejo.x=1*velocidadTejo.x;
 		velocidadTejo.y=-1*velocidadTejo.y;
 		
+		Punto nuevaPosicion;
+		nuevaPosicion.x = tejo->getCentro().x;
+		nuevaPosicion.y = puntoC.y - tejo->getRadio()-1;
+		pTejo->setPosicion(nuevaPosicion);
+
 		pTejo->setVelocidad( velocidadTejo);
 		return(true);
 	}
 	
 	
-	if ((hayChoqueConSegmento(pTejo,segmentoDA) || hayChoqueConSegmento(pTejo,segmentoDAExt) || hayChoqueConSegmento(pTejo,segmentoDAExt2)) && velocidadTejo.y<0)
+	if ((hayChoqueConSegmento(pTejo,segmentoDA) && velocidadTejo.y<0))//|| hayChoqueConSegmento(pTejo,segmentoDAExt) || hayChoqueConSegmento(pTejo,segmentoDAExt2)) && velocidadTejo.y<0)
 	{
 				
 		velocidadTejo.x=1*velocidadTejo.x;
 		velocidadTejo.y=-1*velocidadTejo.y;
+
+		Punto nuevaPosicion;
+		nuevaPosicion.x = tejo->getCentro().x;
+		nuevaPosicion.y = puntoD.y + tejo->getRadio()+1;
+		pTejo->setPosicion(nuevaPosicion);
 		
 		pTejo->setVelocidad( velocidadTejo);
 		return(true);
 	}
+
 
 	return(false);
 }
@@ -260,47 +279,67 @@ bool ControladorDeChoque::resolverChoqueConRectangulo(Tejo* pTejo, Rectangulo* r
 	Segmento* segmentoDAExt2 = new Segmento("DAExt2",puntoDExt2, puntoAExt2);
 
 
-    if ( (hayChoqueConSegmento(pTejo,segmentoAB) || hayChoqueConSegmento(pTejo,segmentoABExt) || hayChoqueConSegmento(pTejo,segmentoABExt2)) && velocidadTejo.x<0)
+    if ( (hayChoqueConSegmento(pTejo,segmentoAB) && velocidadTejo.x<0 ))// || hayChoqueConSegmento(pTejo,segmentoABExt) || hayChoqueConSegmento(pTejo,segmentoABExt2)) && velocidadTejo.x<0)
 	{
 
 		
 		velocidadTejo.x=-1*velocidadTejo.x;
 		velocidadTejo.y=velocidadTejo.y;
 		
-		pTejo->setVelocidad( velocidadTejo);
+		Punto nuevaPosicion;
+		nuevaPosicion.x = puntoA.x + tejo->getRadio()+1;
+		nuevaPosicion.y = tejo->getCentro().y;
+		pTejo->setPosicion(nuevaPosicion);
+		
+		pTejo->setVelocidad(velocidadTejo);
 		return(true);
 	}
  
 
 
-	if ((hayChoqueConSegmento(pTejo,segmentoCD) || hayChoqueConSegmento(pTejo,segmentoCDExt) || hayChoqueConSegmento(pTejo,segmentoCDExt2)) &&velocidadTejo.x>0)
+	if ((hayChoqueConSegmento(pTejo,segmentoCD) && velocidadTejo.x>0))//|| hayChoqueConSegmento(pTejo,segmentoCDExt) || hayChoqueConSegmento(pTejo,segmentoCDExt2)) &&velocidadTejo.x>0)
 	{
 		
 		
 		velocidadTejo.x=-1*velocidadTejo.x;
 		velocidadTejo.y=1*velocidadTejo.y;
+
+		Punto nuevaPosicion;
+		nuevaPosicion.x = puntoC.x - tejo->getRadio()-1;
+		nuevaPosicion.y = tejo->getCentro().y;
+		pTejo->setPosicion(nuevaPosicion);
 		
 		pTejo->setVelocidad( velocidadTejo);
 		return(true);
 	}
 	
-	if ((hayChoqueConSegmento(pTejo,segmentoCB) || hayChoqueConSegmento(pTejo,segmentoCBExt) || hayChoqueConSegmento(pTejo,segmentoCBExt2)) && velocidadTejo.y>0)
+	if ((hayChoqueConSegmento(pTejo,segmentoCB) && velocidadTejo.y>0))//|| hayChoqueConSegmento(pTejo,segmentoCBExt) || hayChoqueConSegmento(pTejo,segmentoCBExt2)) && velocidadTejo.y>0)
 	{
 		
 		
 		velocidadTejo.x=1*velocidadTejo.x;
 		velocidadTejo.y=-1*velocidadTejo.y;
 		
+		Punto nuevaPosicion;
+		nuevaPosicion.x = tejo->getCentro().x;
+		nuevaPosicion.y = puntoC.y - tejo->getRadio()-1;
+		pTejo->setPosicion(nuevaPosicion);
+
 		pTejo->setVelocidad( velocidadTejo);
 		return(true);
 	}
 	
 	
-	if ((hayChoqueConSegmento(pTejo,segmentoDA) || hayChoqueConSegmento(pTejo,segmentoDAExt) || hayChoqueConSegmento(pTejo,segmentoDAExt2)) && velocidadTejo.y<0)
+	if ((hayChoqueConSegmento(pTejo,segmentoDA) && velocidadTejo.y<0))//|| hayChoqueConSegmento(pTejo,segmentoDAExt) || hayChoqueConSegmento(pTejo,segmentoDAExt2)) && velocidadTejo.y<0)
 	{
 				
 		velocidadTejo.x=1*velocidadTejo.x;
 		velocidadTejo.y=-1*velocidadTejo.y;
+
+		Punto nuevaPosicion;
+		nuevaPosicion.x = tejo->getCentro().x;
+		nuevaPosicion.y = puntoD.y + tejo->getRadio()+1;
+		pTejo->setPosicion(nuevaPosicion);
 		
 		pTejo->setVelocidad( velocidadTejo);
 		return(true);
