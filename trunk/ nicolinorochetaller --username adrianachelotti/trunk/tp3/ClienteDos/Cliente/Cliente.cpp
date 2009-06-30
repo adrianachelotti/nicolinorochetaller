@@ -44,7 +44,6 @@ extern "C"{
 #define LISTEN_FILES 17
 
 CONEXION *pConexion;
-list<int> listaDeEventos ; 
 
 using namespace std;
 
@@ -382,7 +381,7 @@ void dibujarAnimacion(int w , int h, SDL_Surface* screen,int gD, int gI)
 	posicionPuntajeIzq.y = h/2 - 150;
 	posicionPuntajeIzq.x = w/2 - 300;
 
-	posicionPuntajeDerecha.y = posicionPuntajeIzq.y;
+	posicionPuntajeDerecha.y = 	posicionPuntajeIzq.y ;
 	posicionPuntajeDerecha.x = w/2 + 200;
 
 	Cuadrado* g = new Cuadrado("g",100,posicionG);
@@ -420,9 +419,8 @@ void dibujarAnimacion(int w , int h, SDL_Surface* screen,int gD, int gI)
 	SDL_Flip(screen);
 	SDL_Delay(100);
  
-
 	int offset =0;
-     
+      
 	posicionG.x = w/2 -150;
 	posicionG.y = h/2 +offset;
 	posicionO.x = w/2 -50;
@@ -441,6 +439,8 @@ void dibujarAnimacion(int w , int h, SDL_Surface* screen,int gD, int gI)
 	i->dibujar();
 	d->dibujar();
 	imagen->dibujar();
+
+
 
 	SDL_Flip(screen);
 	SDL_Delay(100);
@@ -489,7 +489,8 @@ void dibjuarPasoNive(int w, int h, SDL_Surface* screen)
 /* readFunction: Función encargada de recibir lo que envia el    */
 /* servidor mientras la conexión se encuentre establecida        */
 /*****************************************************************/ 
-DWORD WINAPI readFunction(LPVOID param) 
+//DWORD WINAPI readFunction(LPVOID param) 
+void readFunction(int comandoActual) 
 {
 	void* datos;	
 		
@@ -501,164 +502,151 @@ DWORD WINAPI readFunction(LPVOID param)
 
 	FD_ZERO(&readfds);
 	FD_SET(pConexion->socketAccept,&readfds);
-	while(pConexion->len > 0)
+	
+	char cadena[4];
+	bool iniciarComunicacion=false;
+	bool iniciarGraficacion = false;
+	int comando = COMMAND_INVALID;
+		
+	select(0, &readfds, NULL, NULL, &timeout);
+
+	if (!FD_ISSET(pConexion->socketAccept, &readfds ))
 	{
+		pConexion->len=0;
+		return;
+	}
 
-
-		
-		char cadena[4];
-		bool iniciarComunicacion=false;
-		bool iniciarGraficacion = false;
-		int comando = COMMAND_INVALID;
-		
-		while(!iniciarComunicacion && !iniciarGraficacion)
-		{
+ 	int error =recv(pConexion->socketAccept,cadena,4,0);
 			
-
-			select(0, &readfds, NULL, NULL, &timeout);
-
-			if (!FD_ISSET(pConexion->socketAccept, &readfds ))
+	if(error>0)
+	{
+		pConexion->len = error;
+		comando =*(int*)cadena;
+				
+		if(comando==LISTEN_CLIENT) iniciarComunicacion= true;
+		else if(comando==LISTEN_COMMAND) iniciarGraficacion= true;
+	}
+	else
+	{
+		if(error==SOCKET_ERROR)
+		{
+			if((WSAGetLastError()==WSAECONNRESET)||(WSAGetLastError()==WSAECONNABORTED))
 			{
 				pConexion->len=0;
-				return 0;
-			}
- 			int error =recv(pConexion->socketAccept,cadena,4,0);
-			
-			if(error>0)
-			{
-				pConexion->len = error;
-				comando =*(int*)cadena;
-				
-				if(comando==LISTEN_CLIENT) iniciarComunicacion= true;
-				else if(comando==LISTEN_COMMAND) iniciarGraficacion= true;
-			}
-			else
-			{
-				if(error==SOCKET_ERROR)
-				{
-					if((WSAGetLastError()==WSAECONNRESET)||(WSAGetLastError()==WSAECONNABORTED))
-					{
-						pConexion->len=0;
-						return 0;
-					}
-				}
-			}
-
-		}
-		if(iniciarComunicacion)
-		{
-			
-			int eventoActual = COMMAND_INVALID;
-			if(!listaDeEventos.empty())
-			{	
-				eventoActual = listaDeEventos.front();
-				listaDeEventos.pop_front();
-			}
-			int error = send(pConexion->socketAccept,(char*)&eventoActual,sizeof(int),0);
-			while(error==-1)
-			{
-				error = send(pConexion->socketAccept,(char*)&eventoActual,sizeof(int),0);	
-			}
-			
-			if(error>0)
-			{
-				pConexion->len = error;
+				return;
 			}
 		}
-		if(iniciarGraficacion)
-		{
-			char posiciones[60];
-			int error = recv(pConexion->socketAccept,posiciones,60,0);
-			if(error>0)
-			{
-				pConexion->len = error;
-
-				int posicionYPadOne = *(int*)posiciones;
-				int posicionYPadTwo = *(int*)(posiciones+4);
-				int posicionTejoX = *(int*)(posiciones+8);
-				int posicionTejoY = *(int*)(posiciones+12);
-				int disper = *(int*)(posiciones+16);
-				int bonus = *(int*)(posiciones+20);
-				int largoPad1 = *(int*)(posiciones+24);
-				int largoPad2 = *(int*)(posiciones+28);
-				int radioTejo = *(int*)(posiciones+32);
-				int pegaDado = *(int*)(posiciones+36);
-				int golD = *(int*)(posiciones+40);
-				int golI = *(int*)(posiciones+44);
-				int nivel = *(int*)(posiciones+48);
-				int pD = *(int*)(posiciones+52);
-				int pI = *(int*)(posiciones+56);
-	
-				Escenario* escenario = Escenario::obtenerInstancia();
-				
-				escenario->setGolesDerecho(golD);
-				escenario->setGolesIzquierdo(golI);
-				
-				escenario->setPuntajeD(pD);
-				escenario->setPuntajeI(pI);
-
-				if ((golD!=0)||(golI!=0))
-				{
-					dibujarAnimacion(escenario->getAncho(),escenario->getAlto(),escenario->screen,golD,golI);
-				}
-
-				escenario->setNivel(nivel);
-
-				//aca tendria que ir 7....
-				if((nivel == 1) && (golD+golI == 7))
-				{
-					dibjuarPasoNive(escenario->getAncho(),escenario->getAlto(),escenario->screen);
-				}
-
-
-				Pad* pad1 = escenario->getPad1();
-				Pad* pad2 = escenario->getPad2();
-				
-				Punto posicionPad1 = pad1->getPosicion();
-				Punto posicionPad2 = pad2->getPosicion();
-
-				posicionPad1.y = posicionYPadOne;
-				posicionPad2.y = posicionYPadTwo;
-				
-				pad1->getRepresentacionGrafica()->setPosicionVerticeInferiorIzquierdo(posicionPad1);
-				pad2->getRepresentacionGrafica()->setPosicionVerticeInferiorIzquierdo(posicionPad2);
-				pad1->getRepresentacionGrafica()->setAltura(largoPad1);
-				pad2->getRepresentacionGrafica()->setAltura(largoPad2);
-
-				escenario->setPad1(pad1);
-				escenario->setPad2(pad2);
-
-				Tejo* tejo = escenario->getTejo();
-				Punto posicionNueva;
-				posicionNueva.x = posicionTejoX;
-				posicionNueva.y = posicionTejoY;
-				tejo->setPosicion(posicionNueva);
-				tejo->getRepresentacionGrafica()->setRadio(radioTejo);
-				escenario->setTejo(tejo);
-
-				if ((bonus!=0) && (disper!=0))
-				{
-					escenario->selectorDeDispersor(bonus,disper);
-				}
-				if (pegaDado == 1)
-				{
-					escenario->sacarBonus(escenario->getListadoDeFiguras());
-				}
-				
-			}
-			else
-			{
-
-				if(WSAGetLastError()==WSAECONNABORTED)
-				{
-					pConexion->len=0;
-					return 0;
-				}
-			}
-		}
-	
 	}
-	return 0;
+
+	if(iniciarComunicacion)
+	{
+			
+		int eventoActual = comandoActual;
+			
+		int error = send(pConexion->socketAccept,(char*)&eventoActual,sizeof(int),0);
+		while(error==-1)
+		{
+			error = send(pConexion->socketAccept,(char*)&eventoActual,sizeof(int),0);	
+		}
+			
+		if(error>0)
+		{
+			pConexion->len = error;
+		}
+	}
+	if(iniciarGraficacion)
+	{
+		char posiciones[60];
+		int error = recv(pConexion->socketAccept,posiciones,60,0);
+		if(error>0)
+		{
+			pConexion->len = error;
+
+			int posicionYPadOne = *(int*)posiciones;
+			int posicionYPadTwo = *(int*)(posiciones+4);
+			int posicionTejoX = *(int*)(posiciones+8);
+			int posicionTejoY = *(int*)(posiciones+12);
+			int disper = *(int*)(posiciones+16);
+			int bonus = *(int*)(posiciones+20);
+			int largoPad1 = *(int*)(posiciones+24);
+			int largoPad2 = *(int*)(posiciones+28);
+			int radioTejo = *(int*)(posiciones+32);
+			int pegaDado = *(int*)(posiciones+36);
+			int golD = *(int*)(posiciones+40);
+			int golI = *(int*)(posiciones+44);
+			int nivel = *(int*)(posiciones+48);
+			int pD = *(int*)(posiciones+52);
+			int pI = *(int*)(posiciones+56);
+	
+			Escenario* escenario = Escenario::obtenerInstancia();
+				
+			escenario->setGolesDerecho(golD);
+			escenario->setGolesIzquierdo(golI);
+				
+			escenario->setPuntajeD(pD);
+			escenario->setPuntajeI(pI);
+
+			if ((golD!=0)||(golI!=0))
+			{
+				dibujarAnimacion(escenario->getAncho(),escenario->getAlto(),escenario->screen,golD,golI);
+			}
+
+			escenario->setNivel(nivel);
+
+			//aca tendria que ir 7....
+			if((nivel == 1) && (golD+golI == 7))
+			{
+				dibjuarPasoNive(escenario->getAncho(),escenario->getAlto(),escenario->screen);
+			}
+
+
+			Pad* pad1 = escenario->getPad1();
+			Pad* pad2 = escenario->getPad2();
+				
+			Punto posicionPad1 = pad1->getPosicion();
+			Punto posicionPad2 = pad2->getPosicion();
+
+			posicionPad1.y = posicionYPadOne;
+			posicionPad2.y = posicionYPadTwo;
+				
+			pad1->getRepresentacionGrafica()->setPosicionVerticeInferiorIzquierdo(posicionPad1);
+			pad2->getRepresentacionGrafica()->setPosicionVerticeInferiorIzquierdo(posicionPad2);
+			pad1->getRepresentacionGrafica()->setAltura(largoPad1);
+			pad2->getRepresentacionGrafica()->setAltura(largoPad2);
+
+			escenario->setPad1(pad1);
+			escenario->setPad2(pad2);
+
+			Tejo* tejo = escenario->getTejo();
+			Punto posicionNueva;
+			posicionNueva.x = posicionTejoX;
+			posicionNueva.y = posicionTejoY;
+			tejo->setPosicion(posicionNueva);
+			tejo->getRepresentacionGrafica()->setRadio(radioTejo);
+			escenario->setTejo(tejo);
+
+			if ((bonus!=0) && (disper!=0))
+			{
+				escenario->selectorDeDispersor(bonus,disper);
+			}
+			if (pegaDado == 1)
+			{
+				escenario->sacarBonus(escenario->getListadoDeFiguras());
+			}
+				
+		}
+		else
+		{
+
+			if(WSAGetLastError()==WSAECONNABORTED)
+			{
+				pConexion->len=0;
+				return;
+			}
+				
+		}
+	}
+	
 }
 
 
@@ -757,10 +745,9 @@ DWORD WINAPI recvFilesFunction(LPVOID param)
 }
 
 
-void  handle_input(SDL_Event event)
+int  handle_input(SDL_Event event)
 {
     //si el evento fue que se presiono una tecla
-	bool isOK = false;
 	int comando= COMMAND_INVALID;
 
 
@@ -768,35 +755,23 @@ void  handle_input(SDL_Event event)
     {
         switch( event.key.keysym.sym )
         {
-			// si se presiono la flecha down
 			case SDLK_DOWN:
 				 comando = COMMAND_DOWN;
-				isOK= true;
-				break;
-			// si se presiono la flecha down
+				 break;
 			case SDLK_UP:
 				 comando = COMMAND_UP;
-				 isOK= true;
 				 break;
-         
-			case SDLK_SPACE:
+         	case SDLK_SPACE:
 				comando = COMMAND_SPACE;
-				isOK= true;
-				 break;
-			
-        }
+				break;
+		}
 		
     }
 	
-	if(isOK)
-	{
-		listaDeEventos.push_back(comando);
-			
-	}
+	return comando;
 	
-	
-
 }
+
 
 void dibujarFinal(int w, int h, SDL_Surface* screen)
 {
@@ -957,8 +932,8 @@ void dibujarFalla(int w, int h, SDL_Surface* screen)
 	Punto posicionFondo, posCartel;
 	posicionFondo.x = 0;
 	posicionFondo.y = h;
-	posCartel.x = (esce->getAncho())/2-(ancho/2);
-	posCartel.y = ((esce->getAlto())/2 )+(alto/2);
+	posCartel.x = (esce->getAncho())/2 - (ancho/2);
+	posCartel.y = (esce->getAlto())/2 + (alto/2);
 
 	Rectangulo* fondo = new Rectangulo("fondo",w,h,posicionFondo);
 	fondo->setColorFondo(0x000000);
@@ -982,9 +957,10 @@ void dibujarFalla(int w, int h, SDL_Surface* screen)
 }
 
 
-DWORD WINAPI gameFunction(LPVOID param) 
+//DWORD WINAPI gameFunction(LPVOID param) 
+void gameFunction()
 {
-	SDL_Event event;
+	
 	// Eventos considerados:
 	SDL_EventState(SDL_KEYDOWN,SDL_ENABLE);
 	SDL_EventState(SDL_QUIT ,SDL_ENABLE);
@@ -1015,27 +991,35 @@ DWORD WINAPI gameFunction(LPVOID param)
 		SDL_Flip(Escenario::screen);
 		int i = 0;
 		int quit =0;
-		while ((true) && (pConexion->len > 0))
+		int comandoActual = COMMAND_INVALID;
+
+		while (pConexion->len > 0)
 		{
+			
+			SDL_Event event;
+			SDL_PollEvent(&event);
+			comandoActual = handle_input(event);
+
+			readFunction(comandoActual);
+			
 			if ((Escenario::obtenerInstancia()->getGolesDerecho()!=0) || (Escenario::obtenerInstancia()->getGolesIzquierdo()!=0))
 			{
-				Sleep(1500);
+				//Sleep(1500);
 			}
 			if ((Escenario::obtenerInstancia()->getNivel()<3) && (Escenario::obtenerInstancia()->getGolesDerecho()+Escenario::obtenerInstancia()->getGolesIzquierdo() == 7))
 			{
-				Sleep(1500);
+				//Sleep(1500);
 				break;
 			}
-			SDL_Event event;
-			SDL_PollEvent(&event);
-			handle_input(event);
-			Sleep(75);
+			
+			//Sleep(75);
 			Escenario::obtenerInstancia()->dibujar();
 			SDL_Flip(Escenario::screen);		
+			
 			if(WSAGetLastError()==WSAECONNABORTED)
 			{
 				pConexion->len=0;
-				return 0;
+				return;
 			}
 
 		}
@@ -1050,7 +1034,7 @@ DWORD WINAPI gameFunction(LPVOID param)
 		dibujarFinal(Escenario::obtenerInstancia()->getAncho(),Escenario::obtenerInstancia()->getAlto(),Escenario::screen);
 	}
 	Sleep(5000);
-	return 0;
+	return;
 }
 
 
@@ -1060,7 +1044,8 @@ int main(int argc, char* argv[])
 {
 	int puerto;
 
-	HANDLE threadReader,threadWriter, threadInit, threadGame;
+	
+	HANDLE	threadReader,threadWriter, threadInit, threadGame;
 	
 	pConexion =(CONEXION*) malloc(sizeof(CONEXION));
 
@@ -1096,10 +1081,9 @@ int main(int argc, char* argv[])
 	 	int listenFiles = *(int*) cadenaListenFiles;
 		if (listenFiles==LISTEN_FILES) iniciarTransferencia = true;
 	}
-	
+
 	printf("Se inicia la transferencia de archivos.\n");
 	printf("Transfiriendo archivos.....\n");
-
 	threadInit = CreateThread(NULL,0,recvFilesFunction,NULL,0,NULL);	
 	
 	WaitForSingleObject(threadInit,INFINITE);		
@@ -1119,19 +1103,23 @@ int main(int argc, char* argv[])
 
 	printf("Se inicia el juego.\n");
 
-	threadGame = CreateThread(NULL,0,gameFunction,NULL,0,NULL);	
-	threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);
 
-	WaitForSingleObject(readFunction,INFINITE);			
-	WaitForSingleObject(threadGame,INFINITE);		
+	gameFunction();
+
+	//threadGame = CreateThread(NULL,0,gameFunction,NULL,0,NULL);	
+	//threadReader = CreateThread(NULL,0,readFunction,NULL,0,NULL);
+
+	//WaitForSingleObject(threadReader,INFINITE);			
+	//WaitForSingleObject(threadGame,INFINITE);		
 
 
-	CloseHandle(threadGame);
-	CloseHandle(threadReader);
+	//CloseHandle(threadGame);
+	//CloseHandle(threadReader);
 
-   	printf("Finaliza el juego.\n");
+	printf("Finaliza el juego.\n");
 
 	trCerrarConexion(pConexion);
+	SDL_Quit();
 
 	printf("Presione una tecla para finalizar.");
 	getchar();
