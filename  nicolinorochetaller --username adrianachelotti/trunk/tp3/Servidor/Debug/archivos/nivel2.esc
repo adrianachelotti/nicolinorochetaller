@@ -1,5 +1,5 @@
 <escenario>
-<General resolucion="800" colorFondoEsc="255000000" texturaEsc="id1" velox="720" veloy="720" colorFondoFig="255255255" colorLinea="000000000" >
+<General resolucion="800" colorFondoEsc="255000000" texturaEsc="id1" velox="1500" veloy="1500" colorFondoFig="255255255" colorLinea="000000000" >
 	</General>
 	<ListadoDeElementos>
 		<circulo id="tejo" colorFigura="100100100" radio="15">
