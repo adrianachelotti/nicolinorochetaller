@@ -33,6 +33,8 @@ public:
 	/*Resuelve el choque entre un circulo y el tejo*/
 	void resolverChoqueConCirculo(Tejo* tejo, Circulo* circulo);
 
+	void resolverChoqueConVertice(Tejo* tejo, Circulo* circulo);
+
 	/*detecta si hay un choque entre el tejo y un circulo*/
 	bool hayChoqueConCirculo(Tejo* tejo, Circulo* circulo);
 

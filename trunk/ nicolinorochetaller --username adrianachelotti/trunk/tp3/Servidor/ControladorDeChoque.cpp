@@ -348,6 +348,28 @@ bool ControladorDeChoque::resolverChoqueConRectangulo(Tejo* pTejo, Rectangulo* r
 	return(false);
 }
 
+void  ControladorDeChoque::resolverChoqueConVertice(Tejo* tejo, Circulo* circulo)
+{
+	if(hayChoqueConCirculo(tejo,circulo))
+	{
+		Punto velocidadTejo ;
+		velocidadTejo.x = tejo->getVelocidad().x;
+		velocidadTejo.y = tejo->getVelocidad().y;
+		double normaVelocidad = Formula::norma(velocidadTejo);
+		
+		Punto distancia = Formula::restarPuntos(tejo->getPosicion(),circulo->getCentro());
+		Punto normalADistancia = Formula::getNormal(distancia);
+		double normalizadorDistancia = Formula::norma(distancia);
+		Punto punto1;
+		punto1.x =(double)(distancia.x*circulo->getRadio()/(double)normalizadorDistancia);
+		punto1.y =(double)(distancia.y*circulo->getRadio()/(double)normalizadorDistancia);
+		Punto punto2;
+		punto2.x = normalADistancia.x + punto1.x;
+		punto2.y = normalADistancia.y + punto1.y;
+		calculoVelocidadReflejada(punto1,punto2,tejo);
+	}
+}
+
 void  ControladorDeChoque::resolverChoqueConCirculo(Tejo* tejo, Circulo* circulo)
 {
 	if(hayChoqueConCirculo(tejo,circulo))
@@ -404,8 +426,6 @@ bool ControladorDeChoque::hayChoqueConCirculo(Tejo* pTejo, Circulo* circulo)
 	if(u<=restaDeRadios) return true;
 	if((u>restaDeRadios)&&(u<sumaDeRadios)) return true;
 	return false;
-
-
 }
 
 bool ControladorDeChoque::hayChoqueConSegmento(Tejo* pTejo, Segmento*  segmento )
@@ -505,49 +525,6 @@ void ControladorDeChoque::calculoVelocidadReflejada(Punto inicio,Punto fin,Tejo*
 	pTejo->setVelocidad(velocidadNueva);
 }
 
-bool ControladorDeChoque::hayChoqueConVertices(Tejo* pTejo, Triangulo*  triangulo)
-{
-	Punto* vertices;
-	vertices = triangulo->getVertices();
-	int radioAuxiliar = 3;
-	Punto v1 = vertices[0];
-	Punto v2 = vertices[1];
-	Punto v3 = vertices[2];
-
-	Circulo* auxiliar = new Circulo("12",radioAuxiliar,v3);
-	if(hayChoqueConCirculo(pTejo,auxiliar)==false)
-	{
-		auxiliar->setCentro(v2);
-		if(hayChoqueConCirculo(pTejo,auxiliar)==false)
-		{
-			auxiliar->setCentro(v1);
-			if(hayChoqueConCirculo(pTejo,auxiliar)==true)
-			{
-				resolverChoqueConCirculo(pTejo,auxiliar);
-				return true;
-			}
-			
-
-		}else
-		{
-			resolverChoqueConCirculo(pTejo,auxiliar);
-			return true;
-
-		}
-	}else
-	{
- 		resolverChoqueConCirculo(pTejo,auxiliar);
-		return true;
-
-	}
-	delete(auxiliar);
-	return false;
-
-
-
-}
-
-
 bool ControladorDeChoque::hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangulo,float deltaTime)
 {	
 	Punto* vertices;
@@ -595,11 +572,6 @@ bool ControladorDeChoque::hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangu
 			pTejo->moverTejo(deltaTime);
 			choque = hayChoqueConSegmento(pTejo,segmento3);
 		}
-		return(true);
-	}
-
-	if (hayChoqueConVertices(pTejo, triangulo) == true)
-	{
 		return(true);
 	}
 
@@ -669,8 +641,9 @@ void ControladorDeChoque::resolverChoqueDispersores(Pad* pad,Pad* pad1,Tejo* pTe
 	Figura* figuraActual;
 	size_t found;
     it = listaFiguras.begin();
+	bool controlado = false;
 
-	while( it != listaFiguras.end()) 
+	while((it != listaFiguras.end()) && (controlado == false))
 	{
 		figuraActual = *it;
 		string id = figuraActual->getId();
@@ -686,11 +659,28 @@ void ControladorDeChoque::resolverChoqueDispersores(Pad* pad,Pad* pad1,Tejo* pTe
 				{
 					controladorBonus->aplicarBonus(pad,pad1,pTejo,triangulo->getBonus());
 				}
+				controlado = true;
+			}
+		}
+
+		
+		found = id.find("cirver");
+		if ((found != string::npos)&&(controlado == false))
+		{
+			Circulo* circulo = (Circulo*) figuraActual;
+			if (hayChoqueConCirculo(pTejo,circulo))
+			{
+				resolverChoqueConVertice(pTejo,circulo);
+				if  (circulo->getBonus() != 0)
+				{
+					controladorBonus->aplicarBonus(pad,pad1,pTejo,circulo->getBonus());
+				}
+				controlado = true;
 			}
 		}
 	
 		found = id.find("cir");
-		if (found != string::npos)
+		if ((found != string::npos)&&(controlado == false))
 		{
 			Circulo* circulo = (Circulo*) figuraActual;
 			if (hayChoqueConCirculo(pTejo,circulo))
@@ -700,16 +690,18 @@ void ControladorDeChoque::resolverChoqueDispersores(Pad* pad,Pad* pad1,Tejo* pTe
 				{
 					controladorBonus->aplicarBonus(pad,pad1,pTejo,circulo->getBonus());
 				}
+				controlado = true;
 			}
 		}
 
 		found = id.find("rec");
-		if (found != string::npos)
+		if ((found != string::npos)&&(controlado == false))
 		{
 			Rectangulo* rectangulo = (Rectangulo*) figuraActual;
 			if (resolverChoqueConRectangulo(pTejo,rectangulo) == true)
 			{
 				controladorBonus->aplicarBonus(pad,pad1,pTejo,rectangulo->getBonus());
+				controlado = true;
 			}
 			
 		}
