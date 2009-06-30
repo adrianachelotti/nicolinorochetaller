@@ -1,14 +1,14 @@
 <escenario>
-<General resolucion="800" texturaFig="id1" texturaEsc="id1" velox="750" veloy="750" colorFondoFig="255255255" colorLinea="000000000" >
+<General resolucion="800" texturaFig="id1" texturaEsc="id1" velox="2000" veloy="2000" colorFondoFig="255255255" colorLinea="000000000" >
 	</General>
 	<ListadoDeElementos>
-		<circulo id="tejo" colorFigura="111100100" radio="15" idTextura="id2">
+		<circulo id="tejo" colorFigura="111100100" radio="15">
 			<posicion x="1" y="1"/>
 		</circulo>
-		<rectangulo id="pad1" base="20" altura="100" colorFigura="100100100">
+		<rectangulo id="pad1" base="20" altura="100" colorFigura="111000000">
 			<posicion x="1" y="1"/>
 		</rectangulo>	
-		<rectangulo id="pad2" base="20" altura="100" colorFigura="100100100">
+		<rectangulo id="pad2" base="20" altura="100" colorFigura="111000000">
 			<posicion x="1" y="1"/>
 		</rectangulo>	
 		<rectangulo id="arco1" base="10" altura="10" colorFigura="100100100">
@@ -18,22 +18,25 @@
 			<posicion x="1" y="1"/>
 		</rectangulo>
 				 	
-		<circulo id="cir3" colorFigura="255233000" radio="60" >
-			<posicion x="600" y="120"/>
+		<circulo id="cir3" colorFigura="255233000" radio="45" >
+			<posicion x="395" y="120"/>
+		</circulo> 
+		<circulo id="cir2" colorFigura="255233000" radio="45" >
+			<posicion x="395" y="500"/>
 		</circulo> 
 		<triangulo id="tri2"  colorFigura="000000255">
-			<ver1 x="370" y="410"/>
-			<ver2 x="430" y="410"/>
-			<ver3 x="400" y="460"/>
+			<ver1 x="520" y="250"/>
+			<ver2 x="520" y="350"/>
+			<ver3 x="620" y="300"/>
 		</triangulo> 		
 		<triangulo id="tri3"  colorFigura="000255000">
-			<ver1 x="310" y="290"/>
-			<ver2 x="310" y="350"/>
-			<ver3 x="260" y="320"/>
+			<ver1 x="280" y="250"/>
+			<ver2 x="280" y="350"/>
+			<ver3 x="180" y="300"/>
 		</triangulo>
 		
-		<rectangulo id="rec1" base="1" altura="200" colorFigura="100100100">
-			<posicion x="300" y="280"/>
+		<rectangulo id="rec1" base="90" idTextura="textura" altura="90" colorFigura="100100100">
+			<posicion x="350" y="350"/>
 		</rectangulo>	
 		</ListadoDeElementos>
 	<ListadoDeTexturas>
@@ -97,11 +100,11 @@
 		</textura>
 		<textura id="falla" path="archivos/falla.bmp">
 		</textura>
-
+		<textura id="textura" path="archivos/textura.bmp">
+		</textura>
 		<textura id="pasoNivel" path="archivos/pasoNivel2.bmp">
 		</textura>
 
 	</ListadoDeTexturas>
 	
 </escenario>
-

@@ -47,7 +47,7 @@ extern "C"{
 #define INIT_GAME 16
 #define LISTEN_FILES 17
 
-#define DELTA_Y 1000
+#define DELTA_Y 200
 #define DELTA_T 3
 
 
@@ -487,8 +487,10 @@ void* getDataProcessed(float deltaTime,int nivel)
 			}
 			else
 			{
+				tejo->moverTejo(deltaTime);
 				//verifico el resto de las cosas si no hay gol en ninguno de los dos arcos.
 				controlador->resolverChoqueConParedes(tejo);
+				
 				if (controlador->resolverChoqueConPaleta(tejo,pad1) == true)
 				{
 					escenario->setUtlimoTocado(0);
@@ -517,8 +519,9 @@ void* getDataProcessed(float deltaTime,int nivel)
 
 				}
 								
+				//tejo->moverTejo(deltaTime);
 				controlador->resolverChoqueDispersores(pad1,pad2,tejo,escenario,deltaTime);
-				tejo->moverTejo(deltaTime);
+				
 			
 				posicionTejoX = tejo->getPosicion().x;
 				posicionTejoY = tejo->getPosicion().y;
@@ -550,7 +553,7 @@ void* getDataProcessed(float deltaTime,int nivel)
 			centroTejo.x = posicionTejoX;
 			centroTejo.y = posicionTejoY;
 			tejo->getRepresentacionGrafica()->setCentro(centroTejo);
-			veloInicial.x = escenario->getVelox();
+			veloInicial.x = -escenario->getVelox();
 			veloInicial.y = escenario->getVeloy();
 			tejo->setVelocidad(veloInicial);
 			escenario->setTejo(tejo); 
@@ -586,7 +589,9 @@ void* getDataProcessed(float deltaTime,int nivel)
 		pegamentoAsigando = 1;
 	}
 
-
+	posicionTejoX= tejo->getPosicion().x;
+	posicionTejoY= tejo->getPosicion().y;
+	
 
 	void*	resultado = malloc(15*sizeof(int));
 	memcpy(  (void*)((int)resultado) , &posicionPadY1, sizeof(int));
@@ -658,11 +663,6 @@ DWORD WINAPI readFunctionClienteOne(LPVOID param)
 	return 0;
 }
 
-/*****************************************************************/
-/* readFunction: Función encargada de recibir lo que envia el    */
-/* cliente 2 mientras la conexión se encuentre establecida       */
-/*****************************************************************/ 
-
 DWORD WINAPI readFunctionClienteTwo(LPVOID param) 
 {
 	int sendListen = LISTEN_CLIENT;
@@ -688,7 +688,7 @@ DWORD WINAPI readFunctionClienteTwo(LPVOID param)
 		if(error>0)
 		{
 			pConexion2->len = error;
-
+			
 			error = recv(pConexion2->socketAccept,cadenaComando,sizeof(int),0);
 			comando =  *((int*)cadenaComando);
 			if(error == SOCKET_ERROR)
@@ -1005,6 +1005,7 @@ int main(int argc, char* argv[])
 		printf("Finaliza la transferencia de archivos.\n");
 		printf("Inicia el juego.\n");
 		
+		
 		int niveles = 1;
 		while ((niveles < 3)&&(pConexion->len > 0 && pConexion2->len > 0))
 		{
@@ -1021,21 +1022,24 @@ int main(int argc, char* argv[])
 		
 			while(pConexion->len > 0 && pConexion2->len > 0)
 			{
-				Sleep(100);
+				
 				thisTime = SDL_GetTicks();
 				deltaTime = (float)((thisTime - lastTime)/(float)10000 );
 				lastTime = thisTime; 
 	
-				threadReader = CreateThread(NULL,0,readFunctionClienteOne,NULL,0,NULL);	
-				WaitForSingleObject(threadReader, INFINITE);
-				
-				threadReader2 = CreateThread(NULL,0,readFunctionClienteTwo,NULL,0,NULL);
-				WaitForSingleObject(threadReader2, INFINITE);
 							
-
+				threadReader2 = CreateThread(NULL,0,readFunctionClienteTwo,NULL,0,NULL);
+				threadReader = CreateThread(NULL,0,readFunctionClienteOne,NULL,0,NULL);	
+			
+				
+				
+				WaitForSingleObject(threadReader, 150);
+				WaitForSingleObject(threadReader2, 10);
+				
 				CloseHandle(threadReader);		
 				CloseHandle(threadReader2);
-			    
+				
+						    
 				//proceso los datos
 
 				void* posiciones = getDataProcessed(deltaTime,niveles);
@@ -1049,11 +1053,12 @@ int main(int argc, char* argv[])
 
 			
 				enviar[0] = CreateThread(NULL, 0, writeFunctionClient, &packageClientOne, 0, NULL);
+				enviar[1] = CreateThread(NULL, 0, writeFunctionClient, &packageClientTwo, 0, NULL);
+				
+				WaitForSingleObject(enviar[1], 300);
 				WaitForSingleObject(enviar[0], 300);
 			
-				enviar[1] = CreateThread(NULL, 0, writeFunctionClient, &packageClientTwo, 0, NULL);
-				WaitForSingleObject(enviar[1], 300);
-			
+				
 				CloseHandle(enviar[0]);
 				CloseHandle(enviar[1]);
 		
@@ -1064,7 +1069,7 @@ int main(int argc, char* argv[])
 					break;
 				}
 			}
-
+	
 		}
 	}
 
