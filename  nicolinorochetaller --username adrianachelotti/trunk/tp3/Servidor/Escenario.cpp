@@ -655,8 +655,57 @@ string nombreBonus(int bonus)
 	}
 }
 
-
 int Escenario::selectorDeDispersor()
+{
+	size_t found; 
+	bool ok=false;
+	int ranBonus;
+	int ranDisper;
+	while (ok == false)
+	{ 
+		int lowestBonus=1, highestBonus=9;
+		int lowestDisper = 6, highestDisper = this->listadoDeFiguras.size();
+		int rangeBonus = (highestBonus-lowestBonus)+1;
+		int rangeDisper = (highestDisper-lowestDisper)+1;
+ 
+	      ranBonus = lowestBonus+int(rangeBonus*rand()/(RAND_MAX + 1.0));
+		ranDisper = lowestDisper+int(rangeDisper*rand()/(RAND_MAX + 1.0));
+		list<Figura*>::iterator it;
+		Figura* figuraActual;
+		it = this->listadoDeFiguras.begin();
+		int contador = 0;
+		while((it!= this->listadoDeFiguras.end())&&(ok==false))
+		{
+			contador++;
+			figuraActual = *it;
+			string nombre = figuraActual->getId();
+			found = nombre.find("cirver");
+			if ((contador == ranDisper) && (found == string::npos))
+			{
+	  			figuraActual->setBonus(ranBonus);
+				figuraActual->setIdTextura(nombreBonus(ranBonus));
+				figuraActual->setImagenFigura(NULL);
+				ok = true;
+				if (nombre.find("tri") != string::npos)
+				{
+					for(int i=0; i<3; i++)
+					{
+						it++;
+						figuraActual = *it;
+						figuraActual->setBonus(ranBonus);
+						nombre = figuraActual->getId();
+					}
+				}
+			}
+		it++;
+		}
+	}
+	
+
+	return ranBonus;
+}
+
+/*int Escenario::selectorDeDispersor()
 {
     int ranBonus;
 	int ranDisper;
@@ -686,7 +735,7 @@ int Escenario::selectorDeDispersor()
 	  it++;
     }
 	return ranBonus;
-}
+}*/
 
 void Escenario::sacarBonus(list<Figura*> listaFiguras)
 {
