@@ -2486,37 +2486,6 @@ int Parser::validaElementos(char* tag,FILE* archivo,FILE* archivoErrores)
 				vertices[2] = v3;
 				nuevoTriangulo->setVertices(vertices);
 				res = escenario->addFigura(nuevoTriangulo);
-				
-				string n1 = nuevoTriangulo->getId();
-				string n2 = nuevoTriangulo->getId();
-				string n3 = nuevoTriangulo->getId();
-				
-				n1.insert(0,"cirver1");
-				n2.insert(0,"cirver2");
-				n3.insert(0,"cirver3");
-				
-				for (int i = 0; i < n1.length(); i++)
-				{
-					if (n1[i] =='t')
-					{
-						n1.replace(i,1,"d");
-					}
-					if (n2[i] =='t')
-					{
-						n2.replace(i,1,"d");
-					}
-					if (n3[i] =='t')
-					{
-						n3.replace(i,1,"d");
-					}
-				}
-				
-				Circulo* ver1 = new Circulo(n1,2,v1);
-				Circulo* ver2 = new Circulo(n2,2,v2);
-				Circulo* ver3 = new Circulo(n3,2,v3);
-				res = escenario->addFigura(ver1);
-				res = escenario->addFigura(ver2);
-				res = escenario->addFigura(ver3);
 
 				if (res==RES_ERROR_FIGURA_EXISTENTE) imprimirError(tag,archivoErrores,ERR35);
 			} 
