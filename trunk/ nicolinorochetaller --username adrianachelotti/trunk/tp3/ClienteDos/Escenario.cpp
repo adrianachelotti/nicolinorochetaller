@@ -406,14 +406,8 @@ int Escenario::dibujar()
 	
 	while( it != this->listadoDeFiguras.end())
 	{
-        size_t found; 
 		figuraActual = *it;
-		string nombre = figuraActual->getId();
-		found = nombre.find("cirver");
-		if (found == string::npos)
-		{
-			figuraActual->dibujar();
-		}
+		figuraActual->dibujar();
 		it++;
     }
 

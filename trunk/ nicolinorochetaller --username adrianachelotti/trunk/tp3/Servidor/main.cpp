@@ -47,7 +47,7 @@ extern "C"{
 #define INIT_GAME 16
 #define LISTEN_FILES 17
 
-#define DELTA_Y 2000
+#define DELTA_Y 3000
 #define DELTA_T 3
 
 

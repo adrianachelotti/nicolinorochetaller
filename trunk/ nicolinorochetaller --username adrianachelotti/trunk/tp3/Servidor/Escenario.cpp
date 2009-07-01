@@ -686,16 +686,6 @@ int Escenario::selectorDeDispersor()
 				figuraActual->setIdTextura(nombreBonus(ranBonus));
 				figuraActual->setImagenFigura(NULL);
 				ok = true;
-				if (nombre.find("tri") != string::npos)
-				{
-					for(int i=0; i<3; i++)
-					{
-						it++;
-						figuraActual = *it;
-						figuraActual->setBonus(ranBonus);
-						nombre = figuraActual->getId();
-					}
-				}
 			}
 		it++;
 		}

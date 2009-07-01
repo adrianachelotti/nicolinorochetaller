@@ -539,46 +539,60 @@ bool ControladorDeChoque::hayChoqueConTriangulo(Tejo* pTejo, Triangulo*  triangu
 	Punto v2 = vertices[1];
 	Punto v3 = vertices[2];
 
+	Circulo* circulo1 = new Circulo("1",2,v1);
+	Circulo* circulo2 = new Circulo("1",2,v2);
+	Circulo* circulo3 = new Circulo("1",2,v3);
+
+	if(hayChoqueConCirculo(pTejo,circulo1)==true)
+	{
+		resolverChoqueConCirculo(pTejo,circulo1);
+	
+		return true;
+	}
+	
+	if(hayChoqueConCirculo(pTejo,circulo2)==true)
+	{
+		resolverChoqueConCirculo(pTejo,circulo2);
+	
+		return true;
+	}
+	
+	if(hayChoqueConCirculo(pTejo,circulo3)==true)
+	{
+		resolverChoqueConCirculo(pTejo,circulo3);
+	
+		return true;
+	}
+
 	
 	Segmento* segmento1 = new Segmento("segmento1",v1,v2);
 	choque = hayChoqueConSegmento(pTejo,segmento1);
 	if (choque == true) {
+		pTejo->moverTejo(-deltaTime);
 		calculoVelocidadReflejada(v1,v2,pTejo);
-		pTejo->moverTejo(deltaTime);
-		choque = hayChoqueConSegmento(pTejo,segmento1);
-		while (choque == true) {
-			pTejo->moverTejo(deltaTime);
-			choque = hayChoqueConSegmento(pTejo,segmento1);
-		}
 		return(true);	
 	}
 
 	Segmento* segmento2 = new Segmento("segmento2",v2,v3);
 	choque = hayChoqueConSegmento(pTejo,segmento2);
 	if (choque == true) {
+		pTejo->moverTejo(-deltaTime);
 		calculoVelocidadReflejada(v2,v3,pTejo);
-		pTejo->moverTejo(deltaTime);
-		choque = hayChoqueConSegmento(pTejo,segmento2);
-		while (choque == true) {
-			pTejo->moverTejo(deltaTime);
-			choque = hayChoqueConSegmento(pTejo,segmento2);
-		}
 		return(true);
 	}
 
 	Segmento* segmento3 = new Segmento("segmento3",v3,v1);
 	choque = hayChoqueConSegmento(pTejo,segmento3);
 	if (choque == true) {
+		pTejo->moverTejo(-deltaTime);
 		calculoVelocidadReflejada(v3,v1,pTejo);
-		pTejo->moverTejo(deltaTime);
-		choque = hayChoqueConSegmento(pTejo,segmento3);
-		while (choque == true) {
-			pTejo->moverTejo(deltaTime);
-			choque = hayChoqueConSegmento(pTejo,segmento3);
-		}
 		return(true);
 	}
 
+	delete(circulo1);
+	delete(circulo2);	
+	delete(circulo3);
+	
 	delete(segmento1);
 	delete(segmento2);
 	delete(segmento3);
@@ -662,22 +676,6 @@ void ControladorDeChoque::resolverChoqueDispersores(Pad* pad,Pad* pad1,Tejo* pTe
 				if  (triangulo->getBonus() != 0)
 				{
 					controladorBonus->aplicarBonus(pad,pad1,pTejo,triangulo->getBonus());
-				}
-				controlado = true;
-			}
-		}
-
-		
-		found = id.find("cirver");
-		if ((found != string::npos)&&(controlado == false))
-		{
-			Circulo* circulo = (Circulo*) figuraActual;
-			if (hayChoqueConCirculo(pTejo,circulo))
-			{
-				resolverChoqueConVertice(pTejo,circulo);
-				if  (circulo->getBonus() != 0)
-				{
-					controladorBonus->aplicarBonus(pad,pad1,pTejo,circulo->getBonus());
 				}
 				controlado = true;
 			}
