@@ -650,7 +650,7 @@ void ControladorDeChoque::resolverChoqueDispersores(Pad* pad,Pad* pad1,Tejo* pTe
 		//si encontramos tri en el id es un triangulo...
 		found = id.find("tri");
 		
-		if (found != string::npos)
+		if ((found != string::npos)&&(controlado == false))
 		{
 			Triangulo* triangulo = (Triangulo*) figuraActual;
 			if (hayChoqueConTriangulo(pTejo,triangulo, deltaTime) == true)
