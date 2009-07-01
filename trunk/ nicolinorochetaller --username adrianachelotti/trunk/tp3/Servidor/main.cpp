@@ -47,7 +47,7 @@ extern "C"{
 #define INIT_GAME 16
 #define LISTEN_FILES 17
 
-#define DELTA_Y 1500
+#define DELTA_Y 2000
 #define DELTA_T 3
 
 
@@ -352,6 +352,8 @@ void* getDataProcessed(float deltaTime,int nivel)
 	int puntD = 0;
 	int puntI = 0;
 
+
+	
 	if(command_Client_One==COMMAND_UP)
 	{
 		if(posicionPadY1 > pad1->getRepresentacionGrafica()->getAltura())
