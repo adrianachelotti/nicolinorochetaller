@@ -28,18 +28,22 @@ void ControladorDeChoque::resolverChoqueConParedes(Tejo* pTejo)
 	if((tejo->getCentro().x +  tejo->getRadio() )> escenario->getAncho() &&velocidadTejo.x>=0)
 	{
 		velocidadTejo.x=-1*velocidadTejo.x;
+		if(velocidadTejo.y==0) velocidadTejo.y+=2;
 	}
 	if((tejo->getCentro().x - tejo->getRadio())<0 && velocidadTejo.x<=0)
 	{
 		velocidadTejo.x=-1*velocidadTejo.x;
+		if(velocidadTejo.y==0) velocidadTejo.y+=2;
 	}
 	if((tejo->getCentro().y - tejo->getRadio())<0 && velocidadTejo.y<=0)
 	{
 		velocidadTejo.y=-1*velocidadTejo.y;
+		if(velocidadTejo.x==0) velocidadTejo.x+=2;
 	}
 	if((tejo->getCentro().y + tejo->getRadio())>escenario->getAlto()&& velocidadTejo.y>=0)
 	{
 		velocidadTejo.y=velocidadTejo.y*-1;
+		if(velocidadTejo.x==0) velocidadTejo.x+=2;
 	}
 	pTejo->setVelocidad(velocidadTejo);
 }
