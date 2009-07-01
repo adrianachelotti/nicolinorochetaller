@@ -47,7 +47,7 @@ extern "C"{
 #define INIT_GAME 16
 #define LISTEN_FILES 17
 
-#define DELTA_Y 200
+#define DELTA_Y 1500
 #define DELTA_T 3
 
 
@@ -361,10 +361,14 @@ void* getDataProcessed(float deltaTime,int nivel)
 			escenario->setPad1(pad1);
 			posicionPadY1 = pos1.y;
 		}
+		command_Client_One=COMMAND_INVALID;
+
 	}
+	
 
 	if(command_Client_One==COMMAND_DOWN)
 	{
+
 		if (posicionPadY1 < escenario->getAlto())
 		{
 			pos1.y += DELTA_Y * deltaTime;
@@ -372,6 +376,8 @@ void* getDataProcessed(float deltaTime,int nivel)
 			escenario->setPad1(pad1);
 			posicionPadY1 = pos1.y;
 		}
+			command_Client_One=COMMAND_INVALID;
+
 	}
 	
 	if(command_Client_Two==COMMAND_UP)
@@ -384,6 +390,7 @@ void* getDataProcessed(float deltaTime,int nivel)
 			posicionPadY2 = pos2.y;
 
 		}
+		command_Client_Two=COMMAND_INVALID;
 	}
 
 	if(command_Client_Two==COMMAND_DOWN)
@@ -395,6 +402,7 @@ void* getDataProcessed(float deltaTime,int nivel)
 			escenario->setPad2(pad2);
 			posicionPadY2 = pos2.y;
 		}
+		command_Client_Two=COMMAND_INVALID;
 	}
 
 	if ((command_Client_One==COMMAND_SPACE) && (tejo->getPosicion().x < escenario->getAncho()/2))
