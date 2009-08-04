@@ -1,14 +1,14 @@
 <escenario>
-<General resolucion="800" colorFondoEsc="255000000" texturaEsc="id1" velox="1500" veloy="1500" colorFondoFig="255255255" colorLinea="000000000" >
+<General resolucion="800" colorFondoEsc="255000000" texturaEsc="id1" velox="4000" veloy="4000" colorFondoFig="255255255" colorLinea="000000000" >
 	</General>
 	<ListadoDeElementos>
 		<circulo id="tejo" colorFigura="100100100" radio="15">
 			<posicion x="1" y="1"/>
 		</circulo>
-		<rectangulo id="pad1" base="20" altura="100" colorFigura="100100100">
+		<rectangulo id="pad1" base="20" altura="150" colorFigura="100100100">
 			<posicion x="1" y="1"/>
 		</rectangulo>	
-		<rectangulo id="pad2" base="20" altura="100" colorFigura="100100100">
+		<rectangulo id="pad2" base="20" altura="150" colorFigura="100100100">
 			<posicion x="1" y="1"/>
 		</rectangulo>	
 		<rectangulo id="arco1" base="10" altura="10" colorFigura="100100100">
@@ -18,21 +18,28 @@
 			<posicion x="1" y="1"/>
 		</rectangulo>
 
-		<circulo id="cir1" colorFigura="255000000" radio="50">
-			<posicion x="200" y="400"/>
-		</circulo>
-		<circulo id="cir2" colorFigura="000100255" radio="50">
+		<circulo id="cir3" colorFigura="255233000" radio="60" >
+			<posicion x="400" y="120"/>
+		</circulo> 
+		<circulo id="cir2" colorFigura="255233000" radio="60" >
 			<posicion x="400" y="500"/>
-		</circulo>
-		<rectangulo id="rec1" base="75" altura="100" colorFigura="100100100">
-			<posicion x="300" y="300"/>
-		</rectangulo>
-		<triangulo id="tri1" colorFigura="100100100">
-			<ver1 x="370" y="230"/>
-			<ver2 x="430" y="230"/>
-			<ver3 x="400" y="180"/>
+		</circulo> 
+		<triangulo id="tri2"  colorFigura="000000255">
+			<ver1 x="540" y="250"/>
+			<ver2 x="540" y="390"/>
+			<ver3 x="650" y="320"/>
 		</triangulo> 		
-		</ListadoDeElementos>
+		<triangulo id="tri3"  colorFigura="000255000">
+			<ver1 x="270" y="250"/>
+			<ver2 x="270" y="390"/>
+			<ver3 x="150" y="320"/>
+		</triangulo>
+				
+		<rectangulo id="rec1" base="130" idTextura="textura" altura="140" colorFigura="100100100">
+			<posicion x="340" y="390"/>
+		</rectangulo>	 	
+		
+	</ListadoDeElementos>
 	<ListadoDeTexturas>
 		<textura id="id1" path="archivos/nivel2.bmp">
 		</textura>
