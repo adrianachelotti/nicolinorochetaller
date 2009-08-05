@@ -1,5 +1,5 @@
 <escenario>
-<General resolucion="800" colorFondoEsc="255000000" texturaEsc="id1" velox="4000" veloy="4000" colorFondoFig="255255255" colorLinea="000000000" >
+<General resolucion="800" colorFondoEsc="255000000" texturaEsc="id1" velox="3000" veloy="3000" colorFondoFig="255255255" colorLinea="000000000" >
 	</General>
 	<ListadoDeElementos>
 		<circulo id="tejo" colorFigura="100100100" radio="15">
@@ -18,11 +18,11 @@
 			<posicion x="1" y="1"/>
 		</rectangulo>
 
-		<circulo id="cir3" colorFigura="255233000" radio="60" >
-			<posicion x="400" y="120"/>
+		<circulo id="cir3" colorFigura="255010255" radio="60" >
+			<posicion x="290" y="110"/>
 		</circulo> 
-		<circulo id="cir2" colorFigura="255233000" radio="60" >
-			<posicion x="400" y="500"/>
+		<circulo id="cir2" colorFigura="255010255" radio="60" >
+			<posicion x="510" y="510"/>
 		</circulo> 
 		<triangulo id="tri2"  colorFigura="000000255">
 			<ver1 x="540" y="250"/>
@@ -35,13 +35,13 @@
 			<ver3 x="150" y="320"/>
 		</triangulo>
 				
-		<rectangulo id="rec1" base="130" idTextura="textura" altura="140" colorFigura="100100100">
+		<rectangulo id="rec1" base="130" altura="140" colorFigura="200200000">
 			<posicion x="340" y="390"/>
 		</rectangulo>	 	
 		
 	</ListadoDeElementos>
 	<ListadoDeTexturas>
-		<textura id="id1" path="archivos/nivel2.bmp">
+		<textura id="id1" path="archivos/nivel3.bmp">
 		</textura>
 		
 		<textura id="id2" path="archivos/dona.bmp">
