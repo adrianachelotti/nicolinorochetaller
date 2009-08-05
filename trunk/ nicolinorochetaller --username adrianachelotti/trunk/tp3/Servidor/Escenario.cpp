@@ -668,8 +668,14 @@ int Escenario::selectorDeDispersor()
 		int rangeBonus = (highestBonus-lowestBonus)+1;
 		int rangeDisper = (highestDisper-lowestDisper)+1;
  
-	      ranBonus = lowestBonus+int(rangeBonus*rand()/(RAND_MAX + 1.0));
+	    ranBonus = lowestBonus+int(rangeBonus*rand()/(RAND_MAX + 1.0));
 		ranDisper = lowestDisper+int(rangeDisper*rand()/(RAND_MAX + 1.0));
+		
+		if (ranBonus == 8)
+		{
+			ranBonus = 9;
+		}
+		
 		list<Figura*>::iterator it;
 		Figura* figuraActual;
 		it = this->listadoDeFiguras.begin();
